@@ -501,14 +501,126 @@ The System Presentation is an interactive, self-contained presentation explainin
 
 ---
 
-## 10. Document Revision History
+## 10. Customer Risk Network Graph
+
+### 10.1 Overview
+
+The Customer Risk Network Graph is an advanced AML visualization feature that displays customer relationships, joint account connections, corporate ownership structures, and signatory relationships in an interactive network diagram.
+
+### 10.2 Feature Description
+
+| Aspect | Description |
+|--------|-------------|
+| Purpose | Visualize customer relationship networks for AML investigation |
+| Access | Available from EDD Case Review page via "Network Graph" button |
+| Technology | Canvas-based interactive visualization with zoom/pan controls |
+| Data Sources | T24, ETL/SnapView, Corporate Registry |
+
+### 10.3 Node Types
+
+| Node Type | Color | Icon | Description |
+|-----------|-------|------|-------------|
+| CUSTOMER | Cyan (#00D4FF) | 👤 | Primary customer under investigation |
+| JOINT_HOLDER | Purple (#9C27B0) | 👥 | Joint account holder |
+| COMPANY | Orange (#FF9800) | 🏢 | Related company entity |
+| ACCOUNT | Green (#4CAF50) | 💳 | Account |
+| SIGNATORY | Pink (#E91E63) | ✍️ | Authorized signatory / POA |
+| HIGH_RISK | Red (#F44336) | ⚠️ | High risk individual |
+| PEP | Deep Orange (#FF5722) | 🎖️ | Politically Exposed Person |
+
+### 10.4 Edge Types (Relationships)
+
+| Edge Type | Color | Style | Description |
+|-----------|-------|-------|-------------|
+| JOINT_ACCOUNT | Purple | Solid | Joint account relationship |
+| SIGNATORY | Pink | Dashed | Signatory authority |
+| BENEFICIAL_OWNER | Orange | Solid | Beneficial ownership |
+| DIRECTOR | Blue | Solid | Director/Board member |
+| SHAREHOLDER | Green | Solid | Shareholder relationship |
+| FAMILY | Cyan | Dotted | Family relationship |
+| EMPLOYER | Brown | Solid | Employment relationship |
+
+### 10.5 Network Graph UI Layout
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🕸️ Customer Risk Network Graph                              [Zoom +/-] [✕]  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                         ┌─────────────────────┐                            │
+│    ┌─────────┐         │    🏢 Company A     │         ┌─────────┐        │
+│    │ 👥 Joint │─────────│   (Beneficial Owner) │─────────│ 👥 Joint │        │
+│    │ Holder 1 │         └─────────────────────┘         │ Holder 2 │        │
+│    └────┬────┘                    │                     └────┬────┘        │
+│         │                         │                          │             │
+│         │                   ┌─────┴─────┐                    │             │
+│         └───────────────────│  👤 MAIN  │────────────────────┘             │
+│                      60%    │ CUSTOMER  │    30%                           │
+│                             │ ⚠️ HIGH   │                                   │
+│                             └─────┬─────┘                                   │
+│                                   │                                         │
+│                              SIGNATORY                                      │
+│                                   │                                         │
+│                             ┌─────┴─────┐                                   │
+│                             │  ✍️ POA   │                                   │
+│                             │  Holder   │                                   │
+│                             └───────────┘                                   │
+│                                                                             │
+│  Legend:                                                                    │
+│  ── Joint Account  ╌╌ Signatory  ── Beneficial Owner                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 10.6 Side Panel Information
+
+| Section | Content |
+|---------|---------|
+| Node Details | Name, Arabic name, RIM/CR number, relationship type, ownership % |
+| Risk Indicators | List of risk flags with severity levels |
+| Connected Accounts | Account numbers, types, balances, status |
+| Total Exposure | Sum of all connected account balances |
+
+### 10.7 Interactive Features
+
+| Feature | Description |
+|---------|-------------|
+| Click Node | Display detailed information in side panel |
+| Zoom In/Out | Enlarge or shrink the network view |
+| Reset View | Return to default zoom and position |
+| Hover | Highlight connection paths |
+
+### 10.8 Risk Indicator Levels
+
+| Severity | Color | Examples |
+|----------|-------|----------|
+| Critical | Red (#F44336) | PEP status, sanctions match |
+| High | Orange (#FF9800) | High-risk jurisdiction, complex structure |
+| Medium | Yellow (#FFC107) | High cash activity, high value accounts |
+| Low | Green (#4CAF50) | Multiple joint accounts |
+
+### 10.9 Data Fields Used
+
+| Field | Source | Description |
+|-------|--------|-------------|
+| JOINT_RIM_1 to JOINT_RIM_5 | T24 | Joint account holder RIMs |
+| JOINT_RIM_PERC to JOINT_RIM_PERC_5 | T24 | Ownership percentages |
+| COMPANY_CR | Corporate Registry | Company CR numbers |
+| POA_TYPE | T24 | Power of Attorney type |
+| POA_EXPIRY | T24 | POA expiration date |
+| DIRECTOR_STATUS | Corporate Registry | Director/Board position |
+| SHAREHOLDING_PCT | Corporate Registry | Shareholding percentage |
+
+---
+
+## 11. Document Revision History
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 2.0 | March 2026 | Enterprise Architecture | Added all enterprise features |
+| 2.1 | March 2026 | Enterprise Architecture | Added Customer Risk Network Graph |
 
 ---
 
 **Document End**
 
-*This document is confidential and intended for QIB internal use only.*
+*This document is confidential and intended for QIB internal use only.**

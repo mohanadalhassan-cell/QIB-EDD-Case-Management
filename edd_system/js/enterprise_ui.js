@@ -690,6 +690,399 @@ const EnterpriseUI = {
   },
 
   // =====================================================
+  // CUSTOMER RISK NETWORK GRAPH
+  // =====================================================
+  
+  networkGraphState: {
+    selectedNode: null,
+    zoom: 1,
+    panX: 0,
+    panY: 0,
+    isDragging: false
+  },
+
+  showNetworkGraphModal: function(rim) {
+    const graphData = EnterpriseFeatures.buildNetworkGraph(rim);
+    
+    if (!graphData) {
+      alert('Network data not available for this customer');
+      return;
+    }
+
+    const nodeTypes = EnterpriseFeatures.nodeTypes;
+    const edgeTypes = EnterpriseFeatures.edgeTypes;
+
+    const modalHTML = `
+      <div id="networkGraphModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 10, 20, 0.95); z-index: 10000; display: flex; flex-direction: column;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(0, 212, 255, 0.1));">
+          <div>
+            <h2 style="margin: 0; font-size: 24px; font-weight: 700;">
+              <span style="background: linear-gradient(135deg, #9C27B0, #00D4FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🕸️ Customer Risk Network Graph</span>
+            </h2>
+            <p style="margin: 4px 0 0 0; color: var(--text-muted); font-size: 14px;">شبكة علاقات المخاطر للعميل — AML Relationship Visualization</p>
+          </div>
+          <button onclick="EnterpriseUI.closeNetworkGraphModal()" style="background: rgba(255,255,255,0.1); border: none; color: white; cursor: pointer; font-size: 14px; padding: 8px 16px; border-radius: 8px;">✕ Close</button>
+        </div>
+
+        <!-- Main Content -->
+        <div style="display: flex; flex: 1; overflow: hidden;">
+          <!-- Canvas Area -->
+          <div style="flex: 1; position: relative; background: radial-gradient(circle at center, rgba(156, 39, 176, 0.05) 0%, transparent 70%);">
+            <canvas id="networkCanvas" style="width: 100%; height: 100%;"></canvas>
+            
+            <!-- Legend -->
+            <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(0, 20, 40, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px;">
+              <h4 style="margin: 0 0 12px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Legend</h4>
+              <div style="display: grid; gap: 8px; font-size: 11px;">
+                <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: ${nodeTypes.CUSTOMER.color};"></div> Customer</div>
+                <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: ${nodeTypes.JOINT_HOLDER.color};"></div> Joint Holder</div>
+                <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: ${nodeTypes.COMPANY.color};"></div> Company</div>
+                <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: ${nodeTypes.SIGNATORY.color};"></div> Signatory/POA</div>
+                <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: ${nodeTypes.HIGH_RISK.color};"></div> High Risk</div>
+                <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: ${nodeTypes.PEP.color};"></div> PEP</div>
+              </div>
+            </div>
+
+            <!-- Zoom Controls -->
+            <div style="position: absolute; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px;">
+              <button onclick="EnterpriseUI.zoomNetworkGraph(1.2)" style="width: 40px; height: 40px; border-radius: 8px; background: rgba(0, 212, 255, 0.2); border: 1px solid rgba(0, 212, 255, 0.3); color: white; cursor: pointer; font-size: 18px;">+</button>
+              <button onclick="EnterpriseUI.zoomNetworkGraph(0.8)" style="width: 40px; height: 40px; border-radius: 8px; background: rgba(0, 212, 255, 0.2); border: 1px solid rgba(0, 212, 255, 0.3); color: white; cursor: pointer; font-size: 18px;">−</button>
+              <button onclick="EnterpriseUI.resetNetworkGraph()" style="width: 40px; height: 40px; border-radius: 8px; background: rgba(255, 152, 0, 0.2); border: 1px solid rgba(255, 152, 0, 0.3); color: white; cursor: pointer; font-size: 14px;">⟲</button>
+            </div>
+          </div>
+
+          <!-- Side Panel -->
+          <div style="width: 380px; border-left: 1px solid rgba(255,255,255,0.1); overflow-y: auto; background: rgba(0, 20, 40, 0.5);">
+            <!-- Node Details -->
+            <div id="nodeDetailsPanel" style="padding: 24px;">
+              <h3 style="margin: 0 0 16px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Node Details</h3>
+              <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <p>Click on a node to view details</p>
+              </div>
+            </div>
+
+            <!-- Risk Indicators -->
+            <div style="padding: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
+              <h3 style="margin: 0 0 16px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">⚠️ Risk Indicators</h3>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                ${graphData.riskIndicators.map(indicator => `
+                  <div style="padding: 12px; background: rgba(${indicator.severity === 'Critical' ? '244, 67, 54' : indicator.severity === 'High' ? '255, 152, 0' : indicator.severity === 'Medium' ? '255, 193, 7' : '76, 175, 80'}, 0.1); border-left: 4px solid ${indicator.severity === 'Critical' ? '#F44336' : indicator.severity === 'High' ? '#FF9800' : indicator.severity === 'Medium' ? '#FFC107' : '#4CAF50'}; border-radius: 0 8px 8px 0;">
+                    <div style="font-weight: 600; font-size: 12px; margin-bottom: 4px;">${indicator.type}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">${indicator.description}</div>
+                    <div style="font-size: 10px; margin-top: 4px; color: ${indicator.severity === 'Critical' ? '#F44336' : indicator.severity === 'High' ? '#FF9800' : indicator.severity === 'Medium' ? '#FFC107' : '#4CAF50'};">${indicator.severity} Severity</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Accounts Summary -->
+            <div style="padding: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
+              <h3 style="margin: 0 0 16px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">💳 Connected Accounts</h3>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${graphData.accounts.map(acc => `
+                  <div style="padding: 12px; background: rgba(76, 175, 80, 0.1); border: 1px solid rgba(76, 175, 80, 0.2); border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="font-family: monospace; font-size: 11px;">${acc.number}</span>
+                      <span style="font-size: 10px; padding: 2px 6px; background: ${acc.status === 'Active' ? 'rgba(76, 175, 80, 0.2)' : 'rgba(244, 67, 54, 0.2)'}; border-radius: 4px; color: ${acc.status === 'Active' ? '#4CAF50' : '#F44336'};">${acc.status}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                      <span style="font-size: 11px; color: var(--text-muted);">${acc.type}</span>
+                      <span style="font-weight: 600; font-size: 13px; color: #4CAF50;">${acc.balance.toLocaleString()} QAR</span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+              <div style="margin-top: 12px; padding: 12px; background: rgba(0, 212, 255, 0.1); border-radius: 8px; text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted);">Total Exposure</div>
+                <div style="font-size: 20px; font-weight: 700; color: #00D4FF;">${graphData.accounts.reduce((sum, a) => sum + a.balance, 0).toLocaleString()} QAR</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Store graph data for rendering
+    this.currentGraphData = graphData;
+    
+    // Initialize canvas
+    setTimeout(() => this.renderNetworkGraph(), 100);
+  },
+
+  renderNetworkGraph: function() {
+    const canvas = document.getElementById('networkCanvas');
+    if (!canvas || !this.currentGraphData) return;
+
+    const ctx = canvas.getContext('2d');
+    const rect = canvas.parentElement.getBoundingClientRect();
+    
+    // Set canvas size with device pixel ratio for crisp rendering
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+
+    const { nodes, edges } = this.currentGraphData;
+    const nodeTypes = EnterpriseFeatures.nodeTypes;
+    const edgeTypes = EnterpriseFeatures.edgeTypes;
+
+    // Apply zoom and pan
+    const zoom = this.networkGraphState.zoom;
+    const panX = this.networkGraphState.panX;
+    const panY = this.networkGraphState.panY;
+
+    // Clear canvas
+    ctx.fillStyle = 'transparent';
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    // Draw grid pattern
+    ctx.strokeStyle = 'rgba(0, 212, 255, 0.05)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < rect.width; x += 50) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, rect.height);
+      ctx.stroke();
+    }
+    for (let y = 0; y < rect.height; y += 50) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(rect.width, y);
+      ctx.stroke();
+    }
+
+    // Calculate center offset
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // Draw edges
+    edges.forEach(edge => {
+      const fromNode = nodes.find(n => n.id === edge.from);
+      const toNode = nodes.find(n => n.id === edge.to);
+      if (!fromNode || !toNode) return;
+
+      const fromX = (fromNode.x - 400) * zoom + centerX + panX;
+      const fromY = (fromNode.y - 300) * zoom + centerY + panY;
+      const toX = (toNode.x - 400) * zoom + centerX + panX;
+      const toY = (toNode.y - 300) * zoom + centerY + panY;
+
+      const edgeStyle = edgeTypes[edge.type] || { color: '#666', style: 'solid' };
+
+      ctx.beginPath();
+      ctx.strokeStyle = edgeStyle.color;
+      ctx.lineWidth = 2;
+      
+      if (edgeStyle.style === 'dashed') {
+        ctx.setLineDash([8, 4]);
+      } else if (edgeStyle.style === 'dotted') {
+        ctx.setLineDash([2, 4]);
+      } else {
+        ctx.setLineDash([]);
+      }
+
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw edge label
+      const midX = (fromX + toX) / 2;
+      const midY = (fromY + toY) / 2;
+      
+      ctx.font = '10px system-ui';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.textAlign = 'center';
+      ctx.fillText(edge.label + (edge.ownershipPct ? ` (${edge.ownershipPct}%)` : ''), midX, midY - 8);
+    });
+
+    // Draw nodes
+    nodes.forEach(node => {
+      const x = (node.x - 400) * zoom + centerX + panX;
+      const y = (node.y - 300) * zoom + centerY + panY;
+      const nodeStyle = nodeTypes[node.type] || nodeTypes.CUSTOMER;
+      const size = nodeStyle.size * zoom;
+
+      // Draw glow for center node
+      if (node.isCenter) {
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, size * 1.5);
+        gradient.addColorStop(0, nodeStyle.color + '40');
+        gradient.addColorStop(1, 'transparent');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, size * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Draw node circle
+      ctx.beginPath();
+      ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+      ctx.fillStyle = nodeStyle.color + '20';
+      ctx.fill();
+      ctx.strokeStyle = nodeStyle.color;
+      ctx.lineWidth = node.isCenter ? 4 : 2;
+      ctx.stroke();
+
+      // Draw icon
+      ctx.font = `${size * 0.5}px system-ui`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = nodeStyle.color;
+      ctx.fillText(nodeStyle.icon, x, y);
+
+      // Draw label
+      ctx.font = `${node.isCenter ? 'bold ' : ''}${11 * zoom}px system-ui`;
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.fillText(node.label, x, y + size / 2 + 12 * zoom);
+      
+      // Draw Arabic label for center
+      if (node.isCenter && node.labelAr) {
+        ctx.font = `${10 * zoom}px system-ui`;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.fillText(node.labelAr, x, y + size / 2 + 24 * zoom);
+      }
+    });
+
+    // Add click handler
+    canvas.onclick = (e) => {
+      const clickX = e.offsetX;
+      const clickY = e.offsetY;
+      
+      nodes.forEach(node => {
+        const x = (node.x - 400) * zoom + centerX + panX;
+        const y = (node.y - 300) * zoom + centerY + panY;
+        const size = (nodeTypes[node.type]?.size || 50) * zoom;
+        
+        if (Math.abs(clickX - x) < size / 2 && Math.abs(clickY - y) < size / 2) {
+          this.showNodeDetails(node);
+        }
+      });
+    };
+  },
+
+  showNodeDetails: function(node) {
+    const panel = document.getElementById('nodeDetailsPanel');
+    if (!panel) return;
+
+    const nodeTypes = EnterpriseFeatures.nodeTypes;
+    const nodeStyle = nodeTypes[node.type] || nodeTypes.CUSTOMER;
+    const data = node.data;
+
+    let detailsHTML = `
+      <h3 style="margin: 0 0 16px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Node Details</h3>
+      
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: ${nodeStyle.color}20; border: 3px solid ${nodeStyle.color}; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 32px;">
+          ${nodeStyle.icon}
+        </div>
+        <h4 style="margin: 0; font-size: 16px; color: white;">${node.label}</h4>
+        ${node.labelAr ? `<p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">${node.labelAr}</p>` : ''}
+        <span style="display: inline-block; margin-top: 8px; padding: 4px 12px; background: ${nodeStyle.color}30; border: 1px solid ${nodeStyle.color}; border-radius: 20px; font-size: 11px; color: ${nodeStyle.color};">${node.type.replace(/_/g, ' ')}</span>
+      </div>
+    `;
+
+    if (node.isCenter) {
+      detailsHTML += `
+        <div style="display: grid; gap: 12px;">
+          <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">RIM</div>
+            <div style="font-family: monospace; font-size: 14px;">${data.rim}</div>
+          </div>
+          <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Segment</div>
+            <div style="font-size: 14px;">${data.segment}</div>
+          </div>
+          <div style="padding: 12px; background: rgba(${data.riskLevel === 'AUTO HIGH' || data.riskLevel === 'HIGH' ? '244, 67, 54' : '255, 152, 0'}, 0.1); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Risk Level</div>
+            <div style="font-size: 14px; font-weight: 600; color: ${data.riskLevel === 'AUTO HIGH' || data.riskLevel === 'HIGH' ? '#F44336' : '#FF9800'};">${data.riskLevel}</div>
+          </div>
+          ${data.isPEP ? `
+          <div style="padding: 12px; background: rgba(255, 87, 34, 0.2); border: 1px solid #FF5722; border-radius: 8px;">
+            <div style="font-size: 10px; color: #FF5722; margin-bottom: 4px;">⚠️ PEP STATUS</div>
+            <div style="font-size: 14px; font-weight: 600; color: #FF5722;">${data.pepPosition || 'Politically Exposed Person'}</div>
+          </div>
+          ` : ''}
+        </div>
+      `;
+    } else {
+      detailsHTML += `
+        <div style="display: grid; gap: 12px;">
+          ${data.rim ? `
+          <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">RIM</div>
+            <div style="font-family: monospace; font-size: 14px;">${data.rim}</div>
+          </div>
+          ` : ''}
+          ${data.crNumber ? `
+          <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">CR Number</div>
+            <div style="font-family: monospace; font-size: 14px;">${data.crNumber}</div>
+          </div>
+          ` : ''}
+          <div style="padding: 12px; background: rgba(156, 39, 176, 0.1); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Relationship</div>
+            <div style="font-size: 14px;">${data.relationship?.replace(/_/g, ' ')}</div>
+          </div>
+          ${data.ownershipPct ? `
+          <div style="padding: 12px; background: rgba(76, 175, 80, 0.1); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Ownership Percentage</div>
+            <div style="font-size: 24px; font-weight: 700; color: #4CAF50;">${data.ownershipPct}%</div>
+          </div>
+          ` : ''}
+          ${data.accountNumber ? `
+          <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Account Number</div>
+            <div style="font-family: monospace; font-size: 12px;">${data.accountNumber}</div>
+          </div>
+          ` : ''}
+          ${data.poaType ? `
+          <div style="padding: 12px; background: rgba(233, 30, 99, 0.1); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">POA Type</div>
+            <div style="font-size: 14px;">${data.poaType}</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Expires: ${data.poaExpiry}</div>
+          </div>
+          ` : ''}
+          ${data.position ? `
+          <div style="padding: 12px; background: rgba(33, 150, 243, 0.1); border-radius: 8px;">
+            <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">Position</div>
+            <div style="font-size: 14px;">${data.position}</div>
+          </div>
+          ` : ''}
+          ${data.isPEP ? `
+          <div style="padding: 12px; background: rgba(255, 87, 34, 0.2); border: 1px solid #FF5722; border-radius: 8px;">
+            <div style="font-size: 12px; font-weight: 600; color: #FF5722;">⚠️ PEP - Politically Exposed Person</div>
+          </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    panel.innerHTML = detailsHTML;
+  },
+
+  zoomNetworkGraph: function(factor) {
+    this.networkGraphState.zoom *= factor;
+    this.networkGraphState.zoom = Math.max(0.5, Math.min(2.5, this.networkGraphState.zoom));
+    this.renderNetworkGraph();
+  },
+
+  resetNetworkGraph: function() {
+    this.networkGraphState.zoom = 1;
+    this.networkGraphState.panX = 0;
+    this.networkGraphState.panY = 0;
+    this.renderNetworkGraph();
+  },
+
+  closeNetworkGraphModal: function() {
+    const modal = document.getElementById('networkGraphModal');
+    if (modal) modal.remove();
+    this.currentGraphData = null;
+  },
+
+  // =====================================================
   // INITIALIZATION
   // =====================================================
   

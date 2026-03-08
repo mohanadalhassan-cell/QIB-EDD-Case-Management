@@ -1,4 +1,8 @@
 // EDD Case Controller
+
+// Global variable to store current customer RIM for network graph
+let currentCustomerRim = null;
+
 document.addEventListener('DOMContentLoaded', function() {
   // Check session
   const session = JSON.parse(sessionStorage.getItem('edd_session') || '{}');
@@ -33,12 +37,24 @@ function getInitials(name) {
   return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
 }
 
+// Show Customer Risk Network Graph
+function showNetworkGraph() {
+  if (currentCustomerRim && typeof EnterpriseUI !== 'undefined') {
+    EnterpriseUI.showNetworkGraphModal(currentCustomerRim);
+  } else {
+    alert('Customer data not loaded. Please wait for the case to load.');
+  }
+}
+
 function loadCase(caseId) {
   // Find case in mock data (use caseId field from mock data)
   const eddCase = MockData.eddCases.find(c => c.caseId === caseId) || MockData.eddCases[0];
   const customer = MockData.customers.find(c => c.rim === eddCase.rim);
 
   if (!eddCase || !customer) return;
+
+  // Store current RIM for network graph
+  currentCustomerRim = customer.rim;
 
   // Update header
   document.getElementById('case-id').textContent = eddCase.caseId;

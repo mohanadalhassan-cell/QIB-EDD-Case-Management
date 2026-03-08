@@ -703,6 +703,18 @@ a:hover {
   box-shadow: 0 6px 24px rgba(33, 150, 243, 0.35);
 }
 
+.btn-network {
+  background: linear-gradient(135deg, #9C27B0, #673AB7);
+  color: white;
+  box-shadow: 0 4px 16px rgba(156, 39, 176, 0.3);
+}
+
+.btn-network:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(156, 39, 176, 0.5);
+  background: linear-gradient(135deg, #AB47BC, #7E57C2);
+}
+
 .btn-sm {
   padding: 8px 16px;
   font-size: 12px;

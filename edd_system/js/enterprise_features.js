@@ -749,6 +749,291 @@ const EnterpriseFeatures = {
 
   getPublishedGuides: function() {
     return this.userGuides.filter(g => g.status === 'Published');
+  },
+
+  // =====================================================
+  // CUSTOMER RISK NETWORK GRAPH
+  // =====================================================
+  
+  // Network graph node types
+  nodeTypes: {
+    CUSTOMER: { color: '#00D4FF', icon: '👤', size: 50 },
+    JOINT_HOLDER: { color: '#9C27B0', icon: '👥', size: 45 },
+    COMPANY: { color: '#FF9800', icon: '🏢', size: 55 },
+    ACCOUNT: { color: '#4CAF50', icon: '💳', size: 40 },
+    SIGNATORY: { color: '#E91E63', icon: '✍️', size: 40 },
+    HIGH_RISK: { color: '#F44336', icon: '⚠️', size: 50 },
+    PEP: { color: '#FF5722', icon: '🎖️', size: 50 }
+  },
+
+  // Edge types for relationships
+  edgeTypes: {
+    JOINT_ACCOUNT: { color: '#9C27B0', style: 'solid', label: 'Joint Account' },
+    SIGNATORY: { color: '#E91E63', style: 'dashed', label: 'Signatory' },
+    BENEFICIAL_OWNER: { color: '#FF9800', style: 'solid', label: 'Beneficial Owner' },
+    DIRECTOR: { color: '#2196F3', style: 'solid', label: 'Director' },
+    SHAREHOLDER: { color: '#4CAF50', style: 'solid', label: 'Shareholder' },
+    FAMILY: { color: '#00BCD4', style: 'dotted', label: 'Family Relation' },
+    EMPLOYER: { color: '#795548', style: 'solid', label: 'Employer' }
+  },
+
+  // Customer network data (simulates T24/ETL relationships)
+  customerNetworks: {
+    'RIM001234': {
+      centerNode: {
+        rim: 'RIM001234',
+        name: 'Abdullah Mohammed Al-Kuwari',
+        nameAr: 'عبدالله محمد الكواري',
+        type: 'CUSTOMER',
+        riskLevel: 'HIGH',
+        isPEP: false,
+        segment: 'Private Banking'
+      },
+      relatedNodes: [
+        {
+          rim: 'RIM005678',
+          name: 'Mariam Hassan Al-Thani',
+          nameAr: 'مريم حسن آل ثاني',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 40,
+          accountNumber: '001-123456-001'
+        },
+        {
+          rim: 'RIM003456',
+          name: 'Khalid bin Hamad Al-Attiyah',
+          nameAr: 'خالد بن حمد العطية',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 30,
+          accountNumber: '001-234567-002',
+          isPEP: true
+        },
+        {
+          rim: 'RIM008901',
+          name: 'Hassan Ali Al-Hajri',
+          nameAr: 'حسن علي الهاجري',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 20,
+          accountNumber: '001-234567-002'
+        },
+        {
+          id: 'COMP001',
+          name: 'Al-Kuwari Trading LLC',
+          nameAr: 'الكواري للتجارة ذ.م.م',
+          type: 'COMPANY',
+          relationship: 'BENEFICIAL_OWNER',
+          ownershipPct: 75,
+          crNumber: 'CR-12345'
+        },
+        {
+          id: 'COMP002',
+          name: 'Gulf Investment Partners',
+          nameAr: 'شركاء استثمار الخليج',
+          type: 'COMPANY',
+          relationship: 'DIRECTOR',
+          position: 'Board Member',
+          crNumber: 'CR-67890'
+        },
+        {
+          rim: 'RIM007890',
+          name: 'Fatima Nasser Al-Misnad',
+          nameAr: 'فاطمة ناصر المسند',
+          type: 'SIGNATORY',
+          relationship: 'SIGNATORY',
+          poaType: 'Limited POA',
+          poaExpiry: '2025-12-31'
+        }
+      ],
+      accounts: [
+        { number: '001-123456-001', type: 'Savings', balance: 500000, status: 'Active' },
+        { number: '001-234567-002', type: 'Current', balance: 1200000, status: 'Active' },
+        { number: '002-345678-001', type: 'Investment', balance: 3500000, status: 'Active' }
+      ],
+      riskIndicators: [
+        { type: 'HIGH_CASH', description: 'High cash transaction volume', severity: 'Medium' },
+        { type: 'INTL_TRANSFERS', description: 'International transfers to high-risk jurisdictions', severity: 'High' },
+        { type: 'PEP_CONNECTED', description: 'Connected to PEP individual', severity: 'High' }
+      ]
+    },
+    'RIM005678': {
+      centerNode: {
+        rim: 'RIM005678',
+        name: 'Mariam Hassan Al-Thani',
+        nameAr: 'مريم حسن آل ثاني',
+        type: 'CUSTOMER',
+        riskLevel: 'MEDIUM',
+        isPEP: false,
+        segment: 'Tamayuz'
+      },
+      relatedNodes: [
+        {
+          rim: 'RIM001234',
+          name: 'Abdullah Mohammed Al-Kuwari',
+          nameAr: 'عبدالله محمد الكواري',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 60,
+          accountNumber: '001-123456-001'
+        },
+        {
+          rim: 'RIM007890',
+          name: 'Fatima Nasser Al-Misnad',
+          nameAr: 'فاطمة ناصر المسند',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 30,
+          accountNumber: '001-345678-003'
+        },
+        {
+          rim: 'RIM006789',
+          name: 'Noura Ahmed Al-Ghanim',
+          nameAr: 'نورة أحمد الغانم',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 33,
+          accountNumber: '001-567890-005'
+        },
+        {
+          id: 'COMP003',
+          name: 'Thani Fashion House',
+          nameAr: 'دار ثاني للأزياء',
+          type: 'COMPANY',
+          relationship: 'BENEFICIAL_OWNER',
+          ownershipPct: 100,
+          crNumber: 'CR-11111'
+        }
+      ],
+      accounts: [
+        { number: '001-123456-001', type: 'Savings', balance: 500000, status: 'Active' },
+        { number: '001-345678-003', type: 'Investment', balance: 2500000, status: 'Active' },
+        { number: '001-567890-005', type: 'Current', balance: 180000, status: 'Active' }
+      ],
+      riskIndicators: [
+        { type: 'MULTI_JOINT', description: 'Multiple joint account relationships', severity: 'Low' }
+      ]
+    },
+    'RIM003456': {
+      centerNode: {
+        rim: 'RIM003456',
+        name: 'Khalid bin Hamad Al-Attiyah',
+        nameAr: 'خالد بن حمد العطية',
+        type: 'CUSTOMER',
+        riskLevel: 'AUTO HIGH',
+        isPEP: true,
+        pepPosition: 'Former Minister',
+        segment: 'Private Banking'
+      },
+      relatedNodes: [
+        {
+          rim: 'RIM001234',
+          name: 'Abdullah Mohammed Al-Kuwari',
+          nameAr: 'عبدالله محمد الكواري',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 30,
+          accountNumber: '001-234567-002'
+        },
+        {
+          rim: 'RIM008901',
+          name: 'Hassan Ali Al-Hajri',
+          nameAr: 'حسن علي الهاجري',
+          type: 'JOINT_HOLDER',
+          relationship: 'JOINT_ACCOUNT',
+          ownershipPct: 20,
+          accountNumber: '001-234567-002'
+        },
+        {
+          id: 'COMP004',
+          name: 'Attiyah Holdings',
+          nameAr: 'مجموعة العطية القابضة',
+          type: 'COMPANY',
+          relationship: 'BENEFICIAL_OWNER',
+          ownershipPct: 85,
+          crNumber: 'CR-99999'
+        },
+        {
+          id: 'COMP005',
+          name: 'Qatar Media Group',
+          nameAr: 'مجموعة قطر للإعلام',
+          type: 'COMPANY',
+          relationship: 'SHAREHOLDER',
+          ownershipPct: 15,
+          crNumber: 'CR-88888'
+        }
+      ],
+      accounts: [
+        { number: '001-234567-002', type: 'Current', balance: 1200000, status: 'Active' },
+        { number: '003-456789-001', type: 'Investment', balance: 8500000, status: 'Active' }
+      ],
+      riskIndicators: [
+        { type: 'PEP', description: 'Politically Exposed Person - Former Minister', severity: 'Critical' },
+        { type: 'HIGH_VALUE', description: 'High value accounts (>5M QAR)', severity: 'Medium' },
+        { type: 'COMPLEX_STRUCTURE', description: 'Complex corporate ownership structure', severity: 'High' }
+      ]
+    }
+  },
+
+  // Get network data for a customer
+  getCustomerNetwork: function(rim) {
+    return this.customerNetworks[rim] || null;
+  },
+
+  // Build network graph data structure
+  buildNetworkGraph: function(rim) {
+    const network = this.getCustomerNetwork(rim);
+    if (!network) return null;
+
+    const nodes = [];
+    const edges = [];
+
+    // Add center node
+    const centerNode = {
+      id: network.centerNode.rim,
+      label: network.centerNode.name,
+      labelAr: network.centerNode.nameAr,
+      type: network.centerNode.isPEP ? 'PEP' : (network.centerNode.riskLevel === 'HIGH' || network.centerNode.riskLevel === 'AUTO HIGH' ? 'HIGH_RISK' : 'CUSTOMER'),
+      x: 400,
+      y: 300,
+      isCenter: true,
+      data: network.centerNode
+    };
+    nodes.push(centerNode);
+
+    // Add related nodes in a circle around center
+    const relatedCount = network.relatedNodes.length;
+    const angleStep = (2 * Math.PI) / relatedCount;
+    const radius = 200;
+
+    network.relatedNodes.forEach((related, index) => {
+      const angle = angleStep * index - Math.PI / 2;
+      const x = 400 + radius * Math.cos(angle);
+      const y = 300 + radius * Math.sin(angle);
+
+      const relatedNode = {
+        id: related.rim || related.id,
+        label: related.name,
+        labelAr: related.nameAr,
+        type: related.isPEP ? 'PEP' : related.type,
+        x: x,
+        y: y,
+        isCenter: false,
+        data: related
+      };
+      nodes.push(relatedNode);
+
+      // Add edge
+      edges.push({
+        from: network.centerNode.rim,
+        to: related.rim || related.id,
+        type: related.relationship,
+        label: this.edgeTypes[related.relationship]?.label || related.relationship,
+        ownershipPct: related.ownershipPct
+      });
+    });
+
+    return { nodes, edges, accounts: network.accounts, riskIndicators: network.riskIndicators };
   }
 };
 
