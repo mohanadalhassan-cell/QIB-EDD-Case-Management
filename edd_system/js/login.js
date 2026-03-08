@@ -207,8 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
       userDisplay.textContent = currentUser.name;
       roleDisplay.textContent = roleLabels[currentUser.role];
 
-      // Store session
+      // Store session (both keys for compatibility)
       sessionStorage.setItem('edd_user', JSON.stringify(currentUser));
+      sessionStorage.setItem('edd_session', JSON.stringify(currentUser));
 
       // Redirect after animation
       setTimeout(() => {
@@ -284,13 +285,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Check existing session
-  const existingSession = sessionStorage.getItem('edd_user');
+  const existingSession = sessionStorage.getItem('edd_user') || sessionStorage.getItem('edd_session');
   if (existingSession) {
     try {
       const user = JSON.parse(existingSession);
+      // Ensure both session keys exist
+      sessionStorage.setItem('edd_user', JSON.stringify(user));
+      sessionStorage.setItem('edd_session', JSON.stringify(user));
       window.location.href = getDashboardUrl(user.role);
     } catch (e) {
       sessionStorage.removeItem('edd_user');
+      sessionStorage.removeItem('edd_session');
     }
   }
 });
