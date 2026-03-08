@@ -1,8 +1,8 @@
 # EDD Case Management System
 # Enterprise Features Specification
-## BRD Addendum — Version 2.2
+## BRD Addendum — Version 2.3
 
-**Document Version:** 2.2  
+**Document Version:** 2.3  
 **Date:** March 2026  
 **Classification:** Internal - Operations, Business, IT, Compliance  
 **Target Audience:** Business Users, CDD Operations, Compliance, IT Teams, Call Center
@@ -17,21 +17,122 @@ This document extends the IT Technical Architecture BRD with comprehensive speci
 
 | Section | Feature | Status |
 |---------|---------|--------|
-| 2 | Role Governance (Maker/Checker) | ✅ Implemented |
-| 3 | Financial Profile Display | ✅ Implemented |
-| 4 | Expected Activity Profile | ✅ Implemented |
-| 5 | Officer Digital Confirmation | ✅ Implemented |
-| 6 | Call Center View | ✅ Implemented |
-| 7 | User Guide Module | ✅ Implemented |
-| 8 | System Presentation | ✅ Implemented |
-| 9 | Comments & Recommendations | ✅ Implemented |
-| 10 | Customer Risk Network Graph | ✅ Implemented |
-| 11 | Financial Behaviour Indicators | ✅ Implemented |
-| 12 | Export Reports Module | ✅ Implemented |
+| 2 | Decision Support Framework | ✅ Implemented |
+| 3 | Role Governance (Maker/Checker) | ✅ Implemented |
+| 4 | Financial Profile Display | ✅ Implemented |
+| 5 | Expected Activity Profile | ✅ Implemented |
+| 6 | Officer Digital Confirmation | ✅ Implemented |
+| 7 | Call Center View | ✅ Implemented |
+| 8 | User Guide Module | ✅ Implemented |
+| 9 | System Presentation | ✅ Implemented |
+| 10 | Comments & Recommendations | ✅ Implemented |
+| 11 | Customer Risk Network Graph | ✅ Implemented |
+| 12 | Financial Behaviour Indicators | ✅ Implemented |
+| 13 | Export Reports Module | ✅ Implemented |
+| 14 | Employee Assessment Panel | ✅ Implemented |
 
 ---
 
-## 2. Role Governance System
+## 2. Decision Support Framework
+
+### 2.1 System Philosophy
+
+**CRITICAL PRINCIPLE: Human-in-the-Loop**
+
+The EDD Case Management System is designed as a **Decision Support System (DSS)**, NOT a Decision Engine.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DECISION SUPPORT SYSTEM PRINCIPLE                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│    ┌──────────────┐        ┌──────────────┐        ┌──────────────┐        │
+│    │   SYSTEM     │   →    │   EMPLOYEE   │   →    │   DECISION   │        │
+│    │   ASSISTS    │        │   ANALYZES   │        │   (HUMAN)    │        │
+│    └──────────────┘        └──────────────┘        └──────────────┘        │
+│                                                                             │
+│    • Collects Data          • Reviews Indicators   • Final Assessment      │
+│    • Presents Indicators    • Applies Judgment     • Accountability        │
+│    • Highlights Anomalies   • Documents Findings   • Digital Signature     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 2.2 Official Statement
+
+> **The system does NOT generate automated risk scores or automated risk decisions.**
+>
+> Its objective is to digitize the EDD workflow and assist employees by presenting relevant financial, AML, and customer relationship indicators.
+>
+> **The final assessment and decision remain the responsibility of the assigned employee and authorized bank personnel.**
+
+### 2.3 What the System Does
+
+| Function | Description |
+|----------|-------------|
+| Data Collection | Aggregates customer data from T24, ETL, SnapView, Risk Dataset |
+| Indicator Display | Presents behavioral and financial indicators |
+| Anomaly Highlighting | Flags inconsistencies for employee review |
+| Workflow Management | Routes cases through Maker/Checker approval |
+| Audit Trail | Records all actions and decisions |
+
+### 2.4 What the System Does NOT Do
+
+| Restriction | Reason |
+|-------------|--------|
+| ❌ Generate automated risk scores | Avoids Model Risk, regulatory challenges |
+| ❌ Classify customers automatically | Decision must be human judgment |
+| ❌ Make approval/rejection decisions | Accountability must remain with employee |
+| ❌ Override employee assessment | Human-in-the-loop principle |
+
+### 2.5 Behaviour Indicators (Not Risk Scores)
+
+The system displays **Indicators**, not scores:
+
+| Indicator Type | Example Display | Employee Action Required |
+|----------------|-----------------|--------------------------|
+| Income Mismatch | "Actual salary differs from declared salary" | Review and assess |
+| Activity Exceeds Expected | "Transaction activity exceeds expected profile" | Investigate source |
+| AML Positive | "AML screening returned positive result" | Verify and document |
+| PEP Status | "Customer identified as PEP" | Apply enhanced procedures |
+| Dormant Reactivation | "Dormant account with sudden high activity" | Verify legitimacy |
+| Salary Gap | "No salary credit for 90+ days" | Confirm employment status |
+
+### 2.6 Employee Assessment Options
+
+After reviewing indicators, the employee must select:
+
+| Assessment Option | Arabic | When to Use |
+|-------------------|--------|-------------|
+| Explanation Acceptable | تفسير مقبول | Customer provided satisfactory explanation |
+| Further Review Required | مراجعة إضافية مطلوبة | Additional documentation or verification needed |
+| Escalate to Compliance | تصعيد للامتثال | Suspicious indicators require compliance review |
+| No Concerns Identified | لا توجد مخاوف | Indicators reviewed, no risk concerns |
+
+### 2.7 Regulatory Compliance Benefits
+
+This design ensures:
+
+| Compliance Area | How It's Achieved |
+|-----------------|-------------------|
+| AML Governance | System supports, human decides |
+| Audit Requirements | Full trail of employee decisions |
+| Regulator Expectations | No algorithmic bias in classification |
+| Model Risk Avoidance | No automated scoring model to validate |
+
+### 2.8 Digital Confirmation Requirements
+
+Before finalizing any assessment, the employee must:
+
+1. ☑ Review all displayed indicators
+2. ☑ Document findings and observations
+3. ☑ Select appropriate assessment option
+4. ☑ Enter 4-digit personal PIN
+5. ☑ System records: Employee ID, Name, Timestamp, Assessment
+
+---
+
+## 3. Role Governance System
 
 ### 2.1 Overview
 
@@ -865,6 +966,7 @@ The PDF report includes:
 | 2.0 | March 2026 | Enterprise Architecture | Added all enterprise features |
 | 2.1 | March 2026 | Enterprise Architecture | Added Customer Risk Network Graph |
 | 2.2 | March 2026 | Enterprise Architecture | Added Financial Behaviour Indicators, Export Reports Module |
+| 2.3 | March 2026 | Enterprise Architecture | Added Decision Support Framework (Human-in-the-Loop), Employee Assessment Panel |
 
 ---
 

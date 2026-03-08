@@ -97,22 +97,30 @@ const ExportReports = {
   <div class="header">
     <div class="logo">QIB</div>
     <h1>EDD Case Investigation Report</h1>
-    <div class="subtitle">تقرير التحقق المعزز من العناية الواجبة</div>
+    <div class="subtitle">تقرير التحقق المعزز من العناية الواجبة — Decision Support System</div>
     <div class="subtitle">Case ID: ${eddCase.caseId} | Generated: ${new Date().toLocaleString()}</div>
   </div>
 
-  <!-- Risk Summary -->
+  <!-- DSS Notice -->
   <div class="section">
-    <div class="section-title">📊 Risk Assessment Summary — ملخص تقييم المخاطر</div>
+    <div style="background: #e3f2fd; border: 2px solid #2196F3; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+      <strong>ℹ️ Decision Support System Notice</strong><br/>
+      <span style="font-size: 10px;">This report presents indicators for employee review. The system does NOT generate automated risk scores or decisions. Final assessment is the responsibility of the reviewing officer.</span>
+    </div>
+  </div>
+
+  <!-- Indicators Summary -->
+  <div class="section">
+    <div class="section-title">🔍 Indicators Detected — المؤشرات المكتشفة</div>
     <div class="summary-box">
       <div class="grid">
         <div style="text-align: center;">
-          <div class="summary-score ${analysis.overallRisk === 'HIGH' || analysis.overallRisk === 'AUTO HIGH' ? 'risk-high' : analysis.overallRisk === 'MEDIUM' ? 'risk-medium' : 'risk-low'}">${analysis.riskScore}</div>
-          <div style="font-size: 14px; font-weight: 600;">Overall Risk Score</div>
-          <span class="risk-badge ${analysis.overallRisk.toLowerCase().replace(' ', '-')}">${analysis.overallRisk} RISK</span>
+          <div class="summary-score">${analysis.riskFactors.length}</div>
+          <div style="font-size: 14px; font-weight: 600;">Indicators Detected</div>
+          <span style="font-size: 11px; color: #666;">Employee Assessment Required</span>
         </div>
         <div>
-          <h4 style="margin-bottom: 10px;">Key Risk Factors:</h4>
+          <h4 style="margin-bottom: 10px;">Observations for Review:</h4>
           ${analysis.riskFactors.map(f => `
             <div class="indicator ${f.severity.toLowerCase()}">
               <strong>${f.type}</strong><br/>
