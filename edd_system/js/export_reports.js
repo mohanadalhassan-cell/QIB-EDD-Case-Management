@@ -579,53 +579,143 @@ const ExportReports = {
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0f1a; color: white; overflow: hidden; }
-    .slide { width: 100vw; height: 100vh; display: none; padding: 60px; position: relative; }
+    
+    /* Control Bar */
+    .control-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .control-bar .brand { font-size: 18px; font-weight: bold; color: #00D4FF; }
+    .control-bar .controls { display: flex; gap: 10px; align-items: center; }
+    .control-btn {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .control-btn:hover { background: rgba(0, 212, 255, 0.2); border-color: #00D4FF; }
+    .control-btn.primary { background: linear-gradient(135deg, #00D4FF, #0288D1); border: none; }
+    .control-btn.primary:hover { transform: scale(1.05); }
+    .slide-indicator { color: #9E9E9E; font-size: 14px; }
+    
+    .slide { width: 100vw; height: calc(100vh - 50px); margin-top: 50px; display: none; padding: 50px 60px; position: relative; }
     .slide.active { display: flex; flex-direction: column; }
-    .slide-header { margin-bottom: 40px; }
-    .slide-header h1 { font-size: 48px; margin-bottom: 10px; background: linear-gradient(135deg, #00D4FF, #0288D1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .slide-header p { font-size: 18px; color: #9E9E9E; }
-    .slide-content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-    .slide-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .nav-btn { padding: 12px 30px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+    .slide-header { margin-bottom: 30px; }
+    .slide-header h1 { font-size: 42px; margin-bottom: 8px; background: linear-gradient(135deg, #00D4FF, #0288D1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .slide-header p { font-size: 16px; color: #9E9E9E; }
+    .slide-content { flex: 1; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+    .slide-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .nav-btn { padding: 10px 24px; font-size: 14px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
     .nav-btn.prev { background: rgba(255,255,255,0.1); color: white; }
     .nav-btn.next { background: linear-gradient(135deg, #00D4FF, #0288D1); color: white; }
     .nav-btn:hover { transform: translateY(-2px); }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 30px; }
-    .card-title { font-size: 14px; color: #9E9E9E; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-    .card-value { font-size: 36px; font-weight: 700; color: #00D4FF; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+    .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; }
+    .card-title { font-size: 12px; color: #9E9E9E; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+    .card-value { font-size: 28px; font-weight: 700; color: #00D4FF; }
     .card-value.danger { color: #FF5252; }
     .card-value.warning { color: #FF9800; }
     .card-value.success { color: #4CAF50; }
-    .risk-meter { width: 100%; height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 10px; }
+    .risk-meter { width: 100%; height: 16px; background: rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; margin-top: 8px; }
     .risk-fill { height: 100%; transition: width 0.5s; }
-    .badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+    .badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; }
     .badge.critical { background: rgba(244, 67, 54, 0.2); color: #FF5252; }
     .badge.high { background: rgba(255, 152, 0, 0.2); color: #FF9800; }
     .badge.medium { background: rgba(255, 193, 7, 0.2); color: #FFC107; }
     .badge.low { background: rgba(76, 175, 80, 0.2); color: #4CAF50; }
+    .badge.auto-high { background: rgba(244, 67, 54, 0.2); color: #FF5252; }
     .indicator-list { list-style: none; }
-    .indicator-list li { padding: 15px; margin-bottom: 10px; border-left: 4px solid; border-radius: 0 8px 8px 0; background: rgba(255,255,255,0.03); }
+    .indicator-list li { padding: 12px; margin-bottom: 8px; border-left: 4px solid; border-radius: 0 8px 8px 0; background: rgba(255,255,255,0.03); font-size: 13px; }
     .indicator-list li.critical { border-color: #FF5252; }
     .indicator-list li.high { border-color: #FF9800; }
     .indicator-list li.medium { border-color: #FFC107; }
     .indicator-list li.low { border-color: #4CAF50; }
     .title-slide { background: linear-gradient(135deg, #0a0f1a 0%, #1a237e 100%); }
-    .title-slide h1 { font-size: 64px; text-align: center; margin-bottom: 20px; }
-    .title-slide .subtitle { font-size: 24px; text-align: center; color: #00D4FF; }
-    .logo { position: absolute; top: 30px; right: 40px; font-size: 24px; font-weight: bold; color: rgba(255,255,255,0.3); }
-    .slide-number { color: #666; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    th { color: #00D4FF; font-size: 12px; text-transform: uppercase; }
-    .highlight-box { background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(2, 136, 209, 0.05)); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 30px; text-align: center; }
+    .title-slide h1 { font-size: 56px; text-align: center; margin-bottom: 15px; }
+    .title-slide .subtitle { font-size: 20px; text-align: center; color: #00D4FF; }
+    .logo { position: absolute; top: 20px; right: 30px; font-size: 20px; font-weight: bold; color: rgba(255,255,255,0.3); }
+    .slide-number { color: #666; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { color: #00D4FF; font-size: 11px; text-transform: uppercase; }
+    .highlight-box { background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(2, 136, 209, 0.05)); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 12px; padding: 25px; text-align: center; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .animate { animation: fadeIn 0.5s ease-out forwards; }
+    
+    /* Print Styles */
+    @media print {
+      .control-bar { display: none !important; }
+      .slide { 
+        display: block !important; 
+        margin-top: 0 !important;
+        height: auto !important;
+        min-height: 100vh;
+        page-break-after: always;
+        padding: 40px;
+        background: white !important;
+        color: #333 !important;
+      }
+      .slide:last-child { page-break-after: avoid; }
+      body { background: white !important; overflow: visible !important; }
+      .slide-header h1 { -webkit-text-fill-color: #1a237e !important; color: #1a237e !important; font-size: 32px; }
+      .slide-header p { color: #666 !important; }
+      .card { background: #f5f5f5 !important; border-color: #ddd !important; }
+      .card-title { color: #666 !important; }
+      .card-value { color: #1a237e !important; }
+      .card-value.danger { color: #d32f2f !important; }
+      .card-value.warning { color: #f57c00 !important; }
+      .card-value.success { color: #388e3c !important; }
+      .title-slide { background: linear-gradient(135deg, #e3f2fd, #bbdefb) !important; }
+      .title-slide h1 { -webkit-text-fill-color: #1a237e !important; }
+      .highlight-box { background: #e3f2fd !important; border-color: #90caf9 !important; }
+      .slide-footer { display: none !important; }
+      .logo { color: #1a237e !important; }
+      table { font-size: 11px; }
+      th { color: #1a237e !important; }
+      td { border-color: #ddd !important; }
+      .indicator-list li { background: #f5f5f5 !important; color: #333 !important; }
+      .nav-btn { display: none !important; }
+    }
+    
+    /* Fullscreen mode */
+    body.fullscreen .control-bar { display: none; }
+    body.fullscreen .slide { height: 100vh; margin-top: 0; }
   </style>
 </head>
 <body>
+  <!-- Control Bar -->
+  <div class="control-bar">
+    <div class="brand">QIB EDD Presentation</div>
+    <div class="controls">
+      <span class="slide-indicator"><span id="current-slide">1</span> / 7</span>
+      <button class="control-btn" onclick="prevSlide()" title="Previous (←)">◀ Previous</button>
+      <button class="control-btn" onclick="nextSlide()" title="Next (→)">Next ▶</button>
+      <button class="control-btn" onclick="toggleFullscreen()" title="Fullscreen (F)">⛶ Fullscreen</button>
+      <button class="control-btn" onclick="printAllSlides()" title="Print All Slides">🖨️ Print All</button>
+      <button class="control-btn primary" onclick="window.close()" title="Close (Esc)">✕ Close</button>
+    </div>
+  </div>
+
   <!-- Slide 1: Title -->
   <div class="slide title-slide active" data-slide="1">
     <div class="logo">QIB</div>
@@ -930,6 +1020,7 @@ const ExportReports = {
     function showSlide(n) {
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.querySelector('[data-slide="' + n + '"]').classList.add('active');
+      document.getElementById('current-slide').textContent = n;
     }
 
     function nextSlide() {
@@ -946,11 +1037,38 @@ const ExportReports = {
       }
     }
 
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then(() => {
+          document.body.classList.add('fullscreen');
+        });
+      } else {
+        document.exitFullscreen().then(() => {
+          document.body.classList.remove('fullscreen');
+        });
+      }
+    }
+
+    function printAllSlides() {
+      window.print();
+    }
+
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
-      if (e.key === 'ArrowLeft') prevSlide();
-      if (e.key === 'Escape') window.close();
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+      if (e.key === 'Escape' && document.fullscreenElement) { document.exitFullscreen(); }
+      if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+      if (e.key === 'p' && e.ctrlKey) { e.preventDefault(); printAllSlides(); }
+      if (e.key === 'Home') { currentSlide = 1; showSlide(1); }
+      if (e.key === 'End') { currentSlide = totalSlides; showSlide(totalSlides); }
+    });
+
+    // Fullscreen change listener
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        document.body.classList.remove('fullscreen');
+      }
     });
   </script>
 </body>
