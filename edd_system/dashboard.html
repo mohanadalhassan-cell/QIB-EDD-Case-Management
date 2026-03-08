@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — Dashboard</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+            <span class="nav-badge">8</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+            <span>CDD Operations</span>
+            <span class="nav-badge warning">3</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <span>Compliance</span>
+            <span class="nav-badge danger">1</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Tools</div>
+          <a href="document_viewer.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+            <span>Documents</span>
+          </a>
+          <a href="notifications_center.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span>Notifications</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Admin User</div>
+          <div class="user-role" id="user-role">IT Administration</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Dashboard</h1>
+          <div class="breadcrumb">
+            <span>Home</span> / <span>Dashboard</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn btn-success btn-sm" onclick="showCallCenterSearch()" title="Call Center Customer Search">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+            Call Center
+          </button>
+          <button class="btn btn-accent btn-sm" onclick="EnterpriseUI.showPresentationModal()" title="System Presentation">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+            Presentation
+          </button>
+          <button class="btn btn-info btn-sm" onclick="EnterpriseUI.showUserGuideModal()" title="Help & User Guides">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Help
+          </button>
+          <button class="header-btn" title="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </button>
+          <button class="header-btn" title="Notifications">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span class="badge">3</span>
+          </button>
+          <button class="header-btn" id="logout-btn" title="Logout">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Data Sources Panel -->
+        <div class="data-sources-panel">
+          <div class="data-source">
+            <div class="data-source-icon t24">
+              <svg viewBox="0 0 24 24" fill="#00D4FF" width="20" height="20"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6z"/><path d="M23 8h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"/></svg>
+            </div>
+            <div class="data-source-info">
+              <h4>T24 Core Banking</h4>
+              <span>Customer Data & KYC</span>
+            </div>
+            <div class="data-source-status connected">
+              <span class="dot" style="width:6px;height:6px;background:#00E676;border-radius:50%;"></span>
+              Connected
+            </div>
+          </div>
+          <div class="data-source">
+            <div class="data-source-icon qcb">
+              <svg viewBox="0 0 24 24" fill="#00E676" width="20" height="20"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <div class="data-source-info">
+              <h4>QCB KYC API</h4>
+              <span>Regulatory Data</span>
+            </div>
+            <div class="data-source-status connected">
+              <span class="dot" style="width:6px;height:6px;background:#00E676;border-radius:50%;"></span>
+              Connected
+            </div>
+          </div>
+          <div class="data-source">
+            <div class="data-source-icon dms">
+              <svg viewBox="0 0 24 24" fill="#FFA726" width="20" height="20"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            </div>
+            <div class="data-source-info">
+              <h4>DMS Repository</h4>
+              <span>Document Storage</span>
+            </div>
+            <div class="data-source-status connected">
+              <span class="dot" style="width:6px;height:6px;background:#00E676;border-radius:50%;"></span>
+              Connected
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card" onclick="location.href='edd_case.html'">
+            <div class="stat-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            </div>
+            <div class="stat-value" id="stat-total">8</div>
+            <div class="stat-label">Total EDD Cases</div>
+            <div class="stat-trend up">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 14l5-5 5 5H7z"/></svg>
+              +3 this week
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon warning">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <div class="stat-value" id="stat-pending">5</div>
+            <div class="stat-label">Pending Review</div>
+            <div class="stat-trend down">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 10l5 5 5-5H7z"/></svg>
+              -2 from yesterday
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon danger">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            </div>
+            <div class="stat-value" id="stat-sla">3</div>
+            <div class="stat-label">SLA Breached</div>
+            <div class="stat-trend down">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 10l5 5 5-5H7z"/></svg>
+              Requires attention
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon success">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="stat-value" id="stat-completed">1</div>
+            <div class="stat-label">Completed Today</div>
+            <div class="stat-trend up">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 14l5-5 5 5H7z"/></svg>
+              On track
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+          <!-- Recent Cases -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                Recent EDD Cases
+              </h2>
+              <a href="edd_case.html" class="btn btn-secondary btn-sm">View All</a>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Case ID</th>
+                    <th>Customer</th>
+                    <th>Segment</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>SLA</th>
+                  </tr>
+                </thead>
+                <tbody id="cases-table">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Quick Stats & Alerts -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Segment Distribution -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>
+                  Cases by Segment
+                </h2>
+              </div>
+              <div class="card-body">
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                      <span style="font-size: 13px;">Mass Banking</span>
+                      <span style="font-size: 13px; color: var(--accent);" id="seg-mass">3</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 37.5%; background: var(--accent); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                      <span style="font-size: 13px;">Tamayuz</span>
+                      <span style="font-size: 13px; color: var(--success);" id="seg-tamayuz">2</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 25%; background: var(--success); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                      <span style="font-size: 13px;">Private Banking</span>
+                      <span style="font-size: 13px; color: var(--warning);" id="seg-private">3</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 37.5%; background: var(--warning); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alerts -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                  Alerts
+                </h2>
+              </div>
+              <div class="card-body" style="padding: 16px;">
+                <div class="notification-item" style="margin-bottom: 12px; background: rgba(255, 82, 82, 0.08); border-color: rgba(255, 82, 82, 0.2);">
+                  <div class="notification-icon" style="background: rgba(255, 82, 82, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="#FF5252" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                  </div>
+                  <div class="notification-content">
+                    <div class="notification-title" style="color: #FF5252;">3 Cases SLA Breached</div>
+                    <div class="notification-desc">Immediate action required</div>
+                  </div>
+                </div>
+                <div class="notification-item" style="margin-bottom: 12px;">
+                  <div class="notification-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                  </div>
+                  <div class="notification-content">
+                    <div class="notification-title">1 PEP Case Pending</div>
+                    <div class="notification-desc">Requires compliance review</div>
+                  </div>
+                </div>
+                <div class="notification-item" style="margin-bottom: 0;">
+                  <div class="notification-icon" style="background: rgba(255, 167, 38, 0.15);">
+                    <svg viewBox="0 0 24 24" fill="#FFA726" width="20" height="20"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 9h-2V7h2v4zm0 4h-2v-2h2v2z"/></svg>
+                  </div>
+                  <div class="notification-content">
+                    <div class="notification-title">2 Documents Pending</div>
+                    <div class="notification-desc">Awaiting client response</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+              Recent Activity
+            </h2>
+            <a href="audit_console.html" class="btn btn-secondary btn-sm">View Full Audit</a>
+          </div>
+          <div class="card-body">
+            <div class="timeline" id="activity-timeline">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/mock_data.js"></script>
+  <script src="js/enterprise_features.js"></script>
+  <script src="js/enterprise_ui.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    // Call Center Search Modal
+    function showCallCenterSearch() {
+      const modalHTML = `
+        <div id="callCenterSearchModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 10000;">
+          <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 16px; padding: 32px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h2 style="margin: 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="#00D4FF" width="24" height="24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                Call Center - Customer Search
+              </h2>
+              <button onclick="document.getElementById('callCenterSearchModal').remove()" style="background: none; border: none; color: white; cursor: pointer; font-size: 24px;">&times;</button>
+            </div>
+            <div style="margin-bottom: 20px;">
+              <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px; display: block;">Search by RIM, QID, or Account Number</label>
+              <input type="text" id="ccSearchInput" placeholder="Enter RIM, QID, or Account..." style="width: 100%; padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 14px;" onkeypress="if(event.key==='Enter') searchCallCenter()">
+            </div>
+            <button onclick="searchCallCenter()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #00D4FF, #0288D1); border: none; border-radius: 10px; color: white; cursor: pointer; font-size: 14px; font-weight: 600;">Search Customer</button>
+            <p style="margin: 16px 0 0 0; font-size: 11px; color: var(--text-muted); text-align: center;">Note: Call Center view shows limited information only. Risk scores and AML flags are restricted.</p>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      document.getElementById('ccSearchInput').focus();
+    }
+
+    function searchCallCenter() {
+      const input = document.getElementById('ccSearchInput').value.trim();
+      if (!input) return;
+      
+      // Search by RIM (in demo, we just check if RIM exists)
+      const customer = EDDMockData.customers.find(c => 
+        c.rim.toLowerCase() === input.toLowerCase() || 
+        c.rim.toLowerCase().includes(input.toLowerCase())
+      );
+      
+      document.getElementById('callCenterSearchModal').remove();
+      
+      if (customer) {
+        EnterpriseUI.showCallCenterView(customer.rim);
+      } else {
+        alert('Customer not found. Try: RIM001234, RIM005678, etc.');
+      }
+    }
+  </script>
+</body>
+</html>

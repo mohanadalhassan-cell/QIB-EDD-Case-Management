@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — EDD Case</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+            <span class="nav-badge">8</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Tools</div>
+          <a href="document_viewer.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+            <span>Documents</span>
+          </a>
+          <a href="notifications_center.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span>Notifications</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User</div>
+          <div class="user-role" id="user-role">Role</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">EDD Case Review</h1>
+          <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a> / <span>EDD Cases</span> / <span id="case-id">EDD-2024-001234</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn btn-accent btn-sm" onclick="EnterpriseUI.showPresentationModal()" title="System Presentation">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+            Presentation
+          </button>
+          <button class="btn btn-info btn-sm" onclick="EnterpriseUI.showUserGuideModal()" title="Help & User Guides">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Help
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="window.print()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+            Print
+          </button>
+          <button class="header-btn" id="logout-btn" title="Logout">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Case Summary Header -->
+        <div class="card mb-24" style="margin-bottom: 24px;">
+          <div class="card-body" style="padding: 24px;">
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 32px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                  <h2 style="font-size: 24px; font-weight: 700;" id="customer-name">Abdullah Mohammed Al-Kuwari</h2>
+                  <span class="risk-badge high" id="risk-badge">HIGH RISK</span>
+                  <span class="status-badge in-progress" id="status-badge">Business Review</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+                  <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">RIM NUMBER</div>
+                    <div style="font-size: 14px; font-weight: 600;" id="rim-number">RIM001234</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">SEGMENT</div>
+                    <div style="font-size: 14px; font-weight: 600;" id="segment">Private Banking</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">TRIGGER SOURCE</div>
+                    <div style="font-size: 14px; font-weight: 600;" id="trigger-source">T24/CRP</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">CASE CREATED</div>
+                    <div style="font-size: 14px; font-weight: 600;" id="created-date">Feb 15, 2024</div>
+                  </div>
+                </div>
+              </div>
+              <div style="border-left: 1px solid var(--glass-border); padding-left: 32px;">
+                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">RISK TRIGGERS</div>
+                <div id="triggers-list" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <span class="status-badge escalated">PEP</span>
+                  <span class="status-badge pending">Private Banking</span>
+                  <span class="status-badge pending">High Net Worth</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workflow Steps -->
+        <div class="workflow-steps" style="margin-bottom: 24px;">
+          <div class="workflow-step completed">
+            <div class="workflow-step-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div class="workflow-step-label">Case Created</div>
+          </div>
+          <div class="workflow-step active">
+            <div class="workflow-step-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            </div>
+            <div class="workflow-step-label">Business Review</div>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div class="workflow-step-label">Business Approval</div>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46"/></svg>
+            </div>
+            <div class="workflow-step-label">CDD Review</div>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div class="workflow-step-label">CDD Approval</div>
+          </div>
+          <div class="workflow-step">
+            <div class="workflow-step-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="workflow-step-label">Complete</div>
+          </div>
+        </div>
+
+        <!-- Data Sources -->
+        <div class="data-sources-panel" style="margin-bottom: 24px;">
+          <div class="data-source">
+            <div class="data-source-icon t24">
+              <svg viewBox="0 0 24 24" fill="#00D4FF" width="20" height="20"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6z"/></svg>
+            </div>
+            <div class="data-source-info">
+              <h4>T24 Core Banking</h4>
+              <span>Last sync: Just now</span>
+            </div>
+            <div class="data-source-status connected">
+              <span class="dot" style="width:6px;height:6px;background:#00E676;border-radius:50%;"></span>
+              Data Retrieved
+            </div>
+          </div>
+          <div class="data-source">
+            <div class="data-source-icon qcb">
+              <svg viewBox="0 0 24 24" fill="#00E676" width="20" height="20"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <div class="data-source-info">
+              <h4>QCB KYC API</h4>
+              <span id="qcb-consent">Consent: Yes</span>
+            </div>
+            <div class="data-source-status connected">
+              <span class="dot" style="width:6px;height:6px;background:#00E676;border-radius:50%;"></span>
+              Connected
+            </div>
+          </div>
+          <div class="data-source">
+            <div class="data-source-icon dms">
+              <svg viewBox="0 0 24 24" fill="#FFA726" width="20" height="20"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+            </div>
+            <div class="data-source-info">
+              <h4>DMS Documents</h4>
+              <span id="doc-count">3 documents available</span>
+            </div>
+            <div class="data-source-status connected">
+              <span class="dot" style="width:6px;height:6px;background:#00E676;border-radius:50%;"></span>
+              Retrieved
+            </div>
+          </div>
+        </div>
+
+        <!-- Risk Analysis Panel (ETL/SnapView Data - EXACT FIELD NAMES) -->
+        <div class="card risk-analysis-panel" id="risk-analysis-panel" style="margin-bottom: 24px;">
+          <div class="card-body" style="padding: 24px;">
+            <!-- Header with FINAL_RISK_SCORE and FINAL_RISK_CATEG -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="color: var(--accent-primary);">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+                <div>
+                  <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Customer Risk Classification</h3>
+                  <span style="font-size: 11px; color: var(--text-muted);">LAST_SCORE_DATE: <span id="last-score-date">Feb 15, 2024</span> • SECTOR_DESC: <span id="sector-desc">Private Family</span></span>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 24px;">
+                <div style="text-align: right;">
+                  <div style="font-size: 11px; color: var(--text-muted); font-family: monospace;">FINAL_RISK_SCORE</div>
+                  <div style="font-size: 32px; font-weight: 700;" id="final-risk-score">370</div>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-size: 11px; color: var(--text-muted); font-family: monospace;">FINAL_RISK_CATEG</div>
+                  <div style="font-size: 18px; font-weight: 700; padding: 6px 16px; border-radius: 8px; background: rgba(244,67,54,0.15); color: #F44336;" id="final-risk-categ">AUTO HIGH</div>
+                </div>
+                <div class="risk-meter" id="risk-meter" style="width: 70px; height: 70px; position: relative;">
+                  <svg viewBox="0 0 100 100" style="transform: rotate(-90deg);">
+                    <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.1)" stroke-width="12" fill="none"/>
+                    <circle id="risk-meter-fill" cx="50" cy="50" r="40" stroke="var(--accent-warning)" stroke-width="12" fill="none"
+                            stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-linecap="round"/>
+                  </svg>
+                  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; font-weight: 700;">
+                    <span id="risk-percentage">74%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- AUTO HIGH TRIGGER Alert -->
+            <div id="auto-high-trigger" style="background: rgba(244,67,54,0.1); border: 2px solid rgba(244,67,54,0.4); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 24 24" fill="#F44336" width="24" height="24">
+                  <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                </svg>
+                <div>
+                  <div style="font-weight: 700; color: #F44336; font-size: 14px;">AUTO HIGH TRIGGER</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">Reason: Private Banking Client</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Risk Factor Grid (Heatmap) - Using EXACT ETL Field Names -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
+              <!-- PROD_RISK_SCORE / PROD_RISK_CATEG -->
+              <div class="risk-factor-card" id="risk-product" style="background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">PROD_RISK_SCORE</div>
+                <div style="font-size: 32px; font-weight: 700; color: #FFB300; margin-bottom: 4px;" id="prod-risk-score">90</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">PROD_RISK_CATEG</div>
+                <div style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.2); color: #FFB300;" id="prod-risk-categ">MEDIUM</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px;">Trading</div>
+              </div>
+              
+              <!-- ACT_RISK_SCORE / ACT_RISK_CATEG -->
+              <div class="risk-factor-card primary-driver" id="risk-activity" style="background: rgba(244,67,54,0.15); border: 2px solid rgba(244,67,54,0.5); border-radius: 12px; padding: 16px; text-align: center; position: relative;">
+                <div style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: #F44336; color: white; padding: 2px 10px; border-radius: 10px; font-size: 9px; font-weight: 700;">PRIMARY DRIVER</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">ACT_RISK_SCORE</div>
+                <div style="font-size: 32px; font-weight: 700; color: #F44336; margin-bottom: 4px;" id="act-risk-score">160</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">ACT_RISK_CATEG</div>
+                <div style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(244,67,54,0.2); color: #F44336;" id="act-risk-categ">HIGH</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px;">Transaction Patterns</div>
+              </div>
+              
+              <!-- OCCP_RISK_SCORE / OCCP_RISK_CATEG -->
+              <div class="risk-factor-card" id="risk-occupation" style="background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">OCCP_RISK_SCORE</div>
+                <div style="font-size: 32px; font-weight: 700; color: #FFB300; margin-bottom: 4px;" id="occp-risk-score">80</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">OCCP_RISK_CATEG</div>
+                <div style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.2); color: #FFB300;" id="occp-risk-categ">MEDIUM</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px;">Business Owner</div>
+              </div>
+              
+              <!-- COUNTRY_RISK_SCORE / COUNTRY_RISK_CATEG -->
+              <div class="risk-factor-card" id="risk-country" style="background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">COUNTRY_RISK_SCORE</div>
+                <div style="font-size: 32px; font-weight: 700; color: #4CAF50; margin-bottom: 4px;" id="country-risk-score">40</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">COUNTRY_RISK_CATEG</div>
+                <div style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(76,175,80,0.2); color: #4CAF50;" id="country-risk-categ">LOW</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px;">Qatar (QA)</div>
+              </div>
+            </div>
+            
+            <!-- PRIMARY RISK DRIVER Display -->
+            <div style="background: rgba(244,67,54,0.05); border: 1px solid rgba(244,67,54,0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;">
+              <div id="primary-risk-driver" style="font-size: 13px; font-family: monospace;">
+                <strong>PRIMARY RISK DRIVER:</strong> ACT_RISK_CATEG = HIGH
+              </div>
+            </div>
+            
+            <!-- Risk-Based EDD Actions -->
+            <div class="risk-actions-panel" style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 12px; padding: 16px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style="color: var(--accent-primary);">
+                  <path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                </svg>
+                <span style="font-size: 13px; font-weight: 600;">Risk-Based EDD Actions Required</span>
+              </div>
+              <div id="risk-actions-list" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(244,67,54,0.1); border: 1px solid rgba(244,67,54,0.3); border-radius: 8px; padding: 8px 12px; font-size: 12px;">
+                  <svg viewBox="0 0 24 24" fill="#F44336" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <span>Transaction Activity Analysis</span>
+                </div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(244,67,54,0.1); border: 1px solid rgba(244,67,54,0.3); border-radius: 8px; padding: 8px 12px; font-size: 12px;">
+                  <svg viewBox="0 0 24 24" fill="#F44336" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <span>Source of Funds Verification</span>
+                </div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,152,0,0.1); border: 1px solid rgba(255,152,0,0.3); border-radius: 8px; padding: 8px 12px; font-size: 12px;">
+                  <svg viewBox="0 0 24 24" fill="#FFB300" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  <span>Product Suitability Review</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Joint Account Exposure Panel (T24 via ETL/SnapView) -->
+        <div class="card joint-exposure-panel" id="joint-exposure-panel" style="margin-bottom: 24px;">
+          <div class="panel-header" style="background: linear-gradient(135deg, #2196F3, #1976D2); color: white; padding: 15px 20px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+              </svg>
+              Joint Account Exposure
+              <span id="jointAccountsBadge" class="joint-accounts-badge" style="background: #FF5722; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; display: none;">0</span>
+            </h3>
+            <div style="font-size: 11px; opacity: 0.9; font-family: monospace;">Source: T24 / ETL / SnapView</div>
+          </div>
+          <div class="joint-exposure-content" id="jointExposureContent" style="padding: 20px;">
+            <!-- Content will be dynamically loaded by JointAccountsModule -->
+            <div style="text-align: center; padding: 40px; color: #9E9E9E;">
+              <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+              <p style="margin-top: 10px;">Loading Joint Account Data...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transaction Activity Analysis Panel (T24/TM via ETL) -->
+        <div class="card transaction-activity-panel" id="transaction-activity-panel" style="margin-bottom: 24px;">
+          <div class="panel-header" style="background: linear-gradient(135deg, #FF5722, #E64A19); color: white; padding: 15px 20px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
+              </svg>
+              Transaction Activity Analysis
+              <span id="tmAlertsBadge" class="tm-alerts-badge" style="background: #F44336; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; display: none;">0</span>
+            </h3>
+            <div style="font-size: 11px; opacity: 0.9; font-family: monospace;">Source: T24 / TM (Transaction Monitoring) / ETL</div>
+          </div>
+          <div class="transaction-content" id="transactionActivityContent" style="padding: 20px;">
+            <!-- Content will be dynamically loaded by TransactionActivityModule -->
+            <div style="text-align: center; padding: 40px; color: #9E9E9E;">
+              <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+              <p style="margin-top: 10px;">Loading Transaction Activity Data...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Profile Panel (ETL/SnapView Data) -->
+        <div class="card financial-profile-panel" id="financial-profile-panel" style="margin-bottom: 24px;">
+          <div class="panel-header" style="background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; padding: 15px 20px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+              </svg>
+              Financial Profile
+            </h3>
+            <div style="font-size: 11px; opacity: 0.9; font-family: monospace;">Source: ETL / SnapView</div>
+          </div>
+          <div class="financial-content" id="financialProfileContent" style="padding: 20px;">
+            <div style="text-align: center; padding: 40px; color: #9E9E9E;">
+              <p style="margin-top: 10px;">Loading Financial Profile...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expected Activity Profile Panel (Risk Dataset) -->
+        <div class="card expected-activity-panel" id="expected-activity-panel" style="margin-bottom: 24px;">
+          <div class="panel-header" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2); color: white; padding: 15px 20px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+              </svg>
+              Expected Activity Profile
+              <span id="deviationBadge" class="deviation-badge" style="background: #F44336; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; display: none;">DEVIATION</span>
+            </h3>
+            <div style="font-size: 11px; opacity: 0.9; font-family: monospace;">Source: Risk Dataset</div>
+          </div>
+          <div class="expected-activity-content" id="expectedActivityContent" style="padding: 20px;">
+            <div style="text-align: center; padding: 40px; color: #9E9E9E;">
+              <p style="margin-top: 10px;">Loading Expected Activity Profile...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs" style="margin-bottom: 24px;">
+          <button class="tab active" data-tab="edd-form">EDD Form</button>
+          <button class="tab" data-tab="documents">Documents</button>
+          <button class="tab" data-tab="comments">Comments & History</button>
+          <button class="tab" data-tab="approval">Approval</button>
+        </div>
+
+        <!-- Tab Content: EDD Form -->
+        <div id="tab-edd-form" class="tab-content">
+          <!-- Section 1: Risk Classification -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">1</span>
+                Risk Classification of the Client
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Client involved in increased risk business <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <div class="option-group">
+                    <label class="option-item"><input type="radio" name="risk_business" value="yes"> Yes</label>
+                    <label class="option-item selected"><input type="radio" name="risk_business" value="no" checked> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Self-employed from sanctioned/high-risk country <span class="required">*</span></label>
+                  <div class="option-group">
+                    <label class="option-item"><input type="radio" name="sanctioned_country" value="yes"> Yes</label>
+                    <label class="option-item selected"><input type="radio" name="sanctioned_country" value="no" checked> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Non-Resident Status <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <div class="option-group">
+                    <label class="option-item"><input type="radio" name="non_resident" value="yes"> Yes</label>
+                    <label class="option-item selected"><input type="radio" name="non_resident" value="no" checked> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Private Banking Sector <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <div class="option-group">
+                    <label class="option-item selected"><input type="radio" name="private_banking" value="yes" checked> Yes</label>
+                    <label class="option-item"><input type="radio" name="private_banking" value="no"> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Politically Exposed Person (PEP) <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <div class="option-group">
+                    <label class="option-item selected"><input type="radio" name="pep" value="yes" checked> Yes</label>
+                    <label class="option-item"><input type="radio" name="pep" value="no"> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Overall Risk Classification <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <select class="form-control readonly" disabled>
+                    <option value="high" selected>High Risk</option>
+                    <option value="medium">Medium Risk</option>
+                    <option value="low">Low Risk</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Customer Information -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">2</span>
+                Customer Information
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Customer Name <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <input type="text" class="form-control readonly" value="Abdullah Mohammed Al-Kuwari" readonly>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">RIM Number <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <input type="text" class="form-control readonly" value="RIM001234" readonly>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nationality <span class="required">*</span> <span class="source-badge qcb">QCB</span></label>
+                  <input type="text" class="form-control readonly" value="Qatari" readonly>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Date of Birth <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <input type="text" class="form-control readonly" value="1975-03-15" readonly>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Form being filed for <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="customer" selected>Customer</option>
+                    <option value="joint">Joint Account Holder</option>
+                    <option value="guardian">Guardian</option>
+                    <option value="poa">Power of Attorney</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">How was client acquired? <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="referral">Referral</option>
+                    <option value="walk-in">Walk-in</option>
+                    <option value="online">Online Application</option>
+                    <option value="corporate">Corporate Introduction</option>
+                  </select>
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Referral Details</label>
+                  <input type="text" class="form-control" placeholder="If referred, specify by whom">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Purpose of Account -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">3</span>
+                Purpose and Intended Use of Account
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Purpose of Account <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="personal">Personal Savings</option>
+                    <option value="salary">Salary Account</option>
+                    <option value="business" selected>Business Operations</option>
+                    <option value="investment">Investment</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Account used for business activities? <span class="required">*</span></label>
+                  <div class="option-group">
+                    <label class="option-item selected"><input type="radio" name="business_activities" value="yes" checked> Yes</label>
+                    <label class="option-item"><input type="radio" name="business_activities" value="no"> No</label>
+                  </div>
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Expected Banking Products & Services <span class="required">*</span></label>
+                  <div class="option-group" style="flex-wrap: wrap;">
+                    <label class="option-item selected"><input type="checkbox" checked> Current Account</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Savings Account</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Credit Card</label>
+                    <label class="option-item"><input type="checkbox"> Personal Finance</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Investment Services</label>
+                    <label class="option-item"><input type="checkbox"> Trade Finance</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Private Banking</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Source of Income & Wealth -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">4</span>
+                Source of Income and Source of Wealth
+              </div>
+            </div>
+            <div class="form-section-body">
+              <!-- 4A: Monthly Income - Salary -->
+              <h4 style="color: var(--accent); margin-bottom: 16px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">A. Monthly Sources of Income</h4>
+              
+              <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h5 style="margin-bottom: 16px; font-size: 14px;">Salary / Employment Income</h5>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Designation <span class="source-badge t24">T24</span></label>
+                    <input type="text" class="form-control" value="Business Owner / Chairman">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Name of Employer <span class="source-badge t24">T24</span></label>
+                    <input type="text" class="form-control" value="Al-Kuwari Trading Group">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Employer Address</label>
+                    <input type="text" class="form-control" value="West Bay Tower, Doha, Qatar">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Years in Employment</label>
+                    <input type="number" class="form-control" value="25">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Expected Monthly Income (QAR) <span class="required">*</span></label>
+                    <input type="text" class="form-control" value="450,000">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Salary Transferred to QIB?</label>
+                    <div class="option-group">
+                      <label class="option-item selected"><input type="radio" name="salary_qib" value="yes" checked> Yes</label>
+                      <label class="option-item"><input type="radio" name="salary_qib" value="no"> No</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h5 style="margin-bottom: 16px; font-size: 14px;">Business / Self-Employment Income</h5>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Business Name</label>
+                    <input type="text" class="form-control" value="Al-Kuwari Trading Group WLL">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Line of Business Activity</label>
+                    <input type="text" class="form-control" value="Import/Export, Real Estate, Investments">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">% Ownership</label>
+                    <input type="text" class="form-control" value="85%">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Years in Business</label>
+                    <input type="number" class="form-control" value="30">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Annual Profit (QAR)</label>
+                    <input type="text" class="form-control" value="15,000,000">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Company Account with QIB?</label>
+                    <div class="option-group">
+                      <label class="option-item selected"><input type="radio" name="company_qib" value="yes" checked> Yes</label>
+                      <label class="option-item"><input type="radio" name="company_qib" value="no"> No</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4B: Source of Wealth -->
+              <h4 style="color: var(--accent); margin: 24px 0 16px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">B. Source of Wealth</h4>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label">Source of Wealth Categories <span class="required">*</span></label>
+                  <div class="option-group" style="flex-wrap: wrap;">
+                    <label class="option-item selected"><input type="checkbox" checked> Salary Earnings</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Business Earnings</label>
+                    <label class="option-item"><input type="checkbox"> Gift / Inheritance</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Investment Income</label>
+                    <label class="option-item"><input type="checkbox"> Sale of Business</label>
+                    <label class="option-item selected"><input type="checkbox" checked> Sale of Property</label>
+                    <label class="option-item"><input type="checkbox"> Others</label>
+                  </div>
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Detailed Explanation of Source of Wealth <span class="required">*</span></label>
+                  <textarea class="form-control" rows="4">Customer's wealth is primarily derived from successful business ventures in trading, real estate investments across Qatar and GCC, and accumulated investment returns over 30+ years of business operations. Family business established in 1994.</textarea>
+                </div>
+              </div>
+
+              <!-- 4C: Net Worth -->
+              <h4 style="color: var(--accent); margin: 24px 0 16px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">C. Total Estimated Net Worth</h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Estimated Net Worth Range <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="<250k">&lt; QAR 250,000</option>
+                    <option value="250k-500k">QAR 250,000 - 500,000</option>
+                    <option value="500k-1m">QAR 500,000 - 1,000,000</option>
+                    <option value="1m-3m">QAR 1,000,000 - 3,000,000</option>
+                    <option value="3m-5m">QAR 3,000,000 - 5,000,000</option>
+                    <option value=">5m" selected>&gt; QAR 5,000,000</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Initial Deposit -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">5</span>
+                Initial Deposit
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Initial Deposit Amount (QAR) <span class="required">*</span></label>
+                  <input type="text" class="form-control" value="5,000,000">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Expected Eventual Balance (QAR)</label>
+                  <input type="text" class="form-control" value="25,000,000">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mode of Initial Deposit <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="cash">Cash</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="transfer" selected>Bank Transfer</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Source of Funds for Initial Deposit <span class="required">*</span></label>
+                  <input type="text" class="form-control" value="Transfer from existing QIB business account">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 6: Transaction Activity -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">6</span>
+                Monthly Anticipated Transactional Activity
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div style="overflow-x: auto;">
+                <table class="data-table" style="min-width: 800px;">
+                  <thead>
+                    <tr>
+                      <th>Transaction Type</th>
+                      <th>No. of Transactions</th>
+                      <th>Total Value (QAR)</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Cash Deposits</td>
+                      <td><input type="number" class="form-control" value="2" style="width: 80px;"></td>
+                      <td><input type="text" class="form-control" value="50,000" style="width: 120px;"></td>
+                      <td><input type="text" class="form-control" value="Business receipts"></td>
+                    </tr>
+                    <tr>
+                      <td>Cash Withdrawals</td>
+                      <td><input type="number" class="form-control" value="3" style="width: 80px;"></td>
+                      <td><input type="text" class="form-control" value="100,000" style="width: 120px;"></td>
+                      <td><input type="text" class="form-control" value="Personal expenses"></td>
+                    </tr>
+                    <tr>
+                      <td>Cheque Payments</td>
+                      <td><input type="number" class="form-control" value="5" style="width: 80px;"></td>
+                      <td><input type="text" class="form-control" value="500,000" style="width: 120px;"></td>
+                      <td><input type="text" class="form-control" value="Supplier payments"></td>
+                    </tr>
+                    <tr>
+                      <td>Internal Transfers</td>
+                      <td><input type="number" class="form-control" value="10" style="width: 80px;"></td>
+                      <td><input type="text" class="form-control" value="2,000,000" style="width: 120px;"></td>
+                      <td><input type="text" class="form-control" value="Business operations"></td>
+                    </tr>
+                    <tr>
+                      <td>Wire Transfers (International)</td>
+                      <td><input type="number" class="form-control" value="4" style="width: 80px;"></td>
+                      <td><input type="text" class="form-control" value="1,500,000" style="width: 120px;"></td>
+                      <td><input type="text" class="form-control" value="Import payments"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="form-grid" style="margin-top: 20px;">
+                <div class="form-group">
+                  <label class="form-label">Countries from/to which funds anticipated</label>
+                  <input type="text" class="form-control" value="UAE, UK, China, India">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Transactions with sanctioned countries? <span class="required">*</span></label>
+                  <div class="option-group">
+                    <label class="option-item"><input type="radio" name="sanctioned_trans" value="yes"> Yes</label>
+                    <label class="option-item selected"><input type="radio" name="sanctioned_trans" value="no" checked> No</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 7 & 8: Existing Relationships -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">7</span>
+                Existing Relationships
+              </div>
+            </div>
+            <div class="form-section-body">
+              <h4 style="color: var(--accent); margin-bottom: 16px; font-size: 13px;">Within QIB</h4>
+              <div class="form-grid" style="margin-bottom: 20px;">
+                <div class="form-group">
+                  <label class="form-label">Existing relationship within QIB?</label>
+                  <div class="option-group">
+                    <label class="option-item selected"><input type="radio" name="qib_relation" value="yes" checked> Yes</label>
+                    <label class="option-item"><input type="radio" name="qib_relation" value="no"> No</label>
+                  </div>
+                </div>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Account Holder</th>
+                    <th>RIM</th>
+                    <th>Segment</th>
+                    <th>Relationship</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Al-Kuwari Trading Group WLL</td>
+                    <td>RIM009999</td>
+                    <td>Corporate Banking</td>
+                    <td>Business Owner</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h4 style="color: var(--accent); margin: 24px 0 16px; font-size: 13px;">With Other Banks</h4>
+              <div class="form-grid" style="margin-bottom: 20px;">
+                <div class="form-group">
+                  <label class="form-label">Existing relationship with other banks?</label>
+                  <div class="option-group">
+                    <label class="option-item selected"><input type="radio" name="other_bank" value="yes" checked> Yes</label>
+                    <label class="option-item"><input type="radio" name="other_bank" value="no"> No</label>
+                  </div>
+                </div>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Bank Name</th>
+                    <th>Country</th>
+                    <th>Est. Value (QAR)</th>
+                    <th>Banking Since</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>QNB</td>
+                    <td>Qatar</td>
+                    <td>10,000,000</td>
+                    <td>2005</td>
+                  </tr>
+                  <tr>
+                    <td>HSBC</td>
+                    <td>UAE</td>
+                    <td>5,000,000</td>
+                    <td>2010</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 9: Related Party -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">9</span>
+                Related Party
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Is there an authorized signatory / POA / Guardian / Joint Holder?</label>
+                  <div class="option-group">
+                    <label class="option-item"><input type="radio" name="related_party" value="yes"> Yes</label>
+                    <label class="option-item selected"><input type="radio" name="related_party" value="no" checked> No</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 10: PEP Identification -->
+          <div class="form-section" style="border: 1px solid rgba(255, 82, 82, 0.3);">
+            <div class="form-section-header" style="background: rgba(255, 82, 82, 0.1);">
+              <div class="form-section-title" style="color: #FF5252;">
+                <span class="section-number" style="background: #FF5252;">10</span>
+                PEP Identification
+              </div>
+              <span class="risk-badge high">PEP FLAG ACTIVE</span>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Is customer a PEP? <span class="required">*</span> <span class="source-badge t24">T24</span></label>
+                  <div class="option-group">
+                    <label class="option-item selected"><input type="radio" name="is_pep" value="yes" checked> Yes</label>
+                    <label class="option-item"><input type="radio" name="is_pep" value="no"> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">PEP Category <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="domestic" selected>Domestic PEP</option>
+                    <option value="foreign">Foreign PEP</option>
+                    <option value="international">International Organization PEP</option>
+                    <option value="family">Family Member of PEP</option>
+                    <option value="associate">Close Associate of PEP</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Name of Primary PEP <span class="required">*</span></label>
+                  <input type="text" class="form-control" value="Abdullah Mohammed Al-Kuwari">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Type of Primary PEP</label>
+                  <input type="text" class="form-control" value="Former Government Official">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">PEP Nationality</label>
+                  <input type="text" class="form-control" value="Qatari">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Associate Country</label>
+                  <input type="text" class="form-control" value="Qatar">
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Public Function / Position Held <span class="required">*</span></label>
+                  <input type="text" class="form-control" value="Former Minister of Commerce (2010-2018)">
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Background and Assessment <span class="required">*</span></label>
+                  <textarea class="form-control" rows="3">Customer served as Minister of Commerce from 2010-2018. No adverse media or legal issues identified. Source of wealth verified through business documentation and government records. Standard PEP enhanced monitoring applied.</textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Still holding PEP position?</label>
+                  <div class="option-group">
+                    <label class="option-item"><input type="radio" name="pep_active" value="yes"> Yes</label>
+                    <label class="option-item selected"><input type="radio" name="pep_active" value="no" checked> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Cessation Year</label>
+                  <input type="number" class="form-control" value="2018">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 11: Business Recommendations -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">
+                <span class="section-number">11</span>
+                Business Recommendations and Sign Offs
+              </div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label">Overall Summary of Customer Profile <span class="required">*</span></label>
+                  <textarea class="form-control" rows="4" placeholder="Provide comprehensive summary of customer profile, risk factors, and overall assessment..."></textarea>
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Business Recommendation <span class="required">*</span></label>
+                  <select class="form-control">
+                    <option value="">Select Recommendation</option>
+                    <option value="proceed">Proceed to CDD with Approval</option>
+                    <option value="proceed_monitor">Proceed with Enhanced Monitoring</option>
+                    <option value="restrict">Temporary Account Restriction</option>
+                    <option value="freeze">Account Freeze Pending Review</option>
+                    <option value="escalate">Escalate to Compliance</option>
+                  </select>
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Additional Information / Comments</label>
+                  <textarea class="form-control" rows="3" placeholder="Any additional comments or information..."></textarea>
+                </div>
+              </div>
+
+              <!-- Approval Panel -->
+              <div class="approval-panel" style="margin-top: 24px;">
+                <div class="approval-box">
+                  <div class="approval-box-header">
+                    <div class="approval-box-title">
+                      <svg viewBox="0 0 24 24" fill="var(--accent)" width="20" height="20"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      Business Maker
+                    </div>
+                    <span class="status-badge pending">Pending</span>
+                  </div>
+                  <div class="approval-info">
+                    <div class="approval-row">
+                      <span>Staff Name:</span>
+                      <span>—</span>
+                    </div>
+                    <div class="approval-row">
+                      <span>Staff ID:</span>
+                      <span>—</span>
+                    </div>
+                    <div class="approval-row">
+                      <span>Date:</span>
+                      <span>—</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="approval-box">
+                  <div class="approval-box-header">
+                    <div class="approval-box-title">
+                      <svg viewBox="0 0 24 24" fill="var(--accent)" width="20" height="20"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                      Business Checker
+                    </div>
+                    <span class="status-badge pending">Pending</span>
+                  </div>
+                  <div class="approval-info">
+                    <div class="approval-row">
+                      <span>Staff Name:</span>
+                      <span>—</span>
+                    </div>
+                    <div class="approval-row">
+                      <span>Staff ID:</span>
+                      <span>—</span>
+                    </div>
+                    <div class="approval-row">
+                      <span>Date:</span>
+                      <span>—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <button class="btn btn-secondary">Save as Draft</button>
+            <button class="btn btn-primary">Submit for Approval</button>
+          </div>
+        </div>
+
+        <!-- Tab Content: Documents -->
+        <div id="tab-documents" class="tab-content hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Available Documents</h2>
+              <button class="btn btn-primary btn-sm">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                Upload Document
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="document-grid" id="document-grid">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: Comments -->
+        <div id="tab-comments" class="tab-content hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Comments & Case History</h2>
+            </div>
+            <div class="card-body">
+              <div class="comments-section" id="comments-section">
+                <!-- Populated by JS -->
+              </div>
+              <div style="margin-top: 20px;">
+                <textarea class="form-control" rows="3" placeholder="Add a comment..."></textarea>
+                <button class="btn btn-primary btn-sm" style="margin-top: 12px;">Add Comment</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <h2 class="card-title">Audit Trail</h2>
+            </div>
+            <div class="card-body">
+              <div class="timeline" id="case-timeline">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: Approval -->
+        <div id="tab-approval" class="tab-content hidden">
+          <div class="approval-panel">
+            <div class="approval-box">
+              <div class="approval-box-header">
+                <div class="approval-box-title">Business Maker Approval</div>
+                <span class="status-badge pending">Pending</span>
+              </div>
+              <div class="approval-info">
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 16px;">
+                  Business maker reviews case documentation and customer information before initial approval.
+                </p>
+                <button class="btn btn-success" style="width: 100%;">Approve as Maker</button>
+              </div>
+            </div>
+            <div class="approval-box">
+              <div class="approval-box-header">
+                <div class="approval-box-title">Business Checker Approval</div>
+                <span class="status-badge pending">Awaiting Maker</span>
+              </div>
+              <div class="approval-info">
+                <p style="color: var(--text-secondary); font-size: 13px;">
+                  Checker approval will be available after maker approval is complete.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/mock_data.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/joint_accounts.js"></script>
+  <script src="js/transaction_activity.js"></script>
+  <script src="js/enterprise_features.js"></script>
+  <script src="js/enterprise_ui.js"></script>
+  <script src="js/edd_case.js"></script>
+</body>
+</html>

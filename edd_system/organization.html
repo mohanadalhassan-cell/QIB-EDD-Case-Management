@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization Structure - QIB EDD System</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <style>
+    .org-container {
+      padding: 24px;
+    }
+    
+    .org-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .org-controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .view-btn {
+      padding: 10px 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .view-btn:hover {
+      border-color: var(--accent);
+    }
+    
+    .view-btn.active {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .org-search {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+      max-width: 400px;
+    }
+    
+    .org-search input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+    
+    .org-search::before {
+      content: '🔍';
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+    }
+    
+    /* Organization Tree */
+    .org-tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    
+    .org-level {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      width: 100%;
+    }
+    
+    .org-level::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 12px;
+      background: var(--accent);
+    }
+    
+    .org-level:first-child::before {
+      display: none;
+    }
+    
+    .level-label {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 12px;
+      padding: 8px 20px;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+      border-radius: 8px;
+    }
+    
+    .level-label h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .level-label span {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+    
+    /* Employee Card */
+    .emp-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      min-width: 200px;
+      max-width: 240px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .emp-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+    }
+    
+    .emp-card.chairman {
+      border: 2px solid var(--gold, #d4af37);
+      background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), transparent);
+    }
+    
+    .emp-card.gceo {
+      border: 2px solid var(--accent);
+      background: linear-gradient(145deg, rgba(0, 212, 255, 0.1), transparent);
+    }
+    
+    .emp-card.vision {
+      border: 2px solid #a78bfa;
+      background: linear-gradient(145deg, rgba(167, 139, 250, 0.1), transparent);
+    }
+    
+    .emp-card.cdd-edd {
+      border: 2px solid #ef4444;
+      background: linear-gradient(145deg, rgba(239, 68, 68, 0.1), transparent);
+    }
+    
+    .emp-badge {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .emp-badge.chairman { background: linear-gradient(135deg, #d4af37, #9a7b0a); color: #000; }
+    .emp-badge.gceo { background: linear-gradient(135deg, var(--accent), #0099cc); color: #000; }
+    .emp-badge.coo { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+    .emp-badge.vision { background: linear-gradient(135deg, #a78bfa, #7c3aed); color: #fff; }
+    .emp-badge.cdd-edd { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+    .emp-badge.it { background: linear-gradient(135deg, #06b6d4, #0891b2); color: #fff; }
+    .emp-badge.retail { background: linear-gradient(135deg, #fb923c, #ea580c); color: #fff; }
+    
+    .emp-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 12px auto;
+      border: 3px solid var(--glass-border);
+    }
+    
+    .emp-card.chairman .emp-photo { border-color: #d4af37; }
+    .emp-card.gceo .emp-photo { border-color: var(--accent); }
+    .emp-card.vision .emp-photo { border-color: #a78bfa; }
+    .emp-card.cdd-edd .emp-photo { border-color: #ef4444; }
+    
+    .emp-initials {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 12px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #0099cc);
+    }
+    
+    .emp-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    
+    .emp-title {
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    
+    .emp-dept {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(0,0,0,0.2);
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    
+    .emp-stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--glass-border);
+    }
+    
+    .emp-stat {
+      text-align: center;
+    }
+    
+    .emp-stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .emp-stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    
+    /* Team Count Badge */
+    .team-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      cursor: pointer;
+    }
+    
+    .team-count:hover {
+      color: var(--accent);
+    }
+    
+    /* Connector Lines */
+    .org-arrow {
+      font-size: 24px;
+      color: var(--accent);
+      text-align: center;
+    }
+    
+    /* Expandable Team Section */
+    .team-section {
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 16px;
+      display: none;
+    }
+    
+    .team-section.expanded {
+      display: block;
+    }
+    
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .team-member:hover {
+      background: rgba(0, 212, 255, 0.1);
+    }
+    
+    .team-member-photo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--glass-border);
+    }
+    
+    .team-member-initials {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #0099cc);
+    }
+    
+    .team-member-info h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .team-member-info p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    
+    /* Detail Panel */
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 450px;
+      height: 100vh;
+      background: var(--glass-bg);
+      border-left: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      z-index: 1100;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+    }
+    
+    .detail-panel.open {
+      right: 0;
+    }
+    
+    .detail-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1050;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .detail-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .detail-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    .detail-close {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: var(--text-primary);
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .detail-body {
+      padding: 24px;
+    }
+    
+    .detail-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 16px;
+      display: block;
+      border: 4px solid var(--accent);
+    }
+    
+    .detail-name {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-primary);
+    }
+    
+    .detail-title {
+      font-size: 14px;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    .detail-section {
+      margin-bottom: 24px;
+    }
+    
+    .detail-section h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    
+    .detail-label {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    
+    .detail-value {
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    
+    .permission-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .permission-tag {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+    
+    /* Workflow Groups Section */
+    .workflow-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    .workflow-group-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .workflow-group-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .workflow-group-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    
+    .group-tasks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    
+    .group-task {
+      background: rgba(0,0,0,0.2);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    
+    /* Tab Navigation */
+    .org-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 8px;
+    }
+    
+    .org-tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .org-tab:hover {
+      color: var(--text-primary);
+    }
+    
+    .org-tab.active {
+      color: var(--accent);
+      background: rgba(0, 212, 255, 0.1);
+    }
+    
+    .org-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">QIB</div>
+        <span class="sidebar-title">EDD System</span>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-title">Main</span>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="edd_case.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          <span>EDD Cases</span>
+        </a>
+        <a href="organization.html" class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          <span>Organization</span>
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <span class="nav-section-title">Departments</span>
+        <a href="business_view.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+          <span>Business</span>
+        </a>
+        <a href="cdd_view.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <span>CDD Operations</span>
+        </a>
+        <a href="compliance_view.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          <span>Compliance</span>
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <span class="nav-section-title">Management</span>
+        <a href="management_dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+          <span>Management</span>
+        </a>
+        <a href="audit_console.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+          <span>Audit Trail</span>
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <span class="nav-section-title">Tools</span>
+        <a href="document_viewer.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+          <span>Documents</span>
+        </a>
+        <a href="notifications_center.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          <span>Notifications</span>
+        </a>
+      </div>
+    </nav>
+    
+    <div class="sidebar-user">
+      <div class="user-avatar">AD</div>
+      <div class="user-info">
+        <span class="user-name" id="user-name">Admin User</span>
+        <span class="user-role" id="user-role">System Admin</span>
+      </div>
+    </div>
+  </aside>
+  
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-left">
+        <h1>🏛️ QIB Organization Structure</h1>
+        <span class="header-subtitle">Board → Executive → Departments → Teams</span>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-outline" id="logout-btn">Logout</button>
+      </div>
+    </header>
+    
+    <!-- Organization Container -->
+    <div class="org-container">
+      <!-- Controls -->
+      <div class="org-header">
+        <div class="org-search">
+          <input type="text" id="org-search" placeholder="Search by name, role, or department...">
+        </div>
+        <div class="org-controls">
+          <button class="view-btn active" data-view="tree" onclick="setView('tree')">
+            📊 Tree View
+          </button>
+          <button class="view-btn" data-view="groups" onclick="setView('groups')">
+            👥 Workflow Groups
+          </button>
+          <button class="view-btn" data-view="list" onclick="setView('list')">
+            📋 List View
+          </button>
+        </div>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="org-tabs">
+        <button class="org-tab active" data-tab="full" onclick="setTab('full')">Full Organization</button>
+        <button class="org-tab" data-tab="operations" onclick="setTab('operations')">Operations Focus</button>
+        <button class="org-tab" data-tab="retail" onclick="setTab('retail')">Retail Banking</button>
+        <button class="org-tab" data-tab="it" onclick="setTab('it')">IT Department</button>
+      </div>
+      
+      <!-- Tree View Content -->
+      <div class="tab-content active" id="tab-full">
+        <div class="org-tree" id="org-tree">
+          <!-- Board of Directors -->
+          <div class="org-level">
+            <div class="level-label">
+              <h3>🏛️ Board of Directors <span>Governance</span></h3>
+            </div>
+            <div class="emp-card chairman" onclick="showDetail('BOD-001')">
+              <span class="emp-badge chairman">👑 Chairman</span>
+              <div class="emp-initials" style="background: linear-gradient(135deg, #d4af37, #9a7b0a);">JT</div>
+              <div class="emp-name">Sheikh Jassim bin Hamad Al Thani</div>
+              <div class="emp-title">Chairman of the Board</div>
+              <div class="emp-dept">Board of Directors</div>
+            </div>
+          </div>
+          
+          <div class="org-arrow">⬇️</div>
+          
+          <!-- GCEO -->
+          <div class="org-level">
+            <div class="level-label">
+              <h3>👑 Executive Leadership <span>Group CEO</span></h3>
+            </div>
+            <div class="emp-card gceo" onclick="showDetail('EXE-001')">
+              <span class="emp-badge gceo">GCEO</span>
+              <img src="assets/employees/GCEO.jpeg" class="emp-photo" alt="GCEO" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">BG</div>
+              <div class="emp-name">Mr. Bassel Gamal</div>
+              <div class="emp-title">Group Chief Executive Officer</div>
+              <div class="emp-dept">Executive Leadership</div>
+            </div>
+          </div>
+          
+          <div class="org-arrow">⬇️</div>
+          
+          <!-- General Managers -->
+          <div class="org-level">
+            <div class="level-label">
+              <h3>⭐ General Managers <span>Report to GCEO</span></h3>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-001')">
+              <span class="emp-badge coo">COO</span>
+              <img src="assets/employees/Saleem.jpeg" class="emp-photo" alt="COO" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">SU</div>
+              <div class="emp-name">Saleem Ulhiq</div>
+              <div class="emp-title">COO - Operations & IT</div>
+              <div class="emp-dept">Operations & Technology</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-002')">
+              <span class="emp-badge retail">GM Retail</span>
+              <img src="assets/employees/Anand.jpeg" class="emp-photo" alt="GM Retail" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">DA</div>
+              <div class="emp-name">D. Anand</div>
+              <div class="emp-title">GM Retail Banking</div>
+              <div class="emp-dept">Retail Banking</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-003')">
+              <img src="assets/employees/Tariq.jpeg" class="emp-photo" alt="GM WBG" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">TF</div>
+              <div class="emp-name">Tariq Fawzi</div>
+              <div class="emp-title">GM Wholesale Banking</div>
+              <div class="emp-dept">Wholesale Banking</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-004')">
+              <img src="assets/employees/Gourang.jpeg" class="emp-photo" alt="GM Finance" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">GO</div>
+              <div class="emp-name">Gourang</div>
+              <div class="emp-title">GM Finance</div>
+              <div class="emp-dept">Finance</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-005')">
+              <img src="assets/employees/Rakesh.jpeg" class="emp-photo" alt="GM Risk" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">RK</div>
+              <div class="emp-name">Rakesh</div>
+              <div class="emp-title">GM Risk</div>
+              <div class="emp-dept">Risk Management</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-006')">
+              <img src="assets/employees/DINOS.jpeg" class="emp-photo" alt="GM Strategy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">DN</div>
+              <div class="emp-name">Dinos</div>
+              <div class="emp-title">GM Strategy & Projects</div>
+              <div class="emp-dept">Strategy & Projects</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('GM-007')">
+              <img src="assets/employees/Khalifa.jpeg" class="emp-photo" alt="Head HR" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">KM</div>
+              <div class="emp-name">Khalifa Al-Muslim</div>
+              <div class="emp-title">Head of HR Group</div>
+              <div class="emp-dept">Human Resources</div>
+            </div>
+          </div>
+          
+          <div class="org-arrow">⬇️</div>
+          
+          <!-- Heads of Operations & IT -->
+          <div class="org-level">
+            <div class="level-label">
+              <h3>👁️ Operations & IT Leadership <span>Report to COO</span></h3>
+            </div>
+            <div class="emp-card vision" onclick="showDetail('OPS-001')">
+              <span class="emp-badge vision">THE VISION</span>
+              <img src="assets/employees/MR.Amit.png" class="emp-photo" alt="Head Ops" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">AM</div>
+              <div class="emp-name">Mr. Amit Malhotra</div>
+              <div class="emp-title">Head of Operations</div>
+              <div class="emp-dept">Operations Division</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('IT-001')" style="border: 2px solid #06b6d4;">
+              <span class="emp-badge it">Head IT</span>
+              <div class="emp-initials" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">KH</div>
+              <div class="emp-name">Khurram</div>
+              <div class="emp-title">Head of IT</div>
+              <div class="emp-dept">Information Technology</div>
+              <div class="team-count" onclick="event.stopPropagation();toggleTeam('it')">👥 10 IT Team - Click to Expand</div>
+            </div>
+          </div>
+          
+          <div class="org-arrow">⬇️</div>
+          
+          <!-- Department Managers -->
+          <div class="org-level">
+            <div class="level-label">
+              <h3>📋 Department Managers <span>Operations</span></h3>
+            </div>
+            <div class="emp-card" onclick="showDetail('MGR-001')" style="border: 2px solid #22c55e;">
+              <span class="emp-badge" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff;">🚀 PILOT</span>
+              <img src="assets/employees/MR.MOHANAD ALHASSAM.jpeg" class="emp-photo" alt="WPS DBO" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">MH</div>
+              <div class="emp-name">Mohanad Al Hassan</div>
+              <div class="emp-title">Dept Manager - WPS & DBO</div>
+              <div class="emp-dept">WPS & Digital Back Office</div>
+              <div class="team-count" onclick="event.stopPropagation();toggleTeam('wps')">👥 4 Team - Click to Expand</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('MGR-002')">
+              <img src="assets/employees/Youssef.jpeg" class="emp-photo" alt="Special Services" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">YK</div>
+              <div class="emp-name">Youssef Al-Khuzain</div>
+              <div class="emp-title">Dept Manager - Special Services</div>
+              <div class="emp-dept">Special Services</div>
+            </div>
+            <div class="emp-card" onclick="showDetail('MGR-004')">
+              <img src="assets/employees/Ashraf.jpeg" class="emp-photo" alt="Vault" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">AS</div>
+              <div class="emp-name">Ashraf</div>
+              <div class="emp-title">Dept Manager - Main Vault</div>
+              <div class="emp-dept">Main Vault</div>
+            </div>
+            <div class="emp-card cdd-edd" onclick="showDetail('MGR-006')">
+              <span class="emp-badge cdd-edd">CDD/EDD</span>
+              <div class="emp-initials" style="background: linear-gradient(135deg, #ef4444, #dc2626);">GE</div>
+              <div class="emp-name">Ghaleb Essam</div>
+              <div class="emp-title">Manager - CDD & EDD Operations</div>
+              <div class="emp-dept">CDD & EDD Operations</div>
+            </div>
+          </div>
+          
+          <!-- IT Team Section (Expandable) -->
+          <div class="team-section" id="team-it">
+            <div class="level-label">
+              <h3>💻 IT Department Team <span>Under Khurram</span></h3>
+            </div>
+            <div class="team-grid" id="it-team-grid">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+          
+          <!-- WPS Team Section (Expandable) -->
+          <div class="team-section" id="team-wps">
+            <div class="level-label">
+              <h3>🚀 WPS & DBO Team <span>Under Mohanad</span></h3>
+            </div>
+            <div class="team-grid" id="wps-team-grid">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Workflow Groups View -->
+      <div class="tab-content" id="view-groups" style="display:none;">
+        <h2 style="margin-bottom: 16px; color: var(--text-primary);">EDD Workflow Groups</h2>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">These groups define task routing in the EDD Case Management workflow</p>
+        <div class="workflow-groups" id="workflow-groups-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Detail Panel -->
+  <div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-header">
+      <h3>Employee Details</h3>
+      <button class="detail-close" onclick="closeDetail()">&times;</button>
+    </div>
+    <div class="detail-body" id="detail-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+  
+  <script src="js/organization_data.js"></script>
+  <script src="js/organization.js"></script>
+</body>
+</html>

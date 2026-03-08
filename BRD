@@ -1,0 +1,176 @@
+Business Requirements Document (BRD) – EDD Case Management System (English)
+Scope: Enhanced Due Diligence (EDD) only – excluding Volooras Risk Classification Engine. The system monitors and manages high‑risk clients based on T24 data and QCB KYC API input. It tracks EDD triggers, assigns cases, manages workflows, and ensures compliance with Qatar Islamic Bank (QIB) policies and central bank requirements.
+1. Purpose
+This document defines the requirements for a dedicated EDD Case Management System. The system supports the controlled execution, tracking, and governance of EDD activities. It covers client segmentation, case creation, risk monitoring, SLA management, dashboard reporting, and integration with T24 and QCB KYC API. The solution is aligned with QIB governance and regulatory expectations.
+2. Scope Definition
+In Scope
+•	Management of EDD cases only (no CDD risk classification).
+•	Integration with T24 for retrieving client segment, KYC dates, and risk triggers.
+•	Integration with QCB KYC API (subject to user consent) for retrieving mandatory documents and verifying client details.
+•	Case creation and routing to business units (Mass, Tamayuz, Private Banking) based on T24 segment.
+•	SLA monitoring for both business review and EDD operations.
+•	Audit trail and full lifecycle reporting.
+•	Ability to fetch and present supporting documents (e.g. salary certificates, passport, ID) from DMS for business review.
+•	Notifications and approval workflows including Maker–Checker at business and CDD levels.
+Out of Scope
+•	Risk scoring or classification (handled by upstream systems).
+•	Modifying customer risk rating in T24.
+•	AML transaction monitoring logic.
+3. Core Principles
+•	EDD is initiated after a customer is classified as high risk by the upstream risk classification engine (T24/CRP).
+•	Business units review cases and provide recommendations, but cannot reject cases; they can suggest actions such as restricting the account.
+•	CDD performs EDD processing and approvals. Maker–Checker principle applies at each stage.
+•	Clear separation of responsibilities among business, EDD operations, and compliance.
+•	Audit readiness and full traceability of each action.
+•	Integration with QCB KYC API to retrieve mandatory KYC documents when customer consent is available.
+•	Notifications to clients via pop‑up and SMS when additional documents or clarifications are required, with dynamic text templates managed by marketing.
+4. Upstream Risk Classification Sources
+Source	Description
+T24 / CRP	Official customer risk classification (High / Medium / Low)
+QCB KYC API	External regulatory data (subject to consent)
+Management Referral	Exceptional cases referred by management or compliance
+5. EDD Trigger Reasons
+High-risk classification is determined by fields from T24 and risk indicators. Triggers include:
+•	Politically Exposed Person (PEP) flag
+•	High-risk occupation
+•	High-risk nationality or residency
+•	Non-resident status
+•	Private Banking segment
+•	Source of wealth / funds sensitivity
+•	Unusual or complex transaction profile
+•	Cash-intensive activity
+•	Exposure to sanctioned countries
+•	Large or sensitive initial deposit
+•	Guardian / Power of Attorney / POA
+•	Multiple banking relationships
+•	Management or Compliance referral
+6. Business Segmentation and Routing
+Customer segment is retrieved from T24 and determines the case routing:
+Customer Segment	Business Department
+Mass	Mass Banking
+Tamayuz	Tamayuz Banking
+Private Banking	Private Banking
+Each business department has a designated supervisor who can assign cases to specific Relationship Managers (RMs) based on RIM number or employee ID. Cases can be transferred between segments (e.g. from Mass to Tamayuz) if necessary.
+7. Workflow & SLAs
+1.	Case Creation: When a customer is classified as high risk, the system automatically opens an EDD case in Flow. The case ID, creation timestamp, segment, and reason code are recorded.
+2.	Business Department Stage: Business units review the case, verify the information, retrieve supporting documents from DMS (passport, ID, salary certificate), and provide comments. They cannot reject cases; instead, they can recommend account restrictions or temporary freezes with justification. The case is then submitted to EDD operations.
+3.	EDD Operations Stage (CDD): EDD operations perform enhanced due diligence, request additional documents via QCB KYC API, review supporting documents, and determine whether to approve or maintain restrictions. Maker–Checker approvals apply.
+4.	Notification: If additional documents are required or if there is data mismatch between T24 and QCB API, the system generates a pop‑up on the client’s mobile banking app and sends an SMS with a reference number, requesting the client to upload the required documents via the mobile app or submit them at any branch. Dynamic templates managed by marketing department ensure proper messaging.
+5.	Case Closure: Upon EDD completion, updated data is sent back to T24. Fields not originally present in T24 must be created in a new “EDD” section of the client profile. The system records completion date, decision (approved or escalated), next EDD review date, and audit trail.
+Business SLAs
+Department	SLA Duration (from case creation to submission to CDD)
+Mass Banking	As per bank policy
+Tamayuz Banking	As per bank policy
+Private Banking	As per bank policy
+EDD Operations SLA
+The operations SLA applies from receipt of the case until EDD is completed. Each stage is monitored separately.
+8. Dashboards & Reporting
+•	Business Dashboard: Shows case volumes, pending cases, SLA performance, and aging analysis per segment.
+•	EDD Operations Dashboard: Shows cases received from business, current status, closure outcomes, and escalations.
+•	Management Dashboard: Provides overall EDD visibility, SLA compliance, volumes by segment, and trend analysis.
+9. Key Dates and Integration
+•	EDD Case Creation Date and Completion Date: Generated by the system.
+•	Last KYC Date: Pulled from T24.
+•	Next EDD Due Date: Calculated based on review cycle and last KYC date.
+•	Consent Status: If consent is available, the system retrieves documents from QCB KYC API.
+10. Periodic EDD Reviews
+Periodic reviews are generated based on the Next EDD Due Date. Each review opens a new linked case, ensuring continuous compliance.
+11. Roles & Responsibilities
+Role	Responsibilities
+Business	Review and prepare case; cannot reject; provide comments and recommendations; Maker–Checker approval within business
+EDD Operations (CDD)	Perform enhanced due diligence, review documents, and close or restrict the account; Maker–Checker applies
+Compliance	Review escalated cases and ensure regulatory adherence
+Management	Provide oversight and ensure governance
+Audit	Read-only access for auditing purposes
+12. Audit & Governance
+•	Full audit trail of every action
+•	Timestamped events and statuses
+•	SLA compliance monitoring and reporting
+•	Historical traceability of all cases
+13. Conclusion
+The EDD Case Management System will provide an automated, transparent, and governed process for handling high-risk customers. It integrates with T24 and QCB KYC API to retrieve and update critical data, includes dynamic notifications, and ensures compliance with QIB and regulatory requirements.
+________________________________________
+Appendix: Field Mapping and Mandatory Flags
+The following table lists all fields from the EDD Form (Individual) and indicates whether each field exists in T24 or QCB KYC API, and whether it is mandatory for high-risk clients. For fields not present in T24, the system must create corresponding fields in an “EDD” section. Fields may be always mandatory for high-risk clients or conditionally mandatory based on risk triggers (e.g. nationality, occupation, or other high-risk indicators). “—” means no information yet; user should confirm.
+Field (English)	In T24	In QCB API	Mandatory Always (High Risk)	Mandatory if Triggered (Risk Indicator)	Notes
+Type of Relationship (New/Existing)	No	No	Yes	No	Form section: relationship type
+Account Opening Reason (New / Additional)	No	No	Yes	No	–
+Customer Name	Yes	Yes	Yes	No	Already in T24 and QCB API
+RIM Number	Yes	No	Yes	No	Unique ID in T24
+Relationship Opening Date	Yes	No	Yes	No	Account open date
+Risk Classification Questions	Yes	Yes	Yes	No	Derived from T24 risk code & CRP; includes PEP, non-resident, high-risk occupation
+Overall Risk Classification (Low/Med/High)	Yes	No	Yes	No	Present in T24
+Customer Type (Customer, Joint, Guardian, POA)	Yes	No	Yes	No	Specifies who the form is for
+Referral Details (Staff / Client / Other)	No	No	Yes	No	Referral source details
+Purpose of Account (personal, salary, etc.)	No	No	Yes	No	Purpose of relationship
+Business Activities Flag	No	No	Yes	No	Indicates if account used for business
+Expected Products (Liabilities, Assets, etc.)	No	No	Yes	No	Expected products required
+Monthly Income – Salary	Yes	No	Yes	If trigger = occupation	Salary details: designation, employer, address, years employed, expected income
+Salary Transfer to QIB (Yes/No)	No	No	No	If trigger = occupation	Whether salary is transferred to QIB
+Monthly Income – Business	No	No	Yes	If trigger = occupation	Business name, activity, % ownership, years, income, QIB account
+Monthly Income – Property Rentals	No	No	Yes	If trigger = occupation or high value	Property details and income
+Monthly Income – Investments	No	No	Yes	If trigger = income or investment risk	Investment details and income
+Monthly Income – Other	No	No	Yes	If trigger = income or occupation	Other income sources
+Source of Wealth (categories)	No	No	Yes	If trigger = source of wealth sensitivity	E.g. salary, business earnings, inheritance, sale of property etc.
+Description of Source of Wealth	No	No	Yes	If trigger = source of wealth sensitivity	Provide explanation with documents
+Estimated Net Worth (bands)	No	No	Yes	If trigger = net worth threshold	Banded values
+Initial Deposit – Amount	No	No	Yes	If trigger = large initial deposit	Amount of initial deposit
+Expected Relationship Size/Balances	No	No	Yes	If trigger = large future balance	Expected size of relationship
+Mode of Deposit (cash, cheque, transfer)	No	No	Yes	If trigger = source of funds issue	Selected mode
+Other Deposit Details (cheque, account info)	No	No	Yes	If trigger = source of funds issue	Account name, number, etc.
+Consent to QCB API Data	No	No	Yes	No	Whether customer consented to data retrieval
+Documents – Passport	Yes	Yes	Yes	No	Passport copy stored in DMS and QCB API
+Documents – ID Card	Yes	Yes	Yes	No	National ID stored in DMS and QCB API
+Documents – Salary Certificate	Yes	Yes	Yes	If trigger = occupation or income mismatch	Salary certificate from DMS / QCB API
+Documents – Business Registration	No	No	Yes	If trigger = business owner	Only if business income source
+Documents – Rental Agreements	No	No	Yes	If trigger = rental income	Rental agreement copies
+Documents – Investment Proof	No	No	Yes	If trigger = investment income	Investment statements
+Comments / Recommendations by Business	No	No	Yes	No	Business comments and recommendations
+Maker Approval (Business)	No	No	Yes	No	Maker approval details
+Checker Approval (Business)	No	No	Yes	No	Checker approval details
+Maker Approval (CDD)	No	No	Yes	No	Maker approval in CDD stage
+Checker Approval (CDD)	No	No	Yes	No	Checker approval in CDD stage
+Next EDD Due Date	Yes	No	Yes	No	Calculated based on KYC date
+Case Status (New / In Progress / Closed)	Yes	No	Yes	No	System field
+Audit Trail	Yes	No	Yes	No	System-generated
+Notes
+•	Mandatory Always: Fields that must always be captured when a customer is classified as high risk.
+•	Mandatory if Triggered: Fields that become mandatory only when specific risk indicators apply (e.g. if the high risk reason is “occupation,” salary details are mandatory).
+•	Fields not in T24: Must be created in a new “EDD” section within the T24 client profile.
+•	Central Bank API: Some documents may be available via QCB KYC API if the client has consented. The system should integrate and fetch those documents automatically.
+
+---
+
+## 14. IT Technical Architecture Reference
+
+For complete technical specifications, refer to:
+
+**Document:** `BRD_IT_Technical_Architecture.md`
+
+This companion document provides:
+
+| Section | Content |
+|---------|---------|
+| System Context Diagram | Architecture overview with all integrated systems |
+| Complete Field Mapping | All 100+ fields with source system (T24/SnapView/QCB/DMS/Manual) |
+| API Specifications | ESB request/response examples for all integrations |
+| T24 Writeback | Fields to be written back to T24 EDD Section |
+| FLOW Workflow Config | Stage definitions, transition rules, data storage |
+| Error Handling | Error codes, recovery actions, monitoring alerts |
+| Security Requirements | Authentication, encryption, role-based access |
+| Performance SLAs | Response times, concurrent users |
+| Deployment Architecture | DEV/UAT/PROD environments |
+| Testing Requirements | Integration test cases, performance scenarios |
+
+### Quick Reference: Data Source Summary
+
+| Data Category | Primary Source | Secondary Source |
+|---------------|----------------|------------------|
+| Customer Identity | T24 Core Banking | QCB KYC API |
+| Risk Classification | T24 CRP Engine | - |
+| Employment/Salary | SnapView Warehouse | T24 Transactions |
+| KYC Documents | DMS | QCB KYC API |
+| Workflow Data | FLOW Internal | - |
+| Manual Fields | User Input | - |
+| Derived Fields | System Calculation | - |
+

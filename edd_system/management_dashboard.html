@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — Management Dashboard</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="management_dashboard.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User</div>
+          <div class="user-role" id="user-role">Role</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Executive Dashboard</h1>
+          <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a> / <span>Management</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <select class="form-control" id="period-selector" style="width: auto;">
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month" selected>This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="exportReport()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Export Report
+          </button>
+          <button class="header-btn" id="logout-btn" title="Logout">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+            </div>
+            <div class="kpi-value">156</div>
+            <div class="kpi-label">Total EDD Cases</div>
+            <div class="kpi-trend up">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 14l5-5 5 5z"/></svg>
+              +12% vs last month
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon success">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div class="kpi-value">142</div>
+            <div class="kpi-label">Completed</div>
+            <div class="kpi-trend up">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 14l5-5 5 5z"/></svg>
+              91% completion rate
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon warning">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            </div>
+            <div class="kpi-value">14</div>
+            <div class="kpi-label">In Progress</div>
+            <div class="kpi-trend neutral">
+              Avg. 3.2 days processing
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon danger">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-label">Escalated</div>
+            <div class="kpi-trend down">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 10l5 5 5-5z"/></svg>
+              -33% vs last month
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
+          <!-- Cases Trend Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Cases Trend</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" id="trend-chart">
+                <!-- Simple bar chart visualization -->
+                <div class="bar-chart">
+                  <div class="bar-item">
+                    <div class="bar-label">Jan</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 65%;" data-value="98"></div></div>
+                    <div class="bar-value">98</div>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-label">Feb</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 72%;" data-value="108"></div></div>
+                    <div class="bar-value">108</div>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-label">Mar</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 80%;" data-value="120"></div></div>
+                    <div class="bar-value">120</div>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-label">Apr</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 88%;" data-value="132"></div></div>
+                    <div class="bar-value">132</div>
+                  </div>
+                  <div class="bar-item">
+                    <div class="bar-label">May</div>
+                    <div class="bar-track"><div class="bar-fill" style="width: 93%;" data-value="140"></div></div>
+                    <div class="bar-value">140</div>
+                  </div>
+                  <div class="bar-item current">
+                    <div class="bar-label">Jun</div>
+                    <div class="bar-track"><div class="bar-fill accent" style="width: 100%;" data-value="156"></div></div>
+                    <div class="bar-value">156</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Distribution -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Risk Distribution</h2>
+            </div>
+            <div class="card-body">
+              <div class="donut-chart">
+                <div class="donut-ring">
+                  <div class="donut-segment high" style="--value: 35;"></div>
+                  <div class="donut-segment medium" style="--value: 45;"></div>
+                  <div class="donut-segment low" style="--value: 20;"></div>
+                  <div class="donut-center">
+                    <span class="donut-total">156</span>
+                    <span class="donut-label">Total</span>
+                  </div>
+                </div>
+              </div>
+              <div class="legend">
+                <div class="legend-item">
+                  <span class="legend-color high"></span>
+                  <span class="legend-label">High Risk</span>
+                  <span class="legend-value">35%</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-color medium"></span>
+                  <span class="legend-label">Medium Risk</span>
+                  <span class="legend-value">45%</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-color low"></span>
+                  <span class="legend-label">Low Risk</span>
+                  <span class="legend-value">20%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Performance -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title">Department Performance</h2>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>Total Cases</th>
+                  <th>Completed</th>
+                  <th>Pending</th>
+                  <th>Avg. TAT</th>
+                  <th>SLA Compliance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+                      </div>
+                      Business
+                    </div>
+                  </td>
+                  <td>156</td>
+                  <td>142</td>
+                  <td>14</td>
+                  <td>2.1 days</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 94%;"></div>
+                    </div>
+                    <span style="font-size: 11px; color: #00E676;">94%</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65"/></svg>
+                      </div>
+                      CDD Operations
+                    </div>
+                  </td>
+                  <td>148</td>
+                  <td>138</td>
+                  <td>10</td>
+                  <td>1.8 days</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 96%;"></div>
+                    </div>
+                    <span style="font-size: 11px; color: #00E676;">96%</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                      </div>
+                      Compliance
+                    </div>
+                  </td>
+                  <td>12</td>
+                  <td>10</td>
+                  <td>2</td>
+                  <td>3.5 days</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress-fill warning" style="width: 85%;"></div>
+                    </div>
+                    <span style="font-size: 11px; color: #FFA726;">85%</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Completions -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <h2 class="card-title">Recent Completions</h2>
+            <a href="edd_case.html" class="btn btn-secondary btn-sm">View All</a>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Case ID</th>
+                  <th>Customer</th>
+                  <th>Risk Level</th>
+                  <th>Segment</th>
+                  <th>Completed</th>
+                  <th>Time Taken</th>
+                </tr>
+              </thead>
+              <tbody id="completions-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/mock_data.js"></script>
+  <script src="js/management_dashboard.js"></script>
+</body>
+</html>
