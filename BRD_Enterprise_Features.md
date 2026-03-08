@@ -1,8 +1,8 @@
 # EDD Case Management System
 # Enterprise Features Specification
-## BRD Addendum — Version 2.0
+## BRD Addendum — Version 2.2
 
-**Document Version:** 2.0  
+**Document Version:** 2.2  
 **Date:** March 2026  
 **Classification:** Internal - Operations, Business, IT, Compliance  
 **Target Audience:** Business Users, CDD Operations, Compliance, IT Teams, Call Center
@@ -25,6 +25,9 @@ This document extends the IT Technical Architecture BRD with comprehensive speci
 | 7 | User Guide Module | ✅ Implemented |
 | 8 | System Presentation | ✅ Implemented |
 | 9 | Comments & Recommendations | ✅ Implemented |
+| 10 | Customer Risk Network Graph | ✅ Implemented |
+| 11 | Financial Behaviour Indicators | ✅ Implemented |
+| 12 | Export Reports Module | ✅ Implemented |
 
 ---
 
@@ -612,12 +615,256 @@ The Customer Risk Network Graph is an advanced AML visualization feature that di
 
 ---
 
-## 11. Document Revision History
+## 11. Financial Behaviour Indicators
+
+### 11.1 Overview
+
+The system implements comprehensive financial behavior analysis comparing declared income against actual verified salary to detect income inconsistencies, potential money laundering, and unusual financial patterns.
+
+**Critical Definition:**
+> **LAST_SAL_AMT** is the actual verified salary amount received by the customer based on the most recent salary credit transaction. It is NOT simply the last transfer — it is the verified salary from Payroll/WPS feed.
+
+### 11.2 Field Definitions
+
+| Field | Definition | Source | Fallback Source |
+|-------|------------|--------|-----------------|
+| SALARY | Declared salary during account onboarding | T24 | - |
+| LAST_SAL_AMT | Actual verified salary (most recent salary credit) | Payroll ETL | T24 Transaction History |
+| LAST_MON_SALARY | Salary of last calendar month | Payroll ETL | - |
+| LAST_SAL_DA | Date of last salary credit | Payroll ETL | - |
+| ANNUAL_INC | Annual income declared | T24 | - |
+| SEC_INC_AMT | Secondary income amount | T24/KYC | - |
+| SEC_INC_SOURCE | Source of secondary income | T24/KYC | - |
+| AVG_LAST_3_SALARY | Average of last 3 months salary | Calculated | - |
+
+### 11.3 Income Consistency Check
+
+The system compares:
+
+```
+DECLARED SALARY (at onboarding)
+        vs
+ACTUAL SALARY (LAST_SAL_AMT from Payroll)
+        vs
+FINANCIAL ACTIVITY (transaction patterns)
+```
+
+**Example Analysis:**
+
+| Scenario | SALARY | LAST_SAL_AMT | Transfers | Analysis Result |
+|----------|--------|--------------|-----------|-----------------|
+| Normal | 15,000 | 15,500 | 45,000 | Income Consistent |
+| Inconsistent | 5,000 | 65,000 | 200,000 | **Declared income mismatch** |
+| Income Drop | 50,000 | 5,000 | 20,000 | **Income drop detected** |
+| Money Mule | 10,000 | 10,500 | 2,000,000 | **Financial Behaviour Risk** |
+
+### 11.4 Risk Analysis Rules
+
+#### Rule 1: Declared Income Inconsistency
+```
+IF LAST_SAL_AMT > SALARY × 2
+THEN Flag: "Declared Income Inconsistency"
+Risk Points: +30
+```
+
+#### Rule 2: Financial Behaviour Risk
+```
+IF Transaction_Volume > LAST_SAL_AMT × 20
+THEN Flag: "Financial Behaviour Risk"
+Risk Points: +40
+```
+
+#### Rule 3: Salary Activity Gap
+```
+IF LAST_SAL_DATE > 3 months ago
+THEN Flag: "Salary Activity Gap"
+Risk Points: +15
+```
+
+#### Rule 4: Income Drop Detection
+```
+IF LAST_SAL_AMT < SALARY × 0.5
+THEN Flag: "Income Drop Detected"
+Risk Points: +15
+```
+
+#### Rule 5: High Activity Ratio
+```
+IF Monthly_Activity > LAST_SAL_AMT × 10
+THEN Flag: "High Activity Ratio"
+Risk Points: +25
+```
+
+### 11.5 Variance Calculation
+
+```
+INCOME_VARIANCE = ABS(LAST_SAL_AMT - SALARY) / SALARY × 100
+
+FINANCIAL_CAPACITY = LAST_SAL_AMT × 12
+```
+
+### 11.6 UI Display — Customer Financial Profile
+
+The system displays to CDD officers:
+
+```
+┌────────────────────────────────────────────────────────────┐
+│           CUSTOMER FINANCIAL PROFILE                       │
+├────────────────────────────────────────────────────────────┤
+│ Declared Salary (SALARY):         5,000 QAR               │
+│ Actual Salary (LAST_SAL_AMT):     65,415 QAR   ⚠️ HIGH    │
+│ Annual Income (ANNUAL_INC):       576,000 QAR             │
+│ Last Salary Date:                 2026-02-15              │
+│ Average Last 3 Months:            62,500 QAR              │
+│                                                            │
+│ ⚠️ RISK INDICATOR:                                        │
+│ Declared income inconsistent with actual salary           │
+│ Variance: 1,208%                                          │
+└────────────────────────────────────────────────────────────┘
+```
+
+### 11.7 Risk Detection Capabilities
+
+This analysis enables detection of:
+
+| Risk Type | Description | Detection Method |
+|-----------|-------------|------------------|
+| Income Inconsistency | Mismatch between declared and actual salary | LAST_SAL_AMT vs SALARY comparison |
+| Money Laundering | High transaction volume relative to income | Transaction Volume vs Financial Capacity |
+| Money Mule | Account used as pass-through for illicit funds | Activity pattern vs salary ratio |
+| Sudden Income Change | Significant increase or decrease in income | Trend analysis of salary history |
+| Ghost Salary | Salary credits without actual employment | No employer verification match |
+
+### 11.8 Data Source Integration
+
+```
+                  ┌─────────────────┐
+                  │   T24 CORE      │
+                  │   (Declared     │
+                  │   Income/KYC)   │
+                  └────────┬────────┘
+                           │
+                           ▼
+┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐
+│   PAYROLL ETL   │───│   EDD SYSTEM    │───│  RISK DATASET   │
+│   (WPS/Direct)  │   │   Analysis      │   │  (Activity)     │
+└─────────────────┘   └─────────────────┘   └─────────────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │  FINANCIAL      │
+                  │  BEHAVIOUR      │
+                  │  RISK SCORE     │
+                  └─────────────────┘
+```
+
+---
+
+## 12. Export Reports Module
+
+### 12.1 Overview
+
+The system provides comprehensive export capabilities allowing officers to generate professional reports and presentations directly from the case management interface.
+
+### 12.2 Export Types
+
+| Export Type | Format | Purpose | Contents |
+|-------------|--------|---------|----------|
+| PDF Investigation Report | HTML/PDF | Formal documentation | Full case analysis, risk assessment, recommendations |
+| Excel Data Export | CSV | Data analysis | Raw data, scores, calculations |
+| Interactive Presentation | HTML | Management review | 7-slide presentation with key findings |
+
+### 12.3 PDF Report Structure
+
+The PDF report includes:
+
+1. **Header**
+   - QIB branding
+   - Case ID and generation timestamp
+   - Document classification
+
+2. **Risk Assessment Summary**
+   - Overall risk score (0-100)
+   - Risk level badge (LOW/MEDIUM/HIGH/AUTO HIGH)
+   - Key risk factors list
+
+3. **Customer Information**
+   - Personal details (Name, RIM, QID)
+   - Account information (Segment, Occupation)
+   
+4. **Case Details**
+   - Trigger source, dates, status
+   - Active triggers
+
+5. **Financial Profile Analysis**
+   - Declared vs Actual salary comparison
+   - Income variance calculation
+   - Annual financial capacity
+   - Consistency status
+
+6. **Expected vs Actual Activity**
+   - Expected transaction volumes
+   - Capacity comparison
+   - Deviation flags
+
+7. **Risk Classification Model**
+   - Product, Activity, Occupation, Country risks
+   - Final risk score and category
+   - AUTO HIGH reasons if applicable
+
+8. **Relationship Network**
+   - Connected entities
+   - Account exposure summary
+   - Network risk indicators
+
+9. **Recommendation**
+   - Investigation findings summary
+   - Final recommendation action
+
+### 12.4 Presentation Slides
+
+| Slide | Title | Content |
+|-------|-------|---------|
+| 1 | Title | Customer name, risk level, case ID |
+| 2 | Risk Summary | Score meter, key indicators |
+| 3 | Customer Profile | Personal and account information |
+| 4 | Financial Analysis | Income consistency check, variance |
+| 5 | Risk Classification | Four risk dimensions + final score |
+| 6 | Network | Related entities, connected accounts |
+| 7 | Recommendation | Final decision and next steps |
+
+### 12.5 Excel Export Fields
+
+| Category | Fields Exported |
+|----------|-----------------|
+| Customer | RIM, Name, Nationality, Segment, QID |
+| Financial | SALARY, LAST_SAL_AMT, AVG_LAST_3_SALARY, ANNUAL_INC |
+| Activity | LM_EXP_CASH, LM_EXP_NONCASH, LM_EXP_TRFR |
+| Risk Scores | PROD_RISK, ACT_RISK, OCCP_RISK, COUNTRY_RISK, FINAL |
+| Analysis | Risk Score, Variance %, Consistency Status |
+| Factors | All detected risk factors with severity |
+
+### 12.6 Access Controls
+
+| Role | PDF Export | Excel Export | Presentation |
+|------|------------|--------------|--------------|
+| BUSINESS_MAKER | ✅ | ❌ | ✅ |
+| BUSINESS_CHECKER | ✅ | ✅ | ✅ |
+| CDD_MAKER | ✅ | ✅ | ✅ |
+| CDD_CHECKER | ✅ | ✅ | ✅ |
+| COMPLIANCE_REVIEW | ✅ | ✅ | ✅ |
+| CALL_CENTER_VIEW | ❌ | ❌ | ❌ |
+| IT_ADMIN | ✅ | ✅ | ✅ |
+
+---
+
+## 13. Document Revision History
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 2.0 | March 2026 | Enterprise Architecture | Added all enterprise features |
 | 2.1 | March 2026 | Enterprise Architecture | Added Customer Risk Network Graph |
+| 2.2 | March 2026 | Enterprise Architecture | Added Financial Behaviour Indicators, Export Reports Module |
 
 ---
 

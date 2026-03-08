@@ -46,6 +46,16 @@ function showNetworkGraph() {
   }
 }
 
+// Show Export Reports Modal
+function showExportModal() {
+  const caseId = document.getElementById('case-id').textContent || 'EDD-2024-001234';
+  if (currentCustomerRim && typeof ExportReports !== 'undefined') {
+    ExportReports.showExportModal(caseId, currentCustomerRim);
+  } else {
+    alert('Case data not loaded. Please wait for the case to load.');
+  }
+}
+
 function loadCase(caseId) {
   // Find case in mock data (use caseId field from mock data)
   const eddCase = MockData.eddCases.find(c => c.caseId === caseId) || MockData.eddCases[0];
