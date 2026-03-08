@@ -291,15 +291,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Check existing session
   const existingSessionData = sessionStorage.getItem('edd_session');
+  console.log('Login page - checking session:', existingSessionData);
   if (existingSessionData) {
     try {
       const session = JSON.parse(existingSessionData);
+      console.log('Parsed session:', session);
       // Check if session has authenticated flag
       if (session.authenticated && session.user && session.user.role) {
-        window.location.href = getDashboardUrl(session.user.role);
+        console.log('Valid session found, redirecting to:', getDashboardUrl(session.user.role));
+        window.location.replace(getDashboardUrl(session.user.role));
         return;
+      } else {
+        console.log('Session invalid - clearing');
+        sessionStorage.removeItem('edd_user');
+        sessionStorage.removeItem('edd_session');
       }
     } catch (e) {
+      console.log('Session parse error:', e);
       // Invalid session, clear it
       sessionStorage.removeItem('edd_user');
       sessionStorage.removeItem('edd_session');

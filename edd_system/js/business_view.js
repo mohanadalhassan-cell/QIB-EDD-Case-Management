@@ -1,11 +1,16 @@
 // Business View Controller
 document.addEventListener('DOMContentLoaded', function() {
   // Check session
-  const session = JSON.parse(sessionStorage.getItem('edd_session') || '{}');
+  const sessionRaw = sessionStorage.getItem('edd_session');
+  console.log('Business View - raw session:', sessionRaw);
+  const session = JSON.parse(sessionRaw || '{}');
+  console.log('Business View - parsed session:', session);
   if (!session.authenticated) {
-    window.location.href = 'login.html';
+    console.log('No authenticated flag, redirecting to login');
+    window.location.replace('login.html');
     return;
   }
+  console.log('Session valid, loading dashboard');
 
   // Update user info
   document.getElementById('user-name').textContent = session.user?.name || 'User';
