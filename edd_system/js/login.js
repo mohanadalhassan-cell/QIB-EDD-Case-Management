@@ -207,9 +207,14 @@ document.addEventListener('DOMContentLoaded', () => {
       userDisplay.textContent = currentUser.name;
       roleDisplay.textContent = roleLabels[currentUser.role];
 
-      // Store session (both keys for compatibility)
+      // Store session (correct format for all views)
+      const sessionData = {
+        authenticated: true,
+        user: currentUser,
+        loginTime: new Date().toISOString()
+      };
       sessionStorage.setItem('edd_user', JSON.stringify(currentUser));
-      sessionStorage.setItem('edd_session', JSON.stringify(currentUser));
+      sessionStorage.setItem('edd_session', JSON.stringify(sessionData));
 
       // Redirect after animation
       setTimeout(() => {
@@ -285,15 +290,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Check existing session
-  const existingSession = sessionStorage.getItem('edd_user') || sessionStorage.getItem('edd_session');
-  if (existingSession) {
+  const existingSessionData = sessionStorage.getItem('edd_session');
+  if (existingSessionData) {
     try {
-      const user = JSON.parse(existingSession);
-      // Ensure both session keys exist
-      sessionStorage.setItem('edd_user', JSON.stringify(user));
-      sessionStorage.setItem('edd_session', JSON.stringify(user));
-      window.location.href = getDashboardUrl(user.role);
+      const session = JSON.parse(existingSessionData);
+      // Check if session has authenticated flag
+      if (session.authenticated && session.user && session.user.role) {
+        window.location.href = getDashboardUrl(session.user.role);
+        return;
+      }
     } catch (e) {
+      // Invalid session, clear it
       sessionStorage.removeItem('edd_user');
       sessionStorage.removeItem('edd_session');
     }
