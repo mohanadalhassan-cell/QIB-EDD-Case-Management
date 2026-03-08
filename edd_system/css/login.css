@@ -334,27 +334,41 @@ html, body {
 
 /* ─── Role Grid ────────────────────────────────────── */
 .role-grid {
-  display: grid;
+  display: grid !important;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-top: 6px;
+  position: relative;
+  z-index: 2;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .role-option {
   cursor: pointer;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .role-option input[type="radio"] {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .role-card {
   padding: 10px 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-sm);
   text-align: center;
   transition: var(--transition);
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
 }
 
 .role-card svg {
