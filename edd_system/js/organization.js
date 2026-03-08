@@ -10,12 +10,26 @@ let currentView = 'tree';
 let currentTab = 'full';
 
 function initOrganization() {
-  // Check auth
-  const currentUser = JSON.parse(localStorage.getItem('eddCurrentUser') || 'null');
-  if (!currentUser) {
-    window.location.href = 'login.html';
+  // Check auth - use sessionStorage like other views
+  const sessionData = sessionStorage.getItem('edd_session');
+  if (!sessionData) {
+    window.location.replace('login.html');
     return;
   }
+  
+  let session;
+  try {
+    session = JSON.parse(sessionData);
+    if (!session.authenticated || !session.user) {
+      window.location.replace('login.html');
+      return;
+    }
+  } catch (e) {
+    window.location.replace('login.html');
+    return;
+  }
+  
+  const currentUser = session.user;
   
   // Set user info
   document.getElementById('user-name').textContent = currentUser.name || 'User';
@@ -38,8 +52,9 @@ function initOrganization() {
   
   // Logout handler
   document.getElementById('logout-btn')?.addEventListener('click', () => {
-    localStorage.removeItem('eddCurrentUser');
-    window.location.href = 'login.html';
+    sessionStorage.removeItem('edd_session');
+    sessionStorage.removeItem('edd_user');
+    window.location.replace('login.html');
   });
 }
 

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Check session
   const session = JSON.parse(sessionStorage.getItem('edd_session') || '{}');
   if (!session.authenticated) {
-    window.location.href = 'login.html';
+    window.location.replace('login.html');
     return;
   }
 

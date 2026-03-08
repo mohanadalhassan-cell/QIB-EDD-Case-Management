@@ -5,14 +5,26 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Check session
-  const session = sessionStorage.getItem('edd_user');
-  if (!session) {
-    window.location.href = 'login.html';
+  // Check session - use edd_session with authenticated flag
+  const sessionData = sessionStorage.getItem('edd_session');
+  if (!sessionData) {
+    window.location.replace('login.html');
     return;
   }
 
-  const currentUser = JSON.parse(session);
+  let session;
+  try {
+    session = JSON.parse(sessionData);
+    if (!session.authenticated || !session.user) {
+      window.location.replace('login.html');
+      return;
+    }
+  } catch (e) {
+    window.location.replace('login.html');
+    return;
+  }
+
+  const currentUser = session.user;
   
   // Update user info in sidebar
   const userAvatar = document.getElementById('user-avatar');
@@ -25,8 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Logout handler
   document.getElementById('logout-btn')?.addEventListener('click', () => {
+    sessionStorage.removeItem('edd_session');
     sessionStorage.removeItem('edd_user');
-    window.location.href = 'login.html';
+    window.location.replace('login.html');
   });
 
   // Load dashboard data
