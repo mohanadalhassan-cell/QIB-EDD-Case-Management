@@ -820,12 +820,14 @@
               <div class="emp-title">GM Risk</div>
               <div class="emp-dept">Risk Management</div>
             </div>
-            <div class="emp-card" onclick="showDetail('GM-006')">
+            <div class="emp-card" onclick="showDetail('GM-006')" style="border: 2px solid #f59e0b;">
+              <span class="emp-badge" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff;">STRATEGY</span>
               <img src="assets/employees/DINOS.jpeg" class="emp-photo" alt="GM Strategy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
               <div class="emp-initials" style="display:none;">DN</div>
               <div class="emp-name">Dinos</div>
               <div class="emp-title">GM Strategy & Projects</div>
               <div class="emp-dept">Strategy & Projects</div>
+              <div class="team-count" onclick="event.stopPropagation();toggleTeam('strategy')">👥 Strategy Team - Click to Expand</div>
             </div>
             <div class="emp-card" onclick="showDetail('GM-007')">
               <img src="assets/employees/Khalifa.jpeg" class="emp-photo" alt="Head HR" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -917,6 +919,42 @@
             </div>
             <div class="team-grid" id="wps-team-grid">
               <!-- Populated by JS -->
+            </div>
+          </div>
+          
+          <!-- Strategy Team Section (Expandable) -->
+          <div class="team-section" id="team-strategy">
+            <div class="level-label">
+              <h3>📊 Strategy & Projects Team <span>Under Dinos</span></h3>
+            </div>
+            <div class="team-grid" id="strategy-team-grid">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+          
+          <div class="org-arrow">⬇️</div>
+          
+          <!-- System Credits Section -->
+          <div class="org-level" style="background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(59, 130, 246, 0.1)); border: 2px solid rgba(167, 139, 250, 0.3);">
+            <div class="level-label">
+              <h3>🏆 EDD System Development Team <span>نظام إدارة حالات EDD</span></h3>
+            </div>
+            <div class="emp-card vision" onclick="showDetail('OPS-001')" style="border: 3px solid #a78bfa;">
+              <span class="emp-badge vision" style="background: linear-gradient(135deg, #a78bfa, #7c3aed);">🌟 THE VISION</span>
+              <img src="assets/employees/MR.Amit.png" class="emp-photo" alt="Amit" style="border: 2px solid #a78bfa;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">AM</div>
+              <div class="emp-name" style="color: #a78bfa; font-size: 15px;">Mr. Amit Malhotra</div>
+              <div class="emp-title">Head of Operations</div>
+              <div class="emp-dept">صاحب الرؤية والتوجيه</div>
+            </div>
+            <div class="emp-card" onclick="showTeamMemberDetail('Sayed ElMahdy', 'Senior Developer', 'assets/employees/sayed elmahdy.jpeg', 'سيد المهدي', 'EDD System Developer')" style="border: 3px solid #3b82f6;">
+              <span class="emp-badge" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff;">⚡ DEVELOPER</span>
+              <img src="assets/employees/sayed elmahdy.jpeg" class="emp-photo" alt="Sayed" style="border: 2px solid #3b82f6;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="emp-initials" style="display:none;">SE</div>
+              <div class="emp-name" style="color: #3b82f6; font-size: 15px;">Sayed ElMahdy</div>
+              <div class="emp-name-ar" style="color: #9CA3AF; font-size: 12px; direction: rtl;">سيد المهدي</div>
+              <div class="emp-title">Senior Developer</div>
+              <div class="emp-dept">مطور نظام إدارة حالات EDD</div>
             </div>
           </div>
         </div>

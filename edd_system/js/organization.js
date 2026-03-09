@@ -47,6 +47,9 @@ function initOrganization() {
   // Populate WPS team
   populateWPSTeam();
   
+  // Populate Strategy team
+  populateStrategyTeam();
+  
   // Populate workflow groups
   populateWorkflowGroups();
   
@@ -407,7 +410,31 @@ function getEmployeeData(id) {
       department: 'Strategy & Projects',
       division: 'Strategy',
       photo: 'assets/employees/DINOS.jpeg',
-      reportsTo: 'GCEO'
+      specialTag: 'STRATEGY',
+      reportsTo: 'GCEO',
+      workflowGroups: ['Management', 'Strategy'],
+      eddTasks: ['Strategic Planning', 'Project Oversight', 'Business Development']
+    },
+    'STR-001': {
+      id: 'STR-001',
+      name: 'Hussein Meqdad',
+      nameAr: 'حسين مقداد',
+      title: 'Strategy Analyst',
+      department: 'Strategy & Projects',
+      division: 'Strategy',
+      reportsTo: 'GM Strategy - Dinos',
+      workflowGroups: ['Strategy'],
+      eddTasks: ['Strategic Analysis', 'Project Support', 'Data Analytics']
+    },
+    'STR-002': {
+      id: 'STR-002',
+      name: 'Ahmad Mahmoud',
+      nameAr: 'أحمد محمود',
+      title: 'Project Manager',
+      department: 'Strategy & Projects',
+      division: 'Strategy',
+      reportsTo: 'GM Strategy - Dinos',
+      workflowGroups: ['Strategy']
     },
     'GM-007': {
       id: 'GM-007',
@@ -541,7 +568,8 @@ function getTagBackground(tag) {
     'THE VISION': 'linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(124, 58, 237, 0.2))',
     'PILOT': 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2))',
     'CDD/EDD': 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2))',
-    'DEVELOPER': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))'
+    'DEVELOPER': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
+    'STRATEGY': 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2))'
   };
   return colors[tag] || 'rgba(255,255,255,0.1)';
 }
@@ -556,7 +584,8 @@ function getTagDescription(tag) {
     'THE VISION': 'Operations Leader & Innovator',
     'PILOT': 'WPS & Digital Transformation Lead',
     'CDD/EDD': 'Customer Due Diligence & Enhanced Due Diligence',
-    'DEVELOPER': 'EDD System Development & Enhancement'
+    'DEVELOPER': 'EDD System Development & Enhancement',
+    'STRATEGY': 'Strategic Planning & Project Management'
   };
   return descriptions[tag] || '';
 }
@@ -620,23 +649,56 @@ function populateWPSTeam() {
   `).join('');
 }
 
+// Populate Strategy Team section
+function populateStrategyTeam() {
+  const grid = document.getElementById('strategy-team-grid');
+  if (!grid) return;
+  
+  const strategyTeam = [
+    { name: 'Hussein Meqdad', nameAr: 'حسين مقداد', title: 'Strategy Analyst', photo: null, special: true },
+    { name: 'Ahmad Mahmoud', nameAr: 'أحمد محمود', title: 'Project Manager', photo: null },
+    { name: 'Sara Al-Abdullah', title: 'Business Analyst', photo: null },
+    { name: 'Omar Nasser', title: 'Strategy Coordinator', photo: null }
+  ];
+  
+  grid.innerHTML = strategyTeam.map(member => `
+    <div class="team-member ${member.special ? 'special-member' : ''}" onclick="showTeamMemberDetail('${member.name}', '${member.title}', '${member.photo || ''}', '${member.nameAr || ''}', '')" style="${member.special ? 'border: 2px solid #f59e0b;' : ''}">
+      ${member.special ? `<span class="member-tag" style="position:absolute;top:8px;right:8px;padding:4px 10px;background:linear-gradient(135deg, #f59e0b, #d97706);border-radius:12px;font-size:9px;color:white;font-weight:600;">⭐ KEY</span>` : ''}
+      <div class="team-member-initials" style="${member.special ? 'background: linear-gradient(135deg, #f59e0b, #d97706);' : ''}">${getInitials(member.name)}</div>
+      <div class="team-member-info">
+        <h4 ${member.special ? 'style="color: #f59e0b;"' : ''}>${member.name}</h4>
+        ${member.nameAr ? `<p style="font-size:11px;color:#9E9E9E;margin-bottom:2px;direction:rtl;">${member.nameAr}</p>` : ''}
+        <p>${member.title}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
 // Show team member detail (simplified)
 function showTeamMemberDetail(name, title, photo, nameAr, subtitle) {
   const panel = document.getElementById('detail-panel');
   const overlay = document.getElementById('detail-overlay');
   const body = document.getElementById('detail-body');
   
-  const isITDeveloper = title.includes('Developer') || title.includes('Lead') || title.includes('Admin');
+  const isITDeveloper = title.includes('Developer') || title.includes('Lead') || title.includes('Admin') || title.includes('Manager');
   const isDeveloper = name === 'Sayed ElMahdy';
+  const isStrategy = title.includes('Strategy') || title.includes('Project') || title.includes('Analyst') || name === 'Hussein Meqdad';
+  const isHussein = name === 'Hussein Meqdad';
+  
+  // Determine department
+  let department = 'WPS & DBO';
+  if (isITDeveloper) department = 'Information Technology';
+  if (isStrategy) department = 'Strategy & Projects';
   
   body.innerHTML = `
     ${photo ? 
-      `<img src="${photo}" class="detail-photo" alt="${name}" style="${isDeveloper ? 'border: 3px solid #3b82f6;' : ''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-       <div class="emp-initials" style="width:120px;height:120px;font-size:36px;margin:0 auto 16px;display:none;">${getInitials(name)}</div>` :
-      `<div class="emp-initials" style="width:120px;height:120px;font-size:36px;margin:0 auto 16px;">${getInitials(name)}</div>`
+      `<img src="${photo}" class="detail-photo" alt="${name}" style="${isDeveloper ? 'border: 3px solid #3b82f6;' : (isHussein ? 'border: 3px solid #f59e0b;' : '')}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+       <div class="emp-initials" style="width:120px;height:120px;font-size:36px;margin:0 auto 16px;display:none;${isHussein ? 'background: linear-gradient(135deg, #f59e0b, #d97706);' : ''}">${getInitials(name)}</div>` :
+      `<div class="emp-initials" style="width:120px;height:120px;font-size:36px;margin:0 auto 16px;${isHussein ? 'background: linear-gradient(135deg, #f59e0b, #d97706);' : ''}">${getInitials(name)}</div>`
     }
     ${isDeveloper ? `<div style="text-align:center;margin-bottom:8px;"><span style="padding:6px 16px;background:linear-gradient(135deg, #3b82f6, #2563eb);border-radius:20px;font-size:11px;color:white;font-weight:600;">⚡ EDD SYSTEM DEVELOPER</span></div>` : ''}
-    <div class="detail-name">${name}</div>
+    ${isHussein ? `<div style="text-align:center;margin-bottom:8px;"><span style="padding:6px 16px;background:linear-gradient(135deg, #f59e0b, #d97706);border-radius:20px;font-size:11px;color:white;font-weight:600;">⭐ STRATEGY TEAM</span></div>` : ''}
+    <div class="detail-name" ${isHussein ? 'style="color: #f59e0b;"' : ''}>${name}</div>
     ${nameAr ? `<div style="text-align:center;font-size:16px;color:#9E9E9E;margin-bottom:4px;direction:rtl;">${nameAr}</div>` : ''}
     <div class="detail-title">${title}</div>
     ${subtitle ? `<div style="text-align:center;font-size:13px;color:var(--accent);margin-top:4px;">${subtitle}</div>` : ''}
@@ -645,7 +707,11 @@ function showTeamMemberDetail(name, title, photo, nameAr, subtitle) {
       <h4>Employee Information</h4>
       <div class="detail-row">
         <span class="detail-label">Department</span>
-        <span class="detail-value">${isITDeveloper ? 'Information Technology' : 'WPS & DBO'}</span>
+        <span class="detail-value">${department}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Reports To</span>
+        <span class="detail-value">${isStrategy ? 'Dinos - GM Strategy' : (isITDeveloper ? 'Khurram - Head of IT' : 'Mohanad - Dept Manager')}</span>
       </div>
       <div class="detail-row">
         <span class="detail-label">Email</span>
