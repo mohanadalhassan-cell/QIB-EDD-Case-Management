@@ -1114,116 +1114,146 @@
               <div class="section-icon executive">👔</div>
               <div class="section-title">
                 <h2>Executive Management</h2>
-                <p>C-Suite & General Managers</p>
+                <p>C-Suite & Direct Reports to GCEO</p>
               </div>
               <div class="section-toggle" id="toggle-executive">▼</div>
             </div>
 
             <div class="section-content" id="content-executive">
-              <div class="executive-grid">
-                <!-- GCEO -->
-                <div class="exec-card gceo" onclick="showDetail('EXE-001')">
-                  <div class="exec-photo">
-                    <img src="assets/employees/GCEO.jpeg" alt="GCEO" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>BG</div>'">
+              <!-- GCEO -->
+              <div class="chairman-container">
+                <div class="chairman-card" onclick="showDetail('EXE-001')" style="border-color: rgba(0, 212, 255, 0.5);">
+                  <div class="chairman-badge" style="background: linear-gradient(135deg, #00D4FF, #0288D1);">👨‍💼 GROUP CEO</div>
+                  <div class="chairman-photo">
+                    <img src="assets/employees/GCEO.jpeg" alt="GCEO" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.innerHTML='BG'">
                   </div>
-                  <div class="exec-info">
-                    <div class="exec-badge">GROUP CEO</div>
-                    <div class="exec-name">Mr. Bassel Gamal</div>
-                    <div class="exec-title">Group Chief Executive Officer</div>
-                    <div class="exec-dept">Executive Leadership</div>
-                  </div>
+                  <div class="chairman-name">Mr. Bassel Gamal</div>
+                  <div class="chairman-name-ar">السيد باسل جمال</div>
+                  <div class="chairman-title">Group Chief Executive Officer</div>
                 </div>
+                <div class="connector-down"></div>
+              </div>
 
+              <!-- C-Suite Grid -->
+              <div class="executive-grid">
                 <!-- COO -->
-                <div class="exec-card" onclick="showDetail('GM-001')">
+                <div class="exec-card" onclick="showDetail('EXE-002')">
                   <div class="exec-photo">
                     <img src="assets/employees/Saleem.jpeg" alt="COO" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>SU</div>'">
                   </div>
                   <div class="exec-info">
                     <div class="exec-badge" style="background: linear-gradient(135deg, #22C55E, #16A34A);">COO</div>
-                    <div class="exec-name">Saleem Ulhiq</div>
+                    <div class="exec-name">Saleem Ulhaq</div>
                     <div class="exec-title">Chief Operating Officer</div>
                     <div class="exec-dept">Operations & IT</div>
                   </div>
                   <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('coo')">👥 View Team</button>
                 </div>
 
-                <!-- GM Retail -->
-                <div class="exec-card" onclick="showDetail('GM-002')">
+                <!-- Chief Personal Banking -->
+                <div class="exec-card" onclick="showDetail('EXE-003')">
                   <div class="exec-photo">
-                    <img src="assets/employees/Anand.jpeg" alt="GM Retail" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>DA</div>'">
+                    <img src="assets/employees/Anand.jpeg" alt="CPB" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>DA</div>'">
                   </div>
                   <div class="exec-info">
-                    <div class="exec-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706);">GM RETAIL</div>
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706);">CPBO</div>
                     <div class="exec-name">D. Anand</div>
-                    <div class="exec-title">General Manager - Retail Banking</div>
-                    <div class="exec-dept">Retail Banking</div>
+                    <div class="exec-title">Chief Personal Banking Officer</div>
+                    <div class="exec-dept">Personal Banking</div>
                   </div>
+                  <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('personal')">👥 View Team</button>
                 </div>
 
-                <!-- GM WBG -->
-                <div class="exec-card" onclick="showDetail('GM-003')">
+                <!-- Chief Wholesale Banking -->
+                <div class="exec-card" onclick="showDetail('EXE-004')">
                   <div class="exec-photo">
-                    <img src="assets/employees/Tariq.jpeg" alt="GM WBG" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>TF</div>'">
+                    <img src="assets/employees/Tariq.jpeg" alt="CWBO" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>TF</div>'">
                   </div>
                   <div class="exec-info">
-                    <div class="exec-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">GM WBG</div>
-                    <div class="exec-name">Tariq Fawzi</div>
-                    <div class="exec-title">General Manager - Wholesale Banking</div>
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">CWBO</div>
+                    <div class="exec-name">Tarek Y. Fawzi</div>
+                    <div class="exec-title">Chief Wholesale Banking Officer</div>
                     <div class="exec-dept">Wholesale Banking Group</div>
                   </div>
                 </div>
 
-                <!-- GM Finance -->
-                <div class="exec-card" onclick="showDetail('GM-004')">
+                <!-- CFO -->
+                <div class="exec-card" onclick="showDetail('EXE-005')">
                   <div class="exec-photo">
-                    <img src="assets/employees/Gourang.jpeg" alt="GM Finance" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>GO</div>'">
+                    <img src="assets/employees/Gourang.jpeg" alt="CFO" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>GH</div>'">
                   </div>
                   <div class="exec-info">
-                    <div class="exec-badge" style="background: linear-gradient(135deg, #EC4899, #DB2777);">GM FINANCE</div>
-                    <div class="exec-name">Gourang</div>
-                    <div class="exec-title">General Manager - Finance</div>
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #EC4899, #DB2777);">CFO</div>
+                    <div class="exec-name">Gourang Hemani</div>
+                    <div class="exec-title">Chief Finance Officer</div>
                     <div class="exec-dept">Finance Division</div>
                   </div>
                 </div>
 
-                <!-- GM Risk -->
-                <div class="exec-card" onclick="showDetail('GM-005')">
+                <!-- CRO -->
+                <div class="exec-card" onclick="showDetail('EXE-006')">
                   <div class="exec-photo">
-                    <img src="assets/employees/Rakesh.jpeg" alt="GM Risk" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>RK</div>'">
+                    <img src="assets/employees/Rakesh.jpeg" alt="CRO" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>RS</div>'">
                   </div>
                   <div class="exec-info">
-                    <div class="exec-badge" style="background: linear-gradient(135deg, #EF4444, #DC2626);">GM RISK</div>
-                    <div class="exec-name">Rakesh</div>
-                    <div class="exec-title">General Manager - Risk</div>
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #EF4444, #DC2626);">CRO</div>
+                    <div class="exec-name">Rakesh Sanghvi</div>
+                    <div class="exec-title">Chief Risk Officer</div>
                     <div class="exec-dept">Risk Management</div>
                   </div>
                 </div>
 
-                <!-- GM Strategy -->
-                <div class="exec-card" onclick="showDetail('GM-006')">
+                <!-- CSDO -->
+                <div class="exec-card" onclick="showDetail('EXE-007')">
                   <div class="exec-photo">
-                    <img src="assets/employees/DINOS.jpeg" alt="GM Strategy" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>DN</div>'">
+                    <img src="assets/employees/DINOS.jpeg" alt="CSDO" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>CC</div>'">
                   </div>
                   <div class="exec-info">
-                    <div class="exec-badge" style="background: linear-gradient(135deg, #14B8A6, #0D9488);">STRATEGY</div>
-                    <div class="exec-name">Dinos</div>
-                    <div class="exec-title">General Manager - Strategy & Projects</div>
-                    <div class="exec-dept">Strategy & Transformation</div>
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #14B8A6, #0D9488);">CSDO</div>
+                    <div class="exec-name">Constantinos Constantinides</div>
+                    <div class="exec-title">Chief Strategy & Digital Officer</div>
+                    <div class="exec-dept">Strategy & Digital</div>
                   </div>
                   <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('strategy')">👥 View Team</button>
                 </div>
 
                 <!-- Head HR -->
-                <div class="exec-card" onclick="showDetail('GM-007')">
+                <div class="exec-card" onclick="showDetail('EXE-008')">
                   <div class="exec-photo">
-                    <img src="assets/employees/Khalifa.jpeg" alt="Head HR" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>KM</div>'">
+                    <img src="assets/employees/Khalifa.jpeg" alt="HCG" onerror="this.parentElement.innerHTML='<div class=\'exec-photo-placeholder\'>KM</div>'">
                   </div>
                   <div class="exec-info">
-                    <div class="exec-badge" style="background: linear-gradient(135deg, #6366F1, #4F46E5);">HEAD HR</div>
-                    <div class="exec-name">Khalifa Al-Muslim</div>
-                    <div class="exec-title">Head of HR Group</div>
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #6366F1, #4F46E5);">HCG</div>
+                    <div class="exec-name">Khalefa Al-Mesalam</div>
+                    <div class="exec-title">Head of Human Capital Group</div>
                     <div class="exec-dept">Human Resources</div>
+                  </div>
+                  <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('hcg')">👥 View Team</button>
+                </div>
+
+                <!-- EM GCEO Office -->
+                <div class="exec-card" onclick="showDetail('EXE-009')">
+                  <div class="exec-photo">
+                    <div class="exec-photo-placeholder">RA</div>
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #64748B, #475569);">EM</div>
+                    <div class="exec-name">Raafat Alrantisi</div>
+                    <div class="exec-title">Executive Manager – GCEO Office</div>
+                    <div class="exec-dept">GCEO Office</div>
+                  </div>
+                </div>
+
+                <!-- Executive Secretary -->
+                <div class="exec-card" onclick="showDetail('EXE-010')">
+                  <div class="exec-photo">
+                    <div class="exec-photo-placeholder">AJ</div>
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #94A3B8, #64748B);">ES</div>
+                    <div class="exec-name">Anjitha J. Menon</div>
+                    <div class="exec-title">Executive Secretary – GCEO Office</div>
+                    <div class="exec-dept">GCEO Office</div>
                   </div>
                 </div>
               </div>
@@ -1241,13 +1271,128 @@
                       <p>Head of Operations</p>
                     </div>
                   </div>
-                  <div class="team-member" onclick="showDetail('IT-001')">
+                  <div class="team-member" onclick="showDetail('OPS-002')">
                     <div class="team-member-photo">
-                      <div class="team-member-initials">KH</div>
+                      <div class="team-member-initials">KQ</div>
                     </div>
                     <div class="team-member-info">
-                      <h5>Khurram</h5>
-                      <p>Head of IT</p>
+                      <h5>Khurram Qadir</h5>
+                      <p>Chief Information Officer</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-003')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AS</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Abdulhadi Alshahwani</h5>
+                      <p>AGM – Business Services</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-004')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Ahmar Azmi</h5>
+                      <p>SEM – Internal Control</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-005')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AK</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Arslan Khan</h5>
+                      <p>Head of Change Management</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-006')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">BB</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Bader Ba-Khamis</h5>
+                      <p>SEM – Service Delivery</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-007')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">NA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Nadim Azar</h5>
+                      <p>Head of Premises & Projects</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-008')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">NM</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Nourhen Mediouni</h5>
+                      <p>Admin Support</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Personal Banking Team -->
+              <div class="team-expand" id="team-personal">
+                <h4 style="margin: 0 0 16px; color: #F59E0B; font-size: 14px;">👥 Personal Banking Team</h4>
+                <div class="team-grid">
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #F59E0B, #D97706);">AN</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Abdulrahman Alnabit</h5>
+                      <p>Head of Wealth Management</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AY</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Ali Younes</h5>
+                      <p>Senior Manager</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AZ</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Ayman Zein</h5>
+                      <p>Head of Alternative Channels</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">FS</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Faiza Saber</h5>
+                      <p>Admin Assistant</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #EF4444, #DC2626);">HA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5 style="color: #EF4444;">Hassan Alnoaimi</h5>
+                      <p>Division Head - Branch & Sales</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">SA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Saleh Anam</h5>
+                      <p>Head of Retail Products</p>
                     </div>
                   </div>
                 </div>
@@ -1255,24 +1400,194 @@
 
               <!-- Strategy Team Expansion -->
               <div class="team-expand" id="team-strategy">
-                <h4 style="margin: 0 0 16px; color: #14B8A6; font-size: 14px;">👥 Strategy & Projects Team</h4>
+                <h4 style="margin: 0 0 16px; color: #14B8A6; font-size: 14px;">👥 Strategy & Digital Office</h4>
                 <div class="team-grid">
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #3B82F6, #2563EB);">AT</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Andonis Theodosiou</h5>
+                      <p>T24 Program Director</p>
+                    </div>
+                  </div>
                   <div class="team-member">
                     <div class="team-member-photo">
                       <div class="team-member-initials" style="background: linear-gradient(135deg, #F59E0B, #D97706);">HM</div>
                     </div>
                     <div class="team-member-info">
-                      <h5 style="color: #F59E0B;">Hussein Meqdad</h5>
-                      <p>حسين مقداد - Strategy Analyst</p>
+                      <h5 style="color: #F59E0B;">Hussein Mokdad</h5>
+                      <p>Head Marketing & Research / Digital Experience</p>
                     </div>
                   </div>
                   <div class="team-member">
                     <div class="team-member-photo">
-                      <div class="team-member-initials">AM</div>
+                      <div class="team-member-initials">IB</div>
                     </div>
                     <div class="team-member-info">
-                      <h5>Ahmad Mahmoud</h5>
-                      <p>Project Manager</p>
+                      <h5>Imad Bourhfir</h5>
+                      <p>Head Strategy, Innovation & Data Science</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">MA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Mashaal Alderham</h5>
+                      <p>AGM – Communications</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">SC</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Suzan Chaker</h5>
+                      <p>Manager – Business Support</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Human Capital Group Team -->
+              <div class="team-expand" id="team-hcg">
+                <h4 style="margin: 0 0 16px; color: #6366F1; font-size: 14px;">👥 Human Capital Group</h4>
+                <div class="team-grid">
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #6366F1, #4F46E5);">KM</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Khaja Mohammed</h5>
+                      <p>Head of Rewards, Performance & Operations</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">MF</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Muhammed Finos</h5>
+                      <p>Head of Talent Acquisition & Workforce Planning</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">RS</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Rudraksh Shekhar</h5>
+                      <p>Head of Learning & Development</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">WM</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Wadha Al-Marri</h5>
+                      <p>SEM – Government Affairs</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BRANCH & SALES DIVISION -->
+          <div class="hierarchy-section" id="section-branch" style="--section-color: #EF4444;">
+            <div class="section-header" onclick="toggleSection('branch')">
+              <div class="section-icon" style="background: linear-gradient(135deg, #EF4444, #DC2626);">🏪</div>
+              <div class="section-title">
+                <h2 style="color: #EF4444;">Branch & Sales Division</h2>
+                <p>Under Division Head - Hassan Alnoaimi</p>
+              </div>
+              <div class="section-toggle" id="toggle-branch">▼</div>
+            </div>
+
+            <div class="section-content" id="content-branch">
+              <div class="ops-hierarchy">
+                <div class="ops-level">
+                  <div class="ops-level-label" style="background: rgba(239, 68, 68, 0.1);"><span style="color: #EF4444;">Division Head</span></div>
+                  <div class="ops-cards">
+                    <div class="ops-card featured" style="border-color: rgba(239, 68, 68, 0.5);">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder" style="background: linear-gradient(135deg, #EF4444, #DC2626);">HA</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4 style="color: #EF4444;">Hassan Alnoaimi</h4>
+                        <div class="title">Division Head - Branch & Sales</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ops-level">
+                  <div class="ops-level-label"><span>Direct Reports</span></div>
+                  <div class="ops-cards">
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">AM</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Abdulkader Al-Masri</h4>
+                        <div class="title">Head of Branch Business Development</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">KN</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Khalid Alnaemi</h4>
+                        <div class="title">Area Manager</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">MM</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Mahmoud Marzughi</h4>
+                        <div class="title">Area Manager</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">NJ</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Naela Aljabir</h4>
+                        <div class="title">Branch Manager</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">NR</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Nasser Radhi</h4>
+                        <div class="title">SM – Branch Analytics & Information</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">SS</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Shrooq Saleh</h4>
+                        <div class="title">Supervisor – Customer Service</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">TR</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Tag Rahmtalla</h4>
+                        <div class="title">Head of Sales & Service</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1312,15 +1627,24 @@
 
                 <!-- Operations Team Expansion -->
                 <div class="team-expand" id="team-ops">
-                  <h4 style="margin: 0 0 16px; color: #A78BFA; font-size: 14px;">👥 Operations Leadership Team</h4>
+                  <h4 style="margin: 0 0 16px; color: #A78BFA; font-size: 14px;">👥 Operations Direct Reports under Amit Malhotra</h4>
                   <div class="team-grid">
-                    <div class="team-member" onclick="showTeamDetail('Sayed ElMahdy', 'Senior Developer', 'assets/employees/sayed elmahdy.jpeg', 'سيد المهدي')">
+                    <div class="team-member" onclick="showDetail('OPS-010')">
+                      <div class="team-member-photo">
+                        <div class="team-member-initials" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">AA</div>
+                      </div>
+                      <div class="team-member-info">
+                        <h5 style="color: #8B5CF6;">Adel Abusbeitan</h5>
+                        <p>SEM – Wholesale Banking Operations</p>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showTeamDetail('Sayed ElMahdy', 'Head of Retail & Shared Services Operations', 'assets/employees/sayed elmahdy.jpeg', 'سيد المهدي')">
                       <div class="team-member-photo">
                         <img src="assets/employees/sayed elmahdy.jpeg" alt="Sayed" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #3B82F6, #2563EB);\'>SE</div>'">
                       </div>
                       <div class="team-member-info">
                         <h5 style="color: #3B82F6;">Sayed ElMahdy</h5>
-                        <p>سيد المهدي - Senior Developer</p>
+                        <p>Head of Retail & Shared Services Operations</p>
                       </div>
                     </div>
                     <div class="team-member" onclick="showDetail('MGR-001')">
