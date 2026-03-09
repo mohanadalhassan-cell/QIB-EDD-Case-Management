@@ -4298,7 +4298,231 @@ The system shall track the following lifecycle metrics:
 
 ---
 
-## 45. Final Conclusion
+## 45. Organizational Hierarchy Data Integrity
+
+### 45.1 Overview
+
+The system shall enforce strict **data integrity rules** for organizational hierarchy records to prevent duplicate entries, inconsistent titles, and invalid reporting lines.
+
+This section ensures that UI groupings, pilot labels, and display sections do not create invalid organizational nodes in the system database.
+
+---
+
+### 45.2 Single Record Principle
+
+The system shall enforce a **single official organizational record** for each employee:
+
+| Rule | Enforcement |
+|------|-------------|
+| **No Duplicate Nodes** | Each employee appears only once per manager |
+| **Single Reporting Line** | One active reporting line per employee (unless matrix governance) |
+| **Single Official Title** | One approved title per organizational context |
+| **Single Department Assignment** | One primary department assignment |
+
+**Validation Query:**
+
+```sql
+-- Check for duplicate employee records under same manager
+SELECT employee_id, manager_id, COUNT(*) as duplicate_count
+FROM org_hierarchy
+GROUP BY employee_id, manager_id
+HAVING COUNT(*) > 1
+```
+
+---
+
+### 45.3 Display Grouping vs Organizational Hierarchy
+
+The system shall clearly distinguish between:
+
+| Type | Purpose | Creates Org Node? |
+|------|---------|-------------------|
+| **Organizational Hierarchy** | Official reporting structure | ✅ Yes |
+| **Display Grouping** | UI visual organization | ❌ No |
+| **Department Section** | Logical grouping for navigation | ❌ No |
+| **Pilot Label** | Temporary identification | ❌ No |
+
+**Display Grouping Rules:**
+
+Any display section such as "Department Managers" shall be treated as a **visual grouping only** and shall NOT create:
+- A separate reporting line
+- An ownership node
+- An approval hierarchy entry
+- A duplicate employee record
+
+---
+
+### 45.4 Official Operations Hierarchy
+
+The system shall maintain the following official hierarchy under **Head of Operations**:
+
+**Division Head:**
+
+| Name | Title | ID |
+|------|-------|----|
+| Mr. Amit Malhotra | Head of Operations | OPS-001 |
+
+**Direct Reports under Amit Malhotra:**
+
+| Employee | Official Title | Reports To |
+|----------|----------------|------------|
+| Adel Abusbeitan | SEM – Wholesale Banking Operations | Amit Malhotra |
+| Sayed ElMahdy | Head of Retail & Shared Services Operations | Amit Malhotra |
+| Mohanad Al Hassan | Manager - WPS & Digital Back Office | Amit Malhotra |
+| Youssef Al-Khuzain | Manager - Special Services | Amit Malhotra |
+| Ashraf | Manager - Main Vault | Amit Malhotra |
+| Ghaleb Essam | Manager - CDD & EDD | Amit Malhotra |
+
+**Important:** Each employee listed above shall have **exactly one record** in the organizational hierarchy table.
+
+---
+
+### 45.5 Title Standardization Rules
+
+The system shall enforce **consistent title formatting**:
+
+| Incorrect Format | Correct Format |
+|------------------|----------------|
+| Manager - WPS & DBO | Manager - WPS & Digital Back Office |
+| Mgr - WPS/DBO | Manager - WPS & Digital Back Office |
+| WPS Manager | Manager - WPS & Digital Back Office |
+
+**Title Validation:**
+
+```json
+{
+  "title_standardization": {
+    "short_forms_allowed": false,
+    "abbreviation_in_title": false,
+    "display_abbreviation": "Secondary UI text only",
+    "official_record": "Full title always"
+  }
+}
+```
+
+Abbreviated labels may be displayed only as **secondary UI text** and shall not replace the official title in:
+- Database records
+- Approval workflows
+- Governance mappings
+- Audit logs
+
+---
+
+### 45.6 Duplicate Prevention Rules
+
+The system shall prevent duplicate records through:
+
+| Prevention Method | Implementation |
+|-------------------|----------------|
+| **Unique Constraint** | employee_id + manager_id must be unique |
+| **Pre-Insert Validation** | Check for existing record before insert |
+| **UI Card Validation** | Cards link to single master record |
+| **Import Validation** | Flag duplicates in batch imports |
+
+**Duplicate Detection:**
+
+```json
+{
+  "duplicate_detection": {
+    "on_ui_render": "Link to master record, no duplicate creation",
+    "on_data_import": "Check existing hierarchy records",
+    "on_manual_entry": "Validate against active employees",
+    "alert_on_duplicate": true,
+    "auto_cleanup": "Scheduled weekly"
+  }
+}
+```
+
+---
+
+### 45.7 Reporting Line Validation
+
+Before any organizational change, the system shall validate:
+
+| Validation | Rule |
+|------------|------|
+| **No Circular References** | Manager cannot report to subordinate |
+| **Single Active Line** | Only one active reporting line (standard mode) |
+| **Matrix Exception** | Secondary lines allowed only with governance approval |
+| **Valid Manager** | Manager must exist in system |
+
+---
+
+### 45.8 Governance Mapping Rules
+
+Ownership and approval mappings shall reference the **single organizational record**:
+
+| Mapping Type | Source |
+|--------------|--------|
+| **Data Ownership** | org_hierarchy.employee_id |
+| **Approval Authority** | org_hierarchy.employee_id |
+| **Escalation Recipient** | org_hierarchy.employee_id |
+| **Dashboard Access** | org_hierarchy.employee_id |
+
+**No separate mappings** shall be created for UI display groupings.
+
+---
+
+### 45.9 Correction Procedures
+
+When duplicate or inconsistent records are detected, the system shall:
+
+| Issue | Correction Action |
+|-------|-------------------|
+| Duplicate Employee Record | Merge to single record, preserve audit trail |
+| Inconsistent Title | Update to official title, log change |
+| Multiple Reporting Lines | Deactivate secondary (unless matrix approved) |
+| UI-Created Duplicate | Delete display record, link to master |
+
+**Correction Audit Log:**
+
+| Field | Description |
+|-------|-------------|
+| Correction ID | Unique identifier |
+| Issue Type | Duplicate/Title/Reporting Line |
+| Employee ID | Affected employee |
+| Before State | Original data |
+| After State | Corrected data |
+| Corrected By | System or user |
+| Correction Date | Timestamp |
+
+---
+
+### 45.10 Demo Environment Compliance
+
+The demo system shall demonstrate:
+
+| Requirement | Implementation |
+|-------------|----------------|
+| No Duplicates | Each employee appears once under manager |
+| Consistent Titles | Official titles used everywhere |
+| Single Reporting | One reporting line per employee |
+| UI Grouping | Display-only, no database impact |
+
+---
+
+### 45.11 Audit and Compliance
+
+All hierarchy data integrity events shall be logged:
+
+| Event | Logged Information |
+|-------|-------------------|
+| Duplicate Detected | Employee IDs, manager, timestamp |
+| Duplicate Resolved | Resolution method, result |
+| Title Corrected | Old title, new title, employee |
+| Reporting Line Fixed | Old line, new line, employee |
+
+**Compliance Reports:**
+
+| Report | Frequency | Content |
+|--------|-----------|---------|
+| Data Integrity Summary | Weekly | Duplicates found/resolved |
+| Title Consistency | Monthly | Non-standard titles flagged |
+| Hierarchy Validation | Daily | Circular references, orphans |
+
+---
+
+## 46. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -4418,6 +4642,18 @@ This Business Requirements Document (BRD) defines the complete requirements for 
   - Integration Points
   - Case Closure Checklist
   - Lifecycle Metrics
+
+**Data Integrity Requirements:**
+- Organizational Hierarchy Data Integrity (Section 45)
+  - Single Record Principle
+  - Display Grouping vs Organizational Hierarchy Rules
+  - Official Operations Hierarchy under Amit Malhotra
+  - Title Standardization Rules
+  - Duplicate Prevention Rules
+  - Reporting Line Validation
+  - Governance Mapping Rules
+  - Correction Procedures
+  - Demo Environment Compliance
 
 **System Integrations:**
 - FLOW Workflow Engine
