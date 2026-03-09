@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Demo Users Database
   const demoUsers = {
+    'Qib@2030': { name: 'QIB Admin', password: 'Qib@2030', department: 'All Access', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] },
     'EMP001': { name: 'Ahmed Al-Thani', password: 'demo123', department: 'Mass Banking', allowedRoles: ['business', 'management'] },
     'EMP002': { name: 'Fatima Al-Mansoor', password: 'demo123', department: 'CDD Operations', allowedRoles: ['cdd', 'compliance'] },
     'EMP003': { name: 'Mohammed Al-Suwaidi', password: 'demo123', department: 'Compliance', allowedRoles: ['compliance', 'management'] },

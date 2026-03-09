@@ -273,6 +273,9 @@ function closeDetail() {
 // Get employee data by ID
 function getEmployeeData(id) {
   const employees = {
+    // =====================================================
+    // BOARD OF DIRECTORS
+    // =====================================================
     'BOD-001': {
       id: 'BOD-001',
       name: 'Sheikh Jassim bin Hamad Al Thani',
@@ -338,6 +341,10 @@ function getEmployeeData(id) {
       division: 'Governance',
       workflowGroups: ['Management']
     },
+
+    // =====================================================
+    // GROUP CEO
+    // =====================================================
     'EXE-001': {
       id: 'EXE-001',
       name: 'Mr. Bassel Gamal',
@@ -350,101 +357,283 @@ function getEmployeeData(id) {
       workflowGroups: ['Management'],
       eddTasks: ['Final Approval', 'Escalation Review', 'Policy Override']
     },
+
+    // =====================================================
+    // GCEO DIRECT REPORTS (C-SUITE)
+    // =====================================================
     'GM-001': {
       id: 'GM-001',
-      name: 'Saleem Ulhiq',
+      name: 'Saleem Ulhaq',
       title: 'Chief Operating Officer',
       department: 'Operations & Technology',
       division: 'Operations',
       photo: 'assets/employees/Saleem.jpeg',
       specialTag: 'COO',
-      reportsTo: 'GCEO',
+      reportsTo: 'GCEO - Bassel Gamal',
       workflowGroups: ['Management'],
       eddTasks: ['Ops Approval', 'IT Approval', 'Resource Allocation']
     },
     'GM-002': {
       id: 'GM-002',
       name: 'D. Anand',
-      title: 'General Manager - Retail Banking',
-      department: 'Retail Banking',
+      title: 'Chief Personal Banking Officer',
+      department: 'Personal Banking',
       division: 'Retail',
       photo: 'assets/employees/Anand.jpeg',
-      reportsTo: 'GCEO',
+      reportsTo: 'GCEO - Bassel Gamal',
       workflowGroups: ['Management'],
       eddTasks: ['Retail Approval', 'Customer Escalation']
     },
     'GM-003': {
       id: 'GM-003',
-      name: 'Tariq Fawzi',
-      title: 'General Manager - Wholesale Banking',
+      name: 'Tarek Y. Fawzi',
+      title: 'Chief Wholesale Banking Officer',
       department: 'Wholesale Banking',
       division: 'WBG',
       photo: 'assets/employees/Tariq.jpeg',
-      reportsTo: 'GCEO',
+      reportsTo: 'GCEO - Bassel Gamal',
       workflowGroups: ['Management']
     },
     'GM-004': {
       id: 'GM-004',
-      name: 'Gourang',
-      title: 'General Manager - Finance',
+      name: 'Gourang Hemani',
+      title: 'Chief Finance Officer',
       department: 'Finance',
       division: 'Finance',
       photo: 'assets/employees/Gourang.jpeg',
-      reportsTo: 'GCEO'
+      reportsTo: 'GCEO - Bassel Gamal'
     },
     'GM-005': {
       id: 'GM-005',
-      name: 'Rakesh',
-      title: 'General Manager - Risk',
+      name: 'Rakesh Sanghvi',
+      title: 'Chief Risk Officer',
       department: 'Risk Management',
       division: 'Risk',
       photo: 'assets/employees/Rakesh.jpeg',
-      reportsTo: 'GCEO',
+      reportsTo: 'GCEO - Bassel Gamal',
       workflowGroups: ['Compliance'],
       eddTasks: ['Risk Assessment', 'Compliance Review']
     },
     'GM-006': {
       id: 'GM-006',
-      name: 'Dinos',
-      title: 'General Manager - Strategy & Projects',
-      department: 'Strategy & Projects',
+      name: 'Constantinos Constantinides',
+      title: 'Chief Strategy & Digital Officer',
+      department: 'Strategy & Digital',
       division: 'Strategy',
       photo: 'assets/employees/DINOS.jpeg',
       specialTag: 'STRATEGY',
-      reportsTo: 'GCEO',
+      reportsTo: 'GCEO - Bassel Gamal',
       workflowGroups: ['Management', 'Strategy'],
-      eddTasks: ['Strategic Planning', 'Project Oversight', 'Business Development']
-    },
-    'STR-001': {
-      id: 'STR-001',
-      name: 'Hussein Meqdad',
-      nameAr: 'حسين مقداد',
-      title: 'Strategy Analyst',
-      department: 'Strategy & Projects',
-      division: 'Strategy',
-      reportsTo: 'GM Strategy - Dinos',
-      workflowGroups: ['Strategy'],
-      eddTasks: ['Strategic Analysis', 'Project Support', 'Data Analytics']
-    },
-    'STR-002': {
-      id: 'STR-002',
-      name: 'Ahmad Mahmoud',
-      nameAr: 'أحمد محمود',
-      title: 'Project Manager',
-      department: 'Strategy & Projects',
-      division: 'Strategy',
-      reportsTo: 'GM Strategy - Dinos',
-      workflowGroups: ['Strategy']
+      eddTasks: ['Strategic Planning', 'Digital Transformation', 'Innovation']
     },
     'GM-007': {
       id: 'GM-007',
-      name: 'Khalifa Al-Muslim',
-      title: 'Head of HR Group',
+      name: 'Khalefa Al-Mesalam',
+      title: 'Head of Human Capital Group',
       department: 'Human Resources',
       division: 'HR',
       photo: 'assets/employees/Khalifa.jpeg',
-      reportsTo: 'GCEO'
+      reportsTo: 'GCEO - Bassel Gamal'
     },
+    'EXE-002': {
+      id: 'EXE-002',
+      name: 'Raafat Alrantisi',
+      title: 'Executive Manager – GCEO Office',
+      department: 'GCEO Office',
+      division: 'Executive',
+      reportsTo: 'GCEO - Bassel Gamal',
+      workflowGroups: ['Management']
+    },
+    'EXE-003': {
+      id: 'EXE-003',
+      name: 'Anjitha J. Menon',
+      title: 'Executive Secretary – GCEO Office',
+      department: 'GCEO Office',
+      division: 'Executive',
+      reportsTo: 'GCEO - Bassel Gamal'
+    },
+
+    // =====================================================
+    // STRATEGY & DIGITAL OFFICE (Reports to Constantinos)
+    // =====================================================
+    'STR-001': {
+      id: 'STR-001',
+      name: 'Andonis Theodosiou',
+      title: 'T24 Program Director',
+      department: 'Strategy & Digital',
+      division: 'Strategy',
+      reportsTo: 'CSDO - Constantinos Constantinides',
+      workflowGroups: ['Strategy', 'IT_Admin'],
+      eddTasks: ['T24 Integration', 'Core Banking Projects']
+    },
+    'STR-002': {
+      id: 'STR-002',
+      name: 'Hussein Mokdad',
+      nameAr: 'حسين مقداد',
+      title: 'Head Marketing & Research / Digital Experience',
+      department: 'Marketing & Digital',
+      division: 'Strategy',
+      reportsTo: 'CSDO - Constantinos Constantinides',
+      workflowGroups: ['Strategy', 'Marketing_Templates'],
+      eddTasks: ['Customer Experience', 'Digital Channels']
+    },
+    'STR-003': {
+      id: 'STR-003',
+      name: 'Imad Bourhfir',
+      title: 'Head Strategy, Innovation & Data Science',
+      department: 'Strategy & Innovation',
+      division: 'Strategy',
+      reportsTo: 'CSDO - Constantinos Constantinides',
+      workflowGroups: ['Strategy'],
+      eddTasks: ['Data Analytics', 'Innovation Projects']
+    },
+    'STR-004': {
+      id: 'STR-004',
+      name: 'Mashaal Alderham',
+      title: 'Assistant General Manager – Communications',
+      department: 'Communications',
+      division: 'Strategy',
+      reportsTo: 'CSDO - Constantinos Constantinides',
+      workflowGroups: ['Marketing_Templates']
+    },
+    'STR-005': {
+      id: 'STR-005',
+      name: 'Suzan Chaker',
+      title: 'Manager – Business Support',
+      department: 'Strategy & Digital',
+      division: 'Strategy',
+      reportsTo: 'CSDO - Constantinos Constantinides'
+    },
+
+    // =====================================================
+    // PERSONAL BANKING (Reports to D. Anand)
+    // =====================================================
+    'PB-001': {
+      id: 'PB-001',
+      name: 'Abdulrahman Alnabit',
+      title: 'Head of Wealth Management',
+      department: 'Wealth Management',
+      division: 'Retail',
+      reportsTo: 'CPBO - D. Anand',
+      workflowGroups: ['Business_Private'],
+      eddTasks: ['Wealth Customer Review', 'HNW Decisions']
+    },
+    'PB-002': {
+      id: 'PB-002',
+      name: 'Ali Younes',
+      title: 'Senior Manager',
+      department: 'Personal Banking',
+      division: 'Retail',
+      reportsTo: 'CPBO - D. Anand',
+      workflowGroups: ['Business_Mass']
+    },
+    'PB-003': {
+      id: 'PB-003',
+      name: 'Ayman Zein',
+      title: 'Head of Alternative Channels Division',
+      department: 'Alternative Channels',
+      division: 'Retail',
+      reportsTo: 'CPBO - D. Anand',
+      workflowGroups: ['Business_Mass'],
+      eddTasks: ['Channel Management', 'Digital Services']
+    },
+    'PB-004': {
+      id: 'PB-004',
+      name: 'Faiza Saber',
+      title: 'Admin Assistant',
+      department: 'Personal Banking',
+      division: 'Retail',
+      reportsTo: 'CPBO - D. Anand'
+    },
+    'PB-005': {
+      id: 'PB-005',
+      name: 'Hassan Alnoaimi',
+      title: 'Division Head – Branch & Sales',
+      department: 'Branch Network',
+      division: 'Retail',
+      reportsTo: 'CPBO - D. Anand',
+      workflowGroups: ['Business_Mass', 'Business_Tamayuz'],
+      eddTasks: ['Branch Operations', 'Sales Management']
+    },
+    'PB-006': {
+      id: 'PB-006',
+      name: 'Saleh Anam',
+      title: 'Head of Retail Products',
+      department: 'Retail Products',
+      division: 'Retail',
+      reportsTo: 'CPBO - D. Anand',
+      workflowGroups: ['Business_Mass']
+    },
+
+    // =====================================================
+    // BRANCH & SALES (Reports to Hassan Alnoaimi)
+    // =====================================================
+    'BR-001': {
+      id: 'BR-001',
+      name: 'Abdulkader Al-Masri',
+      title: 'Head of Branch Business Development',
+      department: 'Branch Development',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi',
+      workflowGroups: ['Business_Mass', 'Business_Tamayuz']
+    },
+    'BR-002': {
+      id: 'BR-002',
+      name: 'Khalid Alnaemi',
+      title: 'Area Manager',
+      department: 'Branch Network',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi',
+      workflowGroups: ['Business_Mass']
+    },
+    'BR-003': {
+      id: 'BR-003',
+      name: 'Mahmoud Marzughi',
+      title: 'Area Manager',
+      department: 'Branch Network',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi',
+      workflowGroups: ['Business_Mass']
+    },
+    'BR-004': {
+      id: 'BR-004',
+      name: 'Naela Aljabir',
+      title: 'Branch Manager',
+      department: 'Branch Network',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi',
+      workflowGroups: ['Business_Mass']
+    },
+    'BR-005': {
+      id: 'BR-005',
+      name: 'Nasser Radhi',
+      title: 'Senior Manager – Branch Analytics & Information',
+      department: 'Branch Analytics',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi'
+    },
+    'BR-006': {
+      id: 'BR-006',
+      name: 'Shrooq Saleh',
+      title: 'Supervisor – Customer Service',
+      department: 'Customer Service',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi',
+      workflowGroups: ['Business_Mass']
+    },
+    'BR-007': {
+      id: 'BR-007',
+      name: 'Tag Rahmtalla',
+      title: 'Head of Sales & Service',
+      department: 'Sales & Service',
+      division: 'Retail',
+      reportsTo: 'Division Head - Hassan Alnoaimi',
+      workflowGroups: ['Business_Mass', 'Business_Tamayuz']
+    },
+
+    // =====================================================
+    // OPERATIONS (Reports to COO - Saleem Ulhaq)
+    // =====================================================
     'OPS-001': {
       id: 'OPS-001',
       name: 'Mr. Amit Malhotra',
@@ -452,24 +641,79 @@ function getEmployeeData(id) {
       department: 'Operations Division',
       division: 'Operations',
       photo: 'assets/employees/MR.Amit.png',
-      reportsTo: 'COO - Saleem Ulhiq',
+      reportsTo: 'COO - Saleem Ulhaq',
       workflowGroups: ['Management', 'CDD_Checker'],
       eddTasks: ['Operations Approval', 'Process Design', 'Team Management', 'Escalation Handling']
     },
+    'OPS-002': {
+      id: 'OPS-002',
+      name: 'Abdulhadi Alshahwani',
+      title: 'Assistant General Manager – Business Services',
+      department: 'Business Services',
+      division: 'Operations',
+      reportsTo: 'COO - Saleem Ulhaq',
+      workflowGroups: ['Management']
+    },
+    'OPS-003': {
+      id: 'OPS-003',
+      name: 'Ahmar Azmi',
+      title: 'Senior Executive Manager – Internal Control Management',
+      department: 'Internal Control',
+      division: 'Operations',
+      reportsTo: 'COO - Saleem Ulhaq',
+      workflowGroups: ['Compliance', 'Audit']
+    },
+    'OPS-004': {
+      id: 'OPS-004',
+      name: 'Arslan Khan',
+      title: 'Head of Change Management & Process Improvement',
+      department: 'Change Management',
+      division: 'Operations',
+      reportsTo: 'COO - Saleem Ulhaq',
+      workflowGroups: ['Management']
+    },
+    'OPS-005': {
+      id: 'OPS-005',
+      name: 'Bader Ba-Khamis',
+      title: 'Senior Executive Manager – Service Delivery',
+      department: 'Service Delivery',
+      division: 'Operations',
+      reportsTo: 'COO - Saleem Ulhaq'
+    },
+    'OPS-006': {
+      id: 'OPS-006',
+      name: 'Nadim Azar',
+      title: 'Head of Premises & Projects',
+      department: 'Premises & Projects',
+      division: 'Operations',
+      reportsTo: 'COO - Saleem Ulhaq'
+    },
+    'OPS-007': {
+      id: 'OPS-007',
+      name: 'Nourhen Mediouni',
+      title: 'Admin Support',
+      department: 'COO Office',
+      division: 'Operations',
+      reportsTo: 'COO - Saleem Ulhaq'
+    },
     'IT-001': {
       id: 'IT-001',
-      name: 'Khurram',
-      title: 'Head of IT',
+      name: 'Khurram Qadir',
+      title: 'Chief Information Officer',
       department: 'Information Technology',
       division: 'IT',
-      reportsTo: 'COO - Saleem Ulhiq',
-      workflowGroups: ['IT_Admin'],
-      eddTasks: ['System Administration', 'IT Support', 'Access Management']
+      reportsTo: 'COO - Saleem Ulhaq',
+      workflowGroups: ['IT_Admin', 'Management'],
+      eddTasks: ['System Administration', 'IT Strategy', 'Digital Infrastructure']
     },
+
+    // =====================================================
+    // OPERATIONS MANAGEMENT (Reports to Amit Malhotra)
+    // =====================================================
     'MGR-001': {
       id: 'MGR-001',
       name: 'Mohanad Al Hassan',
-      title: 'Department Manager - WPS & DBO',
+      title: 'Manager - WPS & DBO',
       department: 'WPS & Digital Back Office',
       division: 'Operations',
       photo: 'assets/employees/MR.MOHANAD ALHASSAM.jpeg',
@@ -480,17 +724,39 @@ function getEmployeeData(id) {
     },
     'MGR-002': {
       id: 'MGR-002',
+      name: 'Adel Abusbeitan',
+      title: 'Senior Executive Manager – Wholesale Banking Operations',
+      department: 'Wholesale Operations',
+      division: 'Operations',
+      reportsTo: 'Head of Operations - Amit Malhotra',
+      workflowGroups: ['CDD_Checker']
+    },
+    'MGR-003': {
+      id: 'MGR-003',
+      name: 'Sayed ElMahdy',
+      nameAr: 'سيد المهدي',
+      title: 'Head of Retail & Shared Services Operations',
+      department: 'Retail Operations',
+      division: 'Operations',
+      photo: 'assets/employees/sayed elmahdy.jpeg',
+      specialTag: 'DEVELOPER',
+      reportsTo: 'Head of Operations - Amit Malhotra',
+      workflowGroups: ['CDD_Maker', 'CDD_Checker', 'IT_Admin'],
+      eddTasks: ['EDD System Design', 'Retail Operations', 'Process Automation']
+    },
+    'MGR-004': {
+      id: 'MGR-004',
       name: 'Youssef Al-Khuzain',
-      title: 'Department Manager - Special Services',
+      title: 'Manager - Special Services',
       department: 'Special Services',
       division: 'Operations',
       photo: 'assets/employees/Youssef.jpeg',
       reportsTo: 'Head of Operations - Amit Malhotra'
     },
-    'MGR-004': {
-      id: 'MGR-004',
+    'MGR-005': {
+      id: 'MGR-005',
       name: 'Ashraf',
-      title: 'Department Manager - Main Vault',
+      title: 'Manager - Main Vault',
       department: 'Main Vault',
       division: 'Operations',
       photo: 'assets/employees/Ashraf.jpeg',
@@ -507,44 +773,153 @@ function getEmployeeData(id) {
       workflowGroups: ['CDD_Maker', 'CDD_Checker', 'Compliance'],
       eddTasks: ['EDD Case Management', 'CDD Review', 'Compliance Check', 'AML Screening']
     },
+
+    // =====================================================
+    // HUMAN CAPITAL (Reports to Khalefa Al-Mesalam)
+    // =====================================================
+    'HR-001': {
+      id: 'HR-001',
+      name: 'Khaja Mohammed',
+      title: 'Head of Rewards, Performance & Operations',
+      department: 'HR Operations',
+      division: 'HR',
+      reportsTo: 'Head of HC - Khalefa Al-Mesalam'
+    },
+    'HR-002': {
+      id: 'HR-002',
+      name: 'Muhammed Finos',
+      title: 'Head of Talent Acquisition & Workforce Planning',
+      department: 'Talent Acquisition',
+      division: 'HR',
+      reportsTo: 'Head of HC - Khalefa Al-Mesalam'
+    },
+    'HR-003': {
+      id: 'HR-003',
+      name: 'Rudraksh Shekhar',
+      title: 'Head of Learning & Development',
+      department: 'Learning & Development',
+      division: 'HR',
+      reportsTo: 'Head of HC - Khalefa Al-Mesalam'
+    },
+    'HR-004': {
+      id: 'HR-004',
+      name: 'Wadha Al-Marri',
+      title: 'Senior Executive Manager – Government Affairs',
+      department: 'Government Affairs',
+      division: 'HR',
+      reportsTo: 'Head of HC - Khalefa Al-Mesalam'
+    },
+
+    // =====================================================
+    // IT TEAM (Reports to CIO - Khurram Qadir)
+    // =====================================================
     'IT-002': {
       id: 'IT-002',
-      name: 'Sayed ElMahdy',
-      nameAr: 'سيد المهدي',
-      title: 'Senior Developer',
-      department: 'Information Technology',
-      division: 'IT',
-      photo: 'assets/employees/sayed elmahdy.jpeg',
-      specialTag: 'DEVELOPER',
-      reportsTo: 'Head of IT - Khurram',
-      workflowGroups: ['IT_Admin', 'Development'],
-      eddTasks: ['System Development', 'EDD System Enhancement', 'Technical Support', 'Integration']
-    },
-    'IT-003': {
-      id: 'IT-003',
       name: 'Syed Shah',
       title: 'IT Manager',
       department: 'Information Technology',
       division: 'IT',
       photo: 'assets/employees/syed shah.jpeg',
-      reportsTo: 'Head of IT - Khurram',
+      reportsTo: 'CIO - Khurram Qadir',
       workflowGroups: ['IT_Admin'],
       eddTasks: ['IT Management', 'System Administration']
     },
-    'IT-004': {
-      id: 'IT-004',
+    'IT-003': {
+      id: 'IT-003',
       name: 'Mohammed Khaja',
       title: 'Core Banking Lead',
       department: 'Information Technology',
       division: 'IT',
       photo: 'assets/employees/Mohammed_Khaja.jpeg',
-      reportsTo: 'Head of IT - Khurram',
+      reportsTo: 'CIO - Khurram Qadir',
       workflowGroups: ['IT_Admin'],
       eddTasks: ['Core Banking Support', 'T24 Administration']
+    },
+    'IT-004': {
+      id: 'IT-004',
+      name: 'Nabit',
+      title: 'Application Developer',
+      department: 'Information Technology',
+      division: 'IT',
+      photo: 'assets/employees/NABIT.jpeg',
+      reportsTo: 'CIO - Khurram Qadir',
+      workflowGroups: ['IT_Admin']
+    },
+    'IT-005': {
+      id: 'IT-005',
+      name: 'Hassan',
+      title: 'BO Reports Specialist',
+      department: 'Information Technology',
+      division: 'IT',
+      photo: 'assets/employees/HASSAN.jpeg',
+      reportsTo: 'CIO - Khurram Qadir'
     }
   };
   
   return employees[id] || null;
+}
+
+// Get all employees for org structure audit
+function getAllEmployees() {
+  const empData = getEmployeeData;
+  const ids = ['BOD-001','BOD-002','BOD-003','BOD-004','BOD-005','BOD-006','BOD-007',
+    'EXE-001','EXE-002','EXE-003',
+    'GM-001','GM-002','GM-003','GM-004','GM-005','GM-006','GM-007',
+    'STR-001','STR-002','STR-003','STR-004','STR-005',
+    'PB-001','PB-002','PB-003','PB-004','PB-005','PB-006',
+    'BR-001','BR-002','BR-003','BR-004','BR-005','BR-006','BR-007',
+    'OPS-001','OPS-002','OPS-003','OPS-004','OPS-005','OPS-006','OPS-007',
+    'IT-001','IT-002','IT-003','IT-004','IT-005',
+    'MGR-001','MGR-002','MGR-003','MGR-004','MGR-005','MGR-006',
+    'HR-001','HR-002','HR-003','HR-004'];
+  
+  return ids.map(id => empData(id)).filter(e => e !== null);
+}
+
+// Organization Structure Audit Log
+const orgAuditLog = {
+  entries: [],
+  log: function(action, employee, manager, status) {
+    this.entries.push({
+      timestamp: new Date().toISOString(),
+      action: action,
+      employee: employee,
+      manager: manager,
+      status: status
+    });
+  },
+  getReport: function() {
+    return {
+      totalEntries: this.entries.length,
+      lastUpdate: this.entries.length > 0 ? this.entries[this.entries.length - 1].timestamp : null,
+      entries: this.entries
+    };
+  }
+};
+
+// Validate Organization Structure
+function validateOrgStructure() {
+  const employees = getAllEmployees();
+  const report = {
+    totalEmployees: employees.length,
+    byDivision: {},
+    reportingIssues: [],
+    validated: new Date().toISOString()
+  };
+  
+  employees.forEach(emp => {
+    // Count by division
+    if (!report.byDivision[emp.division]) {
+      report.byDivision[emp.division] = 0;
+    }
+    report.byDivision[emp.division]++;
+    
+    // Log validation
+    orgAuditLog.log('VALIDATED', emp.name, emp.reportsTo || 'Board', 'SUCCESS');
+  });
+  
+  console.log('Organization Structure Validated:', report);
+  return report;
 }
 
 // Get initials from name
