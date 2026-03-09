@@ -4368,10 +4368,27 @@ The system shall maintain the following official hierarchy under **Head of Opera
 |----------|----------------|------------|
 | Adel Abusbeitan | SEM – Wholesale Banking Operations | Amit Malhotra |
 | Sayed ElMahdy | Head of Retail & Shared Services Operations | Amit Malhotra |
-| Mohanad Al Hassan | Manager - WPS & Digital Back Office | Amit Malhotra |
-| Youssef Al-Khuzain | Manager - Special Services | Amit Malhotra |
-| Ashraf | Manager - Main Vault | Amit Malhotra |
-| Ghaleb Essam | Manager - CDD & EDD | Amit Malhotra |
+
+**Direct Reports under Sayed ElMahdy (Retail & Shared Services Operations):**
+
+| Employee | Official Title | Reports To |
+|----------|----------------|------------|
+| Mohanad Al Hassan | Manager - WPS & Digital Back Office | Sayed ElMahdy |
+| Youssef Al-Khuzain | Manager - Special Services | Sayed ElMahdy |
+| Ashraf | Manager - Main Vault | Sayed ElMahdy |
+| Ghaleb Essam | Manager - CDD & EDD | Sayed ElMahdy |
+
+**Hierarchy Visualization:**
+
+```
+Amit Malhotra (Head of Operations)
+├── Adel Abusbeitan (SEM – Wholesale Banking Operations)
+└── Sayed ElMahdy (Head of Retail & Shared Services Operations)
+    ├── Mohanad Al Hassan (Manager - WPS & Digital Back Office)
+    ├── Youssef Al-Khuzain (Manager - Special Services)
+    ├── Ashraf (Manager - Main Vault)
+    └── Ghaleb Essam (Manager - CDD & EDD)
+```
 
 **Important:** Each employee listed above shall have **exactly one record** in the organizational hierarchy table.
 

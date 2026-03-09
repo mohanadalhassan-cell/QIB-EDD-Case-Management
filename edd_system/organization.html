@@ -1638,22 +1638,31 @@
                         <p>SEM – Wholesale Banking Operations</p>
                       </div>
                     </div>
-                    <div class="team-member" onclick="showTeamDetail('Sayed ElMahdy', 'Head of Retail & Shared Services Operations', 'assets/employees/sayed elmahdy.jpeg', 'سيد المهدي')">
+                    <div class="team-member" onclick="toggleTeam('sayed')">
                       <div class="team-member-photo">
                         <img src="assets/employees/sayed elmahdy.jpeg" alt="Sayed" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #3B82F6, #2563EB);\'>SE</div>'">
                       </div>
                       <div class="team-member-info">
                         <h5 style="color: #3B82F6;">Sayed ElMahdy</h5>
                         <p>Head of Retail & Shared Services Operations</p>
+                        <div class="team-btn" style="margin-top: 4px;">👥 View Direct Reports (4)</div>
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                <!-- Sayed ElMahdy's Direct Reports -->
+                <div class="team-expand" id="team-sayed">
+                  <h4 style="margin: 0 0 16px; color: #3B82F6; font-size: 14px;">👥 Retail & Shared Services Operations - Reports to Sayed ElMahdy</h4>
+                  <div class="team-grid">
                     <div class="team-member" onclick="showDetail('MGR-001')">
                       <div class="team-member-photo">
-                        <img src="assets/employees/MR.MOHANAD ALHASSAM.jpeg" alt="Mohanad" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>MH</div>'">
+                        <img src="assets/employees/MR.MOHANAD ALHASSAM.jpeg" alt="Mohanad" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #22C55E, #16A34A);\'>MH</div>'">
                       </div>
                       <div class="team-member-info">
                         <h5 style="color: #22C55E;">Mohanad Al Hassan</h5>
                         <p>Manager - WPS & Digital Back Office</p>
+                        <div class="team-btn" onclick="event.stopPropagation();toggleTeam('wps')">👥 View Team</div>
                       </div>
                     </div>
                     <div class="team-member" onclick="showDetail('MGR-002')">
