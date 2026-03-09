@@ -1761,7 +1761,500 @@ The system must comply with data privacy requirements.
 
 ---
 
-## 36. Final Conclusion
+## 36. Customer Identity Re-Verification (Liveness Verification)
+
+### 36.1 Overview
+
+As part of the Enhanced Due Diligence (EDD) process, the system must support **customer identity re-verification** when additional identity confirmation is required.
+
+The verification may be performed through three methods:
+
+| Method | Channel | Use Case |
+|--------|---------|----------|
+| Live Selfie Capture | Mobile Banking / QIB Lite / Microsite | Digital verification |
+| Branch Verification | Physical Branch Visit | In-person verification |
+| Video Verification | Video Call with Bank Employee | Remote assisted verification |
+
+The verification result must be recorded and linked to the EDD case.
+
+### 36.2 Trigger Conditions
+
+Identity verification may be triggered in the following scenarios:
+
+| Scenario | Trigger Type | Priority |
+|----------|--------------|----------|
+| Customer classified as High Risk | Automatic | High |
+| KYC data inconsistency detected | Automatic | High |
+| AML indicator requiring identity confirmation | Automatic | Critical |
+| Customer account flagged for EDD review | Automatic | Medium |
+| Suspected fraudulent activity | Manual (Compliance) | Critical |
+| Document authenticity concerns | Manual (CDD) | High |
+| Long-term dormant account reactivation | Automatic | Medium |
+| Significant change in transaction patterns | Automatic | High |
+
+### 36.3 Digital Selfie Verification
+
+When digital verification is selected, the system must send a notification to the customer requesting a **live selfie verification**.
+
+**Notification Channels:**
+
+| Channel | Notification Type | User Experience |
+|---------|-------------------|-----------------|
+| Mobile Banking | Push Notification + In-App Banner | Popup on login |
+| QIB Lite | Push Notification + In-App Banner | Popup on login |
+| Microsite | Email with Secure Link | Landing page with camera |
+| SMS | Link to Secure Portal | Web-based capture |
+
+**Popup Message Template:**
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                  IDENTITY VERIFICATION REQUIRED                 │
+├────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Additional identity verification is required to continue     │
+│   using your account services.                                 │
+│                                                                 │
+│   Please complete one of the following options:                │
+│                                                                 │
+│   ┌─────────────────────────────────────────────────────────┐  │
+│   │  📷  Take a Live Selfie (Recommended)                   │  │
+│   │      Quick verification in 2 minutes                    │  │
+│   └─────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│   ┌─────────────────────────────────────────────────────────┐  │
+│   │  🎥  Schedule Video Call                                │  │
+│   │      Speak with a bank representative                   │  │
+│   └─────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│   ┌─────────────────────────────────────────────────────────┐  │
+│   │  🏦  Visit Branch                                       │  │
+│   │      Complete verification in person                    │  │
+│   └─────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│   Verification must be completed within 14 days.               │
+│                                                                 │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### 36.4 Selfie Capture Requirements
+
+The selfie verification module must support the following requirements:
+
+**Technical Requirements:**
+
+| Requirement | Specification | Purpose |
+|-------------|---------------|---------|
+| Live Camera Capture | Real-time only, no gallery upload | Prevent stored image fraud |
+| Liveness Detection | Blink detection, head movement | Verify live person |
+| Face Detection | OpenCV / ML-based detection | Ensure face visibility |
+| Image Quality Check | Minimum 720p resolution | Clear identification |
+| Lighting Validation | Adequate light detection | Prevent dark/unclear images |
+| Anti-Spoofing | Detect printed photos/screens | Fraud prevention |
+
+**Liveness Detection Actions:**
+
+| Action | User Instruction | Validation |
+|--------|------------------|------------|
+| Blink Detection | "Please blink twice" | Eye movement detected |
+| Head Turn | "Turn your head slowly to the right" | Face angle change |
+| Smile Detection | "Please smile" | Facial expression change |
+| Random Challenge | Random combination of above | Multi-factor liveness |
+
+**Capture Flow:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SELFIE VERIFICATION FLOW                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Step 1: Camera Access                                         │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  Request camera permission from device                  │   │
+│   │  Display camera preview with face guide overlay         │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          ↓                                      │
+│   Step 2: Face Detection                                        │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  Detect face within guide frame                         │   │
+│   │  Validate lighting and image quality                    │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          ↓                                      │
+│   Step 3: Liveness Check                                        │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  Display random liveness challenge                      │   │
+│   │  (Blink / Turn head / Smile)                            │   │
+│   │  Validate user action within 10 seconds                 │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          ↓                                      │
+│   Step 4: Capture                                               │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  Capture high-resolution image                          │   │
+│   │  Display preview for user confirmation                  │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          ↓                                      │
+│   Step 5: Upload                                                │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  Encrypt image and upload to DMS                        │   │
+│   │  Link to EDD case and customer profile                  │   │
+│   │  Record verification event in audit log                 │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          ↓                                      │
+│   Step 6: Confirmation                                          │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  Display success message to customer                    │   │
+│   │  Update EDD case status                                 │   │
+│   │  Notify CDD team for review                             │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 36.5 Video Verification (Video KYC)
+
+For customers who require assisted verification, the system must support **Video KYC** functionality.
+
+**Video Verification Features:**
+
+| Feature | Description |
+|---------|-------------|
+| Scheduled Appointment | Customer selects available time slot |
+| Live Video Call | Real-time video between customer and bank employee |
+| Screen Recording | Full session recorded for audit |
+| Document Verification | Customer shows ID document on camera |
+| Employee Verification | Employee records identity confirmation |
+| Digital Signature | Customer provides digital consent |
+
+**Video Call Flow:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    VIDEO VERIFICATION FLOW                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Customer Side                    Bank Employee Side            │
+│   ─────────────                   ──────────────────            │
+│                                                                  │
+│   1. Schedule appointment  ──→    Receive appointment           │
+│                                                                  │
+│   2. Join video call      ←──→    Join video call               │
+│                                                                  │
+│   3. Show QID document    ──→     Verify document authenticity  │
+│                                                                  │
+│   4. Answer questions     ←──→    Ask verification questions    │
+│                                                                  │
+│   5. Provide consent      ──→     Record verification result    │
+│                                                                  │
+│   6. End call             ─────   Upload recording to DMS       │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Video Verification Record:**
+
+| Field | Description |
+|-------|-------------|
+| Video Reference ID | Unique identifier for video session |
+| Customer RIM | Customer identification |
+| Employee ID | Employee conducting verification |
+| Call Start Time | Session start timestamp |
+| Call End Time | Session end timestamp |
+| Duration | Total call duration |
+| Verification Result | Successful / Failed / Inconclusive |
+| Recording Link | DMS reference to stored video |
+| Customer Consent | Digital consent captured |
+
+### 36.6 Branch Verification Process
+
+If the customer cannot complete digital or video verification, the system must allow identity verification at a branch.
+
+**Branch Notification:**
+
+```
+Dear Customer,
+
+Please visit the nearest QIB branch with the following documents
+to complete your identity verification:
+
+Required Documents:
+• Original Qatar ID (QID)
+• Passport (if non-Qatari)
+
+Branch Hours: Sunday - Thursday, 8:00 AM - 3:00 PM
+
+For branch locations, visit: www.qib.com.qa/branches
+
+This verification must be completed within 14 days.
+
+Thank you,
+Qatar Islamic Bank
+```
+
+**Branch Employee Process:**
+
+| Step | Action | System Update |
+|------|--------|---------------|
+| 1 | Customer arrives at branch | N/A |
+| 2 | Employee opens EDD case in FLOW | Case viewed |
+| 3 | Verify customer QID | ID verification started |
+| 4 | Capture live photo using branch device | Photo upload initiated |
+| 5 | Customer signs verification form | Digital signature captured |
+| 6 | Employee approves verification | Verification status updated |
+| 7 | Photo uploaded to DMS | Document linked to case |
+
+**Branch Verification Interface:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│           BRANCH IDENTITY VERIFICATION - FLOW                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Case: EDD-2024-001242                                         │
+│   Customer: Mohammed Ali Hassan                                  │
+│   RIM: RIM010234                                                │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  Customer Photo Capture                                   │  │
+│   │  ┌────────────────────────┐                              │  │
+│   │  │                        │                              │  │
+│   │  │     [Camera Feed]      │                              │  │
+│   │  │                        │                              │  │
+│   │  │                        │                              │  │
+│   │  └────────────────────────┘                              │  │
+│   │                                                          │  │
+│   │  [ Capture Photo ]                                       │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│   Verification Checklist:                                       │
+│   ☑ Customer QID verified                                       │
+│   ☑ Photo matches QID                                           │
+│   ☑ Customer signed verification form                           │
+│   ☐ Verification approved                                       │
+│                                                                  │
+│   Employee: Ahmed Al-Rashid (EMP4532)                           │
+│   Branch: QIB Westbay Branch                                    │
+│                                                                  │
+│   [ Complete Verification ]    [ Escalate to Compliance ]       │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 36.7 Image Storage & DMS Integration
+
+All verification images and videos must be stored in the bank's **Document Management System (DMS)**.
+
+**Storage Requirements:**
+
+| Data Type | Storage Location | Retention | Encryption |
+|-----------|------------------|-----------|------------|
+| Selfie Image | DMS/FileNet | 10 years | AES-256 |
+| Video Recording | DMS/FileNet | 10 years | AES-256 |
+| Branch Photo | DMS/FileNet | 10 years | AES-256 |
+| Verification Form | DMS/FileNet | 10 years | AES-256 |
+
+**DMS Document Metadata:**
+
+| Field | Description |
+|-------|-------------|
+| Document ID | Unique DMS reference |
+| Customer RIM | Customer identification |
+| EDD Case ID | Linked EDD case |
+| Document Type | SELFIE_VERIFICATION / VIDEO_KYC / BRANCH_PHOTO |
+| Capture Date | Date of verification |
+| Captured By | Employee ID (for branch) or SYSTEM (for selfie) |
+| Verification Method | DIGITAL / VIDEO / BRANCH |
+| Image Quality Score | Quality validation result |
+| Liveness Score | Liveness detection confidence |
+
+### 36.8 Identity Verification Record
+
+All verification events must be recorded within the EDD case.
+
+**Verification Event Record:**
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| Event ID | Unique verification event ID | VER-2024-00123 |
+| EDD Case ID | Linked EDD case | EDD-2024-001242 |
+| Customer RIM | Customer identification | RIM010234 |
+| Verification Type | SELFIE / VIDEO / BRANCH | SELFIE |
+| Verification Date | Date and time | 2024-03-15 14:32:00 |
+| Verification Status | PENDING / SUCCESSFUL / FAILED | SUCCESSFUL |
+| Employee ID | Employee who reviewed (if applicable) | EMP4532 |
+| Employee Name | Employee full name | Ahmed Al-Rashid |
+| Branch Code | Branch code (if branch verification) | QIB-WB-001 |
+| DMS Reference | Link to stored image/video | DMS-DOC-789456 |
+| Liveness Score | Automated liveness confidence | 98.5% |
+| Face Match Score | Face comparison confidence | 95.2% |
+| Notes | Additional verification notes | ID verified successfully |
+
+### 36.9 Case Resolution Impact
+
+Identity verification must update the EDD case status based on the outcome.
+
+**Verification Outcome Matrix:**
+
+| Verification Result | Case Action | Next Step |
+|---------------------|-------------|-----------|
+| Successful | Status: Identity Verified | Continue EDD review |
+| Partial (Low Confidence) | Status: Manual Review Required | Escalate to CDD Supervisor |
+| Failed (Liveness) | Status: Verification Failed | Request re-verification or branch visit |
+| Failed (Face Mismatch) | Status: Identity Concern | Escalate to Compliance |
+| Customer No Response (7 days) | Status: First Reminder | Send reminder notification |
+| Customer No Response (14 days) | Status: Final Notice | Trigger restriction warning |
+| Customer No Response (21 days) | Status: Restriction Applied | Apply account restrictions |
+| Video Verification Inconclusive | Status: Branch Required | Request branch visit |
+
+**SLA Tracking:**
+
+| Milestone | SLA Target | Escalation |
+|-----------|------------|------------|
+| Customer notification sent | Immediate | N/A |
+| First reminder | Day 7 | System auto-send |
+| Final notice | Day 14 | CDD Supervisor notified |
+| Restriction warning | Day 18 | Compliance notified |
+| Account restriction | Day 21 | Head of Operations notified |
+
+### 36.10 Customer Profile Integration
+
+The captured verification image must appear in the **Customer Profile interface**.
+
+**Profile Display:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    CUSTOMER PROFILE                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌─────────────┐   Name: Mohammed Ali Hassan                   │
+│   │             │   RIM: RIM010234                              │
+│   │   [Photo]   │   Segment: Premium Banking                    │
+│   │             │   Risk: HIGH                                  │
+│   └─────────────┘                                               │
+│                                                                  │
+│   Identity Verification History                                  │
+│   ────────────────────────────────────────────────────────────  │
+│                                                                  │
+│   ┌─────────┐  Latest Verification: 15 Mar 2024                 │
+│   │         │  Method: Live Selfie                              │
+│   │ [Selfie]│  Result: Successful                               │
+│   │         │  Liveness Score: 98.5%                            │
+│   └─────────┘  [ View Full Image ]                              │
+│                                                                  │
+│   Previous Verifications:                                       │
+│   • 10 Jan 2023 - Branch Verification - Successful              │
+│   • 05 Mar 2022 - Account Opening Photo - Successful            │
+│                                                                  │
+│   [ Request New Verification ]                                  │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 36.11 Security Requirements
+
+Identity verification must comply with the bank's security standards.
+
+**Security Controls:**
+
+| Requirement | Implementation |
+|-------------|----------------|
+| Secure Image Storage | Encrypted at rest (AES-256) |
+| Encrypted Transmission | TLS 1.3 for all transfers |
+| Audit Logging | All verification attempts logged |
+| Photo Reuse Prevention | One-time capture, no gallery upload |
+| Session Security | Time-limited verification sessions |
+| Device Security | Secure enclave for camera access |
+| Data Masking | Face regions masked in logs |
+| Access Control | Role-based access to verification images |
+
+**Anti-Fraud Measures:**
+
+| Threat | Countermeasure |
+|--------|----------------|
+| Photo of photo | Liveness detection (blink, movement) |
+| Screen display | Anti-spoofing detection |
+| Deepfake | AI-based deepfake detection |
+| Video replay | Real-time challenge-response |
+| Multiple attempts | Rate limiting (max 3 attempts per hour) |
+| Unauthorized access | Strong authentication required |
+
+### 36.12 Audit Trail
+
+All identity verification events must be logged for regulatory compliance.
+
+**Audit Log Fields:**
+
+| Field | Description |
+|-------|-------------|
+| Event Timestamp | Date and time of event |
+| Event Type | REQUEST / ATTEMPT / SUCCESS / FAILURE / REVIEW |
+| Customer RIM | Customer identification |
+| EDD Case ID | Linked EDD case |
+| Verification Method | SELFIE / VIDEO / BRANCH |
+| Employee ID | Employee involved (if any) |
+| Device Info | Customer device information |
+| IP Address | Source IP (masked for privacy) |
+| Location | Approximate location (if permitted) |
+| Result Code | Detailed result code |
+| Error Details | Error description (if failed) |
+
+**Audit Event Types:**
+
+| Event | Description |
+|-------|-------------|
+| VERIFICATION_REQUESTED | System sent verification request |
+| NOTIFICATION_SENT | Customer notified via channel |
+| VERIFICATION_STARTED | Customer initiated verification |
+| LIVENESS_CHECK_PASSED | Liveness detection successful |
+| LIVENESS_CHECK_FAILED | Liveness detection failed |
+| IMAGE_CAPTURED | Photo successfully captured |
+| IMAGE_UPLOADED | Photo uploaded to DMS |
+| VERIFICATION_APPROVED | Employee approved verification |
+| VERIFICATION_REJECTED | Employee rejected verification |
+| VIDEO_CALL_STARTED | Video verification initiated |
+| VIDEO_CALL_ENDED | Video verification completed |
+| BRANCH_VERIFICATION | Branch verification completed |
+| REMINDER_SENT | Reminder notification sent |
+| ACCOUNT_RESTRICTED | Account restricted due to no response |
+
+### 36.13 Integration Points
+
+**System Integration Map:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│            IDENTITY VERIFICATION INTEGRATION                     │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Customer Channels                   Backend Systems            │
+│   ─────────────────                  ───────────────            │
+│                                                                  │
+│   ┌──────────────┐                  ┌──────────────┐            │
+│   │Mobile Banking│ ──────────────→  │ FLOW Workflow│            │
+│   └──────────────┘                  └──────┬───────┘            │
+│                                            │                     │
+│   ┌──────────────┐                         │                     │
+│   │   QIB Lite   │ ──────────────→         │                     │
+│   └──────────────┘                         ↓                     │
+│                                     ┌──────────────┐            │
+│   ┌──────────────┐                  │     ESB      │            │
+│   │  Microsite   │ ──────────────→  └──────┬───────┘            │
+│   └──────────────┘                         │                     │
+│                                    ┌───────┼───────┐            │
+│   ┌──────────────┐                 ↓       ↓       ↓            │
+│   │Branch Device │ ────→    ┌──────┐ ┌──────┐ ┌──────┐         │
+│   └──────────────┘          │  DMS │ │  T24 │ │Notif │         │
+│                             └──────┘ └──────┘ └──────┘         │
+│   ┌──────────────┐                                              │
+│   │  Video Call  │ ──────────────→  Video Recording → DMS       │
+│   └──────────────┘                                              │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 37. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -1796,6 +2289,16 @@ This Business Requirements Document (BRD) defines the complete requirements for 
   - Privacy & Protection
   - Governance Metrics
 
+**Identity Verification Requirements:**
+- Customer Identity Re-Verification (Section 36)
+  - Live Selfie Verification with Liveness Detection
+  - Video KYC Verification
+  - Branch Physical Verification
+  - DMS Integration for Image Storage
+  - Anti-Fraud and Security Controls
+  - SLA Management for Customer Response
+  - Full Audit Trail
+
 **System Integrations:**
 - FLOW Workflow Engine
 - T24 Core Banking
@@ -1807,6 +2310,8 @@ This Business Requirements Document (BRD) defines the complete requirements for 
 - Document Management System (DMS/FileNet)
 - Notification Gateways (SMS/Email/Push)
 - HR Identity System (LDAP/AD)
+- Video Conferencing Platform
+- Liveness Detection Engine
 
 **Compliance Alignment:**
 - Qatar Central Bank (QCB) AML Guidelines
