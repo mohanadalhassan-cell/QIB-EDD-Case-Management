@@ -141,7 +141,328 @@ Notes
 
 ---
 
-## 14. IT Technical Architecture Reference
+## 14. Customer Notification and Document Request Framework
+
+### 14.1 Overview
+
+As part of the Enhanced Due Diligence workflow, the system must support a **Customer Notification Framework** that enables communication with customers when additional KYC information or documentation is required.
+
+The framework must allow:
+
+- Generation of customer notifications
+- Request for additional KYC documentation
+- Centralized message governance
+- Multi-channel notification delivery
+
+This framework must operate as part of the **EDD Case Management workflow** within the **FLOW system**.
+
+### 14.2 Trigger Conditions
+
+Customer notifications may be triggered when:
+
+1. A customer is classified as **High Risk**
+2. Additional documentation is required for **EDD review**
+3. Data inconsistency is detected between T24 and QCB API
+4. Regulatory requirements require additional verification
+
+Triggers may originate from:
+
+| Source | Description |
+|--------|-------------|
+| T24 Customer Data | Missing or outdated KYC information |
+| Re-KYC System | Periodic review requirements |
+| QCB KYC API | Regulatory compliance gaps |
+| AML Indicators | Transaction-based alerts |
+| KYC Data Inconsistency | Mismatch between internal and external data |
+
+### 14.3 QCB Data Integration
+
+The system must support integration with **Qatar Central Bank KYC APIs**.
+
+When a customer is classified as **High Risk**, the system must attempt to retrieve additional information from QCB systems including:
+
+- Regulatory KYC information
+- Identification data
+- Regulatory flags
+- Compliance indicators
+
+**Integration Rules:**
+
+| Condition | System Behavior |
+|-----------|-----------------|
+| Data successfully retrieved | Present to employee within EDD case view |
+| No data returned from QCB API | Continue using internal KYC data |
+| API timeout or error | Log error, proceed with internal data, notify IT support |
+
+### 14.4 Customer Notification Creation
+
+When additional documentation is required, the system must allow **Business users** to create a notification request.
+
+**Process Flow:**
+
+```
+┌─────────────────┐
+│ Business Maker  │
+│ (Create Request)│
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│Business Checker │
+│ (Verify & Approve)│
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│Marketing Approval│
+│ (Content Review) │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│  Customer       │
+│  Notification   │
+└─────────────────┘
+```
+
+The message content must be created by the **Business team** using structured templates approved by Marketing.
+
+### 14.5 Message Governance
+
+All customer notification messages must be approved by the **Marketing Department**.
+
+**Approval Workflow:**
+
+| Stage | Role | Action |
+|-------|------|--------|
+| 1 | Business Maker | Create notification request |
+| 2 | Business Checker | Verify case details and approve |
+| 3 | Marketing Maker | Review message content |
+| 4 | Marketing Checker | Final approval |
+| 5 | System | Notification sent to customer |
+
+Once approved, the message becomes part of the **official notification library** for future reuse.
+
+### 14.6 Notification Template Library
+
+The system must maintain a **centralized message template library** containing commonly used messages.
+
+**Standard Message Templates:**
+
+#### Salary Verification Request
+```
+Dear Customer,
+
+As part of our ongoing KYC review, please provide a copy of your salary certificate.
+
+Reference Number: [CASE ID]
+Required Document: Salary Certificate
+Deadline: [SLA DATE]
+
+Thank you for your cooperation.
+Qatar Islamic Bank
+```
+
+#### Rental Contract Verification
+```
+Dear Customer,
+
+Kindly provide a copy of your rental agreement as part of additional KYC requirements.
+
+Reference Number: [CASE ID]
+Required Document: Rental Agreement
+Deadline: [SLA DATE]
+
+Thank you for your cooperation.
+Qatar Islamic Bank
+```
+
+#### Source of Funds Clarification
+```
+Dear Customer,
+
+Please provide supporting documentation explaining the source of funds for your recent transactions.
+
+Reference Number: [CASE ID]
+Required Document: Source of Funds Declaration
+Deadline: [SLA DATE]
+
+Thank you for your cooperation.
+Qatar Islamic Bank
+```
+
+#### Employment Verification
+```
+Dear Customer,
+
+Please provide an updated employment letter or proof of employment.
+
+Reference Number: [CASE ID]
+Required Document: Employment Letter
+Deadline: [SLA DATE]
+
+Thank you for your cooperation.
+Qatar Islamic Bank
+```
+
+#### Income Documentation Request
+```
+Dear Customer,
+
+Please submit documents supporting your declared income.
+
+Reference Number: [CASE ID]
+Required Document: Income Supporting Documents
+Deadline: [SLA DATE]
+
+Thank you for your cooperation.
+Qatar Islamic Bank
+```
+
+### 14.7 Message Reuse
+
+Approved messages must be stored within the system and made available for reuse.
+
+**Reuse Rules:**
+
+- Employees must be able to select previously approved templates
+- Selected templates auto-populate with case-specific data
+- Custom modifications require Marketing re-approval
+- Template usage is tracked for audit purposes
+
+### 14.8 Customer Document Upload
+
+When documentation is requested, the system must allow the customer to upload documents through digital channels.
+
+**Supported Upload Channels:**
+
+| Channel | Description | Priority |
+|---------|-------------|----------|
+| QIB Mobile Banking | Primary digital channel | High |
+| QIB Lite | Lite mobile application | High |
+| Microsite | Dedicated upload portal | Medium |
+| Branch FLOW System | In-branch assisted upload | Medium |
+
+**Mobile App Popup Notification:**
+
+When the customer logs into the mobile application, a **popup notification** must appear displaying the request:
+
+```
+┌────────────────────────────────────────┐
+│  ⚠️ Action Required                    │
+│                                        │
+│  Additional KYC information is         │
+│  required. Please upload the           │
+│  requested documents.                  │
+│                                        │
+│  Reference: EDD-2024-001234            │
+│                                        │
+│  [View Details]    [Upload Now]        │
+└────────────────────────────────────────┘
+```
+
+### 14.9 Temporary Upload Window
+
+Document upload must remain active until:
+
+| Condition | Action |
+|-----------|--------|
+| Requested documents submitted | Upload window closes |
+| Documents reviewed and approved | Notification removed |
+| EDD case closed | All notifications cleared |
+| SLA deadline exceeded | Escalation triggered |
+
+Once documents are approved, the notification must be automatically removed from all channels.
+
+### 14.10 Multi-Channel Notification Delivery
+
+Customer notifications must be delivered across multiple channels.
+
+**Supported Delivery Channels:**
+
+| Channel | Type | Delivery Method |
+|---------|------|-----------------|
+| SMS | Push | SMS Gateway |
+| Mobile App Notification | Push | Firebase/APNs |
+| Email | Push | Email Gateway |
+| QIB Lite App | Push | In-app notification |
+| Microsite | Pull | Portal banner |
+| ATM Interface | Pull | Screen message |
+| Branch FLOW System | Pull | Employee alert |
+| Call Center System | Pull | CRM integration |
+
+When a customer interacts with any of these channels, the system must display the notification.
+
+### 14.11 Branch and Call Center Visibility
+
+When a customer visits a branch or calls the contact center, the system must display the active notification.
+
+**Employee View Requirements:**
+
+| Information | Display |
+|-------------|---------|
+| Notification text | Full message content |
+| Required documents | Document checklist |
+| EDD case reference | Case ID and status |
+| Upload status | Documents received/pending |
+| SLA countdown | Days remaining |
+
+This allows employees to assist the customer with document submission.
+
+### 14.12 Notification Removal
+
+Notifications must automatically disappear once:
+
+| Event | System Action |
+|-------|---------------|
+| Required documents uploaded | Mark as "Pending Review" |
+| Documents approved by reviewer | Remove notification |
+| Case closed | Clear all related notifications |
+
+### 14.13 Marketing Governance
+
+The **Marketing Department** must have full control over message templates.
+
+**Marketing Responsibilities:**
+
+| Responsibility | Description |
+|----------------|-------------|
+| Edit notification texts | Modify template content |
+| Approve message templates | Maker-Checker approval |
+| Define delivery channels | Select channels per template |
+| Ensure communication consistency | Brand and tone guidelines |
+| Archive old templates | Version control |
+
+Marketing must operate under **Maker and Checker approval** for all changes.
+
+### 14.14 Channel Trigger Control
+
+The EDD system must trigger notifications through the bank's **central communication gateway**.
+
+**Integration Points:**
+
+| Gateway | Protocol | Purpose |
+|---------|----------|---------|
+| SMS Gateway | REST API | SMS delivery |
+| Email Gateway | SMTP/API | Email delivery |
+| Mobile Push | Firebase/APNs | App notifications |
+| Internal ESB | SOAP/REST | Banking channel sync |
+
+### 14.15 Audit and Compliance
+
+All notifications must be recorded in the audit trail.
+
+**Logged Information:**
+
+| Event | Logged Data |
+|-------|-------------|
+| Notification creation | Date, user, template, channel |
+| Notification approval | Approver, timestamp, comments |
+| Message content | Full text, variables used |
+| Delivery status | Channel, delivery time, status |
+| Document upload | Upload date, file details |
+| Document approval | Reviewer, approval date |
+
+---
+
+## 15. IT Technical Architecture Reference
 
 For complete technical specifications, refer to:
 
@@ -174,3 +495,308 @@ This companion document provides:
 | Manual Fields | User Input | - |
 | Derived Fields | System Calculation | - |
 
+---
+
+## 16. System Integration Architecture
+
+### 16.1 Architecture Overview
+
+The EDD Case Management System operates within QIB's enterprise architecture, integrating with multiple core systems through the **Enterprise Service Bus (ESB)**.
+
+**High-Level Architecture Diagram:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           PRESENTATION LAYER                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐       │
+│  │   FLOW UI    │ │ QIB Mobile   │ │  QIB Lite    │ │  Microsite   │       │
+│  │  (Internal)  │ │  Banking     │ │    App       │ │   Portal     │       │
+│  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘ └──────┬───────┘       │
+│         │                │                │                │               │
+│         └────────────────┴────────────────┴────────────────┘               │
+│                                   │                                         │
+├───────────────────────────────────┼─────────────────────────────────────────┤
+│                           APPLICATION LAYER                                  │
+├───────────────────────────────────┼─────────────────────────────────────────┤
+│                                   ↓                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │                    FLOW WORKFLOW ENGINE                          │       │
+│  │  ┌───────────────┐ ┌───────────────┐ ┌───────────────┐         │       │
+│  │  │ EDD Module    │ │ Re-KYC Module │ │ Notification  │         │       │
+│  │  │               │ │               │ │   Module      │         │       │
+│  │  └───────────────┘ └───────────────┘ └───────────────┘         │       │
+│  └─────────────────────────────┬───────────────────────────────────┘       │
+│                                │                                            │
+├────────────────────────────────┼────────────────────────────────────────────┤
+│                        INTEGRATION LAYER                                     │
+├────────────────────────────────┼────────────────────────────────────────────┤
+│                                ↓                                            │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │               ENTERPRISE SERVICE BUS (ESB)                       │       │
+│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐   │       │
+│  │  │T24 Svc  │ │QCB Svc  │ │DMS Svc  │ │SMS Svc  │ │Email Svc│   │       │
+│  │  └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘   │       │
+│  └───────┼──────────┼──────────┼──────────┼──────────┼───────────┘       │
+│          │          │          │          │          │                     │
+├──────────┼──────────┼──────────┼──────────┼──────────┼─────────────────────┤
+│                          DATA / EXTERNAL LAYER                               │
+├──────────┼──────────┼──────────┼──────────┼──────────┼─────────────────────┤
+│          ↓          ↓          ↓          ↓          ↓                     │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐         │
+│  │   T24    │ │ QCB KYC  │ │   DMS    │ │   SMS    │ │  Email   │         │
+│  │Core Bank │ │   API    │ │FileNet   │ │ Gateway  │ │ Gateway  │         │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘         │
+│                                                                             │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐                                   │
+│  │SnapView  │ │   CRM    │ │   ATM    │                                   │
+│  │Warehouse │ │  System  │ │ Network  │                                   │
+│  └──────────┘ └──────────┘ └──────────┘                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 16.2 Integration Points
+
+The EDD system integrates with the following systems:
+
+| System | Integration Type | Protocol | Purpose |
+|--------|------------------|----------|---------|
+| T24 Core Banking | Bidirectional | ESB/SOAP | Customer data, Risk classification, KYC dates |
+| QCB KYC API | Inbound | REST/HTTPS | Regulatory KYC data, Document verification |
+| DMS (FileNet) | Bidirectional | ESB/REST | Document storage and retrieval |
+| SnapView Warehouse | Inbound | ESB/SQL | Historical transaction data, Salary info |
+| Re-KYC System | Bidirectional | FLOW Internal | KYC review triggers, Status updates |
+| SMS Gateway | Outbound | REST API | Customer SMS notifications |
+| Email Gateway | Outbound | SMTP/REST | Customer email notifications |
+| Mobile Push | Outbound | Firebase/APNs | App push notifications |
+| CRM System | Bidirectional | ESB/REST | Call center alerts, Customer interactions |
+
+### 16.3 T24 Integration
+
+**Data Flow: T24 → EDD System**
+
+| Data Element | T24 Field | Update Frequency |
+|--------------|-----------|------------------|
+| Customer ID | @ID | Real-time |
+| Customer Name | NAME.1 | Real-time |
+| Risk Classification | CUSTOMER.RISK | Real-time trigger |
+| Segment | SECTOR | Real-time |
+| KYC Date | DATE.AMEND | Real-time |
+| Account Status | STATUS | Real-time |
+| Nationality | NATIONALITY | Real-time |
+| Residency | RESIDENCE | Real-time |
+| PEP Flag | PEP.STATUS | Real-time |
+
+**Data Flow: EDD System → T24**
+
+| Data Element | Target T24 Field | Condition |
+|--------------|------------------|-----------|
+| EDD Completion Date | EDD.COMPL.DATE | On case closure |
+| Next EDD Due Date | EDD.NEXT.REVIEW | On case closure |
+| EDD Status | EDD.STATUS | On status change |
+| EDD Decision | EDD.DECISION | On approval |
+| Restriction Flag | POSTING.RESTRICT | If restriction applied |
+
+### 16.4 QCB KYC API Integration
+
+**Request Flow:**
+
+```
+EDD System → ESB → QCB API Gateway → QCB KYC Database
+                                          │
+                                          ↓
+                                    Response Data
+                                          │
+                                          ↓
+EDD System ← ESB ← QCB API Gateway ←──────┘
+```
+
+**API Endpoints:**
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| /kyc/customer/{qid} | GET | Retrieve customer KYC profile |
+| /kyc/documents/{qid} | GET | Retrieve available documents |
+| /kyc/verify | POST | Verify document authenticity |
+| /kyc/status/{qid} | GET | Check regulatory status |
+
+**Response Handling:**
+
+| HTTP Status | System Behavior |
+|-------------|-----------------|
+| 200 OK | Process retrieved data |
+| 404 Not Found | Continue with internal data |
+| 401 Unauthorized | Log error, alert IT |
+| 500 Server Error | Retry (3 attempts), then proceed without |
+| Timeout (30s) | Log warning, proceed with internal data |
+
+### 16.5 FLOW Workflow Configuration
+
+**EDD Case Stages:**
+
+```
+┌─────────────┐
+│    NEW      │ Case created from trigger
+└──────┬──────┘
+       ↓
+┌─────────────┐
+│  BUSINESS   │ Business Maker/Checker review
+│   REVIEW    │
+└──────┬──────┘
+       ↓
+┌─────────────┐
+│    EDD      │ CDD Maker/Checker processing
+│  PROCESSING │
+└──────┬──────┘
+       ↓
+┌─────────────────────────────────────────┐
+│                                         │
+↓                   ↓                     ↓
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│  APPROVED   │  │ RESTRICTED  │  │ ESCALATED   │
+└─────────────┘  └─────────────┘  └─────────────┘
+```
+
+**Stage Transition Rules:**
+
+| From Stage | To Stage | Condition | Authorized Roles |
+|------------|----------|-----------|------------------|
+| NEW | BUSINESS_REVIEW | Auto-assign | System |
+| BUSINESS_REVIEW | EDD_PROCESSING | Checker approved | Business Checker |
+| EDD_PROCESSING | APPROVED | Documents complete | CDD Checker |
+| EDD_PROCESSING | RESTRICTED | Risk unmitigated | CDD Checker |
+| EDD_PROCESSING | ESCALATED | Management review needed | CDD Checker |
+| ESCALATED | APPROVED/RESTRICTED | Decision made | Compliance |
+
+### 16.6 Re-KYC Integration
+
+The EDD module integrates with the Re-KYC system within FLOW:
+
+**Integration Points:**
+
+| Event | EDD Action | Re-KYC Action |
+|-------|------------|---------------|
+| High-risk classification | Create EDD case | Link to KYC record |
+| EDD completion | Update EDD fields | Update Next KYC Date |
+| Document request | Trigger notification | Track in KYC history |
+| Risk downgrade | Close EDD case | Update risk profile |
+
+**Shared Data:**
+
+| Data Element | Owner | Consumer |
+|--------------|-------|----------|
+| Customer Risk Level | Re-KYC | EDD |
+| KYC Due Date | Re-KYC | EDD |
+| EDD Completion Status | EDD | Re-KYC |
+| Document Upload Status | EDD | Re-KYC |
+| Next Review Date | EDD | Re-KYC |
+
+### 16.7 Notification Gateway Integration
+
+**Channel Routing Matrix:**
+
+| Notification Type | SMS | Email | Push | ATM | Branch |
+|-------------------|-----|-------|------|-----|--------|
+| Document Request | ✓ | ✓ | ✓ | ✓ | ✓ |
+| SLA Warning | ✗ | ✓ | ✓ | ✗ | ✓ |
+| Status Update | ✗ | ✓ | ✓ | ✗ | ✗ |
+| Case Closure | ✓ | ✓ | ✓ | ✗ | ✗ |
+
+**API Calls:**
+
+| Gateway | Endpoint | Payload |
+|---------|----------|---------|
+| SMS | POST /sms/send | { mobile, message, reference } |
+| Email | POST /email/send | { email, subject, body, reference } |
+| Push | POST /push/notify | { deviceToken, title, body, data } |
+| Internal | POST /esb/notify | { channel, customerId, notification } |
+
+### 16.8 Document Management (DMS) Integration
+
+**Document Operations:**
+
+| Operation | API Call | Purpose |
+|-----------|----------|---------|
+| Retrieve | GET /dms/document/{docId} | Fetch existing document |
+| Store | POST /dms/upload | Store uploaded document |
+| Search | GET /dms/search?rim={rim} | Find customer documents |
+| Metadata | GET /dms/metadata/{docId} | Get document properties |
+
+**Document Categories for EDD:**
+
+| Category | Document Types |
+|----------|----------------|
+| Identity | Passport, QID, Driving License |
+| Employment | Salary Certificate, Employment Letter |
+| Financial | Bank Statement, Tax Return |
+| Property | Rental Agreement, Title Deed |
+| Business | Trade License, Company Registration |
+
+### 16.9 Error Handling and Recovery
+
+**Error Categories:**
+
+| Category | Handling Strategy | Alert Level |
+|----------|-------------------|-------------|
+| Integration timeout | Retry 3x, then fallback | Warning |
+| Data validation error | Log and reject, notify user | Error |
+| System unavailable | Queue request, retry later | Critical |
+| Authentication failure | Alert IT immediately | Critical |
+| Data mismatch | Flag for manual review | Warning |
+
+**Circuit Breaker Configuration:**
+
+| Integration | Threshold | Timeout | Recovery |
+|-------------|-----------|---------|----------|
+| T24 | 5 failures | 30s | 60s cooldown |
+| QCB API | 3 failures | 60s | 120s cooldown |
+| DMS | 5 failures | 10s | 30s cooldown |
+| Notification | 3 failures | 5s | 15s cooldown |
+
+### 16.10 Security Requirements
+
+**Authentication:**
+
+| Integration | Auth Method | Credentials |
+|-------------|-------------|-------------|
+| T24 | Certificate + Basic Auth | Service account |
+| QCB API | OAuth 2.0 + mTLS | API key + certificate |
+| DMS | LDAP/Windows Auth | Service account |
+| ESB | Certificate | PKI certificate |
+
+**Data Protection:**
+
+| Requirement | Implementation |
+|-------------|----------------|
+| Data in Transit | TLS 1.2+ encryption |
+| Data at Rest | AES-256 encryption |
+| PII Handling | Field-level masking |
+| Audit Logging | Full transaction logging |
+| Access Control | Role-based permissions |
+
+### 16.11 Performance Requirements
+
+**SLA Targets:**
+
+| Operation | Target | Max Acceptable |
+|-----------|--------|----------------|
+| T24 data retrieval | < 2s | 5s |
+| QCB API call | < 5s | 30s |
+| Document retrieval | < 3s | 10s |
+| Notification delivery | < 5s | 30s |
+| Screen load time | < 2s | 5s |
+| Concurrent users | 200 | 500 |
+
+---
+
+## 17. Conclusion
+
+The EDD Case Management System provides a comprehensive solution for managing high-risk customers through:
+
+- **Automated case management** within the FLOW platform
+- **Seamless integration** with T24, QCB KYC API, and Re-KYC systems
+- **Multi-channel customer notifications** with Marketing governance
+- **Complete audit trail** for regulatory compliance
+- **SLA monitoring** across all workflow stages
+
+This BRD serves as the foundation for development, ensuring alignment between Business, IT, and Compliance requirements.
