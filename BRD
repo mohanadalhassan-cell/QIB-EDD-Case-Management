@@ -2616,7 +2616,308 @@ The system must track why each EDD case was triggered for analysis and reporting
 
 ---
 
-## 38. Final Conclusion
+## 38. Dynamic Eligibility Validation for EDD Cases
+
+### 38.1 Overview
+
+Before executing any automated action related to an EDD case (reminder, escalation, consequence management), the system must validate whether the customer still meets the conditions that require an active EDD case.
+
+This validation must be performed automatically at each workflow stage.
+
+The purpose is to prevent unnecessary actions when the customer no longer requires enhanced due diligence.
+
+**Key Principle:**
+> Before executing any automated workflow action related to EDD cases, the system must validate that the customer still meets the criteria requiring enhanced due diligence.
+
+---
+
+### 38.2 Validation Triggers
+
+The system must perform validation checks in the following events:
+
+| Trigger Event | Description |
+|---------------|-------------|
+| Before Customer Notifications | Validate before sending any reminder SMS/Email |
+| Before SLA Escalation | Validate before escalating to next level |
+| Before Consequence Management | Validate before applying account restrictions |
+| Before Compliance Submission | Validate before sending cases to Compliance |
+| Before Automated Closure | Validate before any system-initiated closure |
+
+**Validation Flow:**
+```
+Automated Action Triggered
+         ↓
+Dynamic Eligibility Check
+         ↓
+    ┌────────────┐
+    │  Valid?    │
+    └────────────┘
+      ↙       ↘
+   YES         NO
+    ↓           ↓
+Continue    Pause Workflow
+ Action     & Flag for Review
+```
+
+---
+
+### 38.3 High Risk Status Validation
+
+The system must verify that the customer is still classified as **High Risk**.
+
+**Validation Requirements:**
+
+| Check | Source System | Validation Logic |
+|-------|---------------|------------------|
+| Current Risk Rating | T24 Core Banking | Risk rating = 'HIGH' |
+| Risk Classification | CRP System | Customer in High Risk segment |
+| Risk Score | ETL Data Feed | Score above threshold |
+
+**If Risk Classification Changes:**
+- The system must stop the automated EDD workflow
+- Case must be flagged for manual review
+- Notification sent to assigned officer
+- Audit trail must record the change
+
+---
+
+### 38.4 Active Account Validation
+
+The system must verify that the customer still has an **active relationship with the bank**.
+
+At least one of the following accounts must exist and be active:
+
+| Account Type | T24 Category | Status Required |
+|--------------|--------------|-----------------|
+| Current Account | CAT-1001 | Active |
+| Savings Account | CAT-1002 | Active |
+| MISK Savings Account | CAT-1003 | Active |
+
+**Source System:** T24 Core Banking System
+
+**Validation Logic:**
+```
+IF customer has NO active accounts THEN
+    Pause EDD Workflow
+    Flag case as "No Active Relationship"
+    Route to Business for review
+END IF
+```
+
+---
+
+### 38.5 Account Restriction Check
+
+The system must verify whether the customer's accounts are already restricted.
+
+**Restriction Types to Check:**
+
+| Restriction Type | T24 Code | Description |
+|------------------|----------|-------------|
+| Account Freeze | FREEZE | Full account freeze |
+| Regulatory Restriction | REG-RST | QCB or legal hold |
+| Internal Restriction | INT-RST | Bank-initiated restriction |
+| Debit Block | DB-BLK | Debit transactions blocked |
+| Credit Block | CB-BLK | Credit transactions blocked |
+| Full Block | FULL-BLK | All transactions blocked |
+
+**Source System:** T24
+
+**Validation Logic:**
+- If the account is already restricted with FREEZE, REG-RST, or FULL-BLK
+- The system must NOT apply additional consequence actions
+- Case must be flagged as "Already Restricted"
+- Workflow continues for documentation purposes only
+
+---
+
+### 38.6 Exclusion List Check
+
+The system must verify whether the customer belongs to an **EDD exclusion list**.
+
+**Exclusion Categories:**
+
+| Category | Code | Description |
+|----------|------|-------------|
+| Closed Accounts | EXC-01 | Customer relationship closed |
+| Deceased Customers | EXC-02 | Customer deceased |
+| Internal Exceptions | EXC-03 | Approved exception by management |
+| Legal Hold | EXC-04 | Under legal proceedings |
+| VIP Exception | EXC-05 | Approved VIP exception |
+| Regulatory Exception | EXC-06 | QCB approved exception |
+
+**Validation Logic:**
+- The system must check the exclusion list before every automated action
+- If customer appears in exclusion list
+- The EDD workflow must STOP immediately
+- Case must not be processed further without manual intervention
+
+---
+
+### 38.7 Exception-Based Case Closure
+
+If the system determines that the customer should be excluded from EDD processing, the case **cannot be automatically closed**.
+
+**Requirements:**
+- A **manual exclusion request** must be submitted
+- Request must include justification
+- Supporting documents must be attached
+- Request must follow approval workflow
+
+**Exclusion Request Form:**
+| Field | Mandatory | Description |
+|-------|-----------|-------------|
+| Customer RIM | Yes | Customer identifier |
+| Exclusion Reason | Yes | Reason code from list |
+| Justification | Yes | Detailed explanation |
+| Supporting Documents | Conditional | Based on reason code |
+| Requested By | Auto | Logged-in user |
+| Request Date | Auto | System timestamp |
+
+---
+
+### 38.8 Compliance Approval for Exclusion
+
+Any request to exclude a customer from the EDD process must be approved by **Compliance Department**.
+
+**Approval Workflow:**
+
+```
+Business Request
+      ↓
+  CDD Review
+      ↓
+Compliance Approval
+      ↓
+ EDD Case Closure
+```
+
+**Detailed Workflow:**
+
+| Step | Role | Action | SLA |
+|------|------|--------|-----|
+| 1 | Business Officer | Submit exclusion request | - |
+| 2 | CDD Officer | Review request & documents | 2 days |
+| 3 | CDD Supervisor | Approve CDD recommendation | 1 day |
+| 4 | Compliance Officer | Final approval | 2 days |
+| 5 | System | Close EDD case | Auto |
+
+**Important:** The system must NOT allow closure without Compliance approval in exclusion cases.
+
+---
+
+### 38.9 Validation Audit Trail
+
+All validation checks and decisions must be recorded in the system audit trail.
+
+**Audit Record Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| Case ID | String | EDD case reference |
+| Validation Type | Code | Type of validation performed |
+| Validation Result | Boolean | Pass/Fail |
+| System Timestamp | DateTime | Exact time of validation |
+| Source System | String | System queried |
+| Source Data | JSON | Raw response data |
+| Action Taken | Code | System action based on result |
+| User ID | String | If manual intervention |
+| Approval History | Array | Full approval chain |
+
+**Sample Audit Entry:**
+```json
+{
+  "caseId": "EDD-2024-001234",
+  "validationType": "RISK_CLASSIFICATION_CHECK",
+  "validationResult": false,
+  "timestamp": "2024-01-15T10:30:45.123Z",
+  "sourceSystem": "T24",
+  "sourceData": {
+    "previousRisk": "HIGH",
+    "currentRisk": "MEDIUM",
+    "changeDate": "2024-01-14"
+  },
+  "actionTaken": "WORKFLOW_PAUSED",
+  "notes": "Customer risk downgraded - workflow paused for review"
+}
+```
+
+---
+
+### 38.10 Three-Layer Regulatory Control
+
+This Dynamic Eligibility Validation adds **three critical regulatory control layers** to the EDD system:
+
+**Layer 1: Continuous Risk Classification Verification**
+- Real-time validation against T24 and CRP
+- Automatic workflow pause if risk changes
+- Prevents unnecessary EDD on non-high-risk customers
+
+**Layer 2: Active Relationship Verification**
+- Confirms customer still has bank relationship
+- Checks account status before any action
+- Prevents actions on closed/inactive relationships
+
+**Layer 3: Compliance-Gated Case Closure**
+- No automatic closure for exclusion cases
+- Mandatory Compliance approval
+- Full audit trail for regulators
+
+**Regulatory Alignment:**
+| Requirement | QCB Guideline | Implementation |
+|-------------|---------------|----------------|
+| Risk-Based Approach | Article 4.2 | Layer 1 - Risk verification |
+| Customer Due Diligence | Article 5.1 | Layer 2 - Relationship verification |
+| Compliance Oversight | Article 8.3 | Layer 3 - Approval workflow |
+| Audit Trail | Article 10.1 | Full validation logging |
+
+---
+
+### 38.11 System Integration for Validation
+
+**Integration Requirements:**
+
+| System | Integration Type | Purpose |
+|--------|------------------|---------|
+| T24 | Real-time API | Risk rating, account status, restrictions |
+| CRP | Batch + Real-time | Risk classification data |
+| ETL | Scheduled Feed | Risk scores, customer data |
+| FLOW | Event-driven | Workflow orchestration |
+| Audit DB | Real-time | Validation logging |
+
+**API Specification:**
+
+```
+GET /api/v1/customer/{rim}/eligibility
+Response:
+{
+  "eligible": boolean,
+  "riskStatus": "HIGH|MEDIUM|LOW",
+  "activeAccounts": number,
+  "restrictionStatus": "NONE|PARTIAL|FULL",
+  "exclusionList": boolean,
+  "validationTimestamp": ISO8601
+}
+```
+
+---
+
+### 38.12 Error Handling
+
+If validation cannot be completed due to system unavailability:
+
+| Scenario | Action |
+|----------|--------|
+| T24 Unavailable | Queue action, retry in 15 minutes |
+| CRP Unavailable | Use last known risk status with flag |
+| Multiple Failures | Escalate to IT Support |
+| Timeout (>30 sec) | Log error, continue with warning |
+
+**Failsafe Principle:** If validation cannot be confirmed, the system must NOT proceed with consequence management actions.
+
+---
+
+## 39. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -2664,11 +2965,22 @@ This Business Requirements Document (BRD) defines the complete requirements for 
 **Case Resolution Requirements:**
 - EDD Completion Options & KYC Data Correction (Section 37)
   - Request Additional Documents
-  - Accept Current KYC (No Additional Docs)
+  - Accept Current KYB (No Additional Docs)
   - Customer Data Correction
   - Maker/Checker Approval Workflow
   - T24 Synchronization
   - Comprehensive EDD Trigger Categories
+
+**Regulatory Control Requirements:**
+- Dynamic Eligibility Validation (Section 38)
+  - High Risk Status Validation (T24/CRP)
+  - Active Account Relationship Validation
+  - Account Restriction Check
+  - Exclusion List Management
+  - Exception-Based Case Closure
+  - Compliance Approval for Exclusion
+  - Three-Layer Regulatory Control
+  - Full Validation Audit Trail
 
 **System Integrations:**
 - FLOW Workflow Engine
