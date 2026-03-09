@@ -452,7 +452,6 @@ function getEmployeeData(id) {
       department: 'Operations Division',
       division: 'Operations',
       photo: 'assets/employees/MR.Amit.png',
-      specialTag: 'THE VISION',
       reportsTo: 'COO - Saleem Ulhiq',
       workflowGroups: ['Management', 'CDD_Checker'],
       eddTasks: ['Operations Approval', 'Process Design', 'Team Management', 'Escalation Handling']
@@ -565,7 +564,7 @@ function getTagBackground(tag) {
     'VICE CHAIRMAN': 'linear-gradient(135deg, rgba(192, 160, 48, 0.2), rgba(138, 107, 10, 0.2))',
     'GCEO': 'linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2))',
     'COO': 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2))',
-    'THE VISION': 'linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(124, 58, 237, 0.2))',
+
     'PILOT': 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2))',
     'CDD/EDD': 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2))',
     'DEVELOPER': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
@@ -581,7 +580,7 @@ function getTagDescription(tag) {
     'VICE CHAIRMAN': 'Deputy Board Leadership',
     'GCEO': 'Group Chief Executive Officer',
     'COO': 'Chief Operating Officer - Operations & IT',
-    'THE VISION': 'Operations Leader & Innovator',
+
     'PILOT': 'WPS & Digital Transformation Lead',
     'CDD/EDD': 'Customer Due Diligence & Enhanced Due Diligence',
     'DEVELOPER': 'EDD System Development & Enhancement',
