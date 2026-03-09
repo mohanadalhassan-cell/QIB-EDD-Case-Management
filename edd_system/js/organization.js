@@ -273,10 +273,66 @@ function getEmployeeData(id) {
     'BOD-001': {
       id: 'BOD-001',
       name: 'Sheikh Jassim bin Hamad Al Thani',
+      nameAr: 'الشيخ جاسم بن حمد آل ثاني',
       title: 'Chairman of the Board',
       department: 'Board of Directors',
       division: 'Governance',
       specialTag: 'CHAIRMAN',
+      workflowGroups: ['Management']
+    },
+    'BOD-002': {
+      id: 'BOD-002',
+      name: 'Sheikh Abdulrahman bin Hamad Al Thani',
+      nameAr: 'الشيخ عبدالرحمن بن حمد آل ثاني',
+      title: 'Vice Chairman',
+      department: 'Board of Directors',
+      division: 'Governance',
+      specialTag: 'VICE CHAIRMAN',
+      workflowGroups: ['Management']
+    },
+    'BOD-003': {
+      id: 'BOD-003',
+      name: 'Mr. Khalid Al-Subeai',
+      nameAr: 'السيد خالد السبيعي',
+      title: 'Board Member',
+      department: 'Board of Directors',
+      division: 'Governance',
+      workflowGroups: ['Management']
+    },
+    'BOD-004': {
+      id: 'BOD-004',
+      name: 'Mr. Fahad Al-Khalifa',
+      nameAr: 'السيد فهد الخليفة',
+      title: 'Board Member',
+      department: 'Board of Directors',
+      division: 'Governance',
+      workflowGroups: ['Management']
+    },
+    'BOD-005': {
+      id: 'BOD-005',
+      name: 'Mr. Nasser Al-Misnad',
+      nameAr: 'السيد ناصر المسند',
+      title: 'Board Member',
+      department: 'Board of Directors',
+      division: 'Governance',
+      workflowGroups: ['Management']
+    },
+    'BOD-006': {
+      id: 'BOD-006',
+      name: 'Mr. Ahmed Al-Asmakh',
+      nameAr: 'السيد أحمد الأسمخ',
+      title: 'Independent Board Member',
+      department: 'Board of Directors',
+      division: 'Governance',
+      workflowGroups: ['Management']
+    },
+    'BOD-007': {
+      id: 'BOD-007',
+      name: 'Mr. Saad Al-Muhannadi',
+      nameAr: 'السيد سعد المهندي',
+      title: 'Independent Board Member',
+      department: 'Board of Directors',
+      division: 'Governance',
       workflowGroups: ['Management']
     },
     'EXE-001': {
@@ -424,6 +480,41 @@ function getEmployeeData(id) {
       reportsTo: 'Head of Operations - Amit Malhotra',
       workflowGroups: ['CDD_Maker', 'CDD_Checker', 'Compliance'],
       eddTasks: ['EDD Case Management', 'CDD Review', 'Compliance Check', 'AML Screening']
+    },
+    'IT-002': {
+      id: 'IT-002',
+      name: 'Sayed ElMahdy',
+      nameAr: 'سيد المهدي',
+      title: 'Senior Developer',
+      department: 'Information Technology',
+      division: 'IT',
+      photo: 'assets/employees/sayed elmahdy.jpeg',
+      specialTag: 'DEVELOPER',
+      reportsTo: 'Head of IT - Khurram',
+      workflowGroups: ['IT_Admin', 'Development'],
+      eddTasks: ['System Development', 'EDD System Enhancement', 'Technical Support', 'Integration']
+    },
+    'IT-003': {
+      id: 'IT-003',
+      name: 'Syed Shah',
+      title: 'IT Manager',
+      department: 'Information Technology',
+      division: 'IT',
+      photo: 'assets/employees/syed shah.jpeg',
+      reportsTo: 'Head of IT - Khurram',
+      workflowGroups: ['IT_Admin'],
+      eddTasks: ['IT Management', 'System Administration']
+    },
+    'IT-004': {
+      id: 'IT-004',
+      name: 'Mohammed Khaja',
+      title: 'Core Banking Lead',
+      department: 'Information Technology',
+      division: 'IT',
+      photo: 'assets/employees/Mohammed_Khaja.jpeg',
+      reportsTo: 'Head of IT - Khurram',
+      workflowGroups: ['IT_Admin'],
+      eddTasks: ['Core Banking Support', 'T24 Administration']
     }
   };
   
@@ -444,11 +535,13 @@ function getInitials(name) {
 function getTagBackground(tag) {
   const colors = {
     'CHAIRMAN': 'linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(154, 123, 10, 0.2))',
+    'VICE CHAIRMAN': 'linear-gradient(135deg, rgba(192, 160, 48, 0.2), rgba(138, 107, 10, 0.2))',
     'GCEO': 'linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 204, 0.2))',
     'COO': 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2))',
     'THE VISION': 'linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(124, 58, 237, 0.2))',
     'PILOT': 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2))',
-    'CDD/EDD': 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2))'
+    'CDD/EDD': 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2))',
+    'DEVELOPER': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))'
   };
   return colors[tag] || 'rgba(255,255,255,0.1)';
 }
@@ -457,11 +550,13 @@ function getTagBackground(tag) {
 function getTagDescription(tag) {
   const descriptions = {
     'CHAIRMAN': 'Board Leadership & Governance',
+    'VICE CHAIRMAN': 'Deputy Board Leadership',
     'GCEO': 'Group Chief Executive Officer',
     'COO': 'Chief Operating Officer - Operations & IT',
     'THE VISION': 'Operations Leader & Innovator',
     'PILOT': 'WPS & Digital Transformation Lead',
-    'CDD/EDD': 'Customer Due Diligence & Enhanced Due Diligence'
+    'CDD/EDD': 'Customer Due Diligence & Enhanced Due Diligence',
+    'DEVELOPER': 'EDD System Development & Enhancement'
   };
   return descriptions[tag] || '';
 }
@@ -472,28 +567,31 @@ function populateITTeam() {
   if (!grid) return;
   
   const itTeam = [
-    { name: 'Syed Shah', title: 'IT Manager', photo: 'assets/employees/syed shah.jpeg' },
-    { name: 'Sayed ElMahdy', title: 'Senior Developer', photo: 'assets/employees/sayed elmahdy.jpeg' },
-    { name: 'Mohammed Khaja', title: 'Core Banking Lead', photo: 'assets/employees/Mohammed_Khaja.jpeg' },
-    { name: 'Nabit', title: 'Application Developer', photo: 'assets/employees/NABIT.jpeg' },
-    { name: 'Ayman Zain', title: 'Service Desk Lead', photo: 'assets/employees/AYMAN_ZAIN.jpeg' },
-    { name: 'Hassan', title: 'BO Reports Specialist', photo: 'assets/employees/HASSAN.jpeg' },
-    { name: 'Ahmad', title: 'Network Administrator', photo: null },
-    { name: 'Ravi Kumar', title: 'Database Admin', photo: null },
-    { name: 'Mohamed Ali', title: 'Security Analyst', photo: null },
-    { name: 'Fahad', title: 'IT Support', photo: null }
+    { name: 'Syed Shah', title: 'IT Manager', photo: 'assets/employees/syed shah.jpeg', special: false },
+    { name: 'Sayed ElMahdy', nameAr: 'سيد المهدي', title: 'Senior Developer', subtitle: 'EDD System Developer', photo: 'assets/employees/sayed elmahdy.jpeg', special: true, tag: 'DEVELOPER' },
+    { name: 'Mohammed Khaja', title: 'Core Banking Lead', photo: 'assets/employees/Mohammed_Khaja.jpeg', special: false },
+    { name: 'Nabit', title: 'Application Developer', photo: 'assets/employees/NABIT.jpeg', special: false },
+    { name: 'Ayman Zain', title: 'Service Desk Lead', photo: 'assets/employees/AYMAN_ZAIN.jpeg', special: false },
+    { name: 'Hassan', title: 'BO Reports Specialist', photo: 'assets/employees/HASSAN.jpeg', special: false },
+    { name: 'Ahmad', title: 'Network Administrator', photo: null, special: false },
+    { name: 'Ravi Kumar', title: 'Database Admin', photo: null, special: false },
+    { name: 'Mohamed Ali', title: 'Security Analyst', photo: null, special: false },
+    { name: 'Fahad', title: 'IT Support', photo: null, special: false }
   ];
   
   grid.innerHTML = itTeam.map(member => `
-    <div class="team-member" onclick="showTeamMemberDetail('${member.name}', '${member.title}', '${member.photo || ''}')">
+    <div class="team-member ${member.special ? 'special-member' : ''}" onclick="showTeamMemberDetail('${member.name}', '${member.title}', '${member.photo || ''}', '${member.nameAr || ''}', '${member.subtitle || ''}')">
+      ${member.special ? `<span class="member-tag" style="position:absolute;top:8px;right:8px;padding:4px 10px;background:linear-gradient(135deg, #3b82f6, #2563eb);border-radius:12px;font-size:9px;color:white;font-weight:600;">⚡ ${member.tag}</span>` : ''}
       ${member.photo ? 
-        `<img src="${member.photo}" class="team-member-photo" alt="${member.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        `<img src="${member.photo}" class="team-member-photo" alt="${member.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="${member.special ? 'border: 2px solid #3b82f6;' : ''}">
          <div class="team-member-initials" style="display:none;">${getInitials(member.name)}</div>` :
         `<div class="team-member-initials">${getInitials(member.name)}</div>`
       }
       <div class="team-member-info">
         <h4>${member.name}</h4>
+        ${member.nameAr ? `<p style="font-size:11px;color:#9E9E9E;margin-bottom:2px;">${member.nameAr}</p>` : ''}
         <p>${member.title}</p>
+        ${member.subtitle ? `<p style="font-size:10px;color:var(--accent);">${member.subtitle}</p>` : ''}
       </div>
     </div>
   `).join('');
@@ -523,25 +621,31 @@ function populateWPSTeam() {
 }
 
 // Show team member detail (simplified)
-function showTeamMemberDetail(name, title, photo) {
+function showTeamMemberDetail(name, title, photo, nameAr, subtitle) {
   const panel = document.getElementById('detail-panel');
   const overlay = document.getElementById('detail-overlay');
   const body = document.getElementById('detail-body');
   
+  const isITDeveloper = title.includes('Developer') || title.includes('Lead') || title.includes('Admin');
+  const isDeveloper = name === 'Sayed ElMahdy';
+  
   body.innerHTML = `
     ${photo ? 
-      `<img src="${photo}" class="detail-photo" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      `<img src="${photo}" class="detail-photo" alt="${name}" style="${isDeveloper ? 'border: 3px solid #3b82f6;' : ''}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
        <div class="emp-initials" style="width:120px;height:120px;font-size:36px;margin:0 auto 16px;display:none;">${getInitials(name)}</div>` :
       `<div class="emp-initials" style="width:120px;height:120px;font-size:36px;margin:0 auto 16px;">${getInitials(name)}</div>`
     }
+    ${isDeveloper ? `<div style="text-align:center;margin-bottom:8px;"><span style="padding:6px 16px;background:linear-gradient(135deg, #3b82f6, #2563eb);border-radius:20px;font-size:11px;color:white;font-weight:600;">⚡ EDD SYSTEM DEVELOPER</span></div>` : ''}
     <div class="detail-name">${name}</div>
+    ${nameAr ? `<div style="text-align:center;font-size:16px;color:#9E9E9E;margin-bottom:4px;direction:rtl;">${nameAr}</div>` : ''}
     <div class="detail-title">${title}</div>
+    ${subtitle ? `<div style="text-align:center;font-size:13px;color:var(--accent);margin-top:4px;">${subtitle}</div>` : ''}
     
     <div class="detail-section">
       <h4>Employee Information</h4>
       <div class="detail-row">
         <span class="detail-label">Department</span>
-        <span class="detail-value">${title.includes('IT') || title.includes('Developer') || title.includes('Admin') || title.includes('Service Desk') ? 'Information Technology' : 'WPS & DBO'}</span>
+        <span class="detail-value">${isITDeveloper ? 'Information Technology' : 'WPS & DBO'}</span>
       </div>
       <div class="detail-row">
         <span class="detail-label">Email</span>
@@ -553,6 +657,23 @@ function showTeamMemberDetail(name, title, photo) {
       </div>
     </div>
     
+    ${isDeveloper ? `
+    <div class="detail-section">
+      <h4>🚀 Key Projects</h4>
+      <div class="detail-row">
+        <span class="detail-label">Primary Project</span>
+        <span class="detail-value" style="color: var(--accent);">EDD Case Management System</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Technologies</span>
+        <span class="detail-value">JavaScript, HTML5, CSS3, Chart.js</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Responsibilities</span>
+        <span class="detail-value">Full-Stack Development, UI/UX Design</span>
+      </div>
+    </div>
+    ` : `
     <div class="detail-section">
       <h4>Case Statistics</h4>
       <div class="detail-row">
@@ -564,6 +685,7 @@ function showTeamMemberDetail(name, title, photo) {
         <span class="detail-value" style="color: #22c55e;">${Math.floor(Math.random() * 30) + 5}</span>
       </div>
     </div>
+    `}
   `;
   
   panel.classList.add('open');
