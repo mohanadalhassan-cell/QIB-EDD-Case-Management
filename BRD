@@ -800,3 +800,1019 @@ The EDD Case Management System provides a comprehensive solution for managing hi
 - **SLA monitoring** across all workflow stages
 
 This BRD serves as the foundation for development, ensuring alignment between Business, IT, and Compliance requirements.
+
+---
+
+## 29. Case Collaboration and Internal Communication
+
+### 29.1 Overview
+
+The EDD system must support an internal collaboration feature that allows employees to communicate within the context of an EDD case.
+
+This feature enables case participants to exchange messages, share insights, and collaborate on case analysis without leaving the system.
+
+All conversations must be recorded and stored as part of the EDD case history.
+
+### 29.2 Case Chat Functionality
+
+Each EDD case must include a **case chat interface** that allows employees to communicate within the case.
+
+**Required Capabilities:**
+
+| Feature | Description |
+|---------|-------------|
+| Internal chat | Employees can send messages within the case |
+| Participant tagging | Users can tag other employees using @mention |
+| Add participants | Additional users may be invited to the case discussion |
+| File attachments | Documents may be attached to chat messages |
+| Message history | All messages must be preserved permanently |
+| Read receipts | System tracks message read status |
+| Reply threading | Users can reply to specific messages |
+
+### 29.3 Chat Workflow
+
+Employees must be able to initiate discussions directly within the EDD case.
+
+**Example Workflow:**
+
+```
+┌────────────────────┐
+│   CDD Officer      │
+│   Opens Chat       │
+└─────────┬──────────┘
+          │
+          ↓
+┌────────────────────┐
+│ Sends Message      │
+│ Tags @BusinessUser │
+└─────────┬──────────┘
+          │
+          ↓
+┌────────────────────┐
+│ Business User      │
+│ Receives Alert     │
+└─────────┬──────────┘
+          │
+          ↓
+┌────────────────────┐
+│ Business Response  │
+│ Provides Info      │
+└─────────┬──────────┘
+          │
+          ↓
+┌────────────────────┐
+│ Case Updated       │
+│ Chat Archived      │
+└────────────────────┘
+```
+
+All messages must remain permanently attached to the EDD case.
+
+### 29.4 Participant Management
+
+Users must be able to add additional participants to the chat.
+
+**Eligible Participants:**
+
+| Participant Type | Role |
+|-----------------|------|
+| Business Users | Relationship Managers, Business Makers/Checkers |
+| Sector Supervisors | Department heads with case oversight |
+| CDD Operations | EDD case processors |
+| Compliance Officers | For escalated cases |
+| Call Center Supervisors | For customer contact coordination |
+| IT Support | For technical issues |
+
+The system must log all participants in the case collaboration section with:
+- Participant name
+- Employee ID
+- Date/time joined
+- Invited by (employee ID)
+
+### 29.5 Message Archiving
+
+All chat messages must be archived as part of the case documentation.
+
+**Stored Information:**
+
+| Field | Description |
+|-------|-------------|
+| Message ID | Unique identifier (UUID) |
+| Case ID | EDD case reference |
+| Sender Name | Employee full name |
+| Employee ID | Staff number |
+| Department | Department name |
+| Job Title | Official position |
+| Timestamp | Date and time (with timezone) |
+| Message Content | Full text message |
+| Attachments | List of attached files |
+| Tagged Users | List of mentioned employees |
+| Parent Message ID | For reply threading |
+
+**Retention Policy:**
+- All chat messages retained for **7 years minimum**
+- Messages cannot be deleted or edited after sending
+- Export capability for audit/regulatory requests
+
+### 29.6 Case Attachment Storage
+
+Files shared in chat must be stored as **EDD case attachments**.
+
+**Supported Attachments:**
+
+| Type | Formats | Max Size |
+|------|---------|----------|
+| Screenshots | PNG, JPG, GIF | 10MB |
+| Documents | PDF, DOC, DOCX, XLS, XLSX | 25MB |
+| Investigation Notes | PDF, TXT | 10MB |
+| Regulatory References | PDF | 25MB |
+
+**Storage Requirements:**
+- Files must be stored in the **bank's DMS system (FileNet)**
+- Linked to the EDD case with unique document ID
+- Version control for replaced documents
+- Automatic virus scanning before storage
+
+---
+
+## 30. Employee Identity Display
+
+### 30.1 Employee Profile Information
+
+The system must display employee identity information whenever an action is performed.
+
+**Required Employee Details:**
+
+| Field | Description | Source |
+|-------|-------------|--------|
+| Employee Name | Full name (Arabic & English) | HR System |
+| Employee ID | Staff number | HR System |
+| Department | Department name | HR System |
+| Job Title | Official job title | HR System |
+| Profile Photo | Employee photo (if available) | HR Directory |
+| Email | Corporate email | Active Directory |
+| Extension | Phone extension | HR System |
+
+### 30.2 Profile Photo Display
+
+If available, the system must retrieve the employee photo from the bank's **HR directory or identity system**.
+
+**Photo Display Areas:**
+
+| System Area | Display Size | Required |
+|-------------|--------------|----------|
+| Case Chat | 40x40 px | Yes |
+| Case Approval | 60x60 px | Yes |
+| Electronic Signatures | 80x80 px | Yes |
+| Audit Logs | 32x32 px | Optional |
+| Reports | 50x50 px | Yes |
+| User Login Header | 40x40 px | Yes |
+| Sidebar Profile | 48x48 px | Yes |
+
+**Fallback Behavior:**
+- If photo unavailable, display initials in colored circle
+- Color determined by hash of employee name for consistency
+
+### 30.3 Electronic Signature Display
+
+When employees approve or complete actions in the system, their electronic signature must display:
+
+**Signature Block Format:**
+
+```
+┌─────────────────────────────────────────────────┐
+│  ┌────────┐                                    │
+│  │ PHOTO  │  Employee Signature                │
+│  │ or     │                                    │
+│  │INITIALS│  Name: Ahmed Al-Hassan             │
+│  └────────┘  Employee ID: 104583               │
+│              Job Title: Senior Compliance Officer│
+│              Department: Compliance             │
+│              Date/Time: 2024-02-15 14:30:00    │
+│              Action: Approved EDD Case         │
+│              Digital Signature: ✓ Verified     │
+└─────────────────────────────────────────────────┘
+```
+
+### 30.4 Signature Verification
+
+Employees must confirm their actions using the internal confirmation mechanism.
+
+**Verification Requirements:**
+
+| Action Type | Verification Method |
+|-------------|---------------------|
+| Case Approval | Password re-entry |
+| Case Rejection | Password + reason |
+| Document Upload | Session verification |
+| Status Change | Session verification |
+| Case Escalation | Password re-entry |
+| Account Restriction | Password + supervisor OTP |
+
+---
+
+## 31. User Identity in Reports
+
+Reports generated from the EDD system must include employee identity information.
+
+**Report Identity Fields:**
+
+| Field | Included In |
+|-------|-------------|
+| Employee Name | All reports |
+| Employee ID | All reports |
+| Department | All reports |
+| Job Title | Action reports |
+| Case Action | Action reports |
+| Action Timestamp | All reports |
+| Digital Signature | Closure reports |
+
+**Report Types with Identity:**
+
+| Report | Identity Display |
+|--------|------------------|
+| Case Summary | All action performers |
+| Audit Trail | Full identity per action |
+| SLA Report | Assigned officers |
+| Escalation Report | Escalating officer + receiver |
+| Completion Report | All approvers in chain |
+
+---
+
+## 32. User Identity in Login Session
+
+Upon login, the system must display the user's profile information in the system header.
+
+**Header Display:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ [PHOTO] Ahmed Al-Hassan                                         │
+│         EMP: 104583 | Compliance | Senior Compliance Officer   │
+│         Last Login: 2024-02-15 08:30:00                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Session Information:**
+- Retrieved from bank's identity management system (LDAP/AD)
+- Session timeout: 30 minutes idle
+- Concurrent session: Not allowed (single session policy)
+- Activity logging: All navigation and actions logged
+
+---
+
+## 33. Collaboration Dashboard
+
+The system must include a collaboration monitoring dashboard.
+
+### 33.1 Dashboard Metrics
+
+| Metric | Description |
+|--------|-------------|
+| Cases with active discussions | Cases with chat activity in last 24h |
+| Messages exchanged | Total messages in period |
+| Participants involved | Unique employees in case chats |
+| Unanswered messages | Messages without response >4 hours |
+| Average response time | Time to first response |
+| Files shared | Documents attached in chats |
+
+### 33.2 Access Control
+
+| Role | View Metrics | View Messages | Manage Participants |
+|------|--------------|---------------|---------------------|
+| Sector Supervisors | ✓ | Own department | Own department |
+| Operations Management | ✓ | All CDD cases | All CDD cases |
+| Compliance | ✓ | Escalated cases | View only |
+| Audit | ✓ | All (read-only) | View only |
+| IT Admin | ✓ | System logs only | None |
+
+### 33.3 Collaboration Analytics
+
+**Dashboard Widgets:**
+
+| Widget | Content |
+|--------|---------|
+| Active Discussions | Real-time list of cases with ongoing chat |
+| Response SLA | Cases where messages exceeded response time |
+| Top Contributors | Most active collaborators |
+| Pending Responses | Cases awaiting replies |
+| Department Activity | Chat activity by department |
+
+---
+
+## 34. Enterprise Integration Architecture
+
+### 34.1 Overview
+
+The Enhanced Due Diligence (EDD) system will operate as a **workflow orchestration layer** built on the bank's internal **FLOW platform**.
+
+The system will integrate with multiple internal and external systems through the bank's **Enterprise Service Bus (ESB)**.
+
+This architecture ensures centralized data access, controlled system communication, and regulatory compliance.
+
+### 34.2 System Architecture Components
+
+The EDD system must integrate with the following systems:
+
+| System | Purpose | Integration Type |
+|--------|---------|------------------|
+| FLOW | Workflow engine for EDD case management | Native |
+| T24 | Core banking system | ESB/SOAP |
+| ESB | Integration and message orchestration | Hub |
+| CRP | Customer Risk Profile data | ESB/REST |
+| ETL | Data extraction and transformation | Batch/Real-time |
+| QCB API | Regulatory data retrieval | REST/HTTPS |
+| DMS | Document storage (FileNet) | ESB/REST |
+| Notification Gateway | Customer communication | ESB/REST |
+| Identity System | Employee authentication (LDAP/AD) | LDAP/SSO |
+| SnapView | Data warehouse for analytics | SQL/ETL |
+
+### 34.3 Architecture Flow
+
+The system architecture must follow the integration flow below:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              EXTERNAL DATA SOURCES                                   │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐     │
+│   │   QCB API    │    │   T24 Core   │    │     CRP      │    │   SnapView   │     │
+│   │  (External)  │    │   Banking    │    │  Risk Data   │    │  Warehouse   │     │
+│   └──────┬───────┘    └──────┬───────┘    └──────┬───────┘    └──────┬───────┘     │
+│          │                   │                   │                   │              │
+│          └───────────────────┴───────────────────┴───────────────────┘              │
+│                                         │                                            │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                              ETL & DATA LAYER                                        │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                                         ↓                                            │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │                        ETL PROCESSING LAYER                                  │   │
+│   │   ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐               │   │
+│   │   │  Extract  │→ │ Transform │→ │   Load    │→ │  Validate │               │   │
+│   │   └───────────┘  └───────────┘  └───────────┘  └───────────┘               │   │
+│   └─────────────────────────────────────┬───────────────────────────────────────┘   │
+│                                         │                                            │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                           INTEGRATION LAYER                                          │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                                         ↓                                            │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │                    ENTERPRISE SERVICE BUS (ESB)                              │   │
+│   │                                                                              │   │
+│   │   ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│   │   │  T24     │ │  QCB     │ │  DMS     │ │  Notif   │ │  CRP     │        │   │
+│   │   │ Adapter  │ │ Adapter  │ │ Adapter  │ │ Adapter  │ │ Adapter  │        │   │
+│   │   └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘        │   │
+│   │        │            │            │            │            │               │   │
+│   │   ┌────┴────────────┴────────────┴────────────┴────────────┴───────────┐  │   │
+│   │   │                    MESSAGE ROUTER & ORCHESTRATOR                    │  │   │
+│   │   │  • Message Transformation  • Protocol Conversion  • Error Handling  │  │   │
+│   │   │  • Security Gateway        • Audit Logging        • Rate Limiting   │  │   │
+│   │   └────────────────────────────────┬────────────────────────────────────┘  │   │
+│   └─────────────────────────────────────┼───────────────────────────────────────┘   │
+│                                         │                                            │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                          APPLICATION LAYER                                           │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                                         ↓                                            │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │                        FLOW WORKFLOW PLATFORM                                │   │
+│   │                                                                              │   │
+│   │   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐            │   │
+│   │   │   EDD Module    │  │  Re-KYC Module  │  │  Notification   │            │   │
+│   │   │                 │  │                 │  │    Module       │            │   │
+│   │   │ • Case Create   │  │ • KYC Triggers  │  │ • SMS Gateway   │            │   │
+│   │   │ • Workflow      │  │ • Document Req  │  │ • Email Gateway │            │   │
+│   │   │ • Approvals     │  │ • Status Sync   │  │ • Push Notif    │            │   │
+│   │   └─────────────────┘  └─────────────────┘  └─────────────────┘            │   │
+│   └─────────────────────────────────────┬───────────────────────────────────────┘   │
+│                                         │                                            │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                         PRESENTATION LAYER                                           │
+├─────────────────────────────────────────┼────────────────────────────────────────────┤
+│                                         ↓                                            │
+│   ┌─────────────────────────────────────────────────────────────────────────────┐   │
+│   │                    EDD CASE MANAGEMENT SYSTEM                                │   │
+│   │                                                                              │   │
+│   │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │
+│   │   │  Business    │  │     CDD      │  │  Compliance  │  │  Management  │   │   │
+│   │   │    View      │  │  Operations  │  │     View     │  │   Dashboard  │   │   │
+│   │   └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘   │   │
+│   └─────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                      │
+│   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │
+│   │  QIB Mobile  │  │  QIB Lite    │  │  Microsite   │  │  ATM/Branch  │           │
+│   │   Banking    │  │     App      │  │   Portal     │  │   Channels   │           │
+│   └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘           │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 34.4 Core Banking Integration (T24)
+
+T24 will act as the primary system for customer information.
+
+**Data Flow: T24 → EDD System**
+
+| Data Type | T24 Field Name | Update Frequency |
+|-----------|----------------|------------------|
+| Customer Profile | CUSTOMER | Real-time |
+| Customer Since Date | OPENING.DATE | Real-time |
+| Customer Nationality | NATIONALITY | Real-time |
+| Expected Financial Activity | EXPECTED.ACTIVITY | On change |
+| Customer Accounts | ACCOUNT | Real-time |
+| Joint Account Information | JOINT.HOLDER | Real-time |
+| AML Indicators | AML.FLAG | Real-time trigger |
+| Customer Segment | SECTOR | Real-time |
+| KYC Date | KYC.CHECKED | Real-time |
+| Risk Classification | CUSTOMER.RISK | Real-time trigger |
+| PEP Status | PEP.FLAG | Real-time |
+| Residency Status | RESIDENCE | Real-time |
+
+**Data Flow: EDD System → T24**
+
+| Data Type | Target T24 Field | Condition |
+|-----------|------------------|-----------|
+| EDD Completion Date | EDD.COMPL.DATE | On case closure |
+| Next EDD Due Date | EDD.NEXT.REVIEW | On case closure |
+| EDD Status | EDD.STATUS | On status change |
+| EDD Decision | EDD.DECISION | On approval |
+| Restriction Flag | POSTING.RESTRICT | If restriction applied |
+| EDD Case Reference | EDD.CASE.REF | On case creation |
+
+### 34.5 CRP Data Integration
+
+The system must retrieve **Customer Risk Profile (CRP) data** to understand why a customer was classified as High Risk.
+
+**CRP Data Elements:**
+
+| Field | Description | Display Purpose |
+|-------|-------------|-----------------|
+| FINAL_RISK_SCORE | Calculated risk score | Show overall risk level |
+| FINAL_RISK_CATEG | Risk category (High/Medium/Low) | Classification display |
+| PROD_RISK_SCORE | Product risk component | Risk breakdown |
+| ACT_RISK_SCORE | Activity risk component | Risk breakdown |
+| OCCP_RISK_SCORE | Occupation risk component | Risk breakdown |
+| COUNTRY_RISK_SCORE | Country risk component | Risk breakdown |
+| AUTO_HIGH_TRIGGER | Automatic high-risk flag | Trigger indicator |
+| TRIGGER_REASON | Reason for classification | Explain to employee |
+| LAST_SCORE_DATE | Last risk assessment date | Currency indicator |
+
+**CRP Integration Flow:**
+
+```
+CRP Engine → ETL → SnapView → ESB → EDD System
+                                        ↓
+                              Display Risk Indicators
+                              in EDD Case View
+```
+
+### 34.6 ETL Data Integration
+
+The system must consume data from ETL pipelines used within the bank.
+
+**ETL Data Feeds:**
+
+| Data Type | Source | Refresh Frequency | Purpose |
+|-----------|--------|-------------------|---------|
+| Salary Information | Employer Integration | Monthly | Income verification |
+| Transaction Summaries | T24 | Daily | Activity analysis |
+| Customer Behaviour | Analytics Engine | Weekly | Pattern detection |
+| Historical Activity | SnapView | Real-time | Trend analysis |
+| Account Balances | T24 | Real-time | Wealth indicators |
+| Cross-Border Activity | SWIFT | Daily | International exposure |
+
+**ETL Process Flow:**
+
+```
+Source Systems              ETL Layer                    Target
+─────────────────          ─────────────               ─────────
+T24 Transactions    →  ┌─────────────────┐  →  SnapView Warehouse
+Salary Data         →  │    Extract      │  →  EDD Data Mart
+SWIFT Messages      →  │    Transform    │  →  Analytics Repository
+AML Alerts          →  │    Load         │  →  Risk Indicators
+Customer Updates    →  │    Validate     │  →  Operational Store
+                       └─────────────────┘
+```
+
+### 34.7 QCB API Integration
+
+The system must support integration with **Qatar Central Bank APIs**.
+
+**QCB API Data Elements:**
+
+| Data | API Endpoint | Consent Required |
+|------|--------------|------------------|
+| Regulatory KYC Information | /kyc/customer | Yes |
+| Identification Records | /identity/verify | Yes |
+| Compliance Indicators | /compliance/status | Yes |
+| Customer Identity Verification | /identity/match | Yes |
+| Document Verification | /document/validate | Yes |
+| Employment Verification | /employment/verify | Yes |
+
+**QCB Integration Logic:**
+
+```
+Customer Consent Check
+         │
+         ├─ Yes → Call QCB API → Display Data in EDD Case
+         │                            ↓
+         │                    Merge with T24 Data
+         │                            ↓
+         │                    Highlight Discrepancies
+         │
+         └─ No → Proceed with Internal KYC Data Only
+                        ↓
+               Flag "QCB Data Not Available"
+```
+
+### 34.8 Document Management System (DMS)
+
+All documents related to EDD cases must be stored in the bank's **Document Management System (DMS/FileNet)**.
+
+**Document Categories:**
+
+| Category | Document Types | Source |
+|----------|----------------|--------|
+| Identity | QID, Passport, Driving License | Upload/QCB |
+| Employment | Salary Certificate, Employment Letter | Upload/ETL |
+| Financial | Bank Statements, Tax Returns | Upload |
+| Property | Rental Contract, Title Deed | Upload |
+| Business | Trade License, Company Registration | Upload/QCB |
+| EDD Specific | Investigation Notes, Approval Forms | System Generated |
+
+**DMS API Operations:**
+
+| Operation | API Endpoint | Purpose |
+|-----------|--------------|---------|
+| Retrieve | GET /dms/document/{id} | Fetch document for preview |
+| Store | POST /dms/upload | Store uploaded document |
+| Search | GET /dms/search?rim={rim} | Find customer documents |
+| Metadata | GET /dms/metadata/{id} | Get document properties |
+| Version | GET /dms/versions/{id} | Document version history |
+| Link | POST /dms/link | Link document to case |
+
+### 34.9 Notification Gateway Integration
+
+Customer notifications must be triggered through the bank's **Notification Gateway**.
+
+**Supported Communication Channels:**
+
+| Channel | Gateway | Use Case | SLA |
+|---------|---------|----------|-----|
+| SMS | Ooredoo/Vodafone | Document requests, Alerts | < 30 sec |
+| Email | SMTP Gateway | Detailed notifications | < 5 min |
+| Mobile Push | Firebase/APNs | Real-time alerts | < 10 sec |
+| QIB Lite | Internal API | In-app notifications | < 10 sec |
+| Microsite | Web Portal | Customer document upload | N/A |
+| ATM | ATM Network | Screen messages | Next visit |
+
+**Notification Trigger Matrix:**
+
+| Event | SMS | Email | Push | QIB Lite | ATM |
+|-------|-----|-------|------|----------|-----|
+| Document Request | ✓ | ✓ | ✓ | ✓ | ✓ |
+| SLA Warning | ✗ | ✓ | ✓ | ✓ | ✗ |
+| Status Update | ✗ | ✓ | ✓ | ✓ | ✗ |
+| Case Closure | ✓ | ✓ | ✓ | ✓ | ✗ |
+| Account Restriction | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+### 34.10 ESB Integration Layer
+
+All system integrations must pass through the **Enterprise Service Bus (ESB)**.
+
+**ESB Functions:**
+
+| Function | Description |
+|----------|-------------|
+| Message Routing | Direct messages to appropriate endpoints |
+| Protocol Conversion | Convert between SOAP/REST/JMS |
+| Data Transformation | Map data formats between systems |
+| Security Gateway | Authentication and authorization |
+| Rate Limiting | Prevent system overload |
+| Circuit Breaker | Handle downstream failures |
+| Audit Logging | Log all integration transactions |
+| Monitoring | Track integration health |
+
+**ESB Integration Patterns:**
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                    ESB INTEGRATION HUB                            │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│   Synchronous Patterns:                                          │
+│   ┌─────────┐    ┌─────────┐    ┌─────────┐                     │
+│   │ Request │ →  │   ESB   │ →  │ Response│                     │
+│   │ Reply   │ ←  │  Router │ ←  │ Handler │                     │
+│   └─────────┘    └─────────┘    └─────────┘                     │
+│                                                                   │
+│   Asynchronous Patterns:                                         │
+│   ┌─────────┐    ┌─────────┐    ┌─────────┐                     │
+│   │ Publish │ →  │  Topic  │ →  │Subscribe│                     │
+│   │         │    │ Queue   │    │ Handler │                     │
+│   └─────────┘    └─────────┘    └─────────┘                     │
+│                                                                   │
+│   Error Handling:                                                │
+│   ┌─────────┐    ┌─────────┐    ┌─────────┐                     │
+│   │ Failed  │ →  │  Dead   │ →  │  Alert  │                     │
+│   │ Message │    │ Letter  │    │ & Retry │                     │
+│   └─────────┘    └─────────┘    └─────────┘                     │
+│                                                                   │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 34.11 Identity Management Integration
+
+The system must retrieve employee identity information from the bank's identity management system.
+
+**Identity Data Sources:**
+
+| Data | Source System | Protocol |
+|------|---------------|----------|
+| Employee Name | HR System | LDAP |
+| Employee ID | HR System | LDAP |
+| Department | HR System | LDAP |
+| Job Title | HR System | LDAP |
+| Profile Photo | HR Directory | REST API |
+| Email | Active Directory | LDAP |
+| Phone Extension | HR System | LDAP |
+| Manager Info | HR System | LDAP |
+
+**Identity Display Locations:**
+
+| Location | Information Displayed |
+|----------|----------------------|
+| System Login | Name, ID, Department, Photo |
+| Case Actions | Name, ID, Title, Timestamp |
+| Approvals | Full signature block with photo |
+| Reports | Name, ID, Department, Action |
+| Audit Logs | Name, ID, Action, Timestamp |
+| Chat Messages | Name, Photo, Department |
+
+### 34.12 Security Considerations
+
+All integrations must comply with the bank's security policies.
+
+**Security Requirements:**
+
+| Requirement | Implementation |
+|-------------|----------------|
+| Authentication | OAuth 2.0 / mTLS / API Keys |
+| Authorization | Role-based access control (RBAC) |
+| Encryption (Transit) | TLS 1.2+ minimum |
+| Encryption (Rest) | AES-256 |
+| Data Masking | PII field-level masking |
+| Audit Logging | Full transaction audit |
+| API Security | Rate limiting, IP whitelist |
+| Session Management | Timeout, single session |
+
+**Security Architecture:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│                 SECURITY LAYERS                      │
+├─────────────────────────────────────────────────────┤
+│                                                      │
+│   Layer 1: Perimeter Security                       │
+│   ┌─────────────────────────────────────────────┐   │
+│   │  Firewall → WAF → Load Balancer → DMZ       │   │
+│   └─────────────────────────────────────────────┘   │
+│                                                      │
+│   Layer 2: Application Security                     │
+│   ┌─────────────────────────────────────────────┐   │
+│   │  SSO → RBAC → Session Mgmt → API Gateway    │   │
+│   └─────────────────────────────────────────────┘   │
+│                                                      │
+│   Layer 3: Data Security                            │
+│   ┌─────────────────────────────────────────────┐   │
+│   │  Encryption → Masking → Tokenization → DLP  │   │
+│   └─────────────────────────────────────────────┘   │
+│                                                      │
+│   Layer 4: Monitoring & Audit                       │
+│   ┌─────────────────────────────────────────────┐   │
+│   │  SIEM → Audit Logs → Alerting → Forensics   │   │
+│   └─────────────────────────────────────────────┘   │
+│                                                      │
+└─────────────────────────────────────────────────────┘
+```
+
+### 34.13 System Interaction Summary
+
+**Complete Integration Map:**
+
+```
+                           ┌─────────────┐
+                           │   QCB API   │
+                           │ (External)  │
+                           └──────┬──────┘
+                                  │ REST/HTTPS
+                                  ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│                    ENTERPRISE SERVICE BUS (ESB)                      │
+│                                                                      │
+│   ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐     │
+│   │T24 Svc  │ │CRP Svc  │ │ETL Svc  │ │DMS Svc  │ │Notif Svc│     │
+│   └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘ └────┬────┘     │
+│        │          │          │          │          │              │
+└────────┼──────────┼──────────┼──────────┼──────────┼──────────────┘
+         │          │          │          │          │
+         ↓          ↓          ↓          ↓          ↓
+    ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────────┐
+    │  T24   │ │  CRP   │ │SnapView│ │  DMS   │ │Notification│
+    │  Core  │ │ Engine │ │  ETL   │ │FileNet │ │  Gateway   │
+    └────────┘ └────────┘ └────────┘ └────────┘ └────────────┘
+                                                      │
+                                          ┌───────────┼──────────┐
+                                          ↓           ↓          ↓
+                                      ┌──────┐   ┌───────┐  ┌────────┐
+                                      │ SMS  │   │ Email │  │  Push  │
+                                      └──────┘   └───────┘  └────────┘
+```
+
+---
+
+## 35. Data Governance & Data Ownership
+
+### 35.1 Overview
+
+This section defines the data governance framework for the EDD Case Management System, ensuring data quality, ownership accountability, and regulatory compliance.
+
+Data governance is critical for:
+- Regulatory compliance (QCB, FATF, AML requirements)
+- Data quality assurance
+- Clear accountability
+- Audit readiness
+- Operational efficiency
+
+### 35.2 Data Ownership Matrix
+
+Each data element in the EDD system has a designated owner responsible for data quality and accuracy.
+
+**System Data Ownership:**
+
+| Data Domain | Data Owner | Data Steward | System of Record |
+|-------------|------------|--------------|------------------|
+| Customer Master Data | Head of Operations | CDD Manager | T24 |
+| Risk Classification | Chief Risk Officer | Risk Manager | CRP Engine |
+| EDD Case Data | Head of Operations | EDD Supervisor | FLOW |
+| KYC Documents | Head of Operations | CDD Manager | DMS |
+| Transaction Data | Head of IT | Data Manager | T24 |
+| Employee Data | Head of HR | HR Manager | HR System |
+| Audit Data | Chief Audit Officer | Audit Manager | FLOW |
+| Notification Data | Head of Marketing | Marketing Manager | Notification Gateway |
+
+### 35.3 Data Classification
+
+All data in the EDD system must be classified according to sensitivity.
+
+**Data Classification Levels:**
+
+| Classification | Description | Examples | Handling Requirements |
+|----------------|-------------|----------|----------------------|
+| Public | Non-sensitive data | Case status codes | Standard controls |
+| Internal | Business operational data | Case statistics | Internal access only |
+| Confidential | Sensitive business data | Customer names | Need-to-know access |
+| Restricted | High-sensitivity data | QID, Financial data | Encryption required |
+| Highly Restricted | PII/Critical data | Risk scores, PEP status | Maximum protection |
+
+**Data Element Classification:**
+
+| Data Element | Classification | Encryption | Masking |
+|-------------|----------------|------------|---------|
+| Customer RIM | Confidential | At rest | Display last 4 |
+| Customer Name | Confidential | At rest | Partial |
+| QID Number | Restricted | At rest + transit | Full mask except last 4 |
+| Mobile Number | Confidential | At rest | Partial |
+| Risk Score | Highly Restricted | At rest + transit | Role-based |
+| PEP Status | Highly Restricted | At rest + transit | Role-based |
+| Financial Data | Restricted | At rest + transit | Role-based |
+| Case Comments | Internal | At rest | None |
+
+### 35.4 Data Quality Standards
+
+The EDD system must maintain high data quality standards.
+
+**Data Quality Dimensions:**
+
+| Dimension | Definition | Target | Measurement |
+|-----------|------------|--------|-------------|
+| Accuracy | Data matches reality | 99.5% | Monthly audit |
+| Completeness | All required fields populated | 99% | System validation |
+| Consistency | Same data across systems | 99% | Reconciliation |
+| Timeliness | Data available when needed | Real-time | SLA monitoring |
+| Validity | Data conforms to rules | 100% | Business rules |
+| Uniqueness | No duplicate records | 100% | Deduplication |
+
+**Data Quality Controls:**
+
+| Control | Implementation | Frequency |
+|---------|----------------|-----------|
+| Field Validation | Business rules at entry | Real-time |
+| Cross-system Reconciliation | T24 vs FLOW comparison | Daily |
+| Duplicate Detection | Matching algorithm | On creation |
+| Data Completeness Check | Mandatory field validation | Real-time |
+| Referential Integrity | Foreign key validation | Real-time |
+| Historical Data Audit | Data lineage review | Monthly |
+
+### 35.5 Data Retention Policy
+
+All EDD case data must be retained according to regulatory and business requirements.
+
+**Retention Schedule:**
+
+| Data Type | Retention Period | Archive Period | Disposal Method |
+|-----------|------------------|----------------|-----------------|
+| EDD Cases (Active) | Until closure | N/A | N/A |
+| EDD Cases (Closed) | 7 years | 10 years | Secure deletion |
+| KYC Documents | 10 years after account closure | 15 years | Secure deletion |
+| Audit Logs | 10 years | Indefinite | Archive |
+| Chat Messages | 7 years | 10 years | Secure deletion |
+| System Logs | 2 years | 5 years | Secure deletion |
+| Notification Records | 3 years | 5 years | Secure deletion |
+
+**Retention Compliance:**
+
+| Regulation | Requirement | System Implementation |
+|------------|-------------|----------------------|
+| QCB AML Guidelines | 5 years minimum | 7 years retention |
+| FATF Recommendations | 5 years minimum | 7 years retention |
+| QIB Internal Policy | 7 years | 7 years retention |
+| Audit Requirements | 10 years for audit trail | 10 years for audit data |
+
+### 35.6 Data Access Control
+
+Access to EDD data must be strictly controlled based on role and business need.
+
+**Role-Based Access Matrix:**
+
+| Data Type | Business | CDD | Compliance | Management | Audit | IT |
+|-----------|----------|-----|------------|------------|-------|-----|
+| Customer Basic Info | Read | Read/Write | Read | Read | Read | None |
+| Risk Classification | Read | Read | Read/Write | Read | Read | None |
+| Case Details | Read/Write* | Read/Write | Read/Write | Read | Read | None |
+| Financial Data | Read | Read | Read | Read | Read | None |
+| PEP Information | Read | Read | Read/Write | Read | Read | None |
+| Audit Logs | None | None | Read | Read | Read/Write | Read |
+| System Config | None | None | None | Read | Read | Read/Write |
+
+*Business access limited to assigned segment cases
+
+**Access Control Implementation:**
+
+| Control | Mechanism |
+|---------|-----------|
+| Authentication | SSO via Active Directory |
+| Authorization | RBAC in FLOW platform |
+| Segment Restriction | Business sees only their segment |
+| Data Masking | PII masked based on role |
+| Audit Trail | All access logged |
+| Session Management | 30-min idle timeout |
+
+### 35.7 Data Lineage & Traceability
+
+The system must maintain complete data lineage for audit purposes.
+
+**Data Lineage Tracking:**
+
+| Data Element | Source System | Transformation | Target |
+|-------------|---------------|----------------|--------|
+| Customer Name | T24 | None | EDD Case |
+| Risk Score | CRP Engine | ETL aggregation | EDD Case |
+| QCB Data | QCB API | Format conversion | EDD Case |
+| Salary Info | Employer ETL | Anonymization | EDD Case |
+| Documents | DMS | Metadata extraction | EDD Case |
+
+**Audit Trail Requirements:**
+
+| Action | Logged Information |
+|--------|-------------------|
+| Data Read | Who, When, What, Why |
+| Data Create | Who, When, What, Source |
+| Data Update | Who, When, What, Before, After |
+| Data Delete | Who, When, What, Reason, Approval |
+| Data Export | Who, When, What, Purpose |
+
+### 35.8 Data Privacy & Protection
+
+The system must comply with data privacy requirements.
+
+**Privacy Requirements:**
+
+| Requirement | Implementation |
+|-------------|----------------|
+| Consent Management | Customer consent tracked for QCB data |
+| Right to Access | Export capability for customer data |
+| Data Minimization | Only necessary data collected |
+| Purpose Limitation | Data used only for EDD purposes |
+| Storage Limitation | Retention policies enforced |
+| Integrity & Security | Encryption and access controls |
+
+**PII Protection:**
+
+| PII Element | Protection Method |
+|-------------|------------------|
+| QID Number | Encrypted storage, masked display |
+| Mobile Number | Encrypted storage, partial masking |
+| Address | Encrypted storage, role-based access |
+| Financial Data | Encrypted storage, role-based access |
+| Biometric Data | Not collected in EDD system |
+
+### 35.9 Data Governance Responsibilities
+
+**RACI Matrix for Data Governance:**
+
+| Activity | Data Owner | Data Steward | IT | Compliance | Audit |
+|----------|------------|--------------|-----|------------|-------|
+| Define data standards | A | R | C | C | I |
+| Implement controls | I | R | A | C | I |
+| Monitor quality | I | R | C | I | A |
+| Handle issues | A | R | C | I | I |
+| Approve changes | A | R | I | C | I |
+| Conduct audits | I | C | C | I | A |
+| Report to regulators | I | C | I | A | R |
+
+*R = Responsible, A = Accountable, C = Consulted, I = Informed*
+
+### 35.10 Data Governance Metrics
+
+**Key Performance Indicators:**
+
+| KPI | Target | Measurement Frequency |
+|-----|--------|----------------------|
+| Data Accuracy Rate | ≥ 99.5% | Monthly |
+| Data Completeness Rate | ≥ 99% | Weekly |
+| Data Access Compliance | 100% | Daily |
+| Retention Compliance | 100% | Quarterly |
+| Privacy Compliance | 100% | Monthly |
+| Audit Finding Resolution | < 30 days | Per finding |
+
+### 35.11 Data Governance Review
+
+**Review Schedule:**
+
+| Review Type | Frequency | Participants |
+|-------------|-----------|--------------|
+| Data Quality Review | Monthly | Data Stewards, IT |
+| Access Control Review | Quarterly | Data Owners, IT, Audit |
+| Retention Compliance | Quarterly | Compliance, Legal |
+| Privacy Assessment | Annually | DPO, Compliance, Legal |
+| Full Data Governance Audit | Annually | Internal Audit, External Audit |
+
+---
+
+## 36. Final Conclusion
+
+This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
+
+**Core Functional Requirements:**
+- Core EDD Workflow (Sections 1-13)
+- Customer Notifications (Section 14)
+- Document Request Framework (Section 15)
+- System Integration Architecture (Section 16)
+- Case Collaboration & Identity (Sections 29-33)
+
+**Enterprise Architecture Requirements:**
+- Enterprise Integration Architecture (Section 34)
+  - FLOW Workflow Platform
+  - T24 Core Banking Integration
+  - CRP Risk Data Integration
+  - ETL Data Feeds
+  - QCB API Integration
+  - DMS Document Management
+  - Notification Gateway
+  - Identity Management
+  - ESB Integration Layer
+  - Security Architecture
+
+**Governance Requirements:**
+- Data Governance & Data Ownership (Section 35)
+  - Data Ownership Matrix
+  - Data Classification
+  - Data Quality Standards
+  - Data Retention Policy
+  - Access Control
+  - Data Lineage & Traceability
+  - Privacy & Protection
+  - Governance Metrics
+
+**System Integrations:**
+- FLOW Workflow Engine
+- T24 Core Banking
+- QCB KYC APIs
+- Enterprise Service Bus (ESB)
+- Customer Risk Profile (CRP)
+- ETL Data Pipelines
+- SnapView Data Warehouse
+- Document Management System (DMS/FileNet)
+- Notification Gateways (SMS/Email/Push)
+- HR Identity System (LDAP/AD)
+
+**Compliance Alignment:**
+- Qatar Central Bank (QCB) AML Guidelines
+- FATF Recommendations
+- QIB Internal Policies
+- PII Protection Standards
+- Audit Readiness Requirements
+
+This BRD serves as the complete foundation for system development, ensuring alignment between Business, IT, Compliance, and Audit requirements at enterprise-grade standards.
