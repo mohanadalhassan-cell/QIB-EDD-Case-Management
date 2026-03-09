@@ -2917,7 +2917,251 @@ If validation cannot be completed due to system unavailability:
 
 ---
 
-## 39. Final Conclusion
+## 39. Organization Structure Auto-Validation
+
+### 39.1 Overview
+
+The system must automatically validate and maintain the organizational hierarchy to ensure accurate case routing, escalation, and reporting line management.
+
+This feature enables self-healing organizational data management aligned with enterprise standards used by Workday, SAP SuccessFactors, and Oracle HCM.
+
+---
+
+### 39.2 Auto-Validation Triggers
+
+The system must perform organizational structure validation:
+
+| Trigger | Frequency | Description |
+|---------|-----------|-------------|
+| System Startup | Once per day | Full structure validation |
+| Employee Update | Real-time | Single employee validation |
+| HR Feed Received | Event-driven | Batch validation |
+| Manual Request | On-demand | Admin-initiated validation |
+| Integration Sync | Scheduled | Cross-system reconciliation |
+
+---
+
+### 39.3 Official Executive Hierarchy
+
+The system must maintain the following official QIB executive structure:
+
+**GCEO Direct Reports:**
+
+| Position | Title | Department |
+|----------|-------|------------|
+| Bassel Gamal | Group Chief Executive Officer | Executive Leadership |
+| Constantinos Constantinides | Chief Strategy & Digital Officer | Strategy & Digital |
+| D Anand | Chief Personal Banking Officer | Personal Banking |
+| Gourang Hemani | Chief Finance Officer | Finance Division |
+| Khalefa Al-Mesalam | Head of Human Capital Group | Human Resources |
+| Raafat Alrantisi | Executive Manager – GCEO Office | GCEO Office |
+| Rakesh Sanghvi | Chief Risk Officer | Risk Management |
+| Saleem Ulhaq | Chief Operating Officer | Operations & IT |
+| Tarek Y. Fawzi | Chief Wholesale Banking Officer | Wholesale Banking |
+| Anjitha J. Menon | Executive Secretary – GCEO Office | GCEO Office |
+
+---
+
+### 39.4 Strategy & Digital Office Structure
+
+**Manager:** Constantinos Constantinides
+
+| Employee | Position |
+|----------|----------|
+| Andonis Theodosiou | T24 Program Director |
+| Hussein Mokdad | Head Marketing & Research / Digital Experience |
+| Imad Bourhfir | Head Strategy, Innovation & Data Science |
+| Mashaal Alderham | Assistant General Manager – Communications |
+| Suzan Chaker | Manager – Business Support |
+
+---
+
+### 39.5 Personal Banking Structure
+
+**Manager:** D Anand
+
+| Employee | Position |
+|----------|----------|
+| Abdulrahman Alnabit | Head of Wealth Management |
+| Ali Younes | Senior Manager |
+| Ayman Zein | Head of Alternative Channels Division |
+| Faiza Saber | Admin Assistant |
+| Hassan Alnoaimi | Division Head - Branch & Sales |
+| Saleh Anam | Head of Retail Products |
+
+---
+
+### 39.6 Branch & Sales Structure
+
+**Manager:** Hassan Alnoaimi
+
+| Employee | Position |
+|----------|----------|
+| Abdulkader Al-Masri | Head of Branch Business Development |
+| Khalid Alnaemi | Area Manager |
+| Mahmoud Marzughi | Area Manager |
+| Naela Aljabir | Branch Manager |
+| Nasser Radhi | Senior Manager – Branch Analytics & Information |
+| Shrooq Saleh | Supervisor – Customer Service |
+| Tag Rahmtalla | Head of Sales & Service |
+
+---
+
+### 39.7 Operations Structure
+
+**Manager:** Saleem Ulhaq (COO)
+
+| Employee | Position |
+|----------|----------|
+| Abdulhadi Alshahwani | Assistant General Manager – Business Services |
+| Ahmar Azmi | Senior Executive Manager – Internal Control Management |
+| Amit Malhotra | Head of Operations |
+| Arslan Khan | Head of Change Management & Process Improvement |
+| Bader Ba-Khamis | Senior Executive Manager – Service Delivery |
+| Khurram Qadir | Chief Information Officer |
+| Nadim Azar | Head of Premises & Projects |
+| Nourhen Mediouni | Admin Support |
+
+**Under Amit Malhotra (Head of Operations):**
+
+| Employee | Position |
+|----------|----------|
+| Adel Abusbeitan | Senior Executive Manager – Wholesale Banking Operations |
+| Sayed Elmahdy | Head of Retail & Shared Services Operations |
+
+---
+
+### 39.8 Human Capital Group Structure
+
+**Manager:** Khalefa Al-Mesalam
+
+| Employee | Position |
+|----------|----------|
+| Khaja Mohammed | Head of Rewards, Performance & Operations |
+| Muhammed Finos | Head of Talent Acquisition & Workforce Planning |
+| Rudraksh Shekhar | Head of Learning & Development |
+| Wadha Al-Marri | Senior Executive Manager – Government Affairs |
+
+---
+
+### 39.9 Auto-Correction Logic
+
+For each employee in the official hierarchy:
+
+```
+FOR EACH employee IN official_hierarchy:
+    IF employee NOT EXISTS IN employees_table:
+        → CREATE employee record
+        → ASSIGN unique system ID
+        → SET department automatically
+    END IF
+    
+    IF reporting_line NOT EXISTS:
+        → CREATE reporting relationship
+        → LINK to manager_id
+        → SET hierarchy_level
+    END IF
+    
+    IF department_mismatch:
+        → LOG warning
+        → FLAG for HR review
+    END IF
+END FOR
+```
+
+---
+
+### 39.10 Reporting Line Validation
+
+The system must validate all reporting lines:
+
+| Check | Source | Action if Invalid |
+|-------|--------|-------------------|
+| Manager exists | employees table | Create manager record first |
+| Circular reference | reporting_lines | Block and alert |
+| Orphan employee | hierarchy tree | Assign to HR review queue |
+| Duplicate report | reporting_lines | Remove duplicate |
+
+---
+
+### 39.11 Organization Chart Generation
+
+After validation, the system must regenerate the organizational chart:
+
+```
+organization_chart_cache = {
+    "generateDate": ISO8601_timestamp,
+    "levels": {
+        "GCEO": [GCEO_record],
+        "C-Suite": [direct_reports],
+        "Division_Heads": [division_heads],
+        "Department_Heads": [department_heads],
+        "Managers": [managers]
+    },
+    "totalEmployees": count,
+    "validationStatus": "COMPLETE"
+}
+```
+
+---
+
+### 39.12 Audit Log for Structure Changes
+
+All organizational changes must be logged:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| action_id | UUID | Unique action identifier |
+| timestamp | DateTime | Action timestamp |
+| action_type | Enum | CREATE, UPDATE, DELETE, VALIDATE |
+| employee_id | String | Affected employee |
+| manager_id | String | Reporting manager |
+| previous_value | JSON | Before state |
+| new_value | JSON | After state |
+| performed_by | String | System or user |
+| source | String | HR_FEED, MANUAL, AUTO_VALIDATION |
+
+---
+
+### 39.13 Integration with Enterprise Systems
+
+The Organization Structure module must integrate with:
+
+| System | Integration Type | Purpose |
+|--------|------------------|---------|
+| Active Directory | LDAP/SSO | Employee authentication |
+| Outlook | Exchange API | Email & calendar sync |
+| T24 | Core Banking API | Employee banking records |
+| HR System | Feed/API | Official employee data |
+| FLOW | Workflow | Routing & escalation |
+
+---
+
+### 39.14 Validation Output
+
+After each validation run, the system generates:
+
+1. **Summary Report:**
+   - Total employees validated
+   - New records created
+   - Reporting corrections made
+   - Errors encountered
+
+2. **Missing Positions Report:**
+   - Positions in official hierarchy not in system
+   - Recommended actions
+
+3. **Hierarchy Visualization:**
+   - Updated org chart
+   - Reporting line diagram
+
+4. **Database Sync Confirmation:**
+   - Tables updated
+   - Cache refreshed
+
+---
+
+## 40. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -2981,6 +3225,15 @@ This Business Requirements Document (BRD) defines the complete requirements for 
   - Compliance Approval for Exclusion
   - Three-Layer Regulatory Control
   - Full Validation Audit Trail
+
+**Organization Management Requirements:**
+- Organization Structure Auto-Validation (Section 39)
+  - Official Executive Hierarchy Maintenance
+  - Auto-Correction Logic for Missing Positions
+  - Reporting Line Validation
+  - Organization Chart Generation
+  - Integration with AD/Outlook/T24/HR Systems
+  - Full Audit Log for Structure Changes
 
 **System Integrations:**
 - FLOW Workflow Engine
