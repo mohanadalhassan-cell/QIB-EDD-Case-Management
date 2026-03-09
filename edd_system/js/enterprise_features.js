@@ -579,7 +579,7 @@ const EnterpriseFeatures = {
     title: 'Operations Digital Investigation Platform',
     titleAr: 'منصة التحقيق الرقمي للعمليات',
     subtitle: 'QIB Enhanced Due Diligence System',
-    version: '2024.1',
+    version: '2026.3',
     slides: [
       {
         id: 1,
@@ -587,14 +587,16 @@ const EnterpriseFeatures = {
         titleAr: 'نظرة عامة على النظام',
         content: `
           <h3>Purpose</h3>
-          <p>The EDD System is QIB's internal platform for managing Enhanced Due Diligence cases, ensuring regulatory compliance and risk management.</p>
+          <p>The EDD System is QIB's internal platform for managing Enhanced Due Diligence cases, ensuring regulatory compliance with QCB AML Guidelines and FATF Recommendations.</p>
           <h3>Key Features</h3>
           <ul>
             <li>Automated case creation from T24/CRP triggers</li>
-            <li>Risk-based workflow routing</li>
-            <li>Multi-level approval process</li>
-            <li>Real-time data integration (T24, QCB, ETL)</li>
-            <li>Complete audit trail</li>
+            <li>Risk-based workflow routing (40+ trigger categories)</li>
+            <li>Multi-level Maker/Checker approval process</li>
+            <li>Real-time data integration (T24, QCB API, CRP, ETL, DMS)</li>
+            <li>Customer Identity Re-Verification (Selfie/Video/Branch)</li>
+            <li>KYC Data Correction capability</li>
+            <li>Complete audit trail for regulatory compliance</li>
           </ul>
         `
       },
@@ -607,19 +609,22 @@ const EnterpriseFeatures = {
           <ul>
             <li>Initial case review and customer contact</li>
             <li>Document collection and verification</li>
-            <li>Business recommendation</li>
+            <li>KYC data correction (with verification)</li>
+            <li>Business recommendation (Maintain/Exit)</li>
           </ul>
           <h3>CDD Operations</h3>
           <ul>
             <li>Detailed due diligence review</li>
             <li>Risk assessment documentation</li>
-            <li>Final recommendation for standard cases</li>
+            <li>Maker/Checker approval workflow</li>
+            <li>T24 data synchronization</li>
           </ul>
           <h3>Compliance</h3>
           <ul>
-            <li>Review escalated cases</li>
-            <li>PEP and high-risk decisions</li>
-            <li>Regulatory reporting</li>
+            <li>Review escalated/high-risk cases</li>
+            <li>PEP and sanctions decisions</li>
+            <li>Account restriction approvals</li>
+            <li>Regulatory reporting (QCB)</li>
           </ul>
         `
       },
@@ -629,85 +634,152 @@ const EnterpriseFeatures = {
         titleAr: 'سير عمل الحالة',
         content: `
           <div class="workflow-diagram">
-            <div class="workflow-node">📥 Case Created</div>
+            <div class="workflow-node">📥 Case Created (Auto from CRP/T24)</div>
             <div class="workflow-arrow">↓</div>
-            <div class="workflow-node">👤 Business Maker</div>
+            <div class="workflow-node">👤 Business Maker (Review + Decision)</div>
             <div class="workflow-arrow">↓</div>
             <div class="workflow-node">✅ Business Checker</div>
             <div class="workflow-arrow">↓</div>
-            <div class="workflow-node">📋 CDD Maker</div>
+            <div class="workflow-node">📋 CDD Maker (Full Review)</div>
             <div class="workflow-arrow">↓</div>
-            <div class="workflow-node">✅ CDD Checker</div>
+            <div class="workflow-node">✅ CDD Checker (Approve/Reject)</div>
             <div class="workflow-arrow">↓</div>
-            <div class="workflow-node conditional">⚠️ Compliance (if required)</div>
+            <div class="workflow-node conditional">⚠️ Compliance (if High Risk/PEP)</div>
             <div class="workflow-arrow">↓</div>
-            <div class="workflow-node complete">✔️ Case Complete</div>
+            <div class="workflow-node">🔄 T24 Update (EDD Status + Next Review)</div>
+            <div class="workflow-arrow">↓</div>
+            <div class="workflow-node complete">✔️ Case Complete + Archived</div>
           </div>
         `
       },
       {
         id: 4,
-        title: 'Risk Classification',
-        titleAr: 'تصنيف المخاطر',
+        title: 'EDD Resolution Options',
+        titleAr: 'خيارات حل حالة EDD',
         content: `
-          <h3>Risk Scoring Components (ETL/SnapView)</h3>
+          <h3>Available Resolution Paths</h3>
           <table class="presentation-table">
-            <tr><th>Field</th><th>Description</th><th>Weight</th></tr>
-            <tr><td>PROD_RISK_SCORE</td><td>Product Risk</td><td>25%</td></tr>
-            <tr><td>ACT_RISK_SCORE</td><td>Activity Risk</td><td>35%</td></tr>
-            <tr><td>OCCP_RISK_SCORE</td><td>Occupation Risk</td><td>20%</td></tr>
-            <tr><td>COUNTRY_RISK_SCORE</td><td>Country Risk</td><td>20%</td></tr>
+            <tr><th>Option</th><th>Description</th><th>When to Use</th></tr>
+            <tr><td>Request Documents</td><td>Request additional documentation</td><td>Source of funds, income proof needed</td></tr>
+            <tr><td>Accept Current KYC</td><td>No additional docs required</td><td>Risk due to nationality/occupation only</td></tr>
+            <tr><td>Correct Customer Data</td><td>Update incorrect KYC info</td><td>Data entry errors, outdated info</td></tr>
+            <tr><td>Identity Verification</td><td>Selfie/Video/Branch verification</td><td>Identity confirmation needed</td></tr>
+            <tr><td>Escalate to Compliance</td><td>Transfer for high-risk review</td><td>PEP, sanctions, complex cases</td></tr>
           </table>
-          <h3>AUTO HIGH Triggers</h3>
-          <ul>
-            <li>PEP Status</li>
-            <li>Private Banking</li>
-            <li>Online Account Opening</li>
-            <li>High-Risk Nationality</li>
-          </ul>
+          <h3>KYC Data Correction</h3>
+          <p>Business can update: Occupation, Salary, Employer, Source of Income</p>
+          <p>Requires: Verification source + Maker/Checker approval + T24 sync</p>
         `
       },
       {
         id: 5,
-        title: 'Data Sources',
-        titleAr: 'مصادر البيانات',
+        title: 'Customer Identity Verification',
+        titleAr: 'التحقق من هوية العميل',
         content: `
-          <h3>Integration Architecture</h3>
+          <h3>Verification Methods</h3>
           <table class="presentation-table">
-            <tr><th>System</th><th>Data Type</th><th>Integration</th></tr>
-            <tr><td>T24</td><td>Customer, Accounts, Transactions</td><td>Real-time API</td></tr>
-            <tr><td>QCB KYC</td><td>National Identity, Address</td><td>API (with consent)</td></tr>
-            <tr><td>ETL/SnapView</td><td>Risk Scores, Financial Profile</td><td>Daily Batch</td></tr>
-            <tr><td>TM System</td><td>Transaction Alerts</td><td>Real-time Feed</td></tr>
-            <tr><td>DMS</td><td>Documents, Images</td><td>On-demand API</td></tr>
+            <tr><th>Method</th><th>Channel</th><th>Features</th></tr>
+            <tr><td>📷 Live Selfie</td><td>Mobile/QIB Lite/Microsite</td><td>Liveness detection, Anti-spoofing</td></tr>
+            <tr><td>🎥 Video KYC</td><td>Video Call</td><td>Employee verification, Recorded</td></tr>
+            <tr><td>🏦 Branch Visit</td><td>Physical Branch</td><td>In-person photo capture</td></tr>
           </table>
+          <h3>Liveness Detection</h3>
+          <ul>
+            <li>Blink detection</li>
+            <li>Head movement</li>
+            <li>Smile detection</li>
+            <li>Deepfake/Anti-spoofing protection</li>
+          </ul>
+          <h3>SLA Tracking</h3>
+          <p>Day 7: Reminder → Day 14: Final Notice → Day 21: Account Restriction</p>
         `
       },
       {
         id: 6,
+        title: 'Enterprise Integration',
+        titleAr: 'التكامل المؤسسي',
+        content: `
+          <h3>System Integrations via ESB</h3>
+          <table class="presentation-table">
+            <tr><th>System</th><th>Data Type</th><th>Integration</th></tr>
+            <tr><td>T24</td><td>Customer, Accounts, KYC</td><td>Real-time SOAP/REST</td></tr>
+            <tr><td>QCB API</td><td>Identity, Employment</td><td>REST (with consent)</td></tr>
+            <tr><td>CRP Engine</td><td>Risk Scores</td><td>Real-time trigger</td></tr>
+            <tr><td>ETL/SnapView</td><td>Financial Profile</td><td>Daily Batch</td></tr>
+            <tr><td>DMS (FileNet)</td><td>Documents, Photos</td><td>On-demand API</td></tr>
+            <tr><td>Notification GW</td><td>SMS/Email/Push</td><td>Event-driven</td></tr>
+            <tr><td>HR/LDAP</td><td>Employee Identity</td><td>SSO Integration</td></tr>
+          </table>
+        `
+      },
+      {
+        id: 7,
+        title: 'Data Governance',
+        titleAr: 'حوكمة البيانات',
+        content: `
+          <h3>Data Classification</h3>
+          <table class="presentation-table">
+            <tr><th>Level</th><th>Examples</th><th>Protection</th></tr>
+            <tr><td>Highly Restricted</td><td>Risk scores, PEP status</td><td>Encrypted + Role-based</td></tr>
+            <tr><td>Restricted</td><td>QID, Financial data</td><td>Encrypted</td></tr>
+            <tr><td>Confidential</td><td>Customer name, RIM</td><td>Need-to-know</td></tr>
+          </table>
+          <h3>Retention Policy</h3>
+          <ul>
+            <li>EDD Cases: 7 years after closure</li>
+            <li>KYC Documents: 10 years</li>
+            <li>Audit Logs: 10 years</li>
+          </ul>
+          <h3>Access Control</h3>
+          <p>Role-based access (RBAC) with segment restrictions for Business users</p>
+        `
+      },
+      {
+        id: 8,
+        title: 'EDD Trigger Categories',
+        titleAr: 'فئات تنبيه EDD',
+        content: `
+          <h3>Why EDD Cases are Triggered</h3>
+          <table class="presentation-table">
+            <tr><th>Category</th><th>Examples</th></tr>
+            <tr><td>Nationality Risk</td><td>High-risk country, Sanctioned, Tax haven</td></tr>
+            <tr><td>Occupation Risk</td><td>PEP, Cash business, Money service</td></tr>
+            <tr><td>Transaction Risk</td><td>Large cash, Unusual patterns, Rapid movement</td></tr>
+            <tr><td>AML Alert</td><td>Sanctions hit, Negative news, Watchlist</td></tr>
+            <tr><td>KYC Gap</td><td>Missing/Expired documents</td></tr>
+            <tr><td>Account Risk</td><td>Dormant reactivation, Multiple accounts</td></tr>
+          </table>
+          <p><strong>Not every EDD case requires additional documents!</strong></p>
+          <p>Business can close with justification if risk is only due to nationality/occupation.</p>
+        `
+      },
+      {
+        id: 9,
         title: 'Officer Confirmation',
         titleAr: 'تأكيد الموظف',
         content: `
           <h3>Digital Confirmation Process</h3>
           <p>Every approval requires officer confirmation with:</p>
           <ul>
-            <li>Employee Name & ID</li>
-            <li>Department</li>
+            <li>Employee Name & ID (Arabic + English)</li>
+            <li>Department & Job Title</li>
+            <li>Profile Photo</li>
             <li>4-Digit PIN</li>
             <li>Checklist Completion</li>
           </ul>
           <h3>Checklist Items</h3>
           <ul>
-            <li>✓ Identity Verified</li>
-            <li>✓ Salary Verified</li>
+            <li>✓ Customer Identity Verified</li>
+            <li>✓ Salary/Income Verified</li>
             <li>✓ Expected Activity Verified</li>
-            <li>✓ Joint Exposure Verified</li>
-            <li>✓ Documents Complete</li>
+            <li>✓ Risk Classification Reviewed</li>
+            <li>✓ All Required Documents Complete</li>
+            <li>✓ No Pending AML Alerts</li>
           </ul>
         `
       },
       {
-        id: 7,
+        id: 10,
         title: 'Contact & Support',
         titleAr: 'الاتصال والدعم',
         content: `
@@ -718,10 +790,15 @@ const EnterpriseFeatures = {
           <h3>Process Questions</h3>
           <p><strong>CDD Operations:</strong> ext. 4100</p>
           <p><strong>Compliance:</strong> ext. 4200</p>
+          <p><strong>Operations Head:</strong> Amit Malhotra</p>
           
           <h3>Documentation</h3>
           <p>User guides available in Help menu</p>
-          <p>BRD available in SharePoint</p>
+          <p>Full BRD (2,700+ lines) available in SharePoint</p>
+          <p>Covers: Workflow, Integration, Governance, Identity Verification</p>
+          
+          <h3 style="color: #00D4FF;">Developed by Operations Division</h3>
+          <p>Sayed ElMahdy - System Design & BRD</p>
         `
       }
     ]
