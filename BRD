@@ -3161,7 +3161,461 @@ After each validation run, the system generates:
 
 ---
 
-## 40. Final Conclusion
+## 40. KYC Compliance Monitoring Dashboard
+
+### 40.1 Overview
+
+The system shall provide an **Enterprise KYC Compliance Monitoring Dashboard** that enables management and operations teams to monitor the KYC status of customers across the bank.
+
+The dashboard shall provide real-time visibility into the KYC compliance status of customers segmented by business sector.
+
+This module ensures proactive monitoring of regulatory compliance and supports early detection of KYC-related risks.
+
+---
+
+### 40.2 Customer Segmentation
+
+The dashboard shall display KYC compliance statistics based on the bank's **three primary business sectors**:
+
+| Sector | Description |
+|--------|-------------|
+| **Personal Banking** | Retail customers, individual accounts |
+| **Wholesale Banking** | Corporate clients, business accounts |
+| **WPS / Corporate Workers** | Wage Protection System customers |
+
+For each sector, the dashboard shall display:
+
+| Metric | Description |
+|--------|-------------|
+| Total Active Customers | Count of customers with active status |
+| KYC Valid | Customers with current valid KYC |
+| KYC Expiring Soon | Customers approaching KYC expiry (within 30/60/90 days) |
+| KYC Expired | Customers with expired KYC |
+| KYC Under Review | Customers currently in review process |
+
+---
+
+### 40.3 KYC Status Indicators
+
+Each sector shall include visual indicators showing compliance status:
+
+| Status | Color Code | Description |
+|--------|------------|-------------|
+| KYC Valid | 🟢 Green | KYC current and compliant |
+| KYC Expiring Soon | 🟡 Yellow | KYC expires within threshold period |
+| KYC Expired | 🔴 Red | KYC past expiration date |
+| KYC Under Review | 🟠 Orange | KYC currently being processed |
+
+Color-coded indicators shall be displayed prominently for easy monitoring by management.
+
+---
+
+### 40.4 Expired KYC Alert Mechanism
+
+The system shall automatically detect any **active account with an expired KYC next review date** retrieved from **T24 Core Banking System**.
+
+**Alert Generation Rules:**
+
+```json
+{
+  "alert_condition": {
+    "account_status": "ACTIVE",
+    "kyc_next_review_date": "< CURRENT_DATE"
+  },
+  "alert_actions": [
+    "Generate system alert",
+    "Flag customer profile",
+    "Display in Expired KYC Alert Dashboard",
+    "Trigger escalation notification"
+  ]
+}
+```
+
+If an active account is identified with an expired **Next KYC Date**, the system shall:
+
+1. Generate a **system alert**
+2. Flag the customer profile with compliance breach indicator
+3. Display the account in the **Expired KYC Alert Dashboard**
+4. Trigger escalation notifications to the responsible team
+
+---
+
+### 40.5 T24 Integration for KYC Data
+
+The system shall retrieve the following fields from **T24 Core Banking System**:
+
+| Field | Source Table | Description |
+|-------|--------------|-------------|
+| Customer ID | CUSTOMER | Unique customer identifier |
+| RIM | CUSTOMER | Relationship Information Manager |
+| Customer Segment | CUSTOMER.SEGMENT | Personal/Wholesale/WPS |
+| Account Status | ACCOUNT | Active/Dormant/Closed |
+| KYC Next Review Date | CUSTOMER | Next KYC renewal date |
+| Customer Risk Rating | CUSTOMER.RISK | High/Medium/Low risk |
+| Branch Code | CUSTOMER | Primary branch |
+| RM Code | CUSTOMER | Relationship Manager |
+
+The system shall use these fields to evaluate compliance status and generate alerts.
+
+---
+
+### 40.6 KYC Alert Conditions
+
+An alert shall be generated under the following conditions:
+
+| Alert Type | Condition | Severity |
+|------------|-----------|----------|
+| **KYC Compliance Breach** | Account Status = Active AND KYC Next Review Date < Current Date | Critical |
+| **KYC Expiring (30 days)** | Account Status = Active AND KYC Next Review Date <= Current Date + 30 | High |
+| **KYC Expiring (60 days)** | Account Status = Active AND KYC Next Review Date <= Current Date + 60 | Medium |
+| **KYC Expiring (90 days)** | Account Status = Active AND KYC Next Review Date <= Current Date + 90 | Low |
+
+**Critical Breach Cases** shall be escalated immediately to Compliance.
+
+---
+
+### 40.7 KYC Alert Dashboard
+
+The system shall provide a dedicated alert dashboard displaying:
+
+| Column | Description |
+|--------|-------------|
+| Customer Name | Full name from T24 |
+| RIM | Relationship Information Manager |
+| Segment | Personal/Wholesale/WPS |
+| Branch | Customer primary branch |
+| Account Status | Current account status |
+| KYC Expiry Date | KYC next review date |
+| Days Overdue | Days past expiration |
+| Risk Rating | Customer risk level |
+| Responsible Unit | Team responsible for follow-up |
+| Escalation Status | Current escalation level |
+
+**Dashboard Filters:**
+
+| Filter | Options |
+|--------|---------|
+| Sector | Personal Banking / Wholesale Banking / WPS |
+| Branch | All branches list |
+| Risk Level | High / Medium / Low |
+| Days Overdue | 1-30 / 31-60 / 61-90 / >90 |
+| Escalation Status | Not Escalated / L1 / L2 / Management |
+
+---
+
+### 40.8 Escalation Mechanism
+
+The system shall support escalation workflows with configurable timelines:
+
+| Escalation Level | Timeline | Recipient | Action |
+|------------------|----------|-----------|--------|
+| L1 - Operations | Day 0 | Branch RM / Operations | Initial notification |
+| L2 - Compliance | Day +7 | Compliance Team | Compliance review |
+| L3 - Management | Day +14 | Area Manager | Management escalation |
+| L4 - Executive | Day +30 | CPBO / CFO | Executive escalation |
+
+**Escalation Rules:**
+
+```json
+{
+  "escalation_rules": {
+    "high_risk_customer": {
+      "L1_notify_day": 0,
+      "L2_escalate_day": 3,
+      "L3_escalate_day": 7,
+      "L4_escalate_day": 14
+    },
+    "medium_risk_customer": {
+      "L1_notify_day": 0,
+      "L2_escalate_day": 7,
+      "L3_escalate_day": 14,
+      "L4_escalate_day": 30
+    },
+    "low_risk_customer": {
+      "L1_notify_day": 0,
+      "L2_escalate_day": 14,
+      "L3_escalate_day": 30,
+      "L4_escalate_day": 45
+    }
+  }
+}
+```
+
+Escalation timelines shall be configurable by system administrators.
+
+---
+
+### 40.9 Demo System Requirement
+
+The demo environment shall include a working prototype of the **KYC Monitoring Dashboard**.
+
+**Demo Requirements:**
+
+| Component | Requirement |
+|-----------|-------------|
+| Customer Data | Simulated customer records (100+ samples) |
+| KYC Dates | Variety of expiry dates (past/current/future) |
+| Alert Generation | Working alert mechanism |
+| Dashboard Visualization | Fully functional UI |
+| Filtering | All filters operational |
+| Escalation | Simulated escalation workflow |
+
+The demo must demonstrate the full compliance monitoring logic in an interactive manner.
+
+---
+
+### 40.10 BRD and Demo Consistency Review
+
+A full system review shall be conducted to ensure alignment between documented requirements and implemented functionality.
+
+**Review Checklist:**
+
+| Review Item | Scope |
+|-------------|-------|
+| Feature Coverage | All BRD features implemented in demo |
+| Data Accuracy | T24 field mappings correct |
+| Alert Logic | Alert conditions match BRD specifications |
+| Escalation Rules | Escalation timelines as documented |
+| UI Compliance | Dashboard matches design requirements |
+| Integration Points | All integrations functional |
+
+**Gap Analysis:**
+
+1. Identification of features implemented in the demo but not documented in the BRD
+2. Identification of requirements documented in the BRD but not implemented in the demo
+3. Documentation of required enhancements
+
+---
+
+### 40.11 System Enhancement Requirement
+
+Based on the review findings, the system shall undergo a **comprehensive enhancement phase** to:
+
+| Enhancement Area | Objective |
+|------------------|-----------|
+| Functional Gaps | Close gaps between BRD and implementation |
+| Implementation Alignment | Match implementation to documented requirements |
+| Compliance Capabilities | Enhance regulatory monitoring features |
+| Scalability | Improve system scalability for enterprise use |
+| Governance | Strengthen data governance controls |
+
+---
+
+### 40.12 Enterprise Value Enhancement
+
+The objective of this module is to upgrade the system into a **fully integrated enterprise compliance platform** that supports:
+
+| Capability | Description |
+|------------|-------------|
+| Regulatory Compliance Monitoring | Real-time compliance status tracking |
+| Operational Governance | KYC workflow management |
+| Risk Management Visibility | Risk-based customer monitoring |
+| Automated Alerting | Proactive compliance alerts |
+| Escalation Management | Multi-level escalation workflow |
+
+This enhancement significantly increases the **enterprise value and strategic importance** of the system, aligning with solutions like:
+- **NICE Actimize** - AML/Compliance Platform
+- **Oracle FCCM** - Financial Crime & Compliance
+- **SAS AML** - Anti-Money Laundering Solution
+
+---
+
+## 41. KYC Early Warning Engine
+
+### 41.1 Overview
+
+The system shall include an advanced **KYC Early Warning Engine** that predicts compliance risks before they occur.
+
+This engine analyzes customer behavior patterns, transaction history, and compliance data to generate **predictive risk scores** for KYC compliance.
+
+---
+
+### 41.2 Predictive Analytics Capabilities
+
+The Early Warning Engine shall predict:
+
+| Prediction Type | Description |
+|-----------------|-------------|
+| **KYC Non-Compliance Prediction** | Accounts likely to become non-compliant |
+| **Customer Risk Score Change** | Predicted changes in customer risk level |
+| **Document Delay Risk** | Customers likely to delay KYC documentation |
+| **Escalation Probability** | Likelihood of requiring escalation |
+
+---
+
+### 41.3 Customer Behavior Analysis
+
+The system shall analyze the following behavioral indicators:
+
+| Indicator | Weight | Description |
+|-----------|--------|-------------|
+| Previous KYC Compliance History | High | Track record of timely KYC updates |
+| Document Submission Delays | High | Historical delays in submitting documents |
+| Transaction Pattern Changes | Medium | Unusual transaction behavior |
+| Contact Response Rate | Medium | Customer responsiveness to bank requests |
+| Account Activity Level | Low | Active vs dormant account behavior |
+| Risk Rating Changes | High | Historical risk rating movements |
+
+---
+
+### 41.4 KYC Compliance Risk Score
+
+The system shall generate a **KYC Compliance Risk Score** for each customer:
+
+| Score Range | Risk Level | Action Required |
+|-------------|------------|-----------------|
+| 0-20 | Very Low | Standard monitoring |
+| 21-40 | Low | Periodic review |
+| 41-60 | Medium | Enhanced monitoring |
+| 61-80 | High | Proactive outreach |
+| 81-100 | Very High | Immediate action required |
+
+**Score Calculation Formula:**
+
+```
+KYC_Risk_Score = 
+  (Previous_Compliance_Weight × Previous_Compliance_Score) +
+  (Document_Delay_Weight × Document_Delay_Score) +
+  (Transaction_Pattern_Weight × Transaction_Pattern_Score) +
+  (Contact_Response_Weight × Contact_Response_Score) +
+  (Risk_Rating_Weight × Risk_Rating_Score)
+```
+
+---
+
+### 41.5 Early Warning Triggers
+
+The system shall generate early warnings when:
+
+| Trigger | Condition | Action |
+|---------|-----------|--------|
+| **High Risk Score** | KYC_Risk_Score > 60 | Alert RM and Operations |
+| **Score Increase** | Score increased by >20 in 30 days | Review customer |
+| **Approaching Expiry + High Risk** | KYC expires in 90 days AND Risk_Score > 50 | Proactive outreach |
+| **Pattern Match** | Customer matches non-compliance pattern | Flag for review |
+| **Multiple Red Flags** | 3+ behavioral indicators triggered | Escalate to Compliance |
+
+---
+
+### 41.6 Predictive Dashboard
+
+The Early Warning Dashboard shall display:
+
+| Section | Content |
+|---------|---------|
+| **At-Risk Customers** | List of customers with high compliance risk |
+| **Risk Score Trends** | Historical score movements |
+| **Predicted Non-Compliance** | Customers predicted to expire without renewal |
+| **Behavioral Alerts** | Customers with unusual behavior patterns |
+| **Action Queue** | Prioritized list for proactive outreach |
+
+**Dashboard Filters:**
+
+| Filter | Options |
+|--------|---------|
+| Risk Score Range | All / High / Very High |
+| Prediction Confidence | High / Medium / Low |
+| Days to Expiry | 30 / 60 / 90 / 180 |
+| Segment | Personal / Wholesale / WPS |
+| Previous Non-Compliance | Yes / No |
+
+---
+
+### 41.7 Machine Learning Integration
+
+The system shall support integration with machine learning models for:
+
+| ML Capability | Purpose |
+|---------------|---------|
+| **Pattern Recognition** | Identify non-compliance behavior patterns |
+| **Risk Prediction** | Predict future compliance status |
+| **Anomaly Detection** | Detect unusual customer behavior |
+| **Score Optimization** | Continuously improve risk scoring accuracy |
+
+**Model Training Data:**
+
+| Data Source | Fields |
+|-------------|--------|
+| Historical KYC Records | Compliance dates, delays, outcomes |
+| Customer Transactions | Transaction patterns, volumes |
+| Communication Logs | Response rates, contact attempts |
+| Risk Rating History | Rating changes over time |
+| Document Submissions | Document types, submission delays |
+
+---
+
+### 41.8 Proactive Outreach Workflow
+
+Based on Early Warning alerts, the system shall initiate proactive outreach:
+
+| Risk Level | Outreach Timeline | Channel |
+|------------|-------------------|---------|
+| Very High | 120 days before expiry | RM Call + Email + SMS |
+| High | 90 days before expiry | RM Email + SMS |
+| Medium | 60 days before expiry | Automated Email |
+| Low | 30 days before expiry | Automated SMS |
+
+**Outreach Template:**
+
+```json
+{
+  "outreach_message": {
+    "subject": "Important: KYC Update Required",
+    "body": "Dear {customer_name}, your KYC documents require updating by {kyc_expiry_date}. Please contact your relationship manager or visit any QIB branch with the required documents.",
+    "channels": ["email", "sms", "push_notification"]
+  }
+}
+```
+
+---
+
+### 41.9 Compliance Analytics Reports
+
+The system shall generate analytical reports for management:
+
+| Report | Frequency | Contents |
+|--------|-----------|----------|
+| **Early Warning Summary** | Daily | At-risk customers, predicted non-compliance |
+| **Risk Score Distribution** | Weekly | Score breakdown by segment |
+| **Prediction Accuracy** | Monthly | Model accuracy metrics |
+| **Compliance Trend Analysis** | Monthly | Compliance rate trends |
+| **Executive Dashboard** | Real-time | Key metrics and KPIs |
+
+---
+
+### 41.10 Integration with Monitoring Dashboard
+
+The Early Warning Engine shall integrate with the KYC Compliance Monitoring Dashboard:
+
+| Integration Point | Data Flow |
+|-------------------|-----------|
+| Risk Scores | Early Warning → Monitoring Dashboard |
+| Predicted Status | Early Warning → Alert Priority |
+| Behavioral Flags | Early Warning → Customer Profile |
+| Escalation Priority | Early Warning → Escalation Queue |
+
+---
+
+### 41.11 Enterprise Value Proposition
+
+The KYC Early Warning Engine transforms the system from a **reactive compliance tool** into a **predictive compliance platform**:
+
+| Traditional Approach | Early Warning Approach |
+|----------------------|------------------------|
+| React to expired KYC | Predict and prevent expiry |
+| Manual risk assessment | Automated risk scoring |
+| Equal treatment of all customers | Risk-based prioritization |
+| Compliance breaches occur | Compliance breaches prevented |
+| Post-event escalation | Pre-event intervention |
+
+This capability positions the system alongside advanced regulatory technology (RegTech) platforms used by:
+- **HSBC** - Global Standards Analytics
+- **Standard Chartered** - Predictive Compliance
+- **JPMorgan** - Client Risk Intelligence
+
+---
+
+## 42. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -3234,6 +3688,27 @@ This Business Requirements Document (BRD) defines the complete requirements for 
   - Organization Chart Generation
   - Integration with AD/Outlook/T24/HR Systems
   - Full Audit Log for Structure Changes
+
+**KYC Compliance Monitoring Requirements:**
+- KYC Compliance Monitoring Dashboard (Section 40)
+  - Enterprise KYC Monitoring Dashboard
+  - Customer Segmentation (Personal/Wholesale/WPS)
+  - KYC Status Indicators (Valid/Expiring/Expired/Under Review)
+  - Expired KYC Alert Mechanism
+  - T24 Integration for KYC Data
+  - Multi-Level Escalation Workflow
+  - BRD and Demo Consistency Review
+  - Enterprise Value Enhancement
+
+**KYC Predictive Analytics Requirements:**
+- KYC Early Warning Engine (Section 41)
+  - Predictive Non-Compliance Detection
+  - Customer Behavior Analysis
+  - KYC Compliance Risk Scoring
+  - Machine Learning Integration
+  - Proactive Outreach Workflow
+  - Compliance Analytics Reporting
+  - RegTech Platform Capabilities
 
 **System Integrations:**
 - FLOW Workflow Engine
