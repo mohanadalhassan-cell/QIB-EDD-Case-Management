@@ -2254,7 +2254,369 @@ All identity verification events must be logged for regulatory compliance.
 
 ---
 
-## 37. Final Conclusion
+## 37. EDD Completion Options & KYC Data Correction
+
+### 37.1 Overview
+
+When an EDD case is opened, the Business team must have multiple options to resolve the case based on the risk classification reason.
+
+The system must NOT assume that every EDD case requires additional documentation from the customer.
+
+**Available Resolution Options:**
+
+| Option | Description | Use Case |
+|--------|-------------|----------|
+| Request Additional Documents | Request new documents from customer | Source of funds, income proof |
+| Accept Current KYC | No additional documents needed | Risk due to nationality/occupation |
+| Correct Customer Data | Update incorrect KYC information | Data entry errors, outdated info |
+| Request Identity Verification | Selfie/Video/Branch verification | Identity confirmation needed |
+| Escalate to Compliance | Transfer case for review | Complex or high-risk scenarios |
+
+### 37.2 Request Additional Documents
+
+In some cases, the bank may require additional documentation from the customer.
+
+**Common Document Requests:**
+
+| Document Type | Purpose | Priority |
+|---------------|---------|----------|
+| Source of Funds Proof | Verify origin of large deposits | High |
+| Salary Certificate | Income verification | Medium |
+| Employment Letter | Verify employment status | Medium |
+| Rental Contract | Address verification | Low |
+| Trade License | Business verification | High |
+| Bank Statements (Other Banks) | Financial pattern verification | Medium |
+| Updated ID Document | Identity document renewal | High |
+| Selfie Verification | Live identity confirmation | Medium |
+
+**Document Request Flow:**
+
+```
+Business Maker → Select Required Documents → Send to Customer
+                                                    ↓
+                                           Customer Uploads Documents
+                                                    ↓
+                                           CDD Team Reviews
+                                                    ↓
+                                           Case Continues Workflow
+```
+
+### 37.3 Accept Current KYC Requirements
+
+In many cases, no additional documentation is required from the customer.
+
+**Scenarios Where Current KYC is Sufficient:**
+
+| Scenario | Reason | Action |
+|----------|--------|--------|
+| Risk due to Nationality | Country risk classification | Document justification |
+| Risk due to Occupation | High-risk occupation category | Document justification |
+| All KYC Documents Complete | Customer already provided all documents | Document justification |
+| System Configuration Trigger | Automatic risk flagging | Review and document |
+| Incorrect Customer Selection | Data entry error during onboarding | Correct data |
+| Low Activity Variance | Minor transaction pattern deviation | Document justification |
+
+**"No Additional Documents Required" Process:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│           ACCEPT CURRENT KYC - DECISION FLOW                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Business Maker Reviews Case                                    │
+│            ↓                                                     │
+│   Determines Additional Documents NOT Required                   │
+│            ↓                                                     │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  Justification Required:                                  │  │
+│   │                                                           │  │
+│   │  ☐ Risk is due to customer nationality only              │  │
+│   │  ☐ Risk is due to customer occupation only               │  │
+│   │  ☐ All required KYC documents already on file            │  │
+│   │  ☐ Customer data has been corrected                      │  │
+│   │  ☐ Risk classification is system-generated only          │  │
+│   │  ☐ Other: [Free text justification]                      │  │
+│   │                                                           │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│            ↓                                                     │
+│   Submit for CDD Review                                         │
+│            ↓                                                     │
+│   CDD Checker Approves Decision                                 │
+│            ↓                                                     │
+│   Case Continues to Closure                                     │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 37.4 Customer Data Correction (KYC Data Update)
+
+In some cases, the Business team may identify that customer data in the system is incorrect or outdated.
+
+**Editable Customer Fields:**
+
+| Field | Can Business Edit? | Requires Verification? |
+|-------|-------------------|----------------------|
+| Occupation | Yes | Yes |
+| Employer Name | Yes | Yes |
+| Monthly Salary | Yes | Yes |
+| Source of Income | Yes | Yes |
+| Expected Activity | Yes | No |
+| Employment Status | Yes | Yes |
+| Industry Sector | Yes | Yes |
+| Residency Address | Yes | Yes |
+| Contact Information | Yes | No |
+
+**Non-Editable Fields (Require Compliance Approval):**
+
+| Field | Reason |
+|-------|--------|
+| Customer Name | Legal identity |
+| QID Number | Government-issued |
+| Date of Birth | Legal identity |
+| Nationality | Official record |
+| PEP Status | Compliance decision |
+| Risk Classification | System-calculated |
+
+### 37.5 Data Verification Sources
+
+Before updating customer data, the system must require verification from reliable sources.
+
+**Accepted Verification Sources:**
+
+| Source | Data Type Verified | Reliability |
+|--------|-------------------|-------------|
+| KYC Documents on File | Identity, Address | High |
+| QCB API Data | Identity, Employment | High |
+| Salary Transfer Records | Income, Employer | High |
+| Customer-Uploaded Documents | Various | Medium |
+| Third-Party Databases | Employment | Medium |
+| Customer Statement (Written) | Various | Low |
+| Phone Verification | Contact Info | Low |
+
+**Verification Process:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              DATA VERIFICATION WORKFLOW                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Step 1: Identify Incorrect Data                               │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  Current Value: Software Engineer                        │  │
+│   │  Proposed Value: Bank Manager                            │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                          ↓                                      │
+│   Step 2: Select Verification Source                            │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  ☐ Salary Certificate (Uploaded)                         │  │
+│   │  ☐ QCB Employment Data                                   │  │
+│   │  ☐ Salary Transfer Record                                │  │
+│   │  ☐ Employment Letter (Uploaded)                          │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                          ↓                                      │
+│   Step 3: Attach Evidence Document                              │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  [ Select Document from DMS ]                            │  │
+│   │  [ Upload New Document ]                                 │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                          ↓                                      │
+│   Step 4: Submit for Approval                                   │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 37.6 Maker/Checker Approval for Data Changes
+
+All customer data modifications must follow a **Maker/Checker approval workflow**.
+
+**Data Change Approval Flow:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              DATA CHANGE APPROVAL WORKFLOW                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   ┌─────────────────┐                                           │
+│   │  Business Maker │                                           │
+│   │                 │                                           │
+│   │ • Identify error│                                           │
+│   │ • Propose change│                                           │
+│   │ • Attach source │                                           │
+│   │ • Submit        │                                           │
+│   └────────┬────────┘                                           │
+│            ↓                                                     │
+│   ┌─────────────────┐                                           │
+│   │   CDD Reviewer  │                                           │
+│   │                 │                                           │
+│   │ • Verify source │                                           │
+│   │ • Validate data │                                           │
+│   │ • Review change │                                           │
+│   │ • Forward       │                                           │
+│   └────────┬────────┘                                           │
+│            ↓                                                     │
+│   ┌─────────────────┐                                           │
+│   │   CDD Checker   │                                           │
+│   │                 │                                           │
+│   │ • Final review  │                                           │
+│   │ • Approve/Reject│                                           │
+│   │ • Trigger T24   │                                           │
+│   └────────┬────────┘                                           │
+│            ↓                                                     │
+│   ┌─────────────────┐                                           │
+│   │   T24 Update    │                                           │
+│   │                 │                                           │
+│   │ • Sync data     │                                           │
+│   │ • Log change    │                                           │
+│   └─────────────────┘                                           │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 37.7 T24 Core Banking Synchronization
+
+After data change approval, the updated information must be synchronized with **T24 Core Banking**.
+
+**T24 Update Fields:**
+
+| EDD Field | T24 Field | Update Type |
+|-----------|-----------|-------------|
+| Occupation | EMPLOYMENT | Real-time |
+| Employer Name | EMPLOYER | Real-time |
+| Monthly Salary | SALARY.AMOUNT | Real-time |
+| Source of Income | INCOME.SOURCE | Real-time |
+| Industry Sector | INDUSTRY | Real-time |
+| Employment Status | EMPLOY.STATUS | Real-time |
+| Expected Activity | EXPECTED.ACTIVITY | Real-time |
+
+**T24 Update Message:**
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    T24 UPDATE REQUEST                            │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Customer RIM: RIM010234                                       │
+│   Update Source: EDD Case EDD-2024-001242                       │
+│   Requested By: Ahmed Al-Rashid (EMP4532)                       │
+│   Approved By: Fatima Hassan (EMP3421)                          │
+│                                                                  │
+│   Field Changes:                                                │
+│   ┌────────────────┬────────────────┬────────────────┐          │
+│   │ Field          │ Old Value      │ New Value      │          │
+│   ├────────────────┼────────────────┼────────────────┤          │
+│   │ EMPLOYMENT     │ Engineer       │ Bank Manager   │          │
+│   │ EMPLOYER       │ ABC Company    │ Qatar Bank     │          │
+│   │ SALARY.AMOUNT  │ 15,000 QAR     │ 35,000 QAR     │          │
+│   └────────────────┴────────────────┴────────────────┘          │
+│                                                                  │
+│   Verification Source: Salary Certificate (DMS-DOC-456789)      │
+│   Update Timestamp: 2024-03-15 14:32:45                         │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 37.8 Decision Documentation & Audit Trail
+
+The system must record all decisions and data changes for audit purposes.
+
+**Audit Record for Data Changes:**
+
+| Field | Description |
+|-------|-------------|
+| Change ID | Unique change identifier |
+| EDD Case ID | Linked EDD case |
+| Customer RIM | Customer identification |
+| Field Changed | Which field was modified |
+| Previous Value | Value before change |
+| New Value | Value after change |
+| Change Reason | Justification for change |
+| Verification Source | Document/source used |
+| Maker ID | Employee who initiated |
+| Maker Timestamp | When change was initiated |
+| Checker ID | Employee who approved |
+| Checker Timestamp | When change was approved |
+| T24 Update Status | Success/Failed |
+| T24 Reference | T24 transaction reference |
+
+**Audit Record for "No Documents Required" Decision:**
+
+| Field | Description |
+|-------|-------------|
+| Decision ID | Unique decision identifier |
+| EDD Case ID | Linked EDD case |
+| Customer RIM | Customer identification |
+| Decision Type | NO_ADDITIONAL_DOCS |
+| Justification Category | Nationality/Occupation/Complete KYC/etc. |
+| Justification Text | Detailed explanation |
+| Maker ID | Employee who made decision |
+| Maker Timestamp | When decision was made |
+| Checker ID | Employee who approved |
+| Checker Timestamp | When decision was approved |
+
+### 37.9 Case Closure After Resolution
+
+After completing one of the resolution options, the EDD case can proceed to closure.
+
+**Closure Eligibility Matrix:**
+
+| Resolution Path | Documents Required | Approval Required | Case Status |
+|-----------------|-------------------|-------------------|-------------|
+| Additional Documents Received | All requested | CDD Checker | Ready for Closure |
+| Current KYC Accepted | Justification | CDD Checker | Ready for Closure |
+| Data Corrected | Verification Source | CDD Checker | Ready for Closure |
+| Identity Verified | Selfie/Video/Branch | CDD Checker | Ready for Closure |
+| Escalated to Compliance | N/A | Compliance Officer | Pending Compliance |
+
+**Case Closure Workflow:**
+
+```
+Resolution Completed (Any Path)
+            ↓
+    CDD Checker Review
+            ↓
+    Checker Approval
+            ↓
+    Update T24 (if applicable)
+            ↓
+    Case Status: Closed
+            ↓
+    Archive Case Documents
+            ↓
+    Set Next EDD Review Date
+```
+
+### 37.10 EDD Trigger Reasons (Comprehensive List)
+
+The system must track why each EDD case was triggered for analysis and reporting.
+
+**Complete EDD Trigger Categories:**
+
+| Category | Triggers |
+|----------|----------|
+| **Nationality Risk** | High-risk country, Sanctioned country, Tax haven |
+| **Occupation Risk** | Politically Exposed Person (PEP), Cash-intensive business, Money service business, Gaming/Gambling, Weapons dealer |
+| **Transaction Risk** | Unusual transaction patterns, Large cash deposits, Frequent international transfers, Rapid movement of funds |
+| **Account Risk** | Dormant account reactivation, Multiple account usage, Unusual account activity |
+| **Regulatory Trigger** | QCB directive, FATF requirement, Internal audit finding |
+| **AML Alert** | Sanctions screening hit, Negative news, Watchlist match |
+| **KYC Gap** | Missing documents, Expired documents, Incomplete onboarding |
+| **Customer Behavior** | Declined to provide information, Inconsistent information provided |
+| **Relationship Risk** | Connected to high-risk entities, Power of attorney arrangements |
+| **Product Risk** | High-value products, Complex product usage |
+
+**System Tracking Requirements:**
+
+| Metric | Purpose |
+|--------|---------|
+| Triggers by Category | Identify most common risk sources |
+| Resolution by Trigger | Track how different triggers are resolved |
+| No-Doc Rate by Trigger | Measure cases where no documents were needed |
+| Data Correction Rate | Track KYC data quality issues |
+| Average Resolution Time by Trigger | SLA analysis by trigger type |
+
+---
+
+## 38. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -2298,6 +2660,15 @@ This Business Requirements Document (BRD) defines the complete requirements for 
   - Anti-Fraud and Security Controls
   - SLA Management for Customer Response
   - Full Audit Trail
+
+**Case Resolution Requirements:**
+- EDD Completion Options & KYC Data Correction (Section 37)
+  - Request Additional Documents
+  - Accept Current KYC (No Additional Docs)
+  - Customer Data Correction
+  - Maker/Checker Approval Workflow
+  - T24 Synchronization
+  - Comprehensive EDD Trigger Categories
 
 **System Integrations:**
 - FLOW Workflow Engine
