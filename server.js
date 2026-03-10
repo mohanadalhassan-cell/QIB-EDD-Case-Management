@@ -7,7 +7,11 @@ const PORT = 8585;
 const baseDir = path.join(__dirname);
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(baseDir, req.url === '/' ? '/index.html' : req.url);
+  // Parse URL and remove query string
+  const parsedUrl = url.parse(req.url, true);
+  const pathname = parsedUrl.pathname;
+  
+  let filePath = path.join(baseDir, pathname === '/' ? '/index.html' : pathname);
   
   // Security: prevent directory traversal
   if (!filePath.startsWith(baseDir)) {
