@@ -26,6 +26,70 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════ */
+    /* LOADING SCREEN */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-container {
+      text-align: center;
+    }
+
+    .loading-spinner {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 40px;
+      border: 4px solid rgba(212, 175, 55, 0.2);
+      border-top: 4px solid #D4AF37;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 36px;
+      font-weight: 700;
+      color: #D4AF37;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+      animation: loadingPulse 1.5s ease-in-out infinite;
+    }
+
+    .loading-text-sub {
+      font-size: 14px;
+      color: rgba(212, 175, 55, 0.6);
+      letter-spacing: 2px;
+    }
+
+    @keyframes loadingPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
     /* VISION 2030 SPLASH SCREEN */
     /* ═══════════════════════════════════════════════════════════════ */
 
@@ -609,6 +673,17 @@
 <body>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- LOADING SCREEN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">LOADING</div>
+      <div class="loading-text-sub">EDD SYSTEM</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- VISION 2030 SPLASH SCREEN -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <div class="splash-screen" id="splashScreen">
@@ -759,16 +834,22 @@
 
   <!-- Scripts -->
   <script>
-    // Splash screen manager
+    // Loading and splash screen manager
+    const loadingScreen = document.getElementById('loadingScreen');
     const splashScreen = document.getElementById('splashScreen');
     const loginWrapper = document.getElementById('loginWrapper');
     const transitionOverlay = document.getElementById('transitionOverlay');
 
-    // Show splash screen for 2.5 seconds
+    // Hide loading screen after 1.5 seconds
+    setTimeout(() => {
+      loadingScreen.classList.add('hidden');
+    }, 1500);
+
+    // Show splash screen for 2.5 seconds total
     setTimeout(() => {
       splashScreen.classList.add('hidden');
       loginWrapper.classList.add('visible');
-    }, 2500);
+    }, 4000);
 
     // Login form handler
     const loginForm = document.getElementById('loginForm');
