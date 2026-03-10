@@ -641,6 +641,246 @@
       }
     }
 
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* STEP-BY-STEP LOGIN STYLES */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .login-progress {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      justify-content: center;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active {
+      opacity: 1;
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0,212,255,0.1);
+      border: 2px solid rgba(0,212,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #00D4FF;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active .step-number {
+      background: linear-gradient(135deg, #00D4FF, #00E676);
+      border-color: #00D4FF;
+      box-shadow: 0 0 16px rgba(0,212,255,0.4);
+      transform: scale(1.05);
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .progress-step.active .step-label {
+      color: #00D4FF;
+    }
+
+    /* Step containers */
+    .step-container {
+      transition: all 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 100%;
+    }
+
+    .step-container.active {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: translate(0, 0) scale(1);
+    }
+
+    .step-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .step-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #00D4FF, #00E676);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .step-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    /* Large inputs */
+    .large-input {
+      font-size: 18px !important;
+      padding: 16px 18px !important;
+      height: auto !important;
+      letter-spacing: 2px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .large-input::placeholder {
+      letter-spacing: 2px;
+      opacity: 0.4;
+    }
+
+    /* Role option buttons */
+    .role-option-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 20px 24px;
+      background: rgba(0,212,255,0.05);
+      border: 2px solid rgba(0,212,255,0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      min-height: 100px;
+      justify-content: center;
+    }
+
+    .role-option-btn:hover {
+      background: rgba(0,212,255,0.1);
+      border-color: rgba(0,212,255,0.4);
+      transform: translateY(-2px);
+    }
+
+    .role-option-btn.selected {
+      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,230,118,0.1));
+      border-color: #00D4FF;
+      color: #00D4FF;
+      box-shadow: 0 0 20px rgba(0,212,255,0.3);
+    }
+
+    .role-icon {
+      font-size: 32px;
+      display: block;
+    }
+
+    .role-text {
+      font-weight: 600;
+      font-size: 15px;
+      display: block;
+    }
+
+    .role-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    /* OTP Styling */
+    .otp-header {
+      margin-bottom: 28px;
+    }
+
+    .otp-input-wrapper {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .otp-input-main {
+      width: 100%;
+      font-size: 48px !important;
+      padding: 32px 20px !important;
+      height: auto !important;
+      text-align: center;
+      letter-spacing: 12px;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,230,118,0.08)) !important;
+      border: 2px solid rgba(0,212,255,0.3) !important;
+      color: #00D4FF;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .otp-input-main:focus {
+      border-color: #00D4FF !important;
+      box-shadow: 0 0 24px rgba(0,212,255,0.4), inset 0 0 12px rgba(0,212,255,0.1) !important;
+      outline: none;
+    }
+
+    .otp-input-main::placeholder {
+      color: rgba(0,212,255,0.3);
+      letter-spacing: 12px;
+    }
+
+    .otp-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      font-size: 48px;
+      letter-spacing: 12px;
+      color: rgba(0,212,255,0.1);
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    .otp-step .submit-btn {
+      font-size: 13px;
+      padding: 16px 24px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: linear-gradient(135deg, #00D4FF, #00E676) !important;
+      color: #0a1f3d;
+      border: none;
+    }
+
+    .otp-step .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,212,255,0.3) !important;
+    }
+
+    .otp-tips {
+      margin-top: 24px;
+    }
+
+    .employee-tag {
+      font-family: 'Courier New', monospace;
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
       .portal-left { padding: 40px; }
@@ -648,6 +888,8 @@
       .login-panel { max-width: 380px; padding: 40px; }
       .brand-title { font-size: 36px; }
       .panel-title { font-size: 28px; }
+      .step-header h2 { font-size: 20px; }
+      .otp-input-main { font-size: 40px !important; letter-spacing: 10px; }
     }
 
     @media (max-width: 768px) {
@@ -666,7 +908,11 @@
       .brand-title { font-size: 28px; }
       .brand-description { max-width: 100%; }
       .trust-badges { gap: 15px; }
-      .role-selector { grid-template-columns: 1fr; }
+      .login-progress { gap: 8px; }
+      .step-number { width: 38px; height: 38px; font-size: 16px; }
+      .step-label { font-size: 10px; }
+      .large-input { font-size: 16px !important; padding: 14px 16px !important; }
+      .otp-input-main { font-size: 36px !important; letter-spacing: 8px; padding: 24px 16px !important; }
     }
   </style>
 </head>
@@ -774,42 +1020,131 @@
               <span class="status-text">System Operational</span>
             </div>
             <h1 class="panel-title">Secure Portal</h1>
-            <p class="panel-subtitle">Enter your credentials to access the Command Center</p>
+            <p class="panel-subtitle">Multi-Factor Authentication</p>
+          </div>
+
+          <!-- Progress indicator -->
+          <div class="login-progress" id="loginProgress">
+            <div class="progress-step active" data-step="1">
+              <div class="step-number">1</div>
+              <div class="step-label">Identity</div>
+            </div>
+            <div class="progress-step" data-step="2">
+              <div class="step-number">2</div>
+              <div class="step-label">Verify</div>
+            </div>
+            <div class="progress-step" data-step="3">
+              <div class="step-number">3</div>
+              <div class="step-label">Role</div>
+            </div>
+            <div class="progress-step" data-step="4">
+              <div class="step-number">🔐</div>
+              <div class="step-label">OTP</div>
+            </div>
           </div>
 
           <div id="message" class="message" style="display: none;"></div>
 
-          <form class="login-form" id="loginForm">
-            <div class="form-group">
-              <label class="form-label">Employee ID</label>
-              <input type="text" class="form-input" id="employeeId" placeholder="Demo-2030" required>
+          <!-- Step 1: Employee ID -->
+          <div id="step1-container" class="step-container active">
+            <div class="step-header">
+              <h2>Step 1: Enter Employee ID</h2>
+              <p class="step-subtitle">Who are you?</p>
             </div>
+            <form id="step1-form" class="login-form">
+              <div class="form-group">
+                <label class="form-label">Employee ID</label>
+                <input type="text" class="form-input large-input" id="employeeId" placeholder="Example: Demo-2030" required autofocus>
+              </div>
+              <button type="submit" class="submit-btn">Continue to Password</button>
+            </form>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label">Password</label>
-              <input type="password" class="form-input" id="password" placeholder="••••••••" required>
+          <!-- Step 2: Password -->
+          <div id="step2-container" class="step-container" style="display: none;">
+            <div class="step-header">
+              <h2>Step 2: Enter Password</h2>
+              <p class="step-subtitle">Verify your identity</p>
             </div>
+            <form id="step2-form" class="login-form">
+              <div style="margin-bottom: 16px; padding: 12px 14px; background: rgba(0,212,255,0.1); border-radius: 8px; border: 1px solid rgba(0,212,255,0.2);">
+                <span id="employee-display" class="employee-tag" style="display: inline-block; background: rgba(0,212,255,0.2); color: #00D4FF; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">Demo-2030</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input large-input" id="password" placeholder="••••••••" required autofocus>
+              </div>
+              <button type="submit" class="submit-btn">Continue to Role Selection</button>
+            </form>
+          </div>
 
-            <div class="form-group">
-              <label class="form-label">Role</label>
-              <div class="role-selector">
-                <button type="button" class="role-btn active" data-role="business">👔 Business</button>
-                <button type="button" class="role-btn" data-role="cdd">📋 CDD</button>
-                <button type="button" class="role-btn" data-role="compliance">⚖️ Compliance</button>
+          <!-- Step 3: Role Selection -->
+          <div id="step3-container" class="step-container" style="display: none;">
+            <div class="step-header">
+              <h2>Step 3: Select Your Role</h2>
+              <p class="step-subtitle">What is your department?</p>
+            </div>
+            <div id="step3-form" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="margin-bottom: 12px; padding: 12px 14px; background: rgba(0,212,255,0.1); border-radius: 8px; border: 1px solid rgba(0,212,255,0.2);">
+                <span id="employee-display-2" class="employee-tag" style="display: inline-block; background: rgba(0,212,255,0.2); color: #00D4FF; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">Demo-2030</span>
+              </div>
+
+              <button type="button" class="role-option-btn" data-role="business">
+                <span class="role-icon">👔</span>
+                <span class="role-text">Business Banking</span>
+                <span class="role-desc">Business relationship managers</span>
+              </button>
+
+              <button type="button" class="role-option-btn" data-role="cdd">
+                <span class="role-icon">📋</span>
+                <span class="role-text">CDD Operations</span>
+                <span class="role-desc">Customer Due Diligence analysts</span>
+              </button>
+
+              <button type="button" class="role-option-btn" data-role="compliance">
+                <span class="role-icon">⚖️</span>
+                <span class="role-text">Compliance</span>
+                <span class="role-desc">Compliance and risk officers</span>
+              </button>
+
+              <input type="hidden" id="selectedRole">
+            </div>
+          </div>
+
+          <!-- Step 4: OTP (PROMINENT) -->
+          <div id="step4-container" class="step-container otp-step" style="display: none;">
+            <div class="otp-header">
+              <div style="text-align: center; margin-bottom: 24px;">
+                <div style="font-size: 48px; margin-bottom: 12px;">🔐</div>
+                <h2 style="margin: 0; font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #00D4FF, #00E676); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">Two-Factor Authentication</h2>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Enter the 6-digit code from your authenticator</p>
+              </div>
+
+              <div style="background: rgba(0,212,255,0.08); border: 2px solid rgba(0,212,255,0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
+                <div id="employee-display-3" class="employee-tag" style="display: inline-block; background: rgba(0,212,255,0.2); color: #00D4FF; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 14px;">Demo-2030</div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">OTP Code</label>
-              <input type="text" class="form-input" id="otp" placeholder="Enter 6-digit code" maxlength="6" required>
-            </div>
+            <form id="step4-form" class="login-form">
+              <div class="otp-input-wrapper">
+                <input type="text" class="otp-input-main" id="otp" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*" required autofocus>
+                <div class="otp-placeholder">000000</div>
+              </div>
 
-            <button type="submit" class="submit-btn">ENTER DIGITAL COMMAND CENTER</button>
+              <div style="text-align: center; margin: 20px 0; font-size: 12px; color: var(--text-muted);">
+                <span>Enter all 6 digits to proceed</span>
+              </div>
 
-            <div class="security-notice">
-              🔒 This portal is secured with 256-bit AES encryption and multi-factor authentication. All activities are logged and audited for compliance.
-            </div>
-          </form>
+              <button type="submit" class="submit-btn otp-submit-btn">AUTHENTICATE & ENTER SYSTEM</button>
+
+              <div class="otp-tips">
+                <div style="font-size: 11px; color: var(--text-secondary); background: rgba(100,181,246,0.08); padding: 10px 14px; border-radius: 8px; border-left: 3px solid rgba(100,181,246,0.4);">
+                  <strong>💡 Tip:</strong> Check your authenticator app (Google Authenticator, Authy, or Microsoft Authenticator)
+                </div>
+              </div>
+            </form>
+          </div>
+
         </div>
       </div>
 
@@ -851,9 +1186,17 @@
       loginWrapper.classList.add('visible');
     }, 4000);
 
-    // Login form handler
-    const loginForm = document.getElementById('loginForm');
+    // ═══════════════════════════════════════════════════════════════
+    // STEP-BY-STEP LOGIN PROGRESSION
+    // ═══════════════════════════════════════════════════════════════
+
     const messageDiv = document.getElementById('message');
+    let currentStep = 1;
+    let storeData = {
+      employeeId: '',
+      password: '',
+      role: ''
+    };
 
     // Demo credentials
     const VALID_CREDENTIALS = {
@@ -862,46 +1205,168 @@
 
     const VALID_OTP = '123456';
 
-    // Role selection
-    document.querySelectorAll('.role-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
+    // Initialize forms
+    const step1Form = document.getElementById('step1-form');
+    const step2Form = document.getElementById('step2-form');
+    const step3Form = document.getElementById('step3-form');
+    const step4Form = document.getElementById('step4-form');
 
-    // Form submission
-    loginForm.addEventListener('submit', (e) => {
+    // ═══════════════════════════════════════════════════════════════
+    // STEP MANAGEMENT
+    // ═══════════════════════════════════════════════════════════════
+
+    function showStep(stepNum) {
+      console.log(`[LOGIN] Moving to Step ${stepNum}`);
+      
+      // Hide all steps
+      document.querySelectorAll('.step-container').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+      });
+
+      // Show target step
+      const targetStep = document.getElementById(`step${stepNum}-container`);
+      if (targetStep) {
+        targetStep.classList.add('active');
+        targetStep.style.display = 'block';
+      }
+
+      // Update progress indicator
+      document.querySelectorAll('.progress-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.dataset.step) === stepNum) {
+          step.classList.add('active');
+        }
+      });
+
+      // Auto focus input
+      setTimeout(() => {
+        const inputs = targetStep.querySelectorAll('input[type="text"], input[type="password"]');
+        if (inputs.length > 0) inputs[0].focus();
+      }, 100);
+
+      currentStep = stepNum;
+    }
+
+    function advanceStep() {
+      if (currentStep < 4) {
+        showStep(currentStep + 1);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 1: EMPLOYEE ID
+    // ═══════════════════════════════════════════════════════════════
+
+    step1Form.addEventListener('submit', (e) => {
       e.preventDefault();
 
       const employeeId = document.getElementById('employeeId').value.trim();
-      const password = document.getElementById('password').value;
-      const otp = document.getElementById('otp').value.trim();
 
       // Validation
-      if (!employeeId || !password || !otp) {
-        showMessage('Please fill in all fields', 'error');
+      if (!employeeId) {
+        showMessage('Please enter your employee ID', 'error');
+        return;
+      }
+
+      console.log(`[STEP 1] Employee ID validated: ${employeeId}`);
+      storeData.employeeId = employeeId;
+
+      // Update employee display in all steps
+      document.getElementById('employee-display').textContent = employeeId;
+      document.getElementById('employee-display-2').textContent = employeeId;
+      document.getElementById('employee-display-3').textContent = employeeId;
+
+      advanceStep();
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 2: PASSWORD VERIFICATION
+    // ═══════════════════════════════════════════════════════════════
+
+    step2Form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const password = document.getElementById('password').value;
+
+      // Validation
+      if (!password) {
+        showMessage('Please enter your password', 'error');
         return;
       }
 
       // Check credentials
-      if (VALID_CREDENTIALS[employeeId] !== password) {
-        showMessage('Invalid employee ID or password', 'error');
+      if (VALID_CREDENTIALS[storeData.employeeId] !== password) {
+        showMessage('Invalid password. Please try again.', 'error');
         document.getElementById('password').value = '';
+        return;
+      }
+
+      console.log(`[STEP 2] Password verified for ${storeData.employeeId}`);
+      storeData.password = password;
+
+      advanceStep();
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 3: ROLE SELECTION
+    // ═══════════════════════════════════════════════════════════════
+
+    document.querySelectorAll('.role-option-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Remove previous selection
+        document.querySelectorAll('.role-option-btn').forEach(b => {
+          b.classList.remove('selected');
+        });
+
+        // Mark as selected
+        btn.classList.add('selected');
+
+        const role = btn.dataset.role;
+        console.log(`[STEP 3] Role selected: ${role}`);
+        storeData.role = role;
+
+        // Wait a moment for visual feedback, then advance
+        setTimeout(() => {
+          advanceStep();
+        }, 300);
+      });
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 4: OTP AUTHENTICATION (FINAL)
+    // ═══════════════════════════════════════════════════════════════
+
+    step4Form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const otp = document.getElementById('otp').value.trim();
+
+      // Validation
+      if (!otp) {
+        showMessage('Please enter the 6-digit OTP code', 'error');
+        return;
+      }
+
+      if (otp.length !== 6) {
+        showMessage('OTP must be exactly 6 digits', 'error');
         return;
       }
 
       // Check OTP
       if (otp !== VALID_OTP) {
-        showMessage('Invalid OTP code', 'error');
+        showMessage('Invalid OTP code. Please check your authenticator app.', 'error');
         document.getElementById('otp').value = '';
         return;
       }
 
-      // Success
-      console.log('LOGIN SUCCESS');
-      showMessage('Authentication successful. Initializing Command Center...', 'success');
+      // SUCCESS: All steps completed
+      console.log('[STEP 4] OTP verified - Authentication complete');
+      console.log('[LOGIN] All steps validated successfully');
+      
+      showMessage('✓ Authentication successful. Initializing Command Center...', 'success');
 
       // Trigger transition
       setTimeout(() => {
@@ -909,36 +1374,39 @@
         
         // Redirect after animation
         setTimeout(() => {
-          console.log('OTP VERIFIED');
+          console.log('[SESSION] Creating session');
           
           // Create session object matching dashboard.js expectations
           const sessionData = {
             authenticated: true,
             user: {
-              id: employeeId,
-              name: employeeId,
-              role: document.querySelector('.role-btn.active').dataset.role,
+              id: storeData.employeeId,
+              name: storeData.employeeId,
+              role: storeData.role,
               loginTime: new Date().toISOString()
             },
-            token: btoa(employeeId)
+            token: btoa(storeData.employeeId)
           };
           
-          console.log('SESSION CREATED', sessionData);
+          console.log('[SESSION] Session data:', sessionData);
           
           // Store session with correct key name
           sessionStorage.setItem('edd_session', JSON.stringify(sessionData));
-          sessionStorage.setItem('auth_token', btoa(employeeId));
-          sessionStorage.setItem('user_role', document.querySelector('.role-btn.active').dataset.role);
+          sessionStorage.setItem('auth_token', btoa(storeData.employeeId));
+          sessionStorage.setItem('user_role', storeData.role);
           
-          console.log('TOKEN STORED');
-          console.log('SESSION VALIDATED');
-          console.log('REDIRECT TO DASHBOARD');
+          console.log('[SESSION] Token stored');
+          console.log('[SESSION] Redirecting to dashboard');
           
           // Redirect to dashboard
           window.location.href = 'dashboard.html';
         }, 1800);
       }, 500);
     });
+
+    // ═══════════════════════════════════════════════════════════════
+    // MESSAGE DISPLAY
+    // ═══════════════════════════════════════════════════════════════
 
     function showMessage(text, type) {
       messageDiv.textContent = text;
@@ -951,6 +1419,10 @@
         }, 4000);
       }
     }
+
+    // Initialize Step 1
+    console.log('[LOGIN] System initialized - Showing Step 1');
+    showStep(1);
   </script>
 
 </body>
