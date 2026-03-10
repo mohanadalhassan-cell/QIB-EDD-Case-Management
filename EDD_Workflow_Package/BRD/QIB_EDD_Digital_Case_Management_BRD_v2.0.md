@@ -12,7 +12,7 @@
 |---|---|
 | **Document Title** | Business Requirements Document — EDD Digital Case Management System |
 | **Document ID** | BRD-EDD-FLOW-2026-002 |
-| **Version** | 2.1 |
+| **Version** | 2.2 |
 | **Date** | March 10, 2026 |
 | **Classification** | Internal — QIB Confidential |
 | **Target Platform** | FLOW Workflow System (Extension Module) |
@@ -29,7 +29,7 @@
 |-----------|-------|
 | Document Title | Business Requirements Document — EDD Digital Case Management System |
 | Document ID | BRD-EDD-FLOW-2026-002 |
-| Version | 2.1 |
+| Version | 2.2 |
 | Status | Submitted for Stakeholder Review |
 | Classification | Internal — QIB Confidential |
 | Created Date | March 10, 2026 |
@@ -75,6 +75,7 @@
 | 1.1 | March 2026 | Retail Banking Operations | Added Section 1.3 Regulatory Framework, enhanced NFRs | Compliance Head |
 | 2.0 | March 10, 2026 | Retail Banking Operations | Complete restructure to 28-section QIB format; added Escalation Governance, Audit Trail, Security, Change Management, detailed validation rules, regulatory alignment matrix | All stakeholders |
 | 2.1 | March 10, 2026 | Retail Banking Operations | Added Section 22: Risk Governance — Data Management Controls (High-Risk Nationality List, High-Risk Occupation List, Occupation Control Rules, Maker/Checker governance, Audit logging for risk data changes); expanded to 29 sections; added Appendix G and H | Risk Management, Compliance |
+| 2.2 | March 10, 2026 | Retail Banking Operations | Added Section 22.7: Product Risk & Account/Activity Risk Scoring (PROD_RISK_SCORE, ACT_RISK_SCORE); T24 data mapping expanded; added Appendix I: Compliance Clarification Request; pending Compliance response on scoring thresholds | Risk Management, Compliance |
 
 ---
 
@@ -1176,6 +1177,10 @@ The EDD system operates within the FLOW Workflow Platform and integrates with QI
 | RM_NUMBER | Section 2.2 | T24 → EDD | Relationship ID Master |
 | CUST_SEGMENT | Routing Logic | T24 → EDD | Mass / Tamayuz / Private |
 | RISK_CLASS | Section 1.6 | T24 → EDD | High / Medium / Low |
+| PROD_RISK_SCORE | Risk Panel | T24 → EDD | Product-level risk score (numeric) |
+| PROD_RISK_CATEG | Risk Panel | T24 → EDD | Product risk category (HIGH / MEDIUM / LOW) |
+| ACT_RISK_SCORE | Risk Panel | T24 → EDD | Account/activity-level risk score (numeric) |
+| ACT_RISK_CATEG | Risk Panel | T24 → EDD | Account/activity risk category (HIGH / MEDIUM / LOW) |
 | PEP_FLAG | Section 9.1 | T24 → EDD | PEP indicator |
 | DOB | Section 2.4 | T24 → EDD | Date of birth |
 | EDD_STATUS | — | EDD → T24 | Completed / Pending / Expired |
@@ -1682,6 +1687,98 @@ Each audit entry for risk data changes must include:
 
 ---
 
+## 22.7 Product Risk & Account/Activity Risk Scoring
+
+### 22.7.1 Purpose
+
+The Customer Risk Profile (CRP) in T24 includes **two additional risk dimensions** beyond the nationality and occupation risk factors:
+
+| # | Risk Dimension | Score Field | Category Field | Description |
+|---|---------------|-------------|----------------|-------------|
+| 1 | **Product Risk** | PROD_RISK_SCORE | PROD_RISK_CATEG | Risk classification based on the banking product held by the customer (e.g., current account, investment account, trade finance) |
+| 2 | **Account/Activity Risk** | ACT_RISK_SCORE | ACT_RISK_CATEG | Risk classification based on the customer's account behavior, transaction patterns, and activity profile |
+
+These two dimensions are sourced from T24 Core Banking and contribute to the **overall Customer Risk Profile (CRP)** alongside nationality risk and occupation risk.
+
+### 22.7.2 Risk Scoring Model
+
+The system uses the following **composite risk model** to determine the overall Customer Risk Profile:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              CUSTOMER RISK PROFILE (CRP) — T24                 │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   ┌──────────────────┐    ┌──────────────────┐                 │
+│   │ COUNTRY_RISK     │    │ OCCP_RISK        │                 │
+│   │ (Nationality)    │    │ (Occupation)     │                 │
+│   │ Score + Category │    │ Score + Category │                 │
+│   └────────┬─────────┘    └────────┬─────────┘                 │
+│            │                       │                            │
+│   ┌────────┴─────────┐    ┌────────┴─────────┐                 │
+│   │ PROD_RISK        │    │ ACT_RISK         │                 │
+│   │ (Product)        │    │ (Account/Activity)│                 │
+│   │ Score + Category │    │ Score + Category │                 │
+│   └────────┬─────────┘    └────────┬─────────┘                 │
+│            │                       │                            │
+│            └───────────┬───────────┘                            │
+│                        │                                        │
+│               ┌────────▼────────┐                               │
+│               │ RISK_CLASS      │                               │
+│               │ (Overall CRP)   │                               │
+│               │ HIGH/MED/LOW    │                               │
+│               └─────────────────┘                               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 22.7.3 Product Risk (PROD_RISK) — Data Structure
+
+| Field Name | Column Header | Data Type | Source | Description |
+|-----------|---------------|-----------|--------|-------------|
+| Product Risk Score | PROD_RISK_SCORE | Integer | T24 | Numeric risk score assigned to the banking product |
+| Product Risk Category | PROD_RISK_CATEG | Text | T24 | Risk category derived from score: HIGH / MEDIUM / LOW |
+
+**Scoring Thresholds:** ⚠️ *Pending Compliance Clarification*
+
+| Category | Score Range | Status |
+|----------|------------|--------|
+| LOW | ? – ? | Awaiting Compliance confirmation |
+| MEDIUM | ? – ? | Awaiting Compliance confirmation |
+| HIGH | ? – ? | Awaiting Compliance confirmation |
+
+### 22.7.4 Account/Activity Risk (ACT_RISK) — Data Structure
+
+| Field Name | Column Header | Data Type | Source | Description |
+|-----------|---------------|-----------|--------|-------------|
+| Activity Risk Score | ACT_RISK_SCORE | Integer | T24 | Numeric risk score based on account behavior and transaction patterns |
+| Activity Risk Category | ACT_RISK_CATEG | Text | T24 | Risk category derived from score: HIGH / MEDIUM / LOW |
+
+**Scoring Thresholds:** ⚠️ *Pending Compliance Clarification*
+
+| Category | Score Range | Status |
+|----------|------------|--------|
+| LOW | ? – ? | Awaiting Compliance confirmation |
+| MEDIUM | ? – ? | Awaiting Compliance confirmation |
+| HIGH | ? – ? | Awaiting Compliance confirmation |
+
+### 22.7.5 Open Clarification Items
+
+The following items require formal clarification from the Compliance Division before the risk scoring logic can be fully implemented:
+
+| # | Clarification Required | Owner | Status | BRD Impact |
+|---|----------------------|-------|--------|------------|
+| 1 | Risk scoring thresholds for PROD_RISK_SCORE → PROD_RISK_CATEG (Low / Medium / High boundaries) | Compliance Division | ⚠️ Pending | Section 22.7.3 |
+| 2 | Risk scoring thresholds for ACT_RISK_SCORE → ACT_RISK_CATEG (Low / Medium / High boundaries) | Compliance Division | ⚠️ Pending | Section 22.7.4 |
+| 3 | Confirmation that PROD_RISK_SCORE represents product-level risk and ACT_RISK_SCORE represents account/activity risk | Compliance Division | ⚠️ Pending | Section 22.7.1 |
+| 4 | Official scoring matrix or rule set used to derive PROD_RISK_CATEG and ACT_RISK_CATEG | Compliance Division | ⚠️ Pending | Section 22.7.2 |
+| 5 | Whether additional weighting factors are applied before assigning the final risk category | Compliance Division | ⚠️ Pending | Section 22.7.2 |
+| 6 | How PROD_RISK and ACT_RISK contribute to the overall RISK_CLASS (weighting formula) | Compliance Division | ⚠️ Pending | Section 22.7.2 |
+
+**Note:** Once Compliance provides the scoring matrix, this section will be updated with the confirmed thresholds and the system logic will be implemented accordingly. A formal clarification request has been sent to the Compliance Division (see Appendix I).
+
+---
+
 # SECTION 23: REPORTING AND DASHBOARD REQUIREMENTS
 
 ## 23.1 Dashboard Hierarchy
@@ -2104,12 +2201,120 @@ This appendix provides the complete initial High-Risk Occupation list as configu
 
 ---
 
+## Appendix I: Compliance Clarification Request — Risk Scoring Logic
+
+**Reference:** BRD Section 22.7 — Product Risk & Account/Activity Risk Scoring
+**Status:** ⚠️ Pending Compliance Response
+**Date Sent:** March 10, 2026
+
+---
+
+### I.1 Clarification Request
+
+The following formal clarification has been sent to the Compliance Division:
+
+---
+
+**Subject: Clarification Required — Risk Scoring Logic**
+
+Dear Compliance Team,
+
+Kindly provide clarification on the **risk scoring logic** used for the following fields:
+
+- **PROD_RISK_SCORE → PROD_RISK_CATEG**
+- **ACT_RISK_SCORE → ACT_RISK_CATEG**
+
+Based on the data received, both fields generate a **HIGH risk category**, however the underlying **score values differ**.
+
+In order to correctly implement the logic within the system and ensure accurate risk classification, we require confirmation on the following:
+
+1. The **risk scoring thresholds** used to classify scores into categories (Low / Medium / High).
+2. Whether **PROD_RISK_SCORE** represents **product-level risk** and **ACT_RISK_SCORE** represents **account/activity risk**.
+3. The **official scoring matrix or rule set** used by Compliance to derive **PROD_RISK_CATEG** and **ACT_RISK_CATEG**.
+4. If there are **additional factors or weighting rules** applied before assigning the final risk category.
+
+This clarification is required to ensure the **system risk engine and reporting logic** are aligned with the official Compliance methodology.
+
+Best regards,
+Mohannad Al-Hassan
+
+---
+
+### I.2 Response Template — Product Risk Scoring Matrix
+
+*To be completed by the Compliance Division:*
+
+| Score Range (From) | Score Range (To) | Risk Category | Example Products | Notes |
+|-------------------|-----------------|---------------|-----------------|-------|
+| | | LOW | | |
+| | | MEDIUM | | |
+| | | HIGH | | |
+
+### I.3 Response Template — Account/Activity Risk Scoring Matrix
+
+*To be completed by the Compliance Division:*
+
+| Score Range (From) | Score Range (To) | Risk Category | Triggering Factors | Notes |
+|-------------------|-----------------|---------------|-------------------|-------|
+| | | LOW | | |
+| | | MEDIUM | | |
+| | | HIGH | | |
+
+### I.4 Response Template — Overall CRP Weighting Formula
+
+*To be completed by the Compliance Division:*
+
+| # | Risk Dimension | Field | Weight (%) | Notes |
+|---|---------------|-------|-----------|-------|
+| 1 | Nationality Risk | COUNTRY_RISK_SCORE | ? | |
+| 2 | Occupation Risk | OCCP_RISK_SCORE | ? | |
+| 3 | Product Risk | PROD_RISK_SCORE | ? | |
+| 4 | Account/Activity Risk | ACT_RISK_SCORE | ? | |
+| | **Total** | | **100%** | |
+
+**Overall CRP Formula:**
+```
+RISK_CLASS = f( COUNTRY_RISK × W1 + OCCP_RISK × W2 + PROD_RISK × W3 + ACT_RISK × W4 )
+```
+*Where W1 + W2 + W3 + W4 = 100%*
+
+### I.5 Response Template — Product Risk Classification Reference
+
+*To be completed by the Compliance Division:*
+
+| # | Product Type | Product Code | Default PROD_RISK_SCORE | Default PROD_RISK_CATEG |
+|---|-------------|-------------|------------------------|------------------------|
+| 1 | Current Account | | | |
+| 2 | Savings Account | | | |
+| 3 | Investment Account | | | |
+| 4 | Trade Finance | | | |
+| 5 | Credit Card | | | |
+| 6 | Personal Finance | | | |
+| 7 | Home Finance | | | |
+| 8 | *(add as needed)* | | | |
+
+### I.6 Response Template — Activity Risk Indicators
+
+*To be completed by the Compliance Division:*
+
+| # | Activity Indicator | Contributes to ACT_RISK_SCORE? | Weight | Threshold |
+|---|-------------------|-------------------------------|--------|-----------|
+| 1 | High-value cash deposits | | | |
+| 2 | International wire transfers | | | |
+| 3 | Unusual transaction patterns | | | |
+| 4 | Multiple account openings | | | |
+| 5 | Cross-border transactions | | | |
+| 6 | Dormant account reactivation | | | |
+| 7 | *(add as needed)* | | | |
+
+---
+
 ## Document Footer
 
 | | |
 |---|---|
 | **Document ID** | BRD-EDD-FLOW-2026-002 |
-| **Version** | 2.1 |
+| **Version** | 2.2 |
 | **Date** | March 10, 2026 |
 | **Status** | Submitted for Stakeholder Review |
 | **Classification** | Internal — QIB Confidential |
