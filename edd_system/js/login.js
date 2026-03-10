@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOM References
   const stepCredentials = document.getElementById('step-credentials');
   const stepOTP = document.getElementById('step-otp');
+  const stepQibAnimation = document.getElementById('step-qib-animation');
   const stepSuccess = document.getElementById('step-success');
   const loginForm = document.getElementById('login-form');
   const otpForm = document.getElementById('otp-form');
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Step Management
   function showStep(step) {
-    [stepCredentials, stepOTP, stepSuccess].forEach(s => s.classList.remove('active'));
+    [stepCredentials, stepOTP, stepQibAnimation, stepSuccess].forEach(s => s.classList.remove('active'));
     step.classList.add('active');
     clearStatus();
   }
@@ -209,10 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       otpInputs.forEach(i => i.classList.add('success'));
       
-      // Show success
-      showStep(stepSuccess);
-      userDisplay.textContent = currentUser.name;
-      roleDisplay.textContent = roleLabels[currentUser.role];
+      // Show QIB Digital Animation
+      showStep(stepQibAnimation);
 
       // Store session (correct format for all views)
       const sessionData = {
@@ -223,10 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
       sessionStorage.setItem('edd_user', JSON.stringify(currentUser));
       sessionStorage.setItem('edd_session', JSON.stringify(sessionData));
 
-      // Redirect after animation
+      // Show success after animation
       setTimeout(() => {
-        window.location.href = getDashboardUrl(currentUser.role);
-      }, 3000);
+        showStep(stepSuccess);
+        userDisplay.textContent = currentUser.name;
+        roleDisplay.textContent = roleLabels[currentUser.role];
+
+        // Redirect after success
+        setTimeout(() => {
+          window.location.href = getDashboardUrl(currentUser.role);
+        }, 3000);
+      }, 2500);
     }, 1000);
   });
 

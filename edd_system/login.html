@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="QIB EDD Case Management System — Secure Executive Access">
+  <meta name="description" content="Qatar National Vision 2030 - Digital Governance Platform for Financial Sector Transformation">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#060e1a">
-  <title>QIB EDD System — Secure Login</title>
+  <meta name="theme-color" content="#0a1628">
+  <title>Qatar National Vision 2030 — Digital Governance Platform</title>
   <link rel="stylesheet" href="css/login.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
 </head>
@@ -27,17 +27,32 @@
   <div class="login-container">
     <div class="glass-card">
 
-      <!-- Branding -->
-      <div class="brand-section">
-        <div class="brand-logo">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+      <!-- National Platform Branding -->
+      <div class="brand-section vision-2030">
+        <!-- Qatar National Vision 2030 Logo -->
+        <div class="vision-logo">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="vision-svg">
+            <!-- Qatar National Vision 2030 Symbol -->
+            <defs>
+              <linearGradient id="visionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#A68D1E;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Outer ring -->
+            <circle cx="100" cy="100" r="95" fill="none" stroke="url(#visionGrad)" stroke-width="2" opacity="0.8"/>
+            <!-- Center element -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#D4AF37" stroke-width="1.5" opacity="0.5"/>
+            <!-- Vision 2030 text (stylized) -->
+            <path d="M 60 100 Q 100 60 140 100 Q 100 140 60 100" fill="none" stroke="#D4AF37" stroke-width="2"/>
+            <text x="100" y="155" font-size="18" font-weight="bold" fill="#D4AF37" text-anchor="middle" font-family="Arial, sans-serif">VISION 2030</text>
           </svg>
-          <div class="brand-logo-ring"></div>
+          <div class="vision-glow"></div>
         </div>
-        <h1 class="brand-title">EDD Case Management</h1>
-        <p class="brand-subtitle">Enhanced Due Diligence Platform</p>
-        <p class="brand-subtitle bank-name" id="bank-name-reveal" style="display:none; margin-top:4px; color:#D4AF37; letter-spacing:2px;">Qatar Islamic Bank</p>
+        
+        <h1 class="vision-title">Qatar National Vision 2030</h1>
+        <p class="vision-subtitle">Digital Governance Platform</p>
+        <p class="vision-description">Supporting Financial Sector Transformation</p>
       </div>
 
       <!-- Trust indicators -->
@@ -150,7 +165,31 @@
         </form>
       </div>
 
-      <!-- Step 3: Success -->
+      <!-- Step 3: QIB Digital Animation -->
+      <div id="step-qib-animation" class="login-step">
+        <div class="qib-animation-panel">
+          <div class="qib-logo-container">
+            <svg class="qib-logo-animated" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="qibGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#00D4FF;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="url(#qibGrad)"/>
+            </svg>
+            <div class="qib-pulse"></div>
+            <div class="qib-pulse"></div>
+          </div>
+          <h2 class="qib-welcome">Qatar Islamic Bank</h2>
+          <p class="qib-subtitle">Digital Governance Platform</p>
+          <div class="loading-bar">
+            <div class="loading-progress"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Success -->
       <div id="step-success" class="login-step">
         <div class="success-panel">
           <div class="success-icon">
@@ -192,7 +231,7 @@
   </div>
 
   <!-- Build tag -->
-  <div class="build-tag">QIB EDD v1.0.0 · BUILD 2026.03 · ENTERPRISE</div>
+  <div class="build-tag">Qatar National Vision 2030 · QIB Digital Platform · v1.0.0 · BUILD 2026.03</div>
 
   <script src="js/particles.js?v=1.1"></script>
   <script src="js/login.js?v=1.1"></script>
