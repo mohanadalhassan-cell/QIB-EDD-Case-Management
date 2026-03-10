@@ -690,8 +690,254 @@ This BRD requires review and approval from the following stakeholders before imp
 
 ---
 
+# APPENDIX A: EDD FORM — COMPLETE FIELD SPECIFICATION (11 Sections)
+
+This appendix maps every field in the EDD Investigation Form to its source system, data type, and validation rules. The form contains **11 sections**, **4 Tabs**, and follows a **Maker/Checker** approval workflow.
+
+---
+
+## Form Tabs
+
+| Tab | Purpose |
+|-----|---------|
+| EDD Form | Main investigation form (11 sections below) |
+| Documents | Uploaded/retrieved documents (DMS integration) |
+| Comments & History | Case comments, audit trail, timeline |
+| Approval | Maker/Checker approval workflow |
+
+---
+
+## Section 1: Risk Classification of the Client
+
+| # | Field | Type | Required | Source | Values |
+|---|-------|------|----------|--------|--------|
+| 1.1 | Client involved in increased risk business | Radio (Yes/No) | YES | T24/CRP | Yes, No |
+| 1.2 | Self-employed from sanctioned/high-risk country | Radio (Yes/No) | YES | Manual | Yes, No |
+| 1.3 | Non-Resident Status | Radio (Yes/No) | YES | T24 | Yes, No |
+| 1.4 | Private Banking Sector | Radio (Yes/No) | YES | T24 | Yes, No |
+| 1.5 | Politically Exposed Person (PEP) | Radio (Yes/No) | YES | T24/CRP | Yes, No |
+| 1.6 | Overall Risk Classification | Dropdown (Read-only) | YES | T24/CRP | High, Medium, Low |
+
+**Business Logic:** If any of 1.1–1.5 = Yes → Overall Risk Classification auto-set to HIGH.
+
+---
+
+## Section 2: Customer Information
+
+| # | Field | Type | Required | Source | Sample |
+|---|-------|------|----------|--------|--------|
+| 2.1 | Customer Name | Text (Read-only) | YES | T24 | Abdullah Mohammed Al-Kuwari |
+| 2.2 | RIM Number | Text (Read-only) | YES | T24 | RIM001234 |
+| 2.3 | Nationality | Text (Read-only) | YES | QCB KYC API | Qatari |
+| 2.4 | Date of Birth | Date (Read-only) | YES | T24 | 1975-03-15 |
+| 2.5 | Form being filed for | Dropdown | YES | Manual | Customer, Joint Account Holder, Guardian, POA |
+| 2.6 | How was client acquired | Dropdown | YES | Manual | Referral, Walk-in, Online, Corporate Introduction |
+| 2.7 | Referral Details | Text | Conditional | Manual | — |
+| 2.8 | If referred, specify by whom | Text | Conditional | Manual | — |
+
+---
+
+## Section 3: Purpose and Intended Use of Account
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 3.1 | Purpose of Account | Dropdown | YES | Manual |
+| 3.2 | Account used for business activities | Radio (Yes/No) | YES | Manual |
+| 3.3 | Expected Banking Products & Services | Checkbox (Multi) | YES | Manual |
+
+**Products Checklist:**
+- [ ] Current Account
+- [ ] Savings Account
+- [ ] Credit Card
+- [ ] Personal Finance
+- [ ] Investment Services
+- [ ] Trade Finance
+- [ ] Private Banking
+
+---
+
+## Section 4: Source of Income & Source of Wealth
+
+### 4A — Salary / Employment Income
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 4A.1 | Designation | Text | YES | T24 |
+| 4A.2 | Name of Employer | Text | YES | T24 |
+| 4A.3 | Employer Address | Text | NO | Manual |
+| 4A.4 | Years in Employment | Number | NO | Manual |
+| 4A.5 | Expected Monthly Income (QAR) | Currency | YES | Manual |
+| 4A.6 | Salary Transferred to QIB | Radio (Yes/No) | NO | T24 |
+
+### 4A — Business / Self-Employment Income
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 4A.7 | Business Name | Text | Conditional | Manual |
+| 4A.8 | Line of Business Activity | Text | Conditional | Manual |
+| 4A.9 | % Ownership | Percentage | Conditional | Manual |
+| 4A.10 | Years in Business | Number | Conditional | Manual |
+| 4A.11 | Annual Profit (QAR) | Currency | Conditional | Manual |
+| 4A.12 | Company Account with QIB | Radio (Yes/No) | Conditional | T24 |
+
+### 4B — Source of Wealth
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 4B.1 | Source of Wealth Categories | Checkbox (Multi) | YES | Manual |
+| 4B.2 | Detailed Explanation of Source of Wealth | Textarea | YES | Manual |
+
+**Wealth Categories:**
+- [ ] Salary Earnings
+- [ ] Business Earnings
+- [ ] Gift / Inheritance
+- [ ] Investment Income
+- [ ] Sale of Business
+- [ ] Sale of Property
+- [ ] Others
+
+### 4C — Estimated Net Worth
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 4C.1 | Estimated Net Worth Range | Dropdown | YES | Manual |
+
+**Ranges:** < QAR 250K, 250K–500K, 500K–1M, 1M–3M, 3M–5M, > QAR 5M
+
+---
+
+## Section 5: Initial Deposit
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 5.1 | Initial Deposit Amount (QAR) | Currency | YES | Manual |
+| 5.2 | Expected Eventual Balance (QAR) | Currency | NO | Manual |
+| 5.3 | Mode of Initial Deposit | Dropdown | YES | Manual |
+| 5.4 | Source of Funds for Initial Deposit | Text | YES | Manual |
+
+**Deposit Modes:** Cash, Cheque, Bank Transfer, Other
+
+---
+
+## Section 6: Monthly Anticipated Transaction Activity
+
+### Transaction Table
+
+| Transaction Type | No. of Transactions | Total Value (QAR) | Purpose |
+|-----------------|--------------------|--------------------|---------|
+| Cash Deposits | Input | Input | Input |
+| Cash Withdrawals | Input | Input | Input |
+| Cheque Payments | Input | Input | Input |
+| Internal Transfers | Input | Input | Input |
+| Wire Transfers (International) | Input | Input | Input |
+
+### Additional Fields
+
+| # | Field | Type | Required |
+|---|-------|------|----------|
+| 6.1 | Countries funds anticipated from/to | Text | YES |
+| 6.2 | Transactions with sanctioned countries | Radio (Yes/No) | YES |
+
+---
+
+## Section 7: Existing Relationships
+
+### 7A — Within QIB
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 7A.1 | Existing relationship within QIB | Radio (Yes/No) | YES | T24 |
+
+**Table (if Yes):** Account Holder, RIM, Segment, Relationship
+
+### 7B — With Other Banks
+
+**Table:** Bank Name, Country, Estimated Value (QAR), Banking Since
+
+---
+
+## Section 8: Related Party
+
+| # | Field | Type | Required |
+|---|-------|------|----------|
+| 8.1 | Authorized signatory / POA / Guardian / Joint Holder | Radio (Yes/No) | YES |
+
+---
+
+## Section 9: PEP Identification
+
+| # | Field | Type | Required | Source |
+|---|-------|------|----------|--------|
+| 9.1 | Is customer a PEP | Radio (Yes/No) | YES | T24/CRP |
+| 9.2 | PEP Category | Dropdown | Conditional | Manual |
+| 9.3 | Name of Primary PEP | Text | Conditional | Manual |
+| 9.4 | Type of Primary PEP | Text | Conditional | Manual |
+| 9.5 | PEP Nationality | Text | Conditional | QCB |
+| 9.6 | Associate Country | Text | Conditional | Manual |
+| 9.7 | Public Function / Position Held | Text | Conditional | Manual |
+| 9.8 | Background and Assessment | Textarea | Conditional | Manual |
+| 9.9 | Still holding PEP position | Radio (Yes/No) | Conditional | Manual |
+| 9.10 | Cessation Year | Number | Conditional | Manual |
+
+**PEP Categories:** Domestic PEP, Foreign PEP, International Organization PEP, Family Member of PEP, Close Associate of PEP
+
+---
+
+## Section 10: Business Recommendations
+
+| # | Field | Type | Required |
+|---|-------|------|----------|
+| 10.1 | Overall Summary of Customer Profile | Textarea | YES |
+| 10.2 | Business Recommendation | Dropdown | YES |
+| 10.3 | Additional Information / Comments | Textarea | NO |
+
+**Recommendation Options:** Proceed to CDD with Approval, Proceed with Enhanced Monitoring, Temporary Account Restriction, Account Freeze Pending Review, Escalate to Compliance
+
+---
+
+## Section 11: Sign Off Workflow (Maker / Checker)
+
+### Business Maker
+
+| # | Field | Type | Required |
+|---|-------|------|----------|
+| 11.1 | Staff Name | Text (Auto) | YES |
+| 11.2 | Staff ID | Text (Auto) | YES |
+| 11.3 | Date | Date (Auto) | YES |
+
+### Business Checker
+
+| # | Field | Type | Required |
+|---|-------|------|----------|
+| 11.4 | Staff Name | Text (Auto) | YES |
+| 11.5 | Staff ID | Text (Auto) | YES |
+| 11.6 | Date | Date (Auto) | YES |
+
+**Actions:** Save as Draft, Submit for Approval
+
+---
+
+## Data Sources Summary
+
+| Source | Sections | Data |
+|--------|----------|------|
+| T24 Core Banking | 1, 2, 4, 7 | Customer data, risk classification, employment, accounts |
+| QCB KYC API | 2, 9 | Nationality, KYC verification, PEP nationality |
+| DMS | Documents Tab | Document retrieval, upload, storage |
+| Manual Entry | 3, 4, 5, 6, 7, 8, 9, 10 | Investigation data, assessments, recommendations |
+
+---
+
+## Workflow Stages
+
+```
+Case Created → Business Review → Business Approval → CDD Review → CDD Approval → Complete
+```
+
+---
+
 **Document ID:** BRD-EDD-2026-001  
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** March 2026  
 **Status:** Submitted for Stakeholder Review  
 **Classification:** Internal — QIB Confidential
