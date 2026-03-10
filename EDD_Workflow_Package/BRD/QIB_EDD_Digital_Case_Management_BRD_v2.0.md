@@ -29,8 +29,8 @@
 |-----------|-------|
 | Document Title | Business Requirements Document — EDD Digital Case Management System |
 | Document ID | BRD-EDD-FLOW-2026-002 |
-| Version | 2.2 |
-| Status | Submitted for Stakeholder Review |
+| Version | 2.3 |
+| Status | Final Consolidation — Submitted for Stakeholder Review |
 | Classification | Internal — QIB Confidential |
 | Created Date | March 10, 2026 |
 | Last Updated | March 10, 2026 |
@@ -76,6 +76,7 @@
 | 2.0 | March 10, 2026 | Retail Banking Operations | Complete restructure to 28-section QIB format; added Escalation Governance, Audit Trail, Security, Change Management, detailed validation rules, regulatory alignment matrix | All stakeholders |
 | 2.1 | March 10, 2026 | Retail Banking Operations | Added Section 22: Risk Governance — Data Management Controls (High-Risk Nationality List, High-Risk Occupation List, Occupation Control Rules, Maker/Checker governance, Audit logging for risk data changes); expanded to 29 sections; added Appendix G and H | Risk Management, Compliance |
 | 2.2 | March 10, 2026 | Retail Banking Operations | Added Section 22.7: Product Risk & Account/Activity Risk Scoring (PROD_RISK_SCORE, ACT_RISK_SCORE); T24 data mapping expanded; added Appendix I: Compliance Clarification Request; pending Compliance response on scoring thresholds | Risk Management, Compliance |
+| 2.3 | March 10, 2026 | Retail Banking Operations | Final Consolidation: Added 7 new functional requirement subsections (14.8–14.14): Customer Communication Module, Marketing Template Governance, Notification Consequence Management, Enhanced Document Upload with Drag-Drop, Official Case Chat, QR Code Document Request, Template Save and Reuse; expanded Security Section (20.5–20.7): PIN/Biometric verification, Communication Channel Security, QCB Data Visibility controls; updated Appendix A with expanded tab structure; added Appendix J: Customer Communication Template Standards; total functional requirements increased from 48 to 101 | All stakeholders |
 
 ---
 
@@ -766,20 +767,207 @@ Case Creation → Business Input → CDD Review → Escalation → Senior Compli
 | FR-RG-009 | System shall prevent activated risk data changes from taking effect until Checker approval is obtained | Must Have | COBIT DSS05.04 |
 | FR-RG-010 | System shall validate bulk upload file structure (required columns, data types, allowed values) before accepting the upload | Must Have | BCBS 239 |
 
+## 14.8 Customer Communication Module
+
+The system provides a structured customer communication capability within each EDD case, enabling officers to request documents, send reminders, and notify customers of case outcomes. All communications are initiated from within the case workflow and logged in the audit trail.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-CC-001 | System shall provide a Customer Communication tab within each EDD case for initiating and tracking all customer-facing communications | Must Have | QCB AML/CFT |
+| FR-CC-002 | System shall support the following communication types: Document Request, Information Request, Case Update Notification, Account Restriction Notice, Case Closure Notification | Must Have | — |
+| FR-CC-003 | System shall allow officers to select a pre-approved communication template from a governed template library | Must Have | — |
+| FR-CC-004 | System shall auto-populate customer details (Name, RIM, Email, Phone) from T24 data into communications | Must Have | — |
+| FR-CC-005 | System shall support bilingual communications (English and Arabic) with officer selection of language | Must Have | QCB Requirements |
+| FR-CC-006 | System shall log every customer communication in the case audit trail including: template used, officer ID, timestamp, delivery channel, and content summary | Must Have | ISO 27001 A.8.15 |
+| FR-CC-007 | System shall support communication delivery via Email, SMS, and In-App Notification | Must Have | — |
+| FR-CC-008 | System shall track communication delivery status (Sent, Delivered, Failed, Read) | Should Have | — |
+| FR-CC-009 | System shall enforce SLA-based follow-up reminders if no customer response is received within the defined period (default: 7 days) | Must Have | QCB 71/2022 |
+| FR-CC-010 | System shall restrict customer communication initiation to authorized roles only (Business Maker, CDD Officer, Compliance Officer) | Must Have | ISO 27001 A.5.15 |
+
+**Communication Workflow:**
+
+```
+Officer selects Communication Type
+    → System presents pre-approved Template
+        → Officer customizes permitted fields (e.g., document list, deadline)
+            → System generates preview
+                → Officer confirms and sends
+                    → System logs communication in audit trail
+                        → Follow-up timer starts
+```
+
+## 14.9 Marketing Message Template Governance
+
+All customer-facing communications within the EDD system must use pre-approved templates governed by the Marketing & Communications department. No free-form customer communications are permitted without Marketing approval.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-MT-001 | System shall maintain a centralized Marketing Template Library containing all approved customer communication templates | Must Have | — |
+| FR-MT-002 | All templates shall require Marketing & Communications approval before activation in the system | Must Have | — |
+| FR-MT-003 | System shall enforce Maker/Checker governance for template creation, modification, and deactivation | Must Have | COBIT DSS05.04 |
+| FR-MT-004 | Each template shall include: Template ID, Category, Language (EN/AR), Subject, Body, Approved By, Approval Date, Expiry Date, Status (Active/Inactive/Expired) | Must Have | — |
+| FR-MT-005 | System shall support the following template categories: Document Request, Information Request, Case Update, Account Restriction, Case Closure, Follow-Up Reminder, Compliance Notice | Must Have | — |
+| FR-MT-006 | System shall prevent officers from modifying template body text; only designated placeholder fields (customer name, document list, deadline date) may be customized | Must Have | — |
+| FR-MT-007 | System shall track template usage analytics (frequency of use per template, per case type, per segment) | Should Have | — |
+| FR-MT-008 | System shall automatically deactivate expired templates and notify the Marketing team 30 days before expiry | Should Have | — |
+| FR-MT-009 | System shall maintain full version history for all template changes | Must Have | ISO 27001 A.8.15 |
+
+**Template Governance Workflow:**
+
+```
+Marketing creates/updates Template (Maker)
+    → Marketing Manager reviews and approves (Checker)
+        → Template activated in Template Library
+            → Officers select template during Customer Communication
+                → Template usage logged in audit trail
+```
+
+## 14.10 Customer Notification Consequence Management
+
+The system implements a structured notification escalation framework that defines business consequences for customer non-responsiveness at each stage of the EDD process.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-NC-001 | System shall enforce configurable notification reminder schedules per case type and segment | Must Have | QCB 71/2022 |
+| FR-NC-002 | System shall support a 3-tier notification escalation: Initial Request → First Reminder → Final Notice with Consequence | Must Have | — |
+| FR-NC-003 | The Initial Request shall be sent upon case assignment with a defined response deadline (default: 7 calendar days) | Must Have | — |
+| FR-NC-004 | The First Reminder shall be sent automatically at 5 days if no customer response is received, notifying the customer that the deadline is approaching | Must Have | — |
+| FR-NC-005 | The Final Notice shall be sent at 7 days with a clear statement of business consequences (account restriction, service limitation) | Must Have | QCB AML/CFT |
+| FR-NC-006 | System shall automatically trigger a pre-defined business action if the customer fails to respond within the final deadline: Account Restriction, Transaction Hold, or Escalation to Compliance | Must Have | QCB AML/CFT |
+| FR-NC-007 | System shall log all notification consequence actions in the audit trail with: action type, trigger reason, timestamp, and approving officer (if manual override) | Must Have | ISO 27001 A.8.15 |
+| FR-NC-008 | System shall allow authorized officers (CDD Manager, Compliance Officer) to override automatic consequences with documented justification | Must Have | — |
+| FR-NC-009 | System shall provide a Notification History panel within each case showing all communications sent, delivery status, and response status | Must Have | — |
+
+**Notification Consequence Timeline:**
+
+```
+Day 0: Case Opened → Initial Document/Information Request sent to customer
+Day 5: No Response → First Reminder sent (approaching deadline)
+Day 7: No Response → Final Notice sent (consequence warning)
+Day 8: No Response → Automatic Business Action triggered:
+    ├─ Account Restriction applied in T24
+    ├─ Transaction Hold activated
+    └─ Case escalated to Compliance for review
+```
+
+## 14.11 Enhanced Document Upload and Email Attachment Management
+
+The system provides enterprise-grade document handling capabilities including drag-and-drop upload, email attachment linking, and structured document classification.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-DU-001 | System shall provide a drag-and-drop document upload zone within the Documents tab of each EDD case | Must Have | — |
+| FR-DU-002 | System shall support the following file formats: PDF, JPG, PNG, TIFF, DOCX, XLSX (maximum file size: 25 MB per file) | Must Have | — |
+| FR-DU-003 | System shall require document classification upon upload: Document Type (from predefined list), Expiry Date (if applicable), Verification Status | Must Have | FATF Rec 11 |
+| FR-DU-004 | System shall support direct linking of email attachments received from customers to the corresponding EDD case | Must Have | — |
+| FR-DU-005 | System shall provide an Email Attachment Upload feature where officers can forward customer emails to a designated case email address, and the system automatically attaches the documents to the correct case | Should Have | — |
+| FR-DU-006 | System shall validate uploaded documents for: file type compliance, file size limit, virus scan (ClamAV or equivalent), and duplicate detection | Must Have | ISO 27001 A.8.24 |
+| FR-DU-007 | System shall generate a document upload confirmation with timestamp, officer ID, and document hash (SHA-256) for integrity verification | Must Have | ISO 27001 A.8.15 |
+| FR-DU-008 | System shall maintain a document checklist per case type with mandatory and optional documents clearly indicated | Must Have | — |
+| FR-DU-009 | System shall prevent case submission if mandatory documents are missing or unverified | Must Have | — |
+| FR-DU-010 | System shall support bulk document upload (multiple files in a single operation) | Should Have | — |
+
+**Document Type Classification List:**
+
+| # | Document Type | Mandatory | Expiry Required |
+|---|-------------|-----------|----------------|
+| 1 | Qatar ID (QID) | Yes | Yes |
+| 2 | Passport | Yes | Yes |
+| 3 | Proof of Income (Salary Certificate) | Yes | No |
+| 4 | Source of Wealth Documentation | Conditional | No |
+| 5 | Commercial Registration | Conditional | Yes |
+| 6 | Bank Statement (External) | No | No |
+| 7 | Utility Bill (Address Proof) | No | No |
+| 8 | Power of Attorney | Conditional | Yes |
+| 9 | Board Resolution | Conditional | No |
+| 10 | Tax Declaration | No | No |
+
+## 14.12 Official Case Chat Module
+
+The system provides a secure, auditable internal chat module within each EDD case for real-time communication between officers involved in the case workflow.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-CH-001 | System shall provide an Official Case Chat panel within each EDD case accessible from the case interface | Must Have | — |
+| FR-CH-002 | Case Chat shall be restricted to officers assigned to or involved in the specific case (Business Maker, Checker, CDD Officers, Compliance Officers) | Must Have | ISO 27001 A.5.15 |
+| FR-CH-003 | All chat messages shall be permanently logged and form part of the official case record (non-deletable) | Must Have | FATF Rec 11, ISO 27001 A.8.15 |
+| FR-CH-004 | System shall support message types: Text Message, File Attachment, Escalation Notice, Decision Update | Must Have | — |
+| FR-CH-005 | System shall display sender identity (Name, Role, Department) and timestamp for every message | Must Have | — |
+| FR-CH-006 | System shall support @mention functionality to notify specific officers within the chat | Should Have | — |
+| FR-CH-007 | System shall provide read receipts showing which officers have viewed each message | Should Have | — |
+| FR-CH-008 | System shall support priority flagging of messages (Normal, Urgent, Critical) | Should Have | — |
+| FR-CH-009 | Chat history shall be included in case export (PDF/Excel) and audit trail reports | Must Have | FATF Rec 11 |
+| FR-CH-010 | System shall prevent chat message editing or deletion after submission to maintain audit integrity | Must Have | ISO 27001 A.8.15 |
+
+**Case Chat Access Matrix:**
+
+| Role | Can Send | Can View | Can Attach Files | Receives @Mentions |
+|------|----------|----------|-----------------|-------------------|
+| Business Maker | Yes | Own case only | Yes | Yes |
+| Business Checker | Yes | Assigned cases | Yes | Yes |
+| CDD Officer | Yes | CDD stage cases | Yes | Yes |
+| CDD Manager | Yes | All CDD cases | Yes | Yes |
+| Compliance Officer | Yes | Escalated cases | Yes | Yes |
+| Compliance Manager | Yes | All cases | Yes | Yes |
+| System Administrator | No (view only) | All cases | No | No |
+
+## 14.13 Document Request Form with QR Code Generation
+
+The system supports generation of structured document request forms that include a unique QR code for customer self-service document submission.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-QR-001 | System shall generate a printable Document Request Form for each EDD case listing all required documents | Must Have | — |
+| FR-QR-002 | The Document Request Form shall include a unique QR code linked to the specific EDD case | Must Have | — |
+| FR-QR-003 | Scanning the QR code shall direct the customer to a secure document upload portal pre-linked to their case | Should Have | — |
+| FR-QR-004 | The Document Request Form shall include: Customer Name, RIM number, Required Document List with descriptions, Submission Deadline, Bank Contact Information, QR Code | Must Have | — |
+| FR-QR-005 | System shall support generation of the form in both English and Arabic | Must Have | QCB Requirements |
+| FR-QR-006 | System shall track QR code usage: scan count, documents uploaded via QR, and upload timestamps | Should Have | — |
+| FR-QR-007 | QR codes shall expire after the case submission deadline (default: 30 days) | Must Have | ISO 27001 A.8.5 |
+| FR-QR-008 | System shall log QR code generation and scanning events in the audit trail | Must Have | ISO 27001 A.8.15 |
+
+**QR Code Document Request Workflow:**
+
+```
+Officer generates Document Request Form from EDD Case
+    → System creates form with unique QR code
+        → Form printed/emailed to customer
+            → Customer scans QR code with mobile device
+                → Customer directed to secure upload portal
+                    → Customer uploads documents
+                        → Documents auto-linked to EDD case
+                            → Officer notified of new document upload
+```
+
+## 14.14 Template Save and Reuse
+
+The system supports saving EDD case templates for common case scenarios, enabling officers to create new cases from pre-configured templates to improve efficiency and consistency.
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-TS-001 | System shall allow authorized users to save a completed or partially completed EDD form as a reusable template | Should Have | — |
+| FR-TS-002 | Templates shall capture: form field values, document checklist configuration, risk classification defaults, and workflow routing preferences | Should Have | — |
+| FR-TS-003 | System shall maintain a Template Library accessible to authorized officers with search and filter capabilities | Should Have | — |
+| FR-TS-004 | System shall enforce Maker/Checker approval for template creation and modification | Must Have | COBIT DSS05.04 |
+| FR-TS-005 | System shall support template categories: By Segment (Mass/Tamayuz/Private), By Risk Level (High/Medium), By Case Type (New Account/Periodic Review/Triggered Review) | Should Have | — |
+| FR-TS-006 | System shall track template usage for analytics and quality monitoring | Should Have | — |
+| FR-TS-007 | When creating a case from a template, the system shall auto-populate template fields while allowing officer modification of all values | Must Have | — |
+
 ---
 
 # SECTION 15: DATA FIELDS AND VALIDATION RULES
 
 ## 15.1 EDD Form Structure
 
-The EDD Investigation Form consists of **11 sections** organized across **4 Tabs**:
+The EDD Investigation Form consists of **11 sections** organized across **7 Tabs**:
 
-| Tab | Purpose |
-|-----|---------|
-| **EDD Form** | Main investigation form (11 sections) |
-| **Documents** | Uploaded/retrieved documents (DMS integration) |
-| **Comments & History** | Case comments, audit trail, timeline |
-| **Approval** | Maker/Checker approval workflow |
+| Tab | Purpose | BRD Reference |
+|-----|---------|---------------|
+| **EDD Form** | Main investigation form (11 sections) | Section 15 |
+| **Documents & Upload** | Drag-and-drop document upload, document checklist, email attachment linking, QR code document request | Sections 14.3, 14.11, 14.13 |
+| **Communication** | Customer communication requests, Marketing-approved templates, notification consequence tracking | Sections 14.8, 14.9, 14.10 |
+| **Case Chat & History** | Official case chat, comments, and complete audit trail | Sections 14.12, 19 |
+| **Approval** | Maker/Checker approval workflow with PIN/biometric verification | Sections 15.12, 20.5 |
 
 ## 15.2 Section 1: Risk Classification of the Client
 
@@ -1326,6 +1514,38 @@ The system provides an integrity verification function accessible to authorized 
 | XSS Prevention | Content Security Policy headers; output encoding | ISO 27001 A.8.26 |
 | CSRF Protection | Anti-CSRF tokens on all state-changing operations | ISO 27001 A.8.26 |
 | API Rate Limiting | Max 100 requests/minute per user; 1000/minute per service | ISO 27001 A.8.20 |
+
+## 20.5 Enhanced Verification Controls
+
+The system implements additional verification mechanisms for high-impact operations to provide layered security beyond standard authentication.
+
+| Requirement | Specification | Reference |
+|-------------|---------------|-----------|
+| PIN Verification | Optional 6-digit PIN required for case approval, escalation, and risk data modification actions | ISO 27001 A.8.5 |
+| Biometric Authentication | Support for fingerprint and facial recognition for mobile-initiated approvals (if device-supported) | ISO 27001 A.8.5 |
+| Step-Up Authentication | System shall require re-authentication (OTP or PIN) for any action after 10 minutes of idle time within a case | ISO 27001 A.8.5 |
+| Digital Signature | Officer digital signature captured for all approval and rejection actions | ISO 27001 A.8.5 |
+| Action Confirmation | All irreversible actions (case closure, account restriction, escalation to QCB) require explicit confirmation dialog with officer re-authentication | ISO 27001 A.8.5 |
+
+## 20.6 Communication Channel Security
+
+| Requirement | Specification | Reference |
+|-------------|---------------|-----------|
+| Template Integrity | Customer communication templates cannot be modified outside the governed approval process (Section 14.9) | ISO 27001 A.8.25 |
+| Case Chat Encryption | All case chat messages encrypted at rest and in transit | ISO 27001 A.8.24 |
+| QR Code Security | QR codes generated with time-limited tokens; expiry enforced server-side | ISO 27001 A.8.5 |
+| Document Upload Scanning | All uploaded documents undergo automated virus/malware scanning before storage | ISO 27001 A.8.7 |
+| Email Attachment Validation | Email-forwarded attachments validated against allowed file types and maximum size before case linking | ISO 27001 A.8.26 |
+
+## 20.7 QCB Data Visibility and Regulatory Reporting Security
+
+| Requirement | Specification | Reference |
+|-------------|---------------|-----------|
+| QCB Data Segregation | QCB-sourced data (KYC verification, nationality risk data) displayed in read-only panels with clear data source attribution | QCB AML/CFT |
+| QCB Data Access Logging | All access to QCB-sourced data fields logged with officer ID, timestamp, and action type | ISO 27001 A.8.15 |
+| QCB Report Generation | Regulatory reports destined for QCB submission generated through a controlled workflow with Compliance Head approval | QCB AML/CFT |
+| Data Provenance | System shall display data source attribution for all auto-populated fields (T24, QCB KYC, SnapView, Manual Entry) | BCBS 239 |
+| Cross-System Data Integrity | System shall validate consistency of customer data across T24, QCB KYC, and EDD records; discrepancies flagged for manual review | BCBS 239 |
 
 ---
 
@@ -2009,15 +2229,18 @@ For material changes that impact scope, workflow, or regulatory alignment:
 
 ## Appendix A: EDD Form — Complete Visual Layout
 
-The EDD form consists of 11 sections organized as follows:
+The EDD case interface consists of 11 form sections organized across **7 Tabs**:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                      EDD INVESTIGATION FORM                         │
-├─────┬───────────┬─────────────────┬────────────┬───────────────────┤
-│ Tab │ EDD Form  │ Documents       │ Comments   │ Approval          │
-│     │ (Active)  │                 │ & History  │                   │
-├─────┴───────────┴─────────────────┴────────────┴───────────────────┤
+├───────┬──────────┬──────────────┬──────────┬────────────┬──────────┤
+│ Tab   │ EDD Form │ Documents    │ Communi- │ Case Chat  │ Approval │
+│       │ (Active) │ & Upload     │ cation   │ & History  │          │
+├───────┼──────────┼──────────────┼──────────┼────────────┼──────────┤
+│       │          │ + QR Code    │ + Market │ + Comments │          │
+│       │          │ + Drag-Drop  │   Templ. │ + Audit    │          │
+├───────┴──────────┴──────────────┴──────────┴────────────┴──────────┤
 │                                                                     │
 │  Section 1:  Risk Classification of the Client                     │
 │  Section 2:  Customer Information                                   │
@@ -2031,10 +2254,20 @@ The EDD form consists of 11 sections organized as follows:
 │  Section 10: Business Recommendations                               │
 │  Section 11: Sign Off Workflow (Maker / Checker)                    │
 │                                                                     │
-│  [Save as Draft]                [Submit for Approval]               │
+│  [Save as Draft]  [Save as Template]  [Submit for Approval]         │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
+
+**Tab Descriptions:**
+
+| Tab | Purpose | BRD Reference |
+|-----|---------|---------------|
+| EDD Form | Main investigation form (11 sections) | Section 15 |
+| Documents & Upload | Drag-and-drop document upload, document checklist, email attachment linking, QR code document request | Sections 14.3, 14.11, 14.13 |
+| Communication | Customer communication requests using Marketing-approved templates, notification history, consequence tracking | Sections 14.8, 14.9, 14.10 |
+| Case Chat & History | Official case chat between assigned officers, comments, and complete audit trail | Sections 14.12, 19 |
+| Approval | Maker/Checker approval workflow | Section 15.12 |
 
 ## Appendix B: SLA Matrix
 
@@ -2309,13 +2542,97 @@ RISK_CLASS = f( COUNTRY_RISK × W1 + OCCP_RISK × W2 + PROD_RISK × W3 + ACT_RIS
 
 ---
 
+## Appendix J: Customer Communication Template Standards
+
+This appendix defines the standard templates for customer communications within the EDD system. All templates are governed by Marketing & Communications approval (Section 14.9).
+
+### J.1 Template Categories
+
+| # | Category | Template ID Prefix | Purpose | Approval Authority |
+|---|----------|-------------------|---------|-------------------|
+| 1 | Document Request | TMPL-DR-xxx | Request missing or additional documents from customer | Marketing + Compliance |
+| 2 | Information Request | TMPL-IR-xxx | Request clarification on customer-provided information | Marketing + Compliance |
+| 3 | Case Update | TMPL-CU-xxx | Inform customer of case progress or status change | Marketing |
+| 4 | Account Restriction Notice | TMPL-AR-xxx | Notify customer of account restriction due to EDD non-compliance | Marketing + Compliance + Legal |
+| 5 | Case Closure | TMPL-CL-xxx | Notify customer of EDD case closure and outcome | Marketing + Compliance |
+| 6 | Follow-Up Reminder | TMPL-FR-xxx | Remind customer of pending requests | Marketing |
+| 7 | Compliance Notice | TMPL-CN-xxx | Formal regulatory compliance notice | Compliance + Legal |
+
+### J.2 Template Structure
+
+Each template follows this standard structure:
+
+```
+┌─────────────────────────────────────────────────┐
+│  QIB Logo                          [EN] / [AR]  │
+├─────────────────────────────────────────────────┤
+│  Template ID: TMPL-DR-001                       │
+│  Category: Document Request                      │
+│  Version: 1.0                                    │
+│  Approved By: Marketing Head                     │
+│  Approval Date: ___/___/2026                     │
+│  Expiry Date: ___/___/2027                       │
+├─────────────────────────────────────────────────┤
+│                                                   │
+│  Dear {CUSTOMER_NAME},                           │
+│                                                   │
+│  Reference: EDD Case {CASE_ID}                   │
+│  RIM: {RIM_NUMBER}                               │
+│                                                   │
+│  [Template Body — Non-editable by officers]      │
+│                                                   │
+│  Required Documents:                              │
+│  {DOCUMENT_LIST} ← Officer-configurable field    │
+│                                                   │
+│  Submission Deadline: {DEADLINE_DATE}             │
+│                                                   │
+│  [QR Code for Document Upload Portal]            │
+│                                                   │
+│  Regards,                                         │
+│  Qatar Islamic Bank                               │
+│  CDD Operations                                  │
+│                                                   │
+└─────────────────────────────────────────────────┘
+```
+
+### J.3 Placeholder Fields
+
+| Placeholder | Source | Officer Editable |
+|-------------|--------|-----------------|
+| {CUSTOMER_NAME} | T24 (auto-populated) | No |
+| {RIM_NUMBER} | T24 (auto-populated) | No |
+| {CASE_ID} | System (auto-generated) | No |
+| {DOCUMENT_LIST} | Officer selection from checklist | Yes |
+| {DEADLINE_DATE} | System default + officer override | Yes |
+| {OFFICER_NAME} | Session (auto-populated) | No |
+| {BRANCH_NAME} | Session (auto-populated) | No |
+| {CONTACT_NUMBER} | System configuration | No |
+
+### J.4 Template Lifecycle
+
+```
+DRAFT → REVIEW → APPROVED → ACTIVE → EXPIRED/DEACTIVATED
+  │        │         │          │           │
+  └─Maker  └─Checker └─Marketing└─In Use   └─Auto/Manual
+                       Head
+```
+
+**Governance Rules:**
+1. All templates must be reviewed and approved by Marketing & Communications before activation
+2. Templates containing regulatory language require additional Compliance Division approval
+3. Template modifications follow the same Maker/Checker governance as original creation
+4. Templates expire after 12 months and must be re-approved for continued use
+5. Deactivated templates remain in the system for audit purposes but cannot be selected for new communications
+
+---
+
 ## Document Footer
 
 | | |
 |---|---|
 | **Document ID** | BRD-EDD-FLOW-2026-002 |
-| **Version** | 2.2 |
+| **Version** | 2.3 |
 | **Date** | March 10, 2026 |
-| **Status** | Submitted for Stakeholder Review |
+| **Status** | Final Consolidation — Submitted for Stakeholder Review |
 | **Classification** | Internal — QIB Confidential |
 | **© Qatar Islamic Bank (QIB) S.A.Q.** | All rights reserved |
