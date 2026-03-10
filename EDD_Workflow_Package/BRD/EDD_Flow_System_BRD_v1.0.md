@@ -43,15 +43,56 @@ The system will digitize, standardize, and automate the end-to-end EDD process f
 
 ## 1.2 Objectives
 
-| # | Objective | Measurable Target |
-|---|-----------|-------------------|
-| 1 | Digitize end-to-end EDD process | 100% paperless workflow |
-| 2 | Standardize case routing across segments | Automated routing to correct department |
-| 3 | Enforce Maker/Checker controls | Zero unauthorized decisions |
-| 4 | Reduce case processing time | < 72 hours (from current 5-7 days) |
-| 5 | Achieve full audit trail | 100% action traceability |
-| 6 | Ensure regulatory compliance | QCB, AML/CTF compliant |
-| 7 | Integrate with existing infrastructure | FLOW platform, T24, DMS |
+| # | Objective | Measurable Target | Regulatory Reference |
+|---|-----------|-------------------|----------------------|
+| 1 | Digitize end-to-end EDD process | 100% paperless workflow | FATF Rec 10, 11 — CDD & Record Keeping |
+| 2 | Standardize case routing across segments | Automated routing to correct department | BCBS 239 — Risk Data Aggregation |
+| 3 | Enforce Maker/Checker controls | Zero unauthorized decisions | COBIT 2019 DSS05.04 — Access Control |
+| 4 | Reduce case processing time | < 72 hours (from current 5-7 days) | QCB Circular No. 71/2022 — CDD Timeliness |
+| 5 | Achieve full audit trail | 100% action traceability | ISO 27001:2022 A.8.15 — Logging |
+| 6 | Ensure regulatory compliance | QCB, AML/CTF, FATF compliant | FATF Rec 20, QCB AML/CFT Framework |
+| 7 | Integrate with existing infrastructure | FLOW platform, T24, DMS | ISO 27001:2022 A.8.26 — App Security |
+
+## 1.3 Regulatory Framework Alignment
+
+This system is designed to comply with the following international and national regulatory frameworks:
+
+| Framework | Standard | Applicability |
+|-----------|----------|---------------|
+| **FATF Recommendation 10** | Customer Due Diligence | All CDD/EDD data collection, verification, and ongoing monitoring |
+| **FATF Recommendation 11** | Record Keeping | All audit trail, data retention (7 years), and document archival |
+| **FATF Recommendation 12** | Politically Exposed Persons | PEP identification, enhanced due diligence, senior management approval |
+| **FATF Recommendation 20** | Suspicious Transaction Reporting | Financial threshold monitoring, STR triggers, transaction analysis |
+| **FATF Recommendation 22** | DNFBPs — Customer Due Diligence | Extended CDD for designated non-financial businesses |
+| **Basel Committee BCBS 239** | Principles for Risk Data Aggregation | Risk data quality, completeness, timeliness, and accuracy |
+| **ISO 27001:2022** | Information Security Management | Access control, logging, encryption, incident response |
+| **ISO 27001:2022 A.5.1** | Information Security Policies | Policy-driven security governance |
+| **ISO 27001:2022 A.8.15** | Logging and Monitoring | Tamper-resistant audit trail, hash-chain integrity |
+| **ISO 27001:2022 A.8.24** | Cryptography | AES-256 encryption, TLS 1.3, key management |
+| **COBIT 2019 DSS05** | Manage Security Services | Identity management, access control, audit logging |
+| **COBIT 2019 APO13** | Manage Security | Information security management system alignment |
+| **QCB AML/CFT Regulatory Framework** | National Compliance | All CDD/EDD processes, STR reporting, sanctions screening |
+| **QCB Circular No. 71/2022** | CDD Timeliness Requirements | SLA enforcement, case processing timelines |
+| **Qatar Law No. 20 of 2019** | Anti-Money Laundering | AML/CTF obligations, customer identification, beneficial ownership |
+
+### Regulatory Compliance Matrix
+
+```
+CONTROL CATEGORY                  FRAMEWORK REFERENCE          SYSTEM IMPLEMENTATION
+──────────────────────────────────────────────────────────────────────────────────────
+Customer Identification           FATF Rec 10, QCB AML         EDD Form Sections 1-2
+Source of Funds/Wealth            FATF Rec 10, 20              EDD Form Section 4
+PEP Screening                    FATF Rec 12                   EDD Form Section 9
+Transaction Monitoring            FATF Rec 20                   Section 6 + Risk Engine
+Record Keeping (7yr)             FATF Rec 11, ISO A.8.15       Audit Trail + DMS
+Maker/Checker Controls           COBIT DSS05.04                Sections 8, 11
+Access Control (RBAC)            ISO 27001 A.5.15              Login + Role System
+Data Encryption                  ISO 27001 A.8.24              AES-256 / TLS 1.3
+Risk Data Aggregation            BCBS 239                      Risk Engine + SnapView
+Escalation Governance            QCB AML Framework             5% Threshold Monitoring
+Suspicious Transaction           FATF Rec 20, QCB              Financial Threshold Alerts
+Ongoing Monitoring               FATF Rec 10, 11               Re-KYC + Annual Review
+```
 
 ---
 
@@ -426,126 +467,6 @@ COMPLIANCE AUTHORITY MATRIX:
 
 ---
 
-# 8B. DECISION AUTHORITY MODEL
-
-## 8B.1 Operating Principle
-
-The EDD workflow adopts a **CDD-Centric Decision Authority Model** where the CDD Team is the primary and default decision authority for all EDD cases. Escalation is reserved exclusively for exceptional circumstances.
-
-```
-┌───────────────────────────────────────────────────────────────────────┐
-│                 DECISION AUTHORITY MODEL                             │
-│                                                                       │
-│  ┌─────────────────┐                                                 │
-│  │  DEFAULT PATH    │  95% of cases                                  │
-│  │  (Standard)      │                                                │
-│  │                  │                                                │
-│  │  Case Created    │                                                │
-│  │      ↓           │                                                │
-│  │  Business Input  │  (Document collection, initial info)           │
-│  │      ↓           │                                                │
-│  │  CDD Review      │  (Full due diligence assessment)              │
-│  │      ↓           │                                                │
-│  │  CDD Decision    │  ← PRIMARY DECISION POINT                    │
-│  │      ↓           │                                                │
-│  │  Completed       │                                                │
-│  └─────────────────┘                                                 │
-│                                                                       │
-│  ┌─────────────────┐                                                 │
-│  │  ESCALATION PATH │  ≤ 5% of cases                                │
-│  │  (Exceptional)   │                                                │
-│  │                  │                                                │
-│  │  Case Created    │                                                │
-│  │      ↓           │                                                │
-│  │  Business Input  │                                                │
-│  │      ↓           │                                                │
-│  │  CDD Review      │                                                │
-│  │      ↓           │                                                │
-│  │  ESCALATION      │  (Mandatory justification required)           │
-│  │      ↓           │                                                │
-│  │  Senior Review   │  (Compliance Head / Risk Committee)           │
-│  │      ↓           │                                                │
-│  │  Decision        │                                                │
-│  └─────────────────┘                                                 │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
-```
-
-## 8B.2 Default Decision Authority
-
-The **CDD Team** is the designated decision authority for all Enhanced Due Diligence cases. This includes:
-
-| Responsibility | Description |
-|----------------|-------------|
-| File Review | Complete review of customer documentation and verification |
-| Risk Assessment | Evaluate risk indicators, financial profile, and transaction patterns |
-| Decision | Approve, Approve with Conditions, or Reject the case |
-
-## 8B.3 Exceptional Escalation Criteria
-
-Escalation is permitted **only** when one or more of the following conditions are met:
-
-| # | Condition | Example |
-|---|-----------|--------|
-| 1 | High-risk PEP indicators | Senior government official, foreign PEP |
-| 2 | Sanctioned country involvement | Customer linked to FATF high-risk jurisdiction |
-| 3 | Information conflict | Source of funds contradicts known profile |
-| 4 | Management directive | Explicit request from Risk Management or Compliance |
-| 5 | Regulatory trigger | QCB or external regulator inquiry |
-
-## 8B.4 Escalation Threshold
-
-**Maximum Escalation Rate: ≤ 5% of total EDD cases.**
-
-The system enforces this through:
-
-| Control | Description |
-|---------|-------------|
-| Real-time monitoring | Dashboard displays current escalation ratio |
-| Threshold alert | System alert when escalation rate exceeds 4% (warning) |
-| Breach notification | Automatic notification to Head of CDD when rate exceeds 5% |
-| Monthly reporting | Escalation trend report generated for Risk Management |
-
-## 8B.5 Mandatory Escalation Fields
-
-When a case is escalated, the system requires the following mandatory fields before submission:
-
-| # | Field | Type | Required |
-|---|-------|------|----------|
-| 1 | Reason for Escalation | Dropdown + Text | YES |
-| 2 | Risk Justification | Textarea | YES |
-| 3 | Supporting Documents | File Upload | YES |
-| 4 | Escalation Level | Dropdown | YES |
-
-**Escalation Levels:**
-- CDD Manager
-- Compliance Head
-- Risk Committee
-- Board Risk Committee
-
-## 8B.6 Escalation Source
-
-Escalation can be initiated by:
-
-| Source | Authority | Condition |
-|--------|-----------|----------|
-| Business Team | RM / Branch Manager | During Business Input stage |
-| CDD Team | CDD Officer / CDD Manager | During CDD Review stage |
-
-## 8B.7 Governance Benefits
-
-This model achieves:
-
-| Benefit | Impact |
-|---------|--------|
-| Reduced processing time | CDD decides without unnecessary escalation layers |
-| CDD empowerment | CDD team has full authority and accountability |
-| Controlled escalation | ≤ 5% threshold prevents escalation abuse |
-| Stronger governance | Clear decision authority with complete audit trail |
-| Regulatory alignment | Meets QCB and FATF expectations for human-in-the-loop |
-
----
-
 # 9. DECISION SUPPORT SYSTEM PHILOSOPHY
 
 ## 9.1 What the System Does
@@ -762,16 +683,21 @@ Upon case completion, the following fields are updated in T24:
 
 # 15. NON-FUNCTIONAL REQUIREMENTS
 
-| Requirement | Target |
-|-------------|--------|
-| System Availability | 99.5% uptime |
-| API Response Time | < 2 seconds |
-| Peak Throughput | 100 cases/hour |
-| Audit Retention | 7 years |
-| Data Encryption | AES-256 at rest, TLS 1.3 in transit |
-| Authentication | JWT + Multi-Factor Authentication |
-| Backup | Hourly incremental, daily full |
-| Recovery Time | RTO: 1 hour, RPO: 1 hour |
+| Requirement | Target | Regulatory Reference |
+|-------------|--------|----------------------|
+| System Availability | 99.5% uptime | ISO 27001:2022 A.8.14 — Redundancy |
+| API Response Time | < 2 seconds | BCBS 239 — Timeliness Principle |
+| Peak Throughput | 100 cases/hour | QCB AML — Operational Capacity |
+| Audit Retention | 7 years | FATF Rec 11, Qatar Law No. 20/2019 |
+| Data Encryption | AES-256 at rest, TLS 1.3 in transit | ISO 27001:2022 A.8.24 |
+| Authentication | JWT + Multi-Factor Authentication | ISO 27001:2022 A.8.5 |
+| Backup | Hourly incremental, daily full | ISO 27001:2022 A.8.13 |
+| Recovery Time | RTO: 1 hour, RPO: 1 hour | ISO 27001:2022 A.8.14 |
+| Access Control | RBAC with 7 role definitions | COBIT 2019 DSS05.04 |
+| Audit Integrity | Hash-chain tamper-resistant logging | ISO 27001:2022 A.8.15, FATF Rec 11 |
+| Escalation Threshold | ≤ 5% of cases should escalate | QCB AML/CFT Monitoring Framework |
+| Form Validation | Enterprise field validation engine | FATF Rec 10, BCBS 239 |
+| Session Security | Auto-timeout, concurrent session prevention | ISO 27001:2022 A.8.5 |
 
 ---
 

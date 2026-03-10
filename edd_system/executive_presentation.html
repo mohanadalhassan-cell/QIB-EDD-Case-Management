@@ -867,7 +867,7 @@
     </div>
     <div class="top-bar-right">
       <div class="classification-badge">CONFIDENTIAL</div>
-      <div class="slide-counter"><span class="current" id="currentNum">1</span> / <span id="totalNum">11</span></div>
+      <div class="slide-counter"><span class="current" id="currentNum">1</span> / <span id="totalNum">12</span></div>
       <button class="btn-exit" onclick="exitPresentation()" title="Exit (Esc)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
@@ -913,14 +913,21 @@ const slides = [
         <div class="slide-label">EXECUTIVE STRATEGIC BRIEFING</div>
         <h1>Digital <span class="gold">CDD / EDD</span><br>Case Management Platform</h1>
         <div class="subtitle">
-          A unified digital platform for managing Customer Due Diligence and Enhanced Due Diligence operations across the bank.
+          A Digital Compliance Governance Framework for managing Customer Due Diligence and Enhanced Due Diligence operations — aligned with FATF, QCB, ISO 27001, and BCBS 239 standards.
         </div>
-        <div class="subtitle-ar">منصة رقمية موحدة لإدارة عمليات العناية الواجبة والعناية المعززة داخل البنك</div>
+        <div class="subtitle-ar">إطار حوكمة الامتثال الرقمي لإدارة عمليات العناية الواجبة والمعززة — متوافق مع FATF وQCB وISO 27001 وBCBS 239</div>
         <div class="meta-info">
           <span>📅 March 2026</span>
           <span>🏛️ Qatar Islamic Bank</span>
           <span>🔒 Confidential</span>
           <span>📊 Board Presentation</span>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <span style="padding:5px 14px;border-radius:20px;font-size:10px;background:rgba(0,212,255,0.1);color:#00D4FF;border:1px solid rgba(0,212,255,0.25);font-weight:600;">FATF Rec 10/11/12/20</span>
+          <span style="padding:5px 14px;border-radius:20px;font-size:10px;background:rgba(0,230,118,0.1);color:#00E676;border:1px solid rgba(0,230,118,0.25);font-weight:600;">QCB AML/CFT</span>
+          <span style="padding:5px 14px;border-radius:20px;font-size:10px;background:rgba(156,39,176,0.1);color:#CE93D8;border:1px solid rgba(156,39,176,0.25);font-weight:600;">ISO 27001:2022</span>
+          <span style="padding:5px 14px;border-radius:20px;font-size:10px;background:rgba(255,152,0,0.1);color:#FFB300;border:1px solid rgba(255,152,0,0.25);font-weight:600;">BCBS 239</span>
+          <span style="padding:5px 14px;border-radius:20px;font-size:10px;background:rgba(33,150,243,0.1);color:#64B5F6;border:1px solid rgba(33,150,243,0.25);font-weight:600;">COBIT 2019</span>
         </div>
       </div>
     `
@@ -965,20 +972,27 @@ const slides = [
           <div class="capability-card" style="text-align: left; padding: 22px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
               <span style="font-size:28px;">5️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Regulatory Governance Framework</h4>
+            </div>
+            <p>FATF, QCB, ISO 27001, BCBS 239 & COBIT alignment matrix</p>
+          </div>
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">6️⃣</span>
               <h4 style="margin:0;font-size:15px;">Implementation Roadmap</h4>
             </div>
             <p>Phased delivery plan and key milestones</p>
           </div>
           <div class="capability-card" style="text-align: left; padding: 22px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-              <span style="font-size:28px;">6️⃣</span>
+              <span style="font-size:28px;">7️⃣</span>
               <h4 style="margin:0;font-size:15px;">Strategic Impact</h4>
             </div>
             <p>Operational, compliance, and strategic benefits</p>
           </div>
           <div class="capability-card" style="text-align: left; padding: 22px;">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-              <span style="font-size:28px;">7️⃣</span>
+              <span style="font-size:28px;">8️⃣</span>
               <h4 style="margin:0;font-size:15px;">Live Platform Demonstration</h4>
             </div>
             <p>Interactive walkthrough of the platform from a user perspective</p>
@@ -1263,7 +1277,75 @@ const slides = [
     `
   },
 
-  // ── SLIDE 8: Implementation Roadmap ──
+  // ── SLIDE 8: Regulatory Governance Framework ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">⚖️ REGULATORY GOVERNANCE</div>
+        <h1>Regulatory <span class="gold">Governance Framework</span></h1>
+        <div class="subtitle">Every system control is mapped to international regulatory standards</div>
+        <div class="subtitle-ar">كل ضوابط النظام متوافقة مع المعايير التنظيمية الدولية</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;">
+          <div style="background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);border-radius:12px;padding:18px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;background:rgba(0,212,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🌐</div>
+              <div>
+                <h4 style="margin:0;font-size:14px;color:var(--cyan);">FATF Recommendations</h4>
+                <span style="font-size:10px;color:var(--white-50);">Financial Action Task Force</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Rec 10 — CDD</span><span style="color:var(--cyan);">✓ Implemented</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Rec 11 — Records</span><span style="color:var(--cyan);">✓ Implemented</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Rec 12 — PEPs</span><span style="color:var(--cyan);">✓ Implemented</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Rec 20 — STR</span><span style="color:var(--cyan);">✓ Implemented</span></div>
+            </div>
+          </div>
+          <div style="background:rgba(0,230,118,0.04);border:1px solid rgba(0,230,118,0.15);border-radius:12px;padding:18px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;background:rgba(0,230,118,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🏛️</div>
+              <div>
+                <h4 style="margin:0;font-size:14px;color:var(--green);">QCB & National</h4>
+                <span style="font-size:10px;color:var(--white-50);">Qatar Central Bank Framework</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">AML/CFT Framework</span><span style="color:var(--green);">✓ Compliant</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Circular 71/2022</span><span style="color:var(--green);">✓ Compliant</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Law No. 20/2019</span><span style="color:var(--green);">✓ Compliant</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">Vision 2030</span><span style="color:var(--green);">✓ Aligned</span></div>
+            </div>
+          </div>
+          <div style="background:rgba(156,39,176,0.04);border:1px solid rgba(156,39,176,0.15);border-radius:12px;padding:18px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:40px;height:40px;background:rgba(156,39,176,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🔒</div>
+              <div>
+                <h4 style="margin:0;font-size:14px;color:#CE93D8;">ISO & COBIT</h4>
+                <span style="font-size:10px;color:var(--white-50);">International Standards</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">ISO 27001:2022</span><span style="color:#CE93D8;">✓ Aligned</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">BCBS 239</span><span style="color:#CE93D8;">✓ Aligned</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">COBIT 2019</span><span style="color:#CE93D8;">✓ Aligned</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 10px;background:rgba(0,0,0,0.2);border-radius:6px;"><span style="color:var(--white-70);">PCI-DSS Level 1</span><span style="color:#CE93D8;">✓ Aligned</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:20px;background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:16px 24px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🛡️</span>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--gold);">Governance Assurance</div>
+              <div style="font-size:12px;color:var(--white-70);">Every field validation, workflow control, escalation rule, and audit log entry is traceable to a specific FATF recommendation, QCB circular, or ISO control. The system maintains an enterprise-grade hash-chain audit trail with tamper-resistance verification.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 9: Implementation Roadmap ──
   {
     render: () => `
       <div class="slide">
@@ -1318,7 +1400,7 @@ const slides = [
     `
   },
 
-  // ── SLIDE 9: Strategic Impact ──
+  // ── SLIDE 10: Strategic Impact ──
   {
     render: () => `
       <div class="slide">
@@ -1366,7 +1448,7 @@ const slides = [
     `
   },
 
-  // ── SLIDE 10: Live Demo ──
+  // ── SLIDE 11: Live Demo ──
   {
     render: () => `
       <div class="slide">
@@ -1412,7 +1494,7 @@ const slides = [
     `
   },
 
-  // ── SLIDE 11: Closing Statement ──
+  // ── SLIDE 12: Closing Statement ──
   {
     render: () => `
       <div class="slide">
