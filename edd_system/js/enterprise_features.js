@@ -559,14 +559,107 @@ const EnterpriseFeatures = {
       department: 'Call Center',
       createdBy: 'CC-001',
       approvedBy: 'COMP-001',
-      version: '1.0',
-      lastUpdated: '2024-01-20',
+      version: '2.0',
+      lastUpdated: '2026-03-10',
       status: 'Published',
       sections: [
-        { title: 'Access Permissions', content: 'Call Center staff have read-only access to basic customer information.' },
-        { title: 'What You Can See', content: 'Customer name, salary, expected activity, account status.' },
-        { title: 'What You Cannot See', content: 'Risk scores, AML flags, compliance notes, investigation status.' },
-        { title: 'Escalation Process', content: 'For sensitive inquiries, escalate to supervisor. Never disclose risk information.' }
+        { 
+          title: 'Role Overview', 
+          content: 'Call Center team manages customer contact requests submitted by branches and operations. The supervisor receives email notifications and assigns staff to conduct recorded calls with proper SLA management and documentation.' 
+        },
+        { 
+          title: 'How Customer Contact Requests Work', 
+          content: `
+            <strong>1. Request Submission (by Branches/Operations)</strong>
+            <ul>
+              <li>Open an EDD Case in the system</li>
+              <li>Click "Customer Contact Request" button</li>
+              <li>Select request reason (e.g., Verification, Documentation, Confirmation)</li>
+              <li>Submit the request</li>
+            </ul>
+            
+            <strong>2. Email Notification (Automatic)</strong>
+            <ul>
+              <li>Call Center Supervisor receives email alert immediately</li>
+              <li>Email includes: Case ID, Customer Name, Request Reason, Priority</li>
+              <li>Direct link to request queue in Call Center Dashboard</li>
+            </ul>
+            
+            <strong>3. Staff Assignment (by Supervisor)</strong>
+            <ul>
+              <li>Supervisor accesses Call Center Queue Dashboard</li>
+              <li>Enters employee ID to assign Call Center staff</li>
+              <li>System creates assignment record with timestamp</li>
+            </ul>
+            
+            <strong>4. SLA Management (via Access Control)</strong>
+            <ul>
+              <li>Supervisor sets SLA parameters via Access Control settings</li>
+              <li>System tracks response time, call duration, completion time</li>
+              <li>Alerts if SLA breach is imminent</li>
+            </ul>
+            
+            <strong>5. Documentation</strong>
+            <ul>
+              <li>Call is recorded with reference number stored securely</li>
+              <li>All interactions logged in audit trail</li>
+              <li>Case status updated upon completion</li>
+            </ul>
+          ` 
+        },
+        { 
+          title: 'What You Can See', 
+          content: `
+            <strong>Call Center Staff:</strong>
+            <ul>
+              <li>Customer name and basic demographics</li>
+              <li>Contact request reason and priority</li>
+              <li>Assigned case reference</li>
+              <li>Required information to collect during call</li>
+              <li>Call recording reference</li>
+            </ul>
+            
+            <strong>Call Center Supervisor:</strong>
+            <ul>
+              <li>All above, plus:</li>
+              <li>Complete queue of pending requests</li>
+              <li>Staff assignments and workload</li>
+              <li>SLA compliance metrics</li>
+              <li>Response time statistics</li>
+              <li>Call attempt history</li>
+            </ul>
+          ` 
+        },
+        { 
+          title: 'What You CANNOT See', 
+          content: 'Risk scores, AML/CTF flags, compliance investigation status, CDD notes, decision documents, internal compliance comments. Never disclose sensitive risk information to customers.' 
+        },
+        { 
+          title: 'Important Security Rules', 
+          content: `
+            <strong>Data Protection:</strong>
+            <ul>
+              <li>All calls must be recorded and referenced in system</li>
+              <li>Never share customer data outside of call context</li>
+              <li>Do not disclose risk assessment to customer</li>
+              <li>Log all customer interactions with timestamp</li>
+            </ul>
+            
+            <strong>Escalation Process:</strong>
+            <ul>
+              <li>For sensitive questions → escalate to supervisor</li>
+              <li>For compliance issues → refer to CDD team</li>
+              <li>For disputes → involve Case Manager</li>
+            </ul>
+            
+            <strong>SLA Compliance:</strong>
+            <ul>
+              <li>Meet assigned SLA targets set by supervisor</li>
+              <li>Update system with call status immediately</li>
+              <li>Report delays to supervisor</li>
+            </ul>
+          ` 
+        }
       ]
     }
   ],
