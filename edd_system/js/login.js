@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const employeeId = employeeIdInput.value.trim().toUpperCase();
     const password = passwordInput.value;
+    const selectedRoleRadio = document.querySelector('input[name="role"]:checked');
 
     // Validation
     if (!employeeId) {
@@ -98,11 +99,25 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Check credentials
+    if (!selectedRoleRadio) {
+      showStatus('error', 'Please select a role');
+      return;
+    }
+
+    selectedRole = selectedRoleRadio.value;
+
+    // Check if user exists
     const user = demoUsers[employeeId];
     
-    if (!user || user.password !== password) {
-      showStatus('error', 'Invalid Employee ID or Password');
+    if (!user) {
+      showStatus('error', `Employee ID "${employeeId}" not found. Please try: DEMO, EMP001, EMP002, etc.`);
+      employeeIdInput.focus();
+      return;
+    }
+
+    if (user.password !== password) {
+      showStatus('error', 'Invalid password. Please try again.');
+      passwordInput.focus();
       return;
     }
 

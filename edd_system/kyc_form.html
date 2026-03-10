@@ -1066,13 +1066,25 @@
         </div>
     </div>
 
+    <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+    <script src="../js/path_manager.js"></script>
+    <script src="../js/risk_datasets.js"></script>
+    <script src="../js/risk_engine.js"></script>
+    <script src="../js/sample_data_generator.js"></script>
+    <script src="../js/edd_data_model.js"></script>
+    <script src="../js/data_bridge.js"></script>
+    
+    <!-- Legacy Support -->
     <script src="../js/organization_data.js"></script>
+    <script src="../js/kyc_form_enhancer.js"></script>
     <script>
         let currentSection = 1;
         const totalSections = 6;
 
         function nextSection() {
-            if (validateCurrentSection()) {
+            if (kycEnhancer) {
+                kycEnhancer.nextSection();
+            } else if (validateCurrentSection()) {
                 if (currentSection < totalSections) {
                     currentSection++;
                     showSection(currentSection);
@@ -1082,7 +1094,9 @@
         }
 
         function prevSection() {
-            if (currentSection > 1) {
+            if (kycEnhancer) {
+                kycEnhancer.prevSection();
+            } else if (currentSection > 1) {
                 currentSection--;
                 showSection(currentSection);
                 updateProgress();

@@ -448,14 +448,16 @@
         <div class="card risk-analysis-panel" id="risk-analysis-panel" style="margin-bottom: 24px;">
           <div class="card-body" style="padding: 24px;">
             <!-- Header with FINAL_RISK_SCORE and FINAL_RISK_CATEG -->
+            <!-- GOVERNANCE NOTE: Risk scores originate from EXTERNAL systems (CRP, Core Banking, TM, etc.) -->
+            <!-- This platform READS and DISPLAYS risk data, it does NOT calculate risk scores -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 12px;">
                 <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="color: var(--accent-primary);">
                   <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
                 </svg>
                 <div>
-                  <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Customer Risk Classification</h3>
-                  <span style="font-size: 11px; color: var(--text-muted);">LAST_SCORE_DATE: <span id="last-score-date">Feb 15, 2024</span> • SECTOR_DESC: <span id="sector-desc">Private Family</span></span>
+                  <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Customer Risk Classification 🔵 <span style="font-size: 12px; font-weight: 600; color: #2196F3;">[External Source: CRP]</span></h3>
+                  <span style="font-size: 11px; color: var(--text-muted);">LAST_SCORE_DATE: <span id="last-score-date">Feb 15, 2024</span> • SECTOR_DESC: <span id="sector-desc">Private Family</span> • <strong style="color: #00D4FF;">Risk Source: Customer Risk Profiling Engine</strong></span>
                 </div>
               </div>
               <div style="display: flex; align-items: center; gap: 24px;">
@@ -492,11 +494,31 @@
                 </div>
               </div>
             </div>
+
+            <!-- GOVERNANCE DISCLOSURE: External Risk Source Attribution -->
+            <div style="background: linear-gradient(135deg, rgba(33,150,243,0.08), rgba(0,212,255,0.08)); border: 2px solid rgba(33,150,243,0.25); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="width: 20px; height: 20px; background: #2196F3; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;">
+                  <span style="color: white; font-weight: 700; font-size: 12px;">ℹ</span>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-weight: 700; color: #1976D2; font-size: 12px; margin-bottom: 4px;">GOVERNANCE NOTICE: Risk Data from External Systems</div>
+                  <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.5;">
+                    <strong>This platform READS and DISPLAYS risk scores</strong> — it does NOT calculate or modify risk classifications. All risk data originates from external authoritative systems including:
+                    <div style="margin-top: 6px; padding: 6px 10px; background: rgba(33,150,243,0.08); border-left: 3px solid #2196F3; border-radius: 4px; font-size: 10px; line-height: 1.4;">
+                      🔵 <strong>CRP</strong> (Customer Risk Profiling) | 🟢 <strong>Core Banking</strong> | 🟡 <strong>TM</strong> (Transaction Monitoring) | 🟣 <strong>DMS</strong> (Document Management) | 🔴 <strong>Regulatory</strong> (External Sanctions/PEPs)
+                    </div>
+                    Risk score updates must originate from the source system.
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <!-- Risk Factor Grid (Heatmap) - Using EXACT ETL Field Names -->
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;">
               <!-- PROD_RISK_SCORE / PROD_RISK_CATEG -->
-              <div class="risk-factor-card" id="risk-product" style="background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+              <div class="risk-factor-card" id="risk-product" style="background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 16px; text-align: center; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.25); color: #FF9800; padding: 2px 8px; border-radius: 6px;">🔵 CRP</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">PROD_RISK_SCORE</div>
                 <div style="font-size: 32px; font-weight: 700; color: #FFB300; margin-bottom: 4px;" id="prod-risk-score">90</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">PROD_RISK_CATEG</div>
@@ -507,6 +529,7 @@
               <!-- ACT_RISK_SCORE / ACT_RISK_CATEG -->
               <div class="risk-factor-card primary-driver" id="risk-activity" style="background: rgba(244,67,54,0.15); border: 2px solid rgba(244,67,54,0.5); border-radius: 12px; padding: 16px; text-align: center; position: relative;">
                 <div style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); background: #F44336; color: white; padding: 2px 10px; border-radius: 10px; font-size: 9px; font-weight: 700;">PRIMARY DRIVER</div>
+                <div style="position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 600; background: rgba(244,67,54,0.25); color: #F44336; padding: 2px 8px; border-radius: 6px;">🔵 CRP</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">ACT_RISK_SCORE</div>
                 <div style="font-size: 32px; font-weight: 700; color: #F44336; margin-bottom: 4px;" id="act-risk-score">160</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">ACT_RISK_CATEG</div>
@@ -515,7 +538,8 @@
               </div>
               
               <!-- OCCP_RISK_SCORE / OCCP_RISK_CATEG -->
-              <div class="risk-factor-card" id="risk-occupation" style="background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+              <div class="risk-factor-card" id="risk-occupation" style="background: rgba(255,152,0,0.15); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 16px; text-align: center; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.25); color: #FF9800; padding: 2px 8px; border-radius: 6px;">🔵 CRP</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">OCCP_RISK_SCORE</div>
                 <div style="font-size: 32px; font-weight: 700; color: #FFB300; margin-bottom: 4px;" id="occp-risk-score">80</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">OCCP_RISK_CATEG</div>
@@ -524,7 +548,8 @@
               </div>
               
               <!-- COUNTRY_RISK_SCORE / COUNTRY_RISK_CATEG -->
-              <div class="risk-factor-card" id="risk-country" style="background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.3); border-radius: 12px; padding: 16px; text-align: center;">
+              <div class="risk-factor-card" id="risk-country" style="background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.3); border-radius: 12px; padding: 16px; text-align: center; position: relative;">
+                <div style="position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 600; background: rgba(76,175,80,0.25); color: #4CAF50; padding: 2px 8px; border-radius: 6px;">🔵 CRP</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">COUNTRY_RISK_SCORE</div>
                 <div style="font-size: 32px; font-weight: 700; color: #4CAF50; margin-bottom: 4px;" id="country-risk-score">40</div>
                 <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-family: monospace;">COUNTRY_RISK_CATEG</div>
@@ -2502,7 +2527,18 @@
     </div>
   </div>
 
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/data_source_transparency.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  
+  <!-- Legacy Support -->
   <script src="js/mock_data.js"></script>
+  <script src="js/case_manager.js"></script>
   <script src="js/call_request.js"></script>
   <script src="js/risk_engine.js"></script>
   <script src="js/joint_accounts.js"></script>

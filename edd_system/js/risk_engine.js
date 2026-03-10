@@ -23,6 +23,164 @@
  */
 
 const RiskEngine = {
+  // ═══════════════════════════════════════════════════════════════
+  // AUTOMATIC RISK SCORING (From Risk Datasets)
+  // ═══════════════════════════════════════════════════════════════
+  /**
+   * Calculate automatic risk score from customer data
+   * Uses RISK_DATASETS to dynamically calculate risk
+   */
+  calculateRiskScore: function(customer) {
+    if (!window.RISK_DATASETS) {
+      console.warn('Risk Datasets not loaded');
+      return null;
+    }
+
+    let scores = {
+      country: 0,
+      activity: 0,
+      product: 0,
+      occupation: 0,
+      pep: 0,
+    };
+
+    // Country Risk
+    if (customer.nationalityCode) {
+      const country = RISK_DATASETS.getCountryRisk(customer.nationalityCode);
+      scores.country = country ? country.score : 0;
+    }
+
+    // Activity Risk
+    if (customer.activity) {
+      const activity = RISK_DATASETS.getActivityRisk(customer.activity);
+      scores.activity = activity ? activity.score : 0;
+    }
+
+    // Product Risk
+    if (customer.product) {
+      const product = RISK_DATASETS.getProductRisk(customer.product);
+      scores.product = product ? product.score : 0;
+    }
+
+    // Occupation Risk
+    if (customer.occupation) {
+      const occ = RISK_DATASETS.getOccupationRisk(customer.occupation);
+      scores.occupation = occ ? occ.score : 0;
+    }
+
+    // PEP Risk
+    if (customer.customer_name && RISK_DATASETS.isPEP(customer.customer_name)) {
+      const pep = RISK_DATASETS.getPEPData(customer.customer_name);
+      scores.pep = pep ? pep.score : 0;
+    }
+
+    const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+    
+    return {
+      total: totalScore,
+      breakdown: scores,
+      primaryDriver: this._findPrimaryDriver(scores),
+      secondaryDrivers: this._findSecondaryDrivers(scores)
+    };
+  },
+
+  /**
+   * Find primary risk driver (highest score)
+   */
+  _findPrimaryDriver: function(scores) {
+    let max = { name: 'NONE', score: 0 };
+    
+    if (scores.activity > max.score) max = { name: 'ACTIVITY', score: scores.activity };
+    if (scores.occupation > max.score) max = { name: 'OCCUPATION', score: scores.occupation };
+    if (scores.country > max.score) max = { name: 'COUNTRY', score: scores.country };
+    if (scores.product > max.score) max = { name: 'PRODUCT', score: scores.product };
+    if (scores.pep > max.score) max = { name: 'PEP', score: scores.pep };
+    
+    return max;
+  },
+
+  /**
+   * Find secondary risk drivers (all non-zero except primary)
+   */
+  _findSecondaryDrivers: function(scores) {
+    const primary = this._findPrimaryDriver(scores);
+    const secondary = [];
+    
+    if (scores.activity > 0 && primary.name !== 'ACTIVITY') {
+      secondary.push({ name: 'ACTIVITY', score: scores.activity });
+    }
+    if (scores.occupation > 0 && primary.name !== 'OCCUPATION') {
+      secondary.push({ name: 'OCCUPATION', score: scores.occupation });
+    }
+    if (scores.country > 0 && primary.name !== 'COUNTRY') {
+      secondary.push({ name: 'COUNTRY', score: scores.country });
+    }
+    if (scores.product > 0 && primary.name !== 'PRODUCT') {
+      secondary.push({ name: 'PRODUCT', score: scores.product });
+    }
+    if (scores.pep > 0 && primary.name !== 'PEP') {
+      secondary.push({ name: 'PEP', score: scores.pep });
+    }
+    
+    return secondary.sort((a, b) => b.score - a.score);
+  },
+
+  /**
+   * Classify risk level based on score
+   */
+  classifyRisk: function(totalScore) {
+    if (totalScore >= 350) {
+      return 'HIGH';
+    } else if (totalScore >= 200) {
+      return 'MEDIUM';
+    } else {
+      return 'LOW';
+    }
+  },
+
+  /**
+   * Enrich customer risk scores from automatic calculation
+   */
+  enrichCustomerWithRiskScores: function(customer) {
+    const riskCalc = this.calculateRiskScore(customer);
+    
+    if (!riskCalc) {
+      return customer;
+    }
+
+    customer.riskScores = {
+      // Auto-calculated scores
+      PROD_RISK_SCORE: riskCalc.breakdown.product,
+      PROD_RISK_CATEG: riskCalc.breakdown.product > 100 ? 'HIGH' : (riskCalc.breakdown.product > 50 ? 'MEDIUM' : 'LOW'),
+      
+      ACT_RISK_SCORE: riskCalc.breakdown.activity,
+      ACT_RISK_CATEG: riskCalc.breakdown.activity > 100 ? 'HIGH' : (riskCalc.breakdown.activity > 50 ? 'MEDIUM' : 'LOW'),
+      
+      OCCP_RISK_SCORE: riskCalc.breakdown.occupation,
+      OCCP_RISK_CATEG: riskCalc.breakdown.occupation > 100 ? 'HIGH' : (riskCalc.breakdown.occupation > 50 ? 'MEDIUM' : 'LOW'),
+      
+      COUNTRY_RISK_SCORE: riskCalc.breakdown.country,
+      COUNTRY_RISK_CATEG: riskCalc.breakdown.country > 100 ? 'HIGH' : (riskCalc.breakdown.country > 50 ? 'MEDIUM' : 'LOW'),
+      
+      // Final score
+      FINAL_RISK_SCORE: riskCalc.total,
+      FINAL_RISK_CATEG: this.classifyRisk(riskCalc.total),
+      
+      // Additional metadata
+      PRIMARY_RISK_DRIVER: riskCalc.primaryDriver.name,
+      SECONDARY_DRIVERS: riskCalc.secondaryDrivers,
+      LAST_SCORE_DATE: new Date().toISOString().split('T')[0],
+      AUTO_HIGH_TRIGGER: riskCalc.primaryDriver.score >= 200,
+      TRIGGER_REASON: riskCalc.primaryDriver.score >= 200 ? 
+        `Primary driver: ${riskCalc.primaryDriver.name} (${riskCalc.primaryDriver.score} points)` : 
+        null,
+      SECTOR_DESC: customer.sector || 'GENERAL',
+      INDUSTRY: customer.activity || '-'
+    };
+
+    return customer;
+  },
+
   // Risk category colors
   COLORS: {
     LOW: '#4CAF50',

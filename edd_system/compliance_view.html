@@ -168,6 +168,65 @@
           </div>
         </div>
 
+        <!-- DATA SOURCE & COMPLIANCE REGISTRY FRESHNESS -->
+        <div style="background: linear-gradient(135deg, rgba(156,39,176,0.08) 0%, rgba(156,39,176,0.03) 100%); border: 1px solid rgba(156,39,176,0.2); border-radius: 12px; padding: 16px; margin: 24px 0;">
+          <h3 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            Compliance Registry &amp; PEP Database Status
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+            <!-- PEP Database -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(156,39,176,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #9C27B0; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🟣</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">PEP Database</div>
+                  <div style="color: #888; font-size: 11px;">Politically Exposed Persons</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 14:10</div>
+              </div>
+            </div>
+            
+            <!-- Sanctions Lists -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(244,67,54,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #F44336; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🔴</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">Sanctions Lists</div>
+                  <div style="color: #888; font-size: 11px;">OFAC, UN, EU, FATF</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 14:05</div>
+              </div>
+            </div>
+            
+            <!-- Adverse Media -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,193,7,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #FFC107; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333;">🟡</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">Adverse Media</div>
+                  <div style="color: #888; font-size: 11px;">News and Public Records</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 13:50</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Compliance Notice -->
+          <div style="margin-top: 12px; padding: 10px 12px; background: rgba(156,39,176,0.05); border-left: 3px solid #9C27B0; border-radius: 4px; font-size: 11px; color: #888; line-height: 1.5;">
+            <strong style="color: #9C27B0;">⚖️ Regulatory Compliance:</strong> Escalated cases are based on real-time matching against authoritative regulatory databases (PEP lists, Sanctions lists, Adverse Media). All compliance decisions are documented with source attribution and decision timestamp for audit purposes.
+          </div>
+        </div>
+
         <!-- Two Column Layout -->
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
           <!-- Escalated Cases -->
@@ -250,6 +309,18 @@
     </main>
   </div>
 
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  
+  <!-- 🔐 GOVERNANCE & TRANSPARENCY LAYER -->
+  <script src="js/data_source_transparency.js"></script>
+  
+  <!-- Legacy Support -->
   <script src="js/mock_data.js"></script>
   <script src="js/compliance_view.js"></script>
   <script>

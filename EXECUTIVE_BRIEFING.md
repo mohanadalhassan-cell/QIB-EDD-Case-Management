@@ -424,7 +424,183 @@ Password: qib@2030
 
 ---
 
-## 📞 Support & Next Steps
+## � Risk Governance Model — Executive Presentation Slide
+
+### 📊 Core Architecture: "Risk Reader, Not Risk Calculator"
+
+The QIB EDD Platform operates under an **enterprise governance principle** that separates responsibilities:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    RISK SOURCE SYSTEMS                       │
+│  (Calculate Risk & Make Authoritative Determinations)       │
+├─────────────────────────────────────────────────────────────┤
+│  🔵 CRP (Customer Risk Profiling)  → Risk Scores            │
+│  🟢 Core Banking (T24)              → Account Risk           │
+│  🟡 TM (Transaction Monitoring)     → Activity Risk          │
+│  🔴 Regulatory (OFAC/FATF)          → Sanctions & PEP Lists  │
+│  🟣 DMS (Document Mgmt)             → KYC Documentation      │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+              (Data Integration Layer)
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│         QIB EDD PLATFORM (This System)                      │
+│  → READS risk data from authoritative sources               │
+│  → CONTEXTUALIZES risk within investigation framework        │
+│  → DISPLAYS source attribution on every risk score          │
+│  → MAINTAINS audit trail of non-repudiation                 │
+│  → ENABLES human judgment & compliance review               │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+          (EDD Case Management Workspace)
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│         COMPLIANCE & OPERATIONS TEAMS                        │
+│  → Review customer information with full context            │
+│  → Make informed compliance decisions                       │
+│  → Document decision rationale in audit trail               │
+│  → Escalate when regulatory thresholds breached             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🎯 What This Means for Governance
+
+**Our Platform Does NOT:**
+- ❌ Calculate risk scores internally
+- ❌ Modify or override external system determinations
+- ❌ Create proprietary risk algorithms
+- ❌ Make autonomous risk decisions
+- ❌ Hide source data lineage
+
+**Our Platform DOES:**
+- ✅ Retrieve risk data from authoritative systems
+- ✅ Display risk source attribution (CRP, T24, TM, etc.)
+- ✅ Show last sync timestamp for all risk data
+- ✅ Maintain complete audit trail
+- ✅ Enable compliance officer human judgment
+- ✅ Provide investigation workspace with full context
+
+### 📋 Data Source Attribution Example
+
+**Every risk display across the platform includes:**
+
+```
+Risk Score: 78/670
+Category: HIGH
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Source:    🔵 CRP (Authoritative)
+Last Sync: 2026-03-10 14:35 UTC
+Status:    ✓ VERIFIED
+Authority: EXTERNAL SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+This is displayed on:
+- Dashboard pages (all segments)
+- Risk case management screens
+- Compliance review panels
+- Executive dashboard
+- Customer 360 views
+- CDD workflow screens
+
+### 🛡️ Enterprise Risk Data Sources
+
+| Source System | Responsibility | Data Type | Authority |
+|---|---|---|---|
+| **CRP** | Customer Risk Profiling | Risk Scores (0-670) | AUTHORITATIVE |
+| **Core Banking (T24)** | Account & Segment Risk | Customer Data | AUTHORITATIVE |
+| **TM** | Transaction Monitoring | Activity Risk | AUTHORITATIVE |
+| **Regulatory DB** | Sanctions & PEP | Designation Lists | AUTHORITATIVE |
+| **DMS** | Document Management | KYC Files | SOURCE |
+
+**All system integrations maintain:** Non-repudiation, Real-time sync verification, Timestamp tracking, Audit logging
+
+### 🔄 Integration Flow & Data Freshness
+
+The platform automatically displays sync status for all external systems:
+
+```
+System Integration Dashboard
+────────────────────────────────────────
+
+CRP System
+  ✓ LIVE SYNC
+  Last Update: 14:35 UTC
+  Data Quality: VERIFIED
+  
+Core Banking (T24)
+  ✓ LIVE SYNC
+  Last Update: 14:30 UTC
+  Data Quality: VERIFIED
+  
+Transaction Monitoring
+  ✓ LIVE SYNC
+  Last Update: 14:25 UTC
+  Data Quality: VERIFIED
+```
+
+On every page displaying risk data, users see:
+1. **Source System** (which system calculated/determined)
+2. **Last Sync Time** (when data was last retrieved)
+3. **Data Quality Status** (VERIFIED/STALE/ERROR)
+4. **Authority Level** (AUTHORITATIVE or CALCULATED)
+
+### 💼 Compliance & Governance Implications
+
+**For Regulatory Compliance:**
+- ✅ Clear separation of responsibilities
+- ✅ Non-repudiation of risk determinations
+- ✅ Audit trail shows source system for every decision
+- ✅ No proprietary algorithms hide risk calculation
+- ✅ External data authority preserved
+
+**For Internal Controls:**
+- ✅ Human judgment always required (no automation)
+- ✅ Source attribution prevents liability disputes
+- ✅ Timestamp tracking proves data freshness
+- ✅ Investigation workflow documented
+- ✅ Metadata maintained for compliance review
+
+**For Operational Efficiency:**
+- ✅ Fast access to contextualized risk data
+- ✅ Clear data lineage for investigations
+- ✅ Reduced re-keying and data duplication
+- ✅ Automated source attribution (no manual entry)
+- ✅ Real-time visibility into data sync status
+
+### 📱 User Experience: Source Attribution in Action
+
+When a compliance officer navigates the system:
+
+1. **Landing on Dashboard**
+   - Sees data freshness status for all risk systems
+   - Knows exactly when data was last synced
+   - Understands which sources are feeding current data
+
+2. **Reviewing a Customer Case**
+   - Every risk score displays its source (CRP, T24, TM)
+   - Governance disclosure explains data comes from external systems
+   - Last sync time visible on case screen
+
+3. **Making Compliance Decision**
+   - Audit trail automatically links decision to source data
+   - Non-repudiation preserved (can't claim unknowledge)
+   - Regulatory body can trace every data point
+
+4. **Escalation/Reporting**
+   - Source attribution included in compliance reports
+   - External system contact info provided
+   - Clear accountability path established
+
+### 🎯 Key Takeaway for Board/Executives
+
+> **"The QIB EDD Platform is an investigation enablement system, not a risk calculation engine. We read risk determinations from authoritative external systems, display them with full source attribution and audit trail, and enable our compliance teams to make informed human decisions. This architecture ensures regulatory compliance, preserves data integrity, and eliminates the ambiguity of internal risk algorithms."**
+
+---
+
+## �📞 Support & Next Steps
 
 ### For the Board Presentation:
 1. ✅ Open `http://localhost:8585/login.html`

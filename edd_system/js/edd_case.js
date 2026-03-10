@@ -2,6 +2,7 @@
 
 // Global variable to store current customer RIM for network graph
 let currentCustomerRim = null;
+let caseManager = null;
 
 document.addEventListener('DOMContentLoaded', function() {
   // Check session
@@ -16,9 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('user-role').textContent = session.user?.role || 'Role';
   document.getElementById('user-avatar').textContent = getInitials(session.user?.name || 'User');
 
-  // Get case ID from URL
+  // Initialize case manager if available
+  if (typeof CaseManager !== 'undefined' && !window.caseManager) {
+    window.caseManager = new CaseManager();
+  }
+  caseManager = window.caseManager;
+
+  // Get case ID from URL - support both 'id' and 'case_id' parameters
   const urlParams = new URLSearchParams(window.location.search);
-  const caseId = urlParams.get('id') || 'EDD-2024-001234';
+  const caseId = urlParams.get('case_id') || urlParams.get('id') || 'EDD-2024-001234';
 
   // Load case data
   loadCase(caseId);
@@ -58,41 +65,57 @@ function showExportModal() {
 }
 
 function loadCase(caseId) {
-  // Find case in mock data (use caseId field from mock data)
-  const eddCase = MockData.eddCases.find(c => c.caseId === caseId) || MockData.eddCases[0];
-  const customer = MockData.customers.find(c => c.rim === eddCase.rim);
+  // First try to load from case manager (new CDD case format)
+  let eddCase = null;
+  let customer = null;
+
+  if (caseManager) {
+    eddCase = caseManager.getCaseById(caseId);
+    if (eddCase) {
+      customer = caseManager.findCustomer(eddCase.rim);
+    }
+  }
+
+  // Fallback to old MockData format if not found in case manager
+  if (!eddCase) {
+    eddCase = MockData.eddCases.find(c => c.caseId === caseId) || MockData.eddCases[0];
+    customer = MockData.customers.find(c => c.rim === eddCase.rim);
+  }
 
   if (!eddCase || !customer) return;
 
   // Store current RIM for network graph
   currentCustomerRim = customer.rim;
 
-  // Update header
-  document.getElementById('case-id').textContent = eddCase.caseId;
+  // Update header - Handle both case formats
+  document.getElementById('case-id').textContent = eddCase.case_id || eddCase.caseId;
   document.getElementById('customer-name').textContent = customer.name;
   document.getElementById('rim-number').textContent = customer.rim;
-  document.getElementById('segment').textContent = customer.segment;
-  document.getElementById('trigger-source').textContent = eddCase.triggerSource;
-  document.getElementById('created-date').textContent = formatDate(eddCase.createdDate);
+  document.getElementById('segment').textContent = customer.segment || 'Private Banking';
+  document.getElementById('trigger-source').textContent = eddCase.triggerSource || 'T24/CRP';
+  document.getElementById('created-date').textContent = formatDate(eddCase.created_date || eddCase.createdDate);
 
   // Risk badge
   const riskBadge = document.getElementById('risk-badge');
-  riskBadge.textContent = customer.riskClassification.toUpperCase() + ' RISK';
-  riskBadge.className = 'risk-badge ' + customer.riskClassification.toLowerCase();
+  const riskLevel = eddCase.risk_level || customer.riskClassification || 'HIGH';
+  riskBadge.textContent = riskLevel.toUpperCase() + ' RISK';
+  riskBadge.className = 'risk-badge ' + riskLevel.toLowerCase();
 
   // Status badge
   const statusBadge = document.getElementById('status-badge');
-  statusBadge.textContent = formatStatus(eddCase.status);
-  statusBadge.className = 'status-badge ' + getStatusClass(eddCase.status);
+  const status = eddCase.case_status || eddCase.status || 'PENDING_CDD';
+  statusBadge.textContent = formatStatus(status);
+  statusBadge.className = 'status-badge ' + getStatusClass(status);
 
   // Triggers
   const triggersList = document.getElementById('triggers-list');
-  triggersList.innerHTML = eddCase.triggers.map(t => 
+  const triggers = eddCase.triggers || [];
+  triggersList.innerHTML = triggers.map(t => 
     `<span class="status-badge escalated">${t}</span>`
   ).join('');
 
   // Update workflow steps
-  updateWorkflow(eddCase.status);
+  updateWorkflow(status);
 
   // Update Risk Analysis Panel (ETL/SnapView data)
   if (typeof RiskEngine !== 'undefined' && customer.riskScores) {

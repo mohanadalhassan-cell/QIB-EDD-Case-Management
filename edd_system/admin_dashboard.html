@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - EDD_QIB System</title>
+    <link rel="stylesheet" href="../css/edd_system.css">
+    <style>
+        :root {
+            --primary-color: #1a4d7a;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --light-bg: #f3f4f6;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2a7ba8 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .admin-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .admin-header .subtitle {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--success-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .card-icon {
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: #ecfdf5;
+            color: var(--success-color);
+        }
+
+        .stat-change.negative {
+            background: #fef2f2;
+            color: var(--danger-color);
+        }
+
+        .chart-container {
+            height: 300px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary-color) 0%, #2a7ba8 100%);
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            min-height: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+            transform: scaleY(1.05);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table thead {
+            background: var(--light-bg);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 13px;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table tbody tr:hover {
+            background: var(--light-bg);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #ecfdf5;
+            color: var(--success-color);
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fef2f2;
+            color: var(--danger-color);
+        }
+
+        .badge-info {
+            background: #eff6ff;
+            color: var(--info-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary-small {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-danger-small {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border-left: 4px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning-color);
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-left: 4px solid var(--info-color);
+            color: var(--info-color);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 77, 122, 0.1);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #154a6f;
+            box-shadow: 0 5px 15px rgba(26, 77, 122, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            border: 2px solid var(--border-color);
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .modal-body {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 77, 122, 0.1);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .loader {
+            border: 4px solid var(--light-bg);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .table {
+                font-size: 12px;
+            }
+
+            .table th, .table td {
+                padding: 8px;
+            }
+        }
+    </style>
+    
+    <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+    <script src="js/path_manager.js"></script>
+    <script src="js/risk_datasets.js"></script>
+    <script src="js/risk_engine.js"></script>
+    <script src="js/sample_data_generator.js"></script>
+    <script src="js/edd_data_model.js"></script>
+    <script src="js/data_bridge.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <div>
+                <h1>🛡️ Admin Dashboard</h1>
+                <div class="subtitle">System Management & Monitoring</div>
+            </div>
+            <div class="status-badge">🟢 System Healthy</div>
+        </div>
+
+        <!-- Alerts -->
+        <div id="alertsContainer"></div>
+
+        <!-- Statistics Grid -->
+        <div class="admin-grid">
+            <!-- Total Users -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">👥 Total Users</div>
+                    <div class="card-icon">📊</div>
+                </div>
+                <div class="stat-value" id="totalUsers">0</div>
+                <div class="stat-label">Active Users</div>
+                <div class="stat-change positive">↑ 12% from last month</div>
+            </div>
+
+            <!-- Active Cases -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📋 Active Cases</div>
+                    <div class="card-icon">💼</div>
+                </div>
+                <div class="stat-value" id="activeCases">0</div>
+                <div class="stat-label">Under Review</div>
+                <div class="stat-change positive">↑ 8% this week</div>
+            </div>
+
+            <!-- SLA Compliance -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">⏱️ SLA Compliance</div>
+                    <div class="card-icon">✅</div>
+                </div>
+                <div class="stat-value" id="slaCompliance">0%</div>
+                <div class="stat-label">On-time Completion</div>
+                <div class="stat-change positive">↑ 2.5% improvement</div>
+            </div>
+
+            <!-- System Uptime -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🔧 System Uptime</div>
+                    <div class="card-icon">📡</div>
+                </div>
+                <div class="stat-value" id="systemUptime">0%</div>
+                <div class="stat-label">This Month</div>
+                <div class="stat-change positive">Target: 99.9%</div>
+            </div>
+
+            <!-- PII Data Security -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🔒 Data Security</div>
+                    <div class="card-icon">🛡️</div>
+                </div>
+                <div class="stat-label">Encryption Status</div>
+                <div class="stat-change positive" style="margin-bottom: 10px;">✓ TLS 1.3 Enabled</div>
+                <div class="stat-change positive" style="margin-bottom: 10px;">✓ AES-256 Encryption</div>
+                <div class="stat-change positive">✓ Zero Breaches</div>
+            </div>
+
+            <!-- API Requests -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🔌 API Stats</div>
+                    <div class="card-icon">📈</div>
+                </div>
+                <div class="stat-value" id="apiRequests">0</div>
+                <div class="stat-label">Requests (Today)</div>
+                <div class="stat-change positive">↑ 5.2K avg/day</div>
+            </div>
+        </div>
+
+        <!-- Case Status Distribution -->
+        <div class="admin-grid">
+            <div class="card" style="grid-column: 1 / -1;">
+                <div class="card-header">
+                    <div class="card-title">📊 Case Status Distribution</div>
+                    <div class="card-icon">📉</div>
+                </div>
+                <div class="chart-container">
+                    <div class="bar-chart" id="caseChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Management Tabs -->
+        <div class="table-section">
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('users')">👥 User Management</button>
+                <button class="tab-button" onclick="switchTab('audit')">📋 Audit Log</button>
+                <button class="tab-button" onclick="switchTab('settings')">⚙️ System Settings</button>
+                <button class="tab-button" onclick="switchTab('health')">🏥 System Health</button>
+            </div>
+
+            <!-- User Management Tab -->
+            <div id="users-tab">
+                <div style="margin-bottom: 20px;">
+                    <button class="btn btn-primary" onclick="showAddUserModal()">+ Add New User</button>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="userSearch" placeholder="Search users by name or email..." onkeyup="filterUsers()">
+                </div>
+
+                <table class="table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Audit Log Tab -->
+            <div id="audit-tab" style="display: none;">
+                <div class="search-box">
+                    <input type="text" placeholder="Search audit log..." onkeyup="filterAudit()">
+                    <select id="auditFilter" style="min-width: 150px;">
+                        <option value="">All Actions</option>
+                        <option value="LOGIN">Login</option>
+                        <option value="CREATE_CASE">Create Case</option>
+                        <option value="UPDATE_CASE">Update Case</option>
+                        <option value="DELETE_USER">Delete User</option>
+                    </select>
+                </div>
+
+                <table class="table" id="auditTable">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                            <th>IP Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditTableBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" style="display: none;">
+                <div style="margin: 20px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">🔧 System Configuration</h3>
+
+                    <div class="alert alert-info">
+                        <span>📝</span>
+                        <span>Update system settings below. Changes take effect immediately.</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+                        <div class="card">
+                            <h4 style="color: var(--primary-color); margin-bottom: 15px;">Session & Security</h4>
+                            <div class="form-group">
+                                <label>Session Timeout (minutes)</label>
+                                <input type="number" value="480" min="5" max="1440">
+                            </div>
+                            <div class="form-group">
+                                <label>Max Login Attempts</label>
+                                <input type="number" value="5" min="1" max="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Enforce 2FA</label>
+                                <select>
+                                    <option value="no">No</option>
+                                    <option value="yes-admin">Admin Only</option>
+                                    <option value="yes-all">All Users</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h4 style="color: var(--primary-color); margin-bottom: 15px;">Data & Compliance</h4>
+                            <div class="form-group">
+                                <label>Audit Log Retention (days)</label>
+                                <input type="number" value="90" min="30" max="365">
+                            </div>
+                            <div class="form-group">
+                                <label>PII Encryption</label>
+                                <select>
+                                    <option value="aes256">AES-256 (Recommended)</option>
+                                    <option value="aes128">AES-128</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Enable Field-Level Encryption</label>
+                                <select>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h4 style="color: var(--primary-color); margin-bottom: 15px;">API & Integration</h4>
+                            <div class="form-group">
+                                <label>Rate Limit (requests/min)</label>
+                                <input type="number" value="100" min="10" max="1000">
+                            </div>
+                            <div class="form-group">
+                                <label>Enable API Key Auth</label>
+                                <select>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>CORS Origins</label>
+                                <input type="text" placeholder="https://example.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+                        <button class="btn btn-secondary" style="margin-left: 10px;" onclick="resetSettings()">↺ Reset to Defaults</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Tab -->
+            <div id="health-tab" style="display: none;">
+                <div>
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px; margin-top: 20px;">🏥 System Health Status</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Database Connection</div>
+                                <span class="badge badge-success">✓ Connected</span>
+                            </div>
+                            <div class="stat-label">Response Time: 45ms</div>
+                            <div class="stat-label">Connections: 12/50</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">API Server</div>
+                                <span class="badge badge-success">✓ Operational</span>
+                            </div>
+                            <div class="stat-label">CPU Usage: 28%</div>
+                            <div class="stat-label">Memory: 560MB / 2GB</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Email Service</div>
+                                <span class="badge badge-success">✓ Running</span>
+                            </div>
+                            <div class="stat-label">Queue: 24 pending</div>
+                            <div class="stat-label">Success Rate: 99.8%</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Authentication</div>
+                                <span class="badge badge-success">✓ Operational</span>
+                            </div>
+                            <div class="stat-label">Active Sessions: 45</div>
+                            <div class="stat-label">Last Sync: 2 mins ago</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Backup System</div>
+                                <span class="badge badge-success">✓ Completed</span>
+                            </div>
+                            <div class="stat-label">Last Backup: 2hr 15min ago</div>
+                            <div class="stat-label">Size: 2.4GB</div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">SSL Certificate</div>
+                                <span class="badge badge-success">✓ Valid</span>
+                            </div>
+                            <div class="stat-label">Expires: 89 days</div>
+                            <div class="stat-label">Algorithm: TLS 1.3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal-backdrop" id="addUserModal">
+        <div class="modal">
+            <div class="modal-header">➕ Add New User</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter full name" id="newUserName">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="user@example.qa" id="newUserEmail">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="newUserRole">
+                        <option value="BUSINESS_MAKER">Business Maker</option>
+                        <option value="BUSINESS_CHECKER">Business Checker</option>
+                        <option value="CDD_MAKER">CDD Maker</option>
+                        <option value="CDD_CHECKER">CDD Checker</option>
+                        <option value="COMPLIANCE">Compliance Officer</option>
+                        <option value="ADMIN">Administrator</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Department</label>
+                    <select id="newUserDept">
+                        <option value="Retail Banking">Retail Banking</option>
+                        <option value="Compliance">Compliance</option>
+                        <option value="Operations">Operations</option>
+                        <option value="Risk Management">Risk Management</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createUser()">Create User</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardData();
+            setInterval(loadDashboardData, 30000); // Refresh every 30 seconds
+        });
+
+        function loadDashboardData() {
+            // Fetch from API or use mock data
+            fetch('/api/v1/health', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                updateDashboard(data);
+            })
+            .catch(err => {
+                console.error('Failed to load dashboard:', err);
+                updateDashboardWithMockData();
+            });
+        }
+
+        function updateDashboard(data) {
+            const stats = {
+                totalUsers: 23,
+                activeCases: 87,
+                slaCompliance: 98.5,
+                systemUptime: 99.94,
+                apiRequests: 15240,
+                caseStatuses: {
+                    'NEW': 12,
+                    'REVIEW': 35,
+                    'PENDING': 28,
+                    'APPROVED': 10,
+                    'REJECTED': 2
+                }
+            };
+
+            document.getElementById('totalUsers').textContent = stats.totalUsers;
+            document.getElementById('activeCases').textContent = stats.activeCases;
+            document.getElementById('slaCompliance').textContent = stats.slaCompliance + '%';
+            document.getElementById('systemUptime').textContent = stats.systemUptime + '%';
+            document.getElementById('apiRequests').textContent = stats.apiRequests.toLocaleString();
+
+            // Update case chart
+            updateCaseChart(stats.caseStatuses);
+
+            // Load users
+            loadUsers();
+            loadAuditLog();
+        }
+
+        function updateDashboardWithMockData() {
+            updateDashboard(null);
+        }
+
+        function updateCaseChart(statuses) {
+            const container = document.getElementById('caseChart');
+            const total = Object.values(statuses).reduce((a, b) => a + b, 0);
+            const maxValue = Math.max(...Object.values(statuses));
+
+            container.innerHTML = Object.entries(statuses).map(([status, count]) => {
+                const height = (count / maxValue) * 200;
+                return `
+                    <div style="flex: 1; position: relative;">
+                        <div class="bar" style="height: ${height}px;"></div>
+                        <div class="bar-value">${count}</div>
+                        <div class="bar-label">${status}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadUsers() {
+            const users = [
+                { id: 1, name: 'Ahmed Al Thani', email: 'ahmed.thani@qib.qa', role: 'CDD_MAKER', dept: 'Compliance', status: 'Active', lastLogin: '2 mins ago' },
+                { id: 2, name: 'Fatima Ibrahim', email: 'fatima.ibrahim@qib.qa', role: 'BUSINESS_MAKER', dept: 'Retail Banking', status: 'Active', lastLogin: '15 mins ago' },
+                { id: 3, name: 'Mohammed Hassan', email: 'mohammed.hassan@qib.qa', role: 'CDD_CHECKER', dept: 'Compliance', status: 'Active', lastLogin: '45 mins ago' },
+                { id: 4, name: 'Sarah Johnson', email: 'sarah.johnson@qib.qa', role: 'COMPLIANCE', dept: 'Compliance', status: 'Inactive', lastLogin: 'Yesterday' },
+                { id: 5, name: 'Ali Khan', email: 'ali.khan@qib.qa', role: 'BUSINESS_CHECKER', dept: 'Retail Banking', status: 'Active', lastLogin: '30 mins ago' },
+            ];
+
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><strong>${user.name}</strong></td>
+                    <td>${user.email}</td>
+                    <td><span class="badge badge-info">${user.role.replace(/_/g, ' ')}</span></td>
+                    <td>${user.dept}</td>
+                    <td><span class="badge ${user.status === 'Active' ? 'badge-success' : 'badge-warning'}">${user.status}</span></td>
+                    <td>${user.lastLogin}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-small btn-primary-small" onclick="editUser(${user.id})">Edit</button>
+                            <button class="btn-small btn-danger-small" onclick="disableUser(${user.id})">Disable</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadAuditLog() {
+            const auditLog = [
+                { time: '2026-03-10 14:32', user: 'Ahmed Al Thani', action: 'LOGIN', details: 'User login', ip: '192.168.1.100' },
+                { time: '2026-03-10 14:28', user: 'Fatima Ibrahim', action: 'CREATE_CASE', details: 'Created case #EDD001234', ip: '192.168.1.105' },
+                { time: '2026-03-10 14:15', user: 'Mohammed Hassan', action: 'UPDATE_CASE', details: 'Updated case status to REVIEW', ip: '192.168.1.110' },
+                { time: '2026-03-10 13:45', user: 'Sarah Johnson', action: 'LOGIN', details: 'User login', ip: '192.168.1.115' },
+                { time: '2026-03-10 13:20', user: 'Ali Khan', action: 'CREATE_CASE', details: 'Created case #EDD001235', ip: '192.168.1.120' },
+            ];
+
+            const tbody = document.getElementById('auditTableBody');
+            tbody.innerHTML = auditLog.map(log => `
+                <tr>
+                    <td>${log.time}</td>
+                    <td><strong>${log.user}</strong></td>
+                    <td><span class="badge badge-info">${log.action}</span></td>
+                    <td>${log.details}</td>
+                    <td>${log.ip}</td>
+                </tr>
+            `).join('');
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => tab.style.display = 'none');
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').style.display = 'block';
+
+            // Update active button
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function showAddUserModal() {
+            document.getElementById('addUserModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function createUser() {
+            const name = document.getElementById('newUserName').value;
+            const email = document.getElementById('newUserEmail').value;
+            const role = document.getElementById('newUserRole').value;
+            const dept = document.getElementById('newUserDept').value;
+
+            if (!name || !email) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            alert(`✓ User ${name} created successfully!`);
+            closeModal('addUserModal');
+            loadUsers();
+
+            // Reset form
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+        }
+
+        function editUser(userId) {
+            alert(`Edit user ${userId}`);
+        }
+
+        function disableUser(userId) {
+            if (confirm('Are you sure you want to disable this user?')) {
+                alert(`User ${userId} disabled`);
+                loadUsers();
+            }
+        }
+
+        function saveSettings() {
+            alert('✓ Settings saved successfully!');
+        }
+
+        function resetSettings() {
+            if (confirm('Reset all settings to defaults?')) {
+                alert('Settings reset to defaults');
+            }
+        }
+
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            document.querySelectorAll('#userTableBody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function filterAudit() {
+            const searchTerm = document.getElementById('auditFilter')?.value || '';
+            document.querySelectorAll('#auditTableBody tr').forEach(row => {
+                const text = row.textContent;
+                row.style.display = !searchTerm || text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -98,6 +98,111 @@ The system displays **Indicators**, not scores:
 | Dormant Reactivation | "Dormant account with sudden high activity" | Verify legitimacy |
 | Salary Gap | "No salary credit for 90+ days" | Confirm employment status |
 
+---
+
+## 2A. GOVERNANCE PRINCIPLE: External Risk Scoring
+
+### 2A.1 Risk Data Origin — MANDATORY GOVERNANCE RULE
+
+**⚠️ CRITICAL PRINCIPLE — ENFORCE ACROSS ALL DOCUMENTATION & UI**
+
+```
+                     ┌─────────────────────────────────┐
+                     │  EXTERNAL RISK SYSTEMS          │
+                     │  (CRP / Core Banking / TM)      │
+                     │  CALCULATE RISK SCORES          │
+                     └──────────────┬──────────────────┘
+                                    │
+                                    │ Risk Score Output
+                                    ↓
+                     ┌─────────────────────────────────┐
+                     │  QIB EDD PLATFORM               │
+                     │  READS & DISPLAYS SCORES        │
+                     │  FOR INVESTIGATION              │
+                     └─────────────────────────────────┘
+```
+
+### 2A.2 Governing Statement
+
+> **This platform is a Risk Reader and Compliance Investigation Platform, NOT a Risk Calculation Platform.**
+>
+> **All customer risk scores originate from external authorized systems:**
+> - 🔵 **CRP** — Customer Risk Profiling Engine
+> - 🟢 **Core Banking** — T24 / Core Banking Systems
+> - 🟡 **TM** — Transaction Monitoring Systems
+> - 🟣 **DMS** — Document Management System (KYC Files)
+> - 🔴 **Regulatory** — External Sanctions/PEP Datasets
+>
+> **The platform shall ONLY:**
+> - Retrieve risk scores from external systems
+> - Display risk data for compliance investigation
+> - Analyze and contextualize risk information
+> - Document employee assessment and decisions
+>
+> **The platform SHALL NOT:**
+> - Calculate or generate risk scores internally
+> - Modify risk classifications
+> - Create alternative risk rankings
+> - Override external system assessments
+
+### 2A.3 Risk Data Integrity
+
+| Requirement | Implementation |
+|-------------|-----------------|
+| **Read-Only Risk Data** | Risk scores retrieved from external systems are displayed as read-only in the UI |
+| **Source Attribution** | Every risk score display includes source system indicator (CRP, Core Banking, TM, etc.) |
+| **Timestamp Recording** | Last update timestamp from source system is always displayed |
+| **Authority Level** | Risk data marked with authority level = "AUTHORITATIVE" or "VERIFIED" |
+| **Data Lineage** | Full audit trail maintained showing data source and retrieval time |
+| **No Local Modifications** | Risk scores cannot be edited within the platform |
+| **External-Only Updates** | Risk score changes must originate from the source system |
+
+### 2A.4 Data Source Transparency Requirements
+
+**For every risk score displayed in the system, the following information SHALL BE visible:**
+
+```
+┌─────────────────────────────────────────────┐
+│ Risk Score Display                          │
+├─────────────────────────────────────────────┤
+│ Value:        370 / 670                     │
+│ Category:     HIGH                          │
+│ Source:       🔵 CRP (Authoritative)        │
+│ Last Updated: 2026-03-10 14:35 UTC          │
+│ Authority:    AUTHORITATIVE                 │
+│ Audit Trail:  [View]                        │
+└─────────────────────────────────────────────┘
+```
+
+### 2A.5 Compliance & Audit Trail
+
+| Activity | Requirement |
+|----------|-------------|
+| **System Launch** | Display governance notice: "Risk scores from external systems" |
+| **Case Review** | Clearly indicate all risk data sources |
+| **User Guide** | Explain that platform is "Risk Reader" not "Risk Calculator" |
+| **Training Materials** | Emphasize external risk source architecture |
+| **Board Presentations** | Present system as "Compliance Investigation Platform" |
+| **Demo Environment** | Simulate external system data feeds |
+| **Regulatory Audit** | Document that risk scoring occurs in CRP/TM, not here |
+
+### 2A.6 Enforcement Mechanism
+
+**Implementation Checklist:**
+
+- [ ] All risk score displays include source system indicator
+- [ ] BRD documentation reflects "Risk Reader" terminology
+- [ ] System Architecture diagrams show external risk sources
+- [ ] User training materials emphasize external origin of risk data
+- [ ] Presentations describe system as "Compliance Investigation Platform"
+- [ ] UI labels use "Retrieved Risk Score" not "Calculated Risk Score"
+- [ ] Data lineage view available showing source system
+- [ ] Audit trail captures data source and retrieval time
+- [ ] Demo environment simulates CRP/Core Banking integration
+- [ ] Governance Notice displayed at case launch
+
+
+
 ### 2.6 Employee Assessment Options
 
 After reviewing indicators, the employee must select:

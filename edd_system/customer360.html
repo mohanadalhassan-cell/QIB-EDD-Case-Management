@@ -135,6 +135,65 @@
       </header>
 
       <div class="page-content">
+        <!-- DATA SOURCE & CUSTOMER PROFILE STATUS -->
+        <div style="background: linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(0,212,255,0.03) 100%); border: 1px solid rgba(0,212,255,0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            Customer Profile Data Sources (Call Center Limited View)
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+            <!-- Core Banking Profile -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #4CAF50; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🟢</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">Core Banking</div>
+                  <div style="color: #888; font-size: 11px;">Account & Customer Data</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 14:40</div>
+              </div>
+            </div>
+            
+            <!-- Regulatory Database -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(33,150,243,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #2196F3; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🔵</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">Regulatory DB</div>
+                  <div style="color: #888; font-size: 11px;">QCB & FATF Listings</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 14:20</div>
+              </div>
+            </div>
+            
+            <!-- Call Center Restrictions -->
+            <div style="background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #FFC107; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333;">⚠️</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">Risk Data</div>
+                  <div style="color: #888; font-size: 11px;">Restricted from Call Center</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #FF9800; margin-bottom: 4px;">🔒 RESTRICTED</div>
+                <div style="color: #888; font-size: 11px;">Per Compliance Policy</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Call Center Policy Notice -->
+          <div style="margin-top: 12px; padding: 10px 12px; background: rgba(255,193,7,0.05); border-left: 3px solid #FFC107; border-radius: 4px; font-size: 11px; color: #888; line-height: 1.5;">
+            <strong style="color: #FF9800;">⚠️ Call Center Data Policy:</strong> Call Center personnel can only view customer profile and account information from Core Banking and basic regulatory status. Advanced risk analysis, CRP scores, and Transaction Monitoring data are restricted to AML Compliance personnel only. All data access is logged for audit purposes.
+          </div>
+        </div>
+
         <!-- Search Panel -->
         <div class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(136,0,255,0.04)); border: 1px solid rgba(0,212,255,0.2);">
           <div class="card-body" style="padding: 24px;">
@@ -511,6 +570,18 @@
     </main>
   </div>
 
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  
+  <!-- 🔐 GOVERNANCE & TRANSPARENCY LAYER -->
+  <script src="js/data_source_transparency.js"></script>
+  
+  <!-- Legacy Support -->
   <script src="js/mock_data.js"></script>
   <script src="js/enterprise_features.js"></script>
   <script src="js/enterprise_ui.js"></script>

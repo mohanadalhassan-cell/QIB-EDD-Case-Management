@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk System Validator - EDD_QIB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .test-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #ddd;
+        }
+        
+        .test-item.pass {
+            background: #E8F5E9;
+            border-left-color: #4CAF50;
+        }
+        
+        .test-item.fail {
+            background: #FFEBEE;
+            border-left-color: #F44336;
+        }
+        
+        .test-item.pending {
+            background: #FFF3E0;
+            border-left-color: #FF9800;
+        }
+        
+        .test-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .test-content {
+            flex: 1;
+        }
+        
+        .test-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .test-detail {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        
+        .test-result {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #ddd;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #ccc;
+        }
+        
+        .summary {
+            background: #F5F5F5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .summary h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .console-line {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        
+        .console-success { color: #6A9955; }
+        .console-error { color: #F48771; }
+        .console-info { color: #569CD6; }
+        .console-warning { color: #DCDCAA; }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Risk System Validator</h1>
+            <p>Quick validation tool for EDD_QIB Professional AML/CDD Risk System</p>
+        </div>
+        
+        <div class="test-section">
+            <div class="button-group">
+                <button class="btn-primary" onclick="runTests()">▶ Run Tests</button>
+                <button class="btn-secondary" onclick="clearResults()">🔄 Clear</button>
+            </div>
+            
+            <div id="tests-container">
+                <div class="test-item pending">
+                    <div class="test-icon">⏳</div>
+                    <div class="test-content">
+                        <div class="test-name">Tests Not Run</div>
+                        <div class="test-detail">Click "Run Tests" to validate the risk system</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="summary" style="display: none;"></div>
+            <div id="console-output" style="display: none;"></div>
+        </div>
+        
+        <div class="footer">
+            <p>EDD_QIB Risk System v2.0.0 | Professional AML/CDD Platform</p>
+        </div>
+    </div>
+    
+    <script src="edd_system/js/path_manager.js"></script>
+    <script src="edd_system/js/risk_datasets.js"></script>
+    <script src="edd_system/js/risk_engine.js"></script>
+    <script src="edd_system/js/sample_data_generator.js"></script>
+    <script src="edd_system/js/edd_data_model.js"></script>
+    <script src="edd_system/js/data_bridge.js"></script>
+    
+    <script>
+        const consoleLogs = [];
+        let testsPassed = 0;
+        let testsFailed = 0;
+        
+        // Override console.log
+        const originalLog = console.log;
+        console.log = function(...args) {
+            consolidateLogs(...args);
+            originalLog.apply(console, args);
+        };
+        
+        function consolidateLogs(...args) {
+            consoleLogs.push(args.join(' '));
+        }
+        
+        function runTests() {
+            consoleLogs.length = 0;
+            testsPassed = 0;
+            testsFailed = 0;
+            
+            const container = document.getElementById('tests-container');
+            container.innerHTML = '';
+            
+            addTest('Load Risk Datasets', testDatasets);
+            addTest('Load Risk Engine', testRiskEngine);
+            addTest('Load Sample Generator', testSampleGenerator);
+            addTest('Load Data Model', testDataModel);
+            addTest('Test Dataset Functions', testDatasetFunctions);
+            addTest('Calculate Risk Score', testRiskCalculation);
+            addTest('Enrich Cases', testCaseEnrichment);
+            addTest('Verify All Cases', testAllCases);
+            
+            updateSummary();
+            updateConsole();
+        }
+        
+        function addTest(name, testFn) {
+            try {
+                const result = testFn();
+                const item = createTestItem(name, result.status, result.detail);
+                document.getElementById('tests-container').appendChild(item);
+                
+                if (result.status === 'pass') testsPassed++;
+                else testsFailed++;
+            } catch (e) {
+                const item = createTestItem(name, 'fail', e.message);
+                document.getElementById('tests-container').appendChild(item);
+                testsFailed++;
+            }
+        }
+        
+        function createTestItem(name, status, detail) {
+            const div = document.createElement('div');
+            div.className = `test-item ${status}`;
+            
+            const icon = status === 'pass' ? '✅' : status === 'fail' ? '❌' : '⏳';
+            const result = status === 'pass' ? 'PASS' : status === 'fail' ? 'FAIL' : 'SKIP';
+            
+            div.innerHTML = `
+                <div class="test-icon">${icon}</div>
+                <div class="test-content">
+                    <div class="test-name">${name}</div>
+                    <div class="test-detail">${detail || ''}</div>
+                </div>
+                <div class="test-result">${result}</div>
+            `;
+            return div;
+        }
+        
+        function testDatasets() {
+            const loaded = typeof window.RISK_DATASETS !== 'undefined';
+            return {
+                status: loaded ? 'pass' : 'fail',
+                detail: loaded ? `${RISK_DATASETS.country_risk.length} countries, ${RISK_DATASETS.activity_risk.length} activities, ${RISK_DATASETS.product_risk.length} products, ${RISK_DATASETS.occupation_risk.length} occupations, ${RISK_DATASETS.pep_registry.length} PEPs` : 'Not loaded'
+            };
+        }
+        
+        function testRiskEngine() {
+            const loaded = typeof window.RiskEngine !== 'undefined';
+            const hasMethods = loaded && 
+                typeof RiskEngine.calculateRiskScore === 'function' &&
+                typeof RiskEngine.classifyRisk === 'function';
+            return {
+                status: hasMethods ? 'pass' : 'fail',
+                detail: hasMethods ? '6 methods available' : 'Methods not found'
+            };
+        }
+        
+        function testSampleGenerator() {
+            const loaded = typeof window.SAMPLE_DATA_GENERATOR !== 'undefined';
+            return {
+                status: loaded ? 'pass' : 'fail',
+                detail: loaded ? 'Generator functions available' : 'Not loaded'
+            };
+        }
+        
+        function testDataModel() {
+            const loaded = typeof window.EDDDataModel !== 'undefined';
+            return {
+                status: loaded ? 'pass' : 'fail',
+                detail: loaded ? `Instance created with ${window.eddDataModel?.cases?.size || 0} cases` : 'Not loaded'
+            };
+        }
+        
+        function testDatasetFunctions() {
+            if (!window.RISK_DATASETS) return { status: 'fail', detail: 'Datasets not loaded' };
+            
+            const qaCountry = RISK_DATASETS.getCountryRisk('QA');
+            const passed = qaCountry && qaCountry.score === 40;
+            
+            return {
+                status: passed ? 'pass' : 'fail',
+                detail: passed ? `Qatar risk lookup: ${qaCountry.score} points (${qaCountry.category})` : 'Lookup failed'
+            };
+        }
+        
+        function testRiskCalculation() {
+            if (!window.RiskEngine || !window.RISK_DATASETS) {
+                return { status: 'fail', detail: 'Engine or datasets not loaded' };
+            }
+            
+            const testCustomer = {
+                customer_name: 'Test Customer',
+                nationalityCode: 'QA',
+                activity: 'BANKING',
+                product: 'CHECKING',
+                occupation: 'ENGINEER'
+            };
+            
+            const score = RiskEngine.calculateRiskScore(testCustomer);
+            const passed = score && score.total > 0;
+            
+            return {
+                status: passed ? 'pass' : 'fail',
+                detail: passed ? `Total score: ${score.total} (${RiskEngine.classifyRisk(score.total).level} risk)` : 'Calculation failed'
+            };
+        }
+        
+        function testCaseEnrichment() {
+            if (!window.RiskEngine) {
+                return { status: 'fail', detail: 'Engine not loaded' };
+            }
+            
+            const testCase = {
+                id: 'TEST-001',
+                customer_name: 'Test Case',
+                nationalityCode: 'QA',
+                activity: 'TRADING',
+                product: 'WIRE_TRANSFER'
+            };
+            
+            const enriched = RiskEngine.enrichCustomerWithRiskScores(testCase);
+            const passed = enriched.riskScores && enriched.riskScores.FINAL_RISK_CATEG;
+            
+            return {
+                status: passed ? 'pass' : 'fail',
+                detail: passed ? `Case enriched: ${enriched.riskScores.FINAL_RISK_CATEG} risk (${enriched.riskScores.FINAL_RISK_SCORE} points)` : 'Enrichment failed'
+            };
+        }
+        
+        function testAllCases() {
+            if (!window.eddDataModel) {
+                return { status: 'fail', detail: 'Data model not initialized' };
+            }
+            
+            const allCases = window.eddDataModel.getAllCases();
+            const casesWithScores = allCases.filter(c => c.riskScores).length;
+            const allEnriched = casesWithScores === allCases.length;
+            
+            return {
+                status: allEnriched ? 'pass' : 'fail',
+                detail: allEnriched ? `All ${allCases.length} cases enriched with risk scores` : `Only ${casesWithScores}/${allCases.length} cases enriched`
+            };
+        }
+        
+        function updateSummary() {
+            const total = testsPassed + testsFailed;
+            const percentage = total > 0 ? Math.round((testsPassed / total) * 100) : 0;
+            
+            const summary = document.getElementById('summary');
+            summary.style.display = 'block';
+            summary.className = 'summary';
+            summary.innerHTML = `
+                <h3>📊 Test Results Summary</h3>
+                <div><strong>Passed:</strong> <span style="color: #4CAF50;">${testsPassed}/${total}</span></div>
+                <div><strong>Failed:</strong> <span style="color: ${testsFailed > 0 ? '#F44336' : '#4CAF50'};">${testsFailed}</span></div>
+                <div class="score">${percentage}% Success Rate</div>
+                <div style="margin-top: 15px; font-size: 14px;">
+                    ${percentage === 100 ? '✅ <strong>All systems operational!</strong>' : '⚠️ Some tests failed. Check details above.'}
+                </div>
+            `;
+        }
+        
+        function updateConsole() {
+            const consoleDiv = document.getElementById('console-output');
+            consoleDiv.style.display = 'block';
+            
+            let html = '<strong style="color: #569CD6;">console output:</strong><br>';
+            consoleLogs.forEach(log => {
+                let className = 'console-info';
+                if (log.includes('✅')) className = 'console-success';
+                if (log.includes('ERROR') || log.includes('undefined')) className = 'console-error';
+                if (log.includes('⚠️')) className = 'console-warning';
+                
+                html += `<div class="console-line ${className}">${escapeHtml(log)}</div>`;
+            });
+            
+            consoleDiv.innerHTML = `<div class="console-output">${html}</div>`;
+        }
+        
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+        
+        function clearResults() {
+            document.getElementById('tests-container').innerHTML = `
+                <div class="test-item pending">
+                    <div class="test-icon">⏳</div>
+                    <div class="test-content">
+                        <div class="test-name">Tests Cleared</div>
+                        <div class="test-detail">Click "Run Tests" to validate again</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('summary').style.display = 'none';
+            document.getElementById('console-output').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

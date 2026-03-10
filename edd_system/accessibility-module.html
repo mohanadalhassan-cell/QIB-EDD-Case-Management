@@ -1,0 +1,519 @@
+<!-- Accessibility & Audio Support Module -->
+<script>
+  // ==========================================
+  // ACCESSIBILITY & AUDIO SYSTEM
+  // ==========================================
+  // Comprehensive support for:
+  // - Screen readers (ARIA labels)
+  // - Voice commands & audio feedback
+  // - High contrast mode
+  // - Font size adjustments
+  // - Keyboard navigation
+  // ==========================================
+
+  class AccessibilityManager {
+    constructor() {
+      this.settings = {
+        highContrast: false,
+        fontSize: 100,
+        screenReaderEnabled: false,
+        audioFeedbackEnabled: true,
+        keyboardNavigation: true,
+        reducedMotion: false
+      };
+      this.loadSettings();
+      this.initializeAudioContext();
+    }
+
+    // Load settings from localStorage
+    loadSettings() {
+      const saved = localStorage.getItem('a11y_settings');
+      if (saved) {
+        this.settings = { ...this.settings, ...JSON.parse(saved) };
+      }
+      // Check system preferences
+      if (window.matchMedia('(prefers-contrast: more)').matches) {
+        this.settings.highContrast = true;
+      }
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.settings.reducedMotion = true;
+      }
+    }
+
+    // Save settings to localStorage
+    saveSettings() {
+      localStorage.setItem('a11y_settings', JSON.stringify(this.settings));
+    }
+
+    // Initialize Web Audio API
+    initializeAudioContext() {
+      try {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.log('Audio context not available');
+        this.audioContext = null;
+      }
+    }
+
+    // High Contrast Mode Toggle
+    toggleHighContrast() {
+      this.settings.highContrast = !this.settings.highContrast;
+      if (this.settings.highContrast) {
+        document.documentElement.classList.add('high-contrast');
+      } else {
+        document.documentElement.classList.remove('high-contrast');
+      }
+      this.saveSettings();
+      this.announce('High contrast mode ' + (this.settings.highContrast ? 'enabled' : 'disabled'));
+    }
+
+    // Font Size Adjustment
+    adjustFontSize(delta) {
+      this.settings.fontSize = Math.min(200, Math.max(75, this.settings.fontSize + delta));
+      document.documentElement.style.fontSize = (this.settings.fontSize / 100) * 16 + 'px';
+      this.saveSettings();
+      this.announce('Font size adjusted to ' + this.settings.fontSize + '%');
+    }
+
+    // Reset to Default
+    resetToDefault() {
+      this.settings = {
+        highContrast: false,
+        fontSize: 100,
+        screenReaderEnabled: false,
+        audioFeedbackEnabled: true,
+        keyboardNavigation: true,
+        reducedMotion: false
+      };
+      document.documentElement.classList.remove('high-contrast');
+      document.documentElement.style.fontSize = '16px';
+      this.saveSettings();
+      this.announce('Settings reset to default');
+    }
+
+    // Screen Reader Announcement
+    announce(message) {
+      const announcement = document.createElement('div');
+      announcement.setAttribute('role', 'status');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.style.position = 'absolute';
+      announcement.style.left = '-10000px';
+      announcement.style.width = '1px';
+      announcement.style.height = '1px';
+      announcement.style.overflow = 'hidden';
+      announcement.textContent = message;
+      document.body.appendChild(announcement);
+      
+      setTimeout(() => announcement.remove(), 1000);
+      
+      // Also announce via Web Speech API if enabled
+      if (this.settings.audioFeedbackEnabled && 'speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.rate = 1;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Play Audio Feedback
+    playSound(type = 'notification') {
+      if (!this.settings.audioFeedbackEnabled || !this.audioContext) return;
+
+      const now = this.audioContext.currentTime;
+      const oscillator = this.audioContext.createOscillator();
+      const gainNode = this.audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
+
+      const frequencies = {
+        notification: 800,
+        success: 1000,
+        error: 400,
+        warning: 600
+      };
+
+      oscillator.frequency.value = frequencies[type] || 800;
+      gainNode.gain.setValueAtTime(0.3, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+      oscillator.start(now);
+      oscillator.stop(now + 0.2);
+    }
+
+    // Enable Voice Commands
+    enableVoiceCommands() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        this.announce('Voice commands not supported in this browser');
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+
+      recognition.continuous = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        this.announce('Listening...');
+        this.playSound('notification');
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+
+        const command = transcript.toLowerCase().trim();
+        this.processVoiceCommand(command);
+      };
+
+      recognition.onerror = (event) => {
+        this.announce('Error: ' + event.error);
+      };
+
+      return recognition;
+    }
+
+    // Process Voice Commands
+    processVoiceCommand(command) {
+      const commands = {
+        'next section': () => {
+          const nextBtn = document.querySelector('[data-voice-command="next"]');
+          if (nextBtn) nextBtn.click();
+        },
+        'previous section': () => {
+          const prevBtn = document.querySelector('[data-voice-command="prev"]');
+          if (prevBtn) prevBtn.click();
+        },
+        'submit': () => {
+          const submitBtn = document.querySelector('[type="submit"]');
+          if (submitBtn) submitBtn.click();
+        },
+        'read page': () => {
+          const content = document.body.innerText;
+          this.readText(content);
+        }
+      };
+
+      if (commands[command]) {
+        commands[command]();
+        this.announce('Command: ' + command);
+        this.playSound('success');
+      } else {
+        this.announce('Command not recognized');
+        this.playSound('error');
+      }
+    }
+
+    // Text-to-Speech
+    readText(text) {
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1;
+        speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Apply Accessibility Styles
+    applyA11yStyles() {
+      const style = document.createElement('style');
+      style.textContent = `
+        /* High Contrast Mode */
+        html.high-contrast {
+          --bg-primary: #000;
+          --text-primary: #FFF;
+          --text-secondary: #F0F0F0;
+          --glass-border: #FFF;
+          --accent-primary: #FFFF00;
+        }
+
+        html.high-contrast body {
+          background: #000;
+          color: #FFF;
+        }
+
+        html.high-contrast .edd-section-panel {
+          border: 3px solid #FFF;
+          background: #000;
+        }
+
+        html.high-contrast button,
+        html.high-contrast input,
+        html.high-contrast select,
+        html.high-contrast textarea {
+          border: 2px solid #FFF;
+          background: #000;
+          color: #FFF;
+        }
+
+        html.high-contrast button:focus,
+        html.high-contrast input:focus,
+        html.high-contrast select:focus,
+        html.high-contrast textarea:focus {
+          outline: 3px solid #FFFF00;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+
+        /* Focus Visibility */
+        *:focus-visible {
+          outline: 3px solid #0D84FF;
+          outline-offset: 2px;
+        }
+
+        /* Skip Links */
+        .skip-to-main {
+          position: absolute;
+          left: -10000px;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+        }
+
+        .skip-to-main:focus {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: auto;
+          height: auto;
+          background: #0D84FF;
+          color: white;
+          padding: 8px 16px;
+          z-index: 10000;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
+  // Initialize Accessibility Manager
+  const a11y = new AccessibilityManager();
+  a11y.applyA11yStyles();
+
+  // Expose to window for global access
+  window.accessibilityManager = a11y;
+</script>
+
+<!-- Accessibility Control Panel HTML -->
+<style>
+  .a11y-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: white;
+    border: 2px solid #0D84FF;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    font-family: system-ui, sans-serif;
+  }
+
+  .a11y-panel-toggle {
+    width: 56px;
+    height: 56px;
+    background: #0D84FF;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .a11y-panel-toggle:hover {
+    background: #0A5FD4;
+  }
+
+  .a11y-panel-content {
+    display: none;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 320px;
+    max-width: 400px;
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+  }
+
+  .a11y-panel-content.active {
+    display: block;
+  }
+
+  .a11y-control {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #EEE;
+    padding-bottom: 12px;
+  }
+
+  .a11y-control:last-child {
+    border-bottom: none;
+  }
+
+  .a11y-control label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .a11y-control-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .a11y-button {
+    padding: 8px 12px;
+    background: #F0F0F0;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .a11y-button:hover {
+    background: #E0E0E0;
+    border-color: #999;
+  }
+
+  .a11y-button.active {
+    background: #0D84FF;
+    color: white;
+    border-color: #0D84FF;
+  }
+
+  .a11y-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #EEE;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .a11y-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #0D84FF;
+    cursor: pointer;
+  }
+
+  .a11y-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #0D84FF;
+    cursor: pointer;
+    border: none;
+  }
+
+  .a11y-status {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+</style>
+
+<!-- Accessibility Control Panel -->
+<a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+<div class="a11y-panel">
+  <button class="a11y-panel-toggle" aria-label="Open accessibility options" onclick="document.querySelector('.a11y-panel-content').classList.toggle('active');">
+    ♿
+  </button>
+
+  <div class="a11y-panel-content">
+    <h3 style="margin: 0 0 16px 0; color: #333; font-size: 16px;">Accessibility Options</h3>
+
+    <div class="a11y-control">
+      <label>Text Size</label>
+      <div class="a11y-control-group">
+        <button class="a11y-button" onclick="window.accessibilityManager.adjustFontSize(-10);" aria-label="decrease font size">A-</button>
+        <input type="range" class="a11y-slider" min="75" max="200" value="100" 
+               onchange="window.accessibilityManager.settings.fontSize = this.value; window.accessibilityManager.saveSettings(); document.documentElement.style.fontSize = (this.value / 100) * 16 + 'px';"
+               aria-label="adjust font size">
+        <button class="a11y-button" onclick="window.accessibilityManager.adjustFontSize(10);" aria-label="increase font size">A+</button>
+      </div>
+      <div class="a11y-status" id="fontSize-status">100%</div>
+    </div>
+
+    <div class="a11y-control">
+      <label>High Contrast</label>
+      <button class="a11y-button" id="contrast-btn" onclick="window.accessibilityManager.toggleHighContrast();" aria-pressed="false">
+        Enable High Contrast
+      </button>
+    </div>
+
+    <div class="a11y-control">
+      <label>Audio</label>
+      <button class="a11y-button active" onclick="window.accessibilityManager.settings.audioFeedbackEnabled = !window.accessibilityManager.settings.audioFeedbackEnabled; window.accessibilityManager.saveSettings(); this.textContent = window.accessibilityManager.settings.audioFeedbackEnabled ? 'Audio On' : 'Audio Off'; this.classList.toggle('active');">
+        Audio On
+      </button>
+    </div>
+
+    <div class="a11y-control">
+      <label>Voice Commands</label>
+      <button class="a11y-button" onclick="const recognizer = window.accessibilityManager.enableVoiceCommands(); recognizer.start();" aria-label="start voice commands">
+        🎤 Start Voice
+      </button>
+      <div class="a11y-status">Say: "next section", "submit", "read page"</div>
+    </div>
+
+    <div class="a11y-control">
+      <label></label>
+      <button class="a11y-button" onclick="window.accessibilityManager.resetToDefault();" aria-label="reset to default settings">
+        Reset to Default
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add ARIA labels to existing elements (inline script) -->
+<script>
+  // Update ARIA labels on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    // Add role and ARIA attributes
+    document.querySelectorAll('[data-section]').forEach((el, idx) => {
+      el.setAttribute('role', 'region');
+      el.setAttribute('aria-label', `Section ${idx + 1}`);
+    });
+
+    // Make form inputs accessible
+    document.querySelectorAll('textarea, input').forEach(el => {
+      if (!el.getAttribute('aria-label')) {
+        const label = el.previousElementSibling?.textContent || el.placeholder;
+        if (label) el.setAttribute('aria-label', label);
+      }
+    });
+
+    // Make buttons accessible
+    document.querySelectorAll('button').forEach(btn => {
+      if (!btn.getAttribute('aria-label')) {
+        btn.setAttribute('aria-label', btn.textContent.trim());
+      }
+    });
+  });
+</script>

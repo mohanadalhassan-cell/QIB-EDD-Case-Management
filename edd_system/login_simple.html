@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QIB Login</title>
+  <style>
+    body { font-family: Arial; background: #0a1f3d; color: white; }
+    .container { max-width: 400px; margin: 100px auto; padding: 30px; background: #1a3a5a; border-radius: 10px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; }
+    button { width: 100%; padding: 10px; margin: 10px 0; background: #D4AF37; color: black; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #e6c158; }
+    #msg { color: red; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 style="text-align: center;">QIB Login</h2>
+    <input type="text" id="user" placeholder="Username">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="dologin()">Login</button>
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    function dologin() {
+      console.log("Button clicked");
+      
+      var user = document.getElementById("user").value;
+      var pass = document.getElementById("pass").value;
+      var msg = document.getElementById("msg");
+      
+      console.log("User: " + user);
+      console.log("Pass: " + pass);
+      
+      if (!user || !pass) {
+        msg.innerHTML = "Please fill all fields";
+        msg.style.color = "red";
+        return;
+      }
+      
+      console.log("Creating session...");
+      
+      sessionStorage.setItem('edd_session', JSON.stringify({
+        authenticated: true,
+        user: { id: user, name: user, role: 'USER' },
+        token: btoa(user)
+      }));
+      
+      sessionStorage.setItem('auth_token', btoa(user));
+      sessionStorage.setItem('user_role', 'USER');
+      
+      msg.innerHTML = "Login successful! Redirecting...";
+      msg.style.color = "green";
+      
+      console.log("Redirecting to dashboard");
+      setTimeout(function() {
+        window.location.href = 'dashboard.html';
+      }, 500);
+    }
+    
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        dologin();
+      }
+    });
+  </script>
+</body>
+</html>

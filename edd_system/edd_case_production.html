@@ -1,0 +1,2792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDD Investigation Workspace — 11-Section Template</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    /* EDD Investigation Workspace Styles */
+    .edd-investigation-workspace {
+      padding: 0;
+      background: var(--bg-primary);
+    }
+
+    /* Section Navigation Sidebar */
+    .edd-section-nav {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(136,0,255,0.05));
+      border-right: 1px solid var(--glass-border);
+      overflow-y: auto;
+      z-index: 50;
+      padding: 20px 0;
+    }
+
+    .edd-section-nav-header {
+      padding: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 10px;
+    }
+
+    .edd-section-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin: 4px 0;
+    }
+
+    .edd-section-item:hover {
+      background: rgba(0,212,255,0.1);
+      color: var(--text-primary);
+    }
+
+    .edd-section-item.active {
+      background: rgba(0,212,255,0.15);
+      border-left-color: var(--accent-primary);
+      color: var(--accent-primary);
+      font-weight: 600;
+    }
+
+    .edd-section-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background: rgba(0,212,255,0.2);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      flex-shrink: 0;
+    }
+
+    .edd-section-item.active .edd-section-num {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .edd-section-status {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0,230,118,0.15);
+      color: #00E676;
+    }
+
+    .edd-section-status.incomplete {
+      background: rgba(255,152,0,0.15);
+      color: #FFB300;
+    }
+
+    .edd-section-status.required {
+      background: rgba(244,67,54,0.15);
+      color: #F44336;
+    }
+
+    /* Main Content Area */
+    .edd-content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .edd-section-panel {
+      display: none;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+    }
+
+    .edd-section-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .edd-section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--glass-border);
+    }
+
+    .edd-section-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent-primary), rgba(0,212,255,0.5));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .edd-section-title {
+      flex: 1;
+    }
+
+    .edd-section-title h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .edd-section-title p {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .edd-data-source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(0,212,255,0.15);
+      color: var(--accent-primary);
+      border: 1px solid rgba(0,212,255,0.3);
+    }
+
+    .edd-data-source-badge.readonly {
+      background: rgba(76,175,80,0.15);
+      color: #4CAF50;
+      border-color: rgba(76,175,80,0.3);
+    }
+
+    .edd-data-source-badge.manual {
+      background: rgba(156,39,176,0.15);
+      color: #9C27B0;
+      border-color: rgba(156,39,176,0.3);
+    }
+
+    .edd-data-source-badge.hybrid {
+      background: rgba(255,152,0,0.15);
+      color: #FFB300;
+      border-color: rgba(255,152,0,0.3);
+    }
+
+    .edd-external-data-block {
+      background: rgba(76,175,80,0.05);
+      border: 1px solid rgba(76,175,80,0.2);
+      border-left: 3px solid #4CAF50;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .edd-external-data-block .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .edd-external-data-block .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .edd-external-data-block .source {
+      font-size: 11px;
+      color: #4CAF50;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .edd-investigator-input {
+      background: linear-gradient(135deg, rgba(156,39,176,0.03), rgba(136,0,255,0.03));
+      border: 1px solid rgba(156,39,176,0.2);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .edd-investigator-input .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .edd-investigator-input textarea,
+    .edd-investigator-input input,
+    .edd-investigator-input select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--glass-bg);
+    }
+
+    .edd-investigator-input textarea:focus,
+    .edd-investigator-input input:focus,
+    .edd-investigator-input select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+    }
+
+    /* Opening Screen */
+    .edd-opening-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(136,0,255,0.15)), var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .edd-opening-screen.hidden {
+      display: none;
+    }
+
+    .edd-opening-content {
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .edd-opening-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 30px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .edd-opening-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .edd-opening-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .edd-opening-description {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      line-height: 1.8;
+      padding: 20px;
+      background: rgba(0,212,255,0.05);
+      border-radius: 10px;
+      border-left: 3px solid var(--accent-primary);
+    }
+
+    .edd-opening-button {
+      display: inline-block;
+      padding: 14px 40px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 8px 24px rgba(0,212,255,0.3);
+    }
+
+    .edd-opening-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0,212,255,0.4);
+    }
+
+    /* System Flow Diagram */
+    .edd-system-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 30px;
+      background: rgba(0,212,255,0.08);
+      border-radius: 12px;
+      margin-bottom: 30px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .edd-flow-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 120px;
+    }
+
+    .edd-flow-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(136,0,255,0.2));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .edd-flow-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    .edd-flow-arrow {
+      font-size: 24px;
+      color: var(--accent-primary);
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(8px); }
+    }
+
+    /* Decision Section */
+    .edd-decision-section {
+      background: linear-gradient(135deg, rgba(244,67,54,0.05), rgba(255,152,0,0.05));
+      border: 2px solid rgba(244,67,54,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .edd-decision-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .edd-decision-option {
+      padding: 12px 16px;
+      border: 2px solid var(--glass-border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .edd-decision-option:hover {
+      border-color: var(--accent-primary);
+      background: rgba(0,212,255,0.05);
+    }
+
+    .edd-decision-option.selected {
+      border-color: var(--accent-primary);
+      background: rgba(0,212,255,0.1);
+    }
+
+    .edd-decision-option input[type="radio"] {
+      margin-right: 8px;
+    }
+
+    /* Progress Bar */
+    .edd-progress {
+      height: 4px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .edd-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Data Source Transparency Legend */
+    .edd-data-legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 14px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 11px;
+    }
+
+    .edd-data-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .edd-data-legend-item strong {
+      color: var(--text-primary);
+    }
+
+    /* Data Credibility Scoring Panel */
+    .edd-credibility-panel {
+      background: linear-gradient(135deg, rgba(76,175,80,0.05), rgba(139,195,74,0.05));
+      border: 2px solid rgba(76,175,80,0.2);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .edd-credibility-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .edd-credibility-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #76B041, #8BC34A);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .edd-credibility-title {
+      flex: 1;
+    }
+
+    .edd-credibility-title h4 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .edd-credibility-title p {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .edd-credibility-score {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .edd-score-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #76B041, #8BC34A);
+      border-radius: 12px;
+      color: white;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(76,175,80,0.2);
+    }
+
+    .edd-score-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .edd-score-label {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .edd-credibility-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .edd-credibility-item {
+      flex: 1;
+    }
+
+    .edd-credibility-item .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .edd-credibility-item .value {
+      font-size: 13px;
+      color: var(--text-primary);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .edd-credibility-status {
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .edd-credibility-status.verified {
+      background: rgba(76,175,80,0.1);
+      color: #558B2F;
+      border: 1px solid rgba(76,175,80,0.3);
+    }
+
+    .edd-credibility-status.warning {
+      background: rgba(255,152,0,0.1);
+      color: #E65100;
+      border: 1px solid rgba(255,152,0,0.3);
+    }
+
+    .edd-credibility-status.missing {
+      background: rgba(244,67,54,0.1);
+      color: #C62828;
+      border: 1px solid rgba(244,67,54,0.3);
+    }
+
+    /* Data Gap Alert */
+    .edd-data-gap-alert {
+      background: linear-gradient(135deg, rgba(255,152,0,0.08), rgba(255,193,7,0.08));
+      border-left: 4px solid #FF9800;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+
+    .edd-alert-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #E65100;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .edd-alert-content {
+      font-size: 13px;
+      color: #5F4C00;
+      line-height: 1.5;
+    }
+
+    .edd-alert-recommendation {
+      background: rgba(76,175,80,0.08);
+      border-left: 4px solid #76B041;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #558B2F;
+    }
+
+    /* Data Reliability Dashboard */
+    .edd-reliability-dashboard {
+      background: linear-gradient(135deg, rgba(33,150,243,0.05), rgba(0,188,212,0.05));
+      border: 2px solid rgba(33,150,243,0.2);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 24px;
+    }
+
+    .edd-reliability-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .edd-reliability-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #2196F3, #00BCD4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .edd-reliability-title {
+      flex: 1;
+    }
+
+    .edd-reliability-title h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .edd-reliability-title p {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .edd-reliability-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .edd-reliability-item {
+      background: white;
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .edd-reliability-item .label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .edd-reliability-item .score {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .edd-reliability-bar {
+      height: 6px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .edd-reliability-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .edd-reliability-fill.high {
+      background: linear-gradient(90deg, #2196F3, #00BCD4);
+    }
+
+    .edd-reliability-fill.medium {
+      background: linear-gradient(90deg, #FF9800, #FFB74D);
+    }
+
+    .edd-reliability-fill.low {
+      background: linear-gradient(90deg, #F44336, #EF5350);
+    }
+
+    /* Investigator Override Language */
+    .edd-investigator-primacy {
+      background: linear-gradient(135deg, rgba(103,58,183,0.08), rgba(156,39,176,0.08));
+      border-left: 4px solid #673AB7;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 20px;
+    }
+
+    .edd-investigator-primacy h4 {
+      margin: 0 0 10px 0;
+      color: #673AB7;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .edd-investigator-primacy p {
+      margin: 0;
+      font-size: 13px;
+      color: #512DA8;
+      line-height: 1.6;
+    }
+
+    /* GLOBAL DATA RELIABILITY DASHBOARD */
+    .edd-global-reliability-panel {
+      background: linear-gradient(135deg, rgba(10, 20, 50, 0.8), rgba(20, 40, 80, 0.7));
+      border: 1px solid rgba(33, 150, 243, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(33, 150, 243, 0.08);
+    }
+
+    .edd-global-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(33, 150, 243, 0.1);
+    }
+
+    .edd-global-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #2196F3, #00BCD4);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .edd-global-title h2 {
+      margin: 0 0 4px 0;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .edd-global-title p {
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .edd-reliability-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .edd-metric-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(33, 150, 243, 0.15);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .edd-metric-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .edd-metric-value {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .edd-metric-value.high {
+      color: #4CAF50;
+    }
+
+    .edd-metric-value.medium {
+      color: #FF9800;
+    }
+
+    .edd-metric-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .edd-metric-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #8BC34A);
+      border-radius: 2px;
+      transition: width 0.6s ease-out;
+    }
+
+    .edd-metric-bar-fill.medium-bar {
+      background: linear-gradient(90deg, #FF9800, #FFB74D);
+    }
+
+    .edd-metric-bar-fill.low-bar {
+      background: linear-gradient(90deg, #F44336, #EF5350);
+    }
+
+    .edd-confidence-score-section {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(139, 195, 74, 0.08));
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .edd-confidence-text {
+      flex: 1;
+    }
+
+    .edd-confidence-text p {
+      margin: 0 0 4px 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .edd-confidence-text strong {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .edd-confidence-meter {
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(76, 175, 80, 0.1), transparent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .edd-confidence-score-value {
+      text-align: center;
+    }
+
+    .edd-confidence-score-value .score {
+      font-size: 36px;
+      font-weight: 900;
+      color: #4CAF50;
+      line-height: 1;
+    }
+
+    .edd-confidence-score-value .max {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ACCESSIBILITY & RESPONSIVE DESIGN */
+    /* Accessibility Panel */
+    .a11y-panel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      background: white;
+      border: 2px solid #0D84FF;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    .a11y-panel-toggle {
+      width: 56px;
+      height: 56px;
+      background: #0D84FF;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+
+    .a11y-panel-toggle:hover {
+      background: #0A5FD4;
+    }
+
+    .a11y-panel-toggle:focus-visible {
+      outline: 3px solid #00D4FF;
+      outline-offset: 2px;
+    }
+
+    .a11y-panel-content {
+      display: none;
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      min-width: 320px;
+      max-width: 400px;
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .a11y-panel-content.active {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .a11y-control {
+      margin-bottom: 16px;
+      border-bottom: 1px solid #EEE;
+      padding-bottom: 12px;
+    }
+
+    .a11y-control:last-child {
+      border-bottom: none;
+    }
+
+    .a11y-control label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .a11y-control-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .a11y-button {
+      padding: 8px 12px;
+      background: #F0F0F0;
+      border: 1px solid #CCC;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .a11y-button:hover {
+      background: #E0E0E0;
+      border-color: #999;
+    }
+
+    .a11y-button:focus-visible {
+      outline: 2px solid #0D84FF;
+      outline-offset: 2px;
+    }
+
+    .a11y-button.active {
+      background: #0D84FF;
+      color: white;
+      border-color: #0D84FF;
+    }
+
+    .a11y-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #EEE;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .a11y-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0D84FF;
+      cursor: pointer;
+    }
+
+    .a11y-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0D84FF;
+      cursor: pointer;
+      border: none;
+    }
+
+    .a11y-status {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .skip-to-main {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .skip-to-main:focus {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: auto;
+      height: auto;
+      background: #0D84FF;
+      color: white;
+      padding: 8px 16px;
+      z-index: 10001;
+    }
+
+    /* High Contrast Mode */
+    html.high-contrast {
+      --bg-primary: #000;
+      --text-primary: #FFF;
+      --text-secondary: #F0F0F0;
+      --glass-border: #FFF;
+      --accent-primary: #FFFF00;
+    }
+
+    html.high-contrast body {
+      background: #000;
+      color: #FFF;
+    }
+
+    html.high-contrast .edd-section-panel {
+      border: 3px solid #FFF;
+      background: #000;
+    }
+
+    html.high-contrast button,
+    html.high-contrast input,
+    html.high-contrast select,
+    html.high-contrast textarea {
+      border: 2px solid #FFF;
+      background: #000;
+      color: #FFF;
+    }
+
+    html.high-contrast button:focus-visible,
+    html.high-contrast input:focus-visible,
+    html.high-contrast select:focus-visible,
+    html.high-contrast textarea:focus-visible {
+      outline: 3px solid #FFFF00;
+    }
+
+    /* Responsive Design - Tablet */
+    @media (max-width: 1024px) {
+      .edd-section-nav {
+        width: 200px;
+      }
+
+      .edd-reliability-metrics {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .a11y-panel-content {
+        min-width: 280px;
+        max-width: 350px;
+      }
+    }
+
+    /* Responsive Design - Mobile */
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+      }
+
+      .edd-section-nav {
+        position: fixed;
+        width: 100%;
+        height: auto;
+        max-height: 40vh;
+        overflow-y: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .edd-section-item {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+
+      .main-content {
+        width: 100%;
+        padding-top: 40vh;
+      }
+
+      .edd-global-reliability-panel {
+        margin: 16px;
+      }
+
+      .edd-reliability-metrics {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .edd-confidence-score-section {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .edd-confidence-meter {
+        width: 100px;
+        height: 100px;
+      }
+
+      .edd-confidence-score-value .score {
+        font-size: 28px;
+      }
+
+      .a11y-panel {
+        bottom: 10px;
+        right: 10px;
+      }
+
+      .a11y-panel-toggle {
+        width: 50px;
+        height: 50px;
+        bottom: 10px;
+        right: 10px;
+        font-size: 20px;
+      }
+
+      .a11y-panel-content {
+        min-width: 250px;
+        max-width: 90vw;
+        bottom: 70px;
+      }
+    }
+
+    /* Fullscreen Mode */
+    .fullscreen-mode {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .fullscreen-btn {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 9998;
+      padding: 8px 16px;
+      background: #0D84FF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .fullscreen-btn:hover {
+      background: #0A5FD4;
+    }
+
+    /* Reduce Motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus Outline */
+    *:focus-visible {
+      outline: 2px solid #0D84FF;
+      outline-offset: 2px;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Skip to main content link for screen readers -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Accessibility Control Panel -->
+  <div class="a11y-panel">
+    <button class="a11y-panel-toggle" aria-label="Open accessibility options" onclick="document.querySelector('.a11y-panel-content').classList.toggle('active');">
+      ♿
+    </button>
+
+    <div class="a11y-panel-content">
+      <h3 style="margin: 0 0 16px 0; color: #333; font-size: 16px;">Accessibility Options</h3>
+
+      <div class="a11y-control">
+        <label>Text Size</label>
+        <div class="a11y-control-group">
+          <button class="a11y-button" onclick="window.accessibilityManager.adjustFontSize(-10);" aria-label="decrease font size">A−</button>
+          <input type="range" class="a11y-slider" min="75" max="200" value="100" 
+                 onchange="window.accessibilityManager.settings.fontSize = this.value; window.accessibilityManager.saveSettings(); document.documentElement.style.fontSize = (this.value / 100) * 16 + 'px';"
+                 aria-label="adjust font size">
+          <button class="a11y-button" onclick="window.accessibilityManager.adjustFontSize(10);" aria-label="increase font size">A+</button>
+        </div>
+        <div class="a11y-status" id="fontSize-status">100%</div>
+      </div>
+
+      <div class="a11y-control">
+        <label>High Contrast Mode</label>
+        <button class="a11y-button" id="contrast-btn" onclick="window.accessibilityManager.toggleHighContrast();" aria-pressed="false">
+          Enable High Contrast
+        </button>
+      </div>
+
+      <div class="a11y-control">
+        <label>Audio Feedback</label>
+        <button class="a11y-button active" onclick="window.accessibilityManager.settings.audioFeedbackEnabled = !window.accessibilityManager.settings.audioFeedbackEnabled; window.accessibilityManager.saveSettings(); this.textContent = window.accessibilityManager.settings.audioFeedbackEnabled ? '🔊 Audio On' : '🔇 Audio Off'; this.classList.toggle('active');">
+          🔊 Audio On
+        </button>
+      </div>
+
+      <div class="a11y-control">
+        <label>Voice Navigation</label>
+        <button class="a11y-button" onclick="startVoiceCommandsHandler();" aria-label="start voice commands">
+          🎤 Start Voice
+        </button>
+        <div class="a11y-status">Say: "next section", "submit", "read page"</div>
+      </div>
+
+      <div class="a11y-control">
+        <label>Display</label>
+        <button class="fullscreen-btn" onclick="window.accessibilityManager.toggleFullscreen();" aria-label="toggle fullscreen">
+          ⛶ Fullscreen
+        </button>
+      </div>
+
+      <div class="a11y-control">
+        <label></label>
+        <button class="a11y-button" onclick="window.accessibilityManager.resetToDefault();" aria-label="reset to default settings">
+          Reset Defaults
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+
+  <!-- Opening Screen -->
+  <div id="openingScreen" class="edd-opening-screen">
+    <div class="edd-opening-content">
+      <div class="edd-opening-logo">
+        🔍
+      </div>
+      <h1 class="edd-opening-title">EDD Investigation Platform</h1>
+      <p class="edd-opening-subtitle">Customer Risk Assessment & Compliance Review</p>
+      <div class="edd-opening-description">
+        <strong>Risk Triggered by CRP Engine</strong><br>
+        Case created and ready for investigator review and compliance decision.
+        <br><br>
+        <em>"This system is not just a digital EDD form, but an investigation platform that helps the bank understand customer risk and make informed compliance decisions."</em>
+      </div>
+      <button class="edd-opening-button" onclick="startInvestigation()">
+        ▶ Start Investigation →
+      </button>
+    </div>
+  </div>
+
+  <div class="app-container" style="display: flex;">
+    <!-- Sidebar (Original Navigation) -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Investigation Workspace</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Navigation</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Investigation</span>
+            <span class="nav-badge">1</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AN</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Investigator</div>
+          <div class="user-role" id="user-role">Compliance Officer</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; display: flex;">
+      <!-- EDD Section Navigation -->
+      <aside class="edd-section-nav">
+        <div class="edd-section-nav-header">📋 11-Section Workflow</div>
+        
+        <!-- Section Items -->
+        <div class="edd-section-item active" onclick="switchSection(1)">
+          <div class="edd-section-num">1</div>
+          <span>Risk Classification</span>
+          <span class="edd-section-status">EXTERNAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(2)">
+          <div class="edd-section-num">2</div>
+          <span>Customer Information</span>
+          <span class="edd-section-status">EXTERNAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(3)">
+          <div class="edd-section-num">3</div>
+          <span>Purpose of Account</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(4)">
+          <div class="edd-section-num">4</div>
+          <span>Source of Income</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(5)">
+          <div class="edd-section-num">5</div>
+          <span>Initial Deposit</span>
+          <span class="edd-section-status">EXTERNAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(6)">
+          <div class="edd-section-num">6</div>
+          <span>Expected Transactions</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(7)">
+          <div class="edd-section-num">7</div>
+          <span>Existing Bank Relations</span>
+          <span class="edd-section-status">EXTERNAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(8)">
+          <div class="edd-section-num">8</div>
+          <span>Other Banks</span>
+          <span class="edd-section-status incomplete">OPTIONAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(9)">
+          <div class="edd-section-num">9</div>
+          <span>Related Parties</span>
+          <span class="edd-section-status incomplete">OPTIONAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(10)">
+          <div class="edd-section-num">10</div>
+          <span>PEP Information</span>
+          <span class="edd-section-status">CONDITIONAL</span>
+        </div>
+
+        <div class="edd-section-item" onclick="switchSection(11)">
+          <div class="edd-section-num">11</div>
+          <span>Business Recommendation</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
+      </aside>
+
+      <!-- Content Area -->
+      <div class="edd-content-area" style="padding: 24px; background: var(--bg-primary);">
+        <!-- Case Header -->
+        <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div>
+              <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: var(--text-primary);">EDD Investigation Workspace</h1>
+              <p style="margin: 6px 0 0 0; color: var(--text-muted); font-size: 13px;">Case ID: <strong id="caseId">EDD-2026-001234</strong> | Customer: <strong id="customerName">Abdullah Mohammed Al-Kuwari</strong></p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Progress</div>
+              <div class="edd-progress">
+                <div class="edd-progress-bar" style="width: 18%;"></div>
+              </div>
+              <span style="font-size: 12px; color: var(--text-primary); font-weight: 600;">2 of 11 sections complete</span>
+            </div>
+          </div>
+          
+          <!-- Data Source Legend -->
+          <div class="edd-data-legend">
+            <div class="edd-data-legend-item">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #4CAF50; border-radius: 50%;"></span>
+              <strong>External Data</strong> (READ-ONLY from systems)
+            </div>
+            <div class="edd-data-legend-item">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #9C27B0; border-radius: 50%;"></span>
+              <strong>Investigator Input</strong> (Manual entry)
+            </div>
+            <div class="edd-data-legend-item">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #FFB300; border-radius: 50%;"></span>
+              <strong>Hybrid Data</strong> (Partial external + manual)
+            </div>
+          </div>
+        </div>
+
+        <!-- System Flow Diagram -->
+        <div class="edd-system-flow">
+          <div class="edd-flow-item">
+            <div class="edd-flow-icon">🏦</div>
+            <div class="edd-flow-label">Core Banking<br>(T24)</div>
+          </div>
+          <div class="edd-flow-arrow">→</div>
+          <div class="edd-flow-item">
+            <div class="edd-flow-icon">⚠️</div>
+            <div class="edd-flow-label">Risk Engine<br>(CRP)</div>
+          </div>
+          <div class="edd-flow-arrow">→</div>
+          <div class="edd-flow-item">
+            <div class="edd-flow-icon">🔍</div>
+            <div class="edd-flow-label">EDD Investigation<br>(This Platform)</div>
+          </div>
+          <div class="edd-flow-arrow">→</div>
+          <div class="edd-flow-item">
+            <div class="edd-flow-icon">✅</div>
+            <div class="edd-flow-label">Compliance<br>Decision</div>
+          </div>
+        </div>
+
+        <!-- CUSTOMER RISK STATUS BADGE -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+          <!-- Risk Overview Card -->
+          <div style="background: linear-gradient(135deg, rgba(244,67,54,0.1), rgba(255,152,0,0.1)); border: 2px solid rgba(244,67,54,0.3); border-radius: 14px; padding: 20px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">📊 Customer Risk Status</div>
+            <div style="font-size: 28px; font-weight: 800; color: #F44336; margin-bottom: 4px;">HIGH RISK</div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Classification: 78/100 (CRP Engine)</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">⚠️</span> Activity Risk: 85/100</div>
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">⚠️</span> Occupation Risk: 72/100</div>
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">⚠️</span> Product Risk: 68/100</div>
+            </div>
+          </div>
+
+          <!-- Profile Summary Card -->
+          <div style="background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(136,0,255,0.08)); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">👤 Profile Overview</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--text-muted);">Customer Name:</span>
+                <strong style="color: var(--text-primary);">Abdullah Al-Kuwari</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--text-muted);">Age:</span>
+                <strong style="color: var(--text-primary);">50 years</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--text-muted);">Occupation:</span>
+                <strong style="color: var(--text-primary);">Government Official</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--text-muted);">Bank Relation:</span>
+                <strong style="color: var(--text-primary);">8+ years</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--text-muted);">PEP Status:</span>
+                <strong style="color: var(--text-primary);">NOT A PEP</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GLOBAL DATA RELIABILITY DASHBOARD -->
+        <div class="edd-global-reliability-panel">
+          <div class="edd-global-header">
+            <div class="edd-global-icon">📊</div>
+            <div class="edd-global-title">
+              <h2>Customer Data Reliability Assessment</h2>
+              <p>Enterprise-grade credibility analysis across all data sources</p>
+            </div>
+          </div>
+
+          <div class="edd-reliability-metrics">
+            <div class="edd-metric-card">
+              <div class="edd-metric-label">Identity Verification</div>
+              <div class="edd-metric-value high">92%</div>
+              <div class="edd-metric-bar">
+                <div class="edd-metric-bar-fill" style="width: 92%;"></div>
+              </div>
+            </div>
+
+            <div class="edd-metric-card">
+              <div class="edd-metric-label">Document Support</div>
+              <div class="edd-metric-value high">75%</div>
+              <div class="edd-metric-bar">
+                <div class="edd-metric-bar-fill medium-bar" style="width: 75%;"></div>
+              </div>
+            </div>
+
+            <div class="edd-metric-card">
+              <div class="edd-metric-label">Income Verification</div>
+              <div class="edd-metric-value medium">60%</div>
+              <div class="edd-metric-bar">
+                <div class="edd-metric-bar-fill low-bar" style="width: 60%;"></div>
+              </div>
+            </div>
+
+            <div class="edd-metric-card">
+              <div class="edd-metric-label">Missing Data</div>
+              <div class="edd-metric-value medium">MEDIUM</div>
+              <div class="edd-metric-bar">
+                <div class="edd-metric-bar-fill medium-bar" style="width: 40%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="edd-confidence-score-section">
+            <div class="edd-confidence-text">
+              <p>Overall Data Confidence Score</p>
+              <strong>Complete customer profile assessment based on external verification, document validation, and investigator confirmation</strong>
+            </div>
+            <div class="edd-confidence-meter">
+              <div class="edd-confidence-score-value">
+                <div class="score">76</div>
+                <div class="max">/100</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: Risk Classification -->
+        <div class="edd-section-panel active" data-section="1">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">1</div>
+            <div class="edd-section-title">
+              <h2>Risk Classification of the Client</h2>
+              <p>Automatically loaded from CRP (Customer Risk Profiling Engine)</p>
+            </div>
+            <div class="edd-data-source-badge readonly">🟢 T24/CRP (External)</div>
+          </div>
+
+          <div class="edd-external-data-block">
+            <div class="label">Overall Risk Category (Auto-Calculated by CRP)</div>
+            <div class="value" style="font-size: 24px; font-weight: 800; color: #F44336; margin: 8px 0;">HIGH RISK</div>
+            <div class="source">🔵 Source: CRP | 📅 Last Updated: 2026-03-10 14:35 UTC | Status: ✓ VERIFIED</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="edd-external-data-block">
+              <div class="label">Risk Score</div>
+              <div class="value" style="font-size: 28px;">78/100</div>
+              <div class="source">From CRP | Category: HIGH</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Primary Risk Driver</div>
+              <div class="value">Activity Risk (Transaction Patterns)</div>
+              <div class="source">ACT_RISK_SCORE: 160 | MEDIUM-HIGH</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(33,150,243,0.1); border: 1px solid rgba(33,150,243,0.2); border-left: 3px solid #2196F3; border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 12px; color: var(--text-secondary);">
+            <strong>ℹ️ Governance Note:</strong> All risk scores originate from external systems (CRP, Core Banking, TM). This platform READS and DISPLAYS these scores but does NOT calculate or modify them. Risk classifications are read-only and updated automatically from source systems.
+          </div>
+        </div>
+
+        <!-- SECTION 2: Customer Information -->
+        <div class="edd-section-panel" data-section="2">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">2</div>
+            <div class="edd-section-title">
+              <h2>Customer Information</h2>
+              <p>Loaded from T24 Core Banking System</p>
+            </div>
+            <div class="edd-data-source-badge readonly">🟢 T24 (External)</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="edd-external-data-block">
+              <div class="label">Full Name</div>
+              <div class="value">Abdullah Mohammed Al-Kuwari</div>
+              <div class="source">From T24 | RIM: RIM001234</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Date of Birth</div>
+              <div class="value">March 15, 1975</div>
+              <div class="source">From T24 | Age: 50 years</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Nationality</div>
+              <div class="value">Qatari (QA)</div>
+              <div class="source">From QCB Registry</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Occupation</div>
+              <div class="value">Government Official</div>
+              <div class="source">From T24 | Verified by CRP</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 12px;">
+            <div class="edd-external-data-block">
+              <div class="label">Contact Phone</div>
+              <div class="value">+974 4411-0234</div>
+              <div class="source">From T24</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Email Address</div>
+              <div class="value">a.alkuwari@qib.qa</div>
+              <div class="source">From T24</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Relationship Manager</div>
+              <div class="value">Ahmed Al-Dosari</div>
+              <div class="source">From T24 | Ext: 4521</div>
+            </div>
+          </div>
+
+          <!-- IDENTITY DATA CREDIBILITY SCORING -->
+          <div class="edd-credibility-panel">
+            <div class="edd-credibility-header">
+              <div class="edd-credibility-icon">✓</div>
+              <div class="edd-credibility-title">
+                <h4>Identity Data Credibility Assessment</h4>
+                <p>Data verification status and reliability scoring</p>
+              </div>
+              <div class="edd-credibility-score">
+                <div class="edd-score-badge">
+                  <div class="edd-score-value">92</div>
+                  <div class="edd-score-label">/100</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="edd-credibility-details">
+              <div class="edd-credibility-item">
+                <div class="label">Qatar ID (QID) Verification</div>
+                <div class="value">
+                  <span class="edd-credibility-status verified">✔ MOI Verified</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Ministry of Interior database verified. Document uploaded and confirmed valid.</div>
+              </div>
+              <div class="edd-credibility-item">
+                <div class="label">Supporting Document</div>
+                <div class="value">
+                  <span class="edd-credibility-status verified">✔ Present</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Identity document scanned, stored in DMS. Validity confirmed through QCB Registry.</div>
+              </div>
+              <div class="edd-credibility-item">
+                <div class="label">Name Match (T24 ↔ MOI)</div>
+                <div class="value">
+                  <span class="edd-credibility-status verified">✔ Verified</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Abdullah Mohammed Al-Kuwari matches official Ministry of Interior records exactly.</div>
+              </div>
+              <div class="edd-credibility-item">
+                <div class="label">Date of Birth Match</div>
+                <div class="value">
+                  <span class="edd-credibility-status verified">✔ Verified</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">March 15, 1975 confirmed in MOI database. Age 50. No discrepancies detected.</div>
+              </div>
+            </div>
+
+            <div style="background: rgba(76,175,80,0.08); border-left: 4px solid #76B041; padding: 12px; border-radius: 6px; margin-top: 14px; font-size: 12px; color: #558B2F;">
+              <strong>✓ Assessment Summary:</strong> Identity data is highly reliable. All verification checks passed. Customer identity confirmed against multiple trusted sources (MOI, QCB Registry, T24). Risk level for identity section: <strong>LOW</strong>.
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: Purpose of Account -->
+        <div class="edd-section-panel" data-section="3">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">3</div>
+            <div class="edd-section-title">
+              <h2>Purpose and Intended Use of Account</h2>
+              <p>You must fill this section</p>
+            </div>
+            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">📝 What is the stated purpose of this account? *</div>
+            <textarea rows="4" placeholder="Describe the customer's intended use of the account..." required></textarea>
+            <small style="color: var(--text-muted); display: block; margin-top: 6px;">This is mandatory. If not applicable, enter 'Not Applicable' with justification.</small>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">💼 Explain the business relationship *</div>
+            <textarea rows="3" placeholder="How did this relationship originate? What is the expected activity?" required></textarea>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">👥 Expected frequency of account use</div>
+            <select>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly" selected>Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="annual">Annual</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Source of Income -->
+        <div class="edd-section-panel" data-section="4">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">4</div>
+            <div class="edd-section-title">
+              <h2>Source of Income and Source of Wealth</h2>
+              <p>Combination of external data and investigator assessment</p>
+            </div>
+            <div class="edd-data-source-badge hybrid">🟡 Hybrid (External + Manual)</div>
+          </div>
+
+          <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--text-primary); font-weight: 700;">Auto-Filled from T24 / CRP</h4>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="edd-external-data-block">
+              <div class="label">Employment Status</div>
+              <div class="value">Employed (Government)</div>
+              <div class="source">From T24 | Verified by CRP</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Employer Name</div>
+              <div class="value">Qatar Ministry of Interior</div>
+              <div class="source">From T24</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Years of Employment</div>
+              <div class="value">22 years</div>
+              <div class="source">From T24</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Annual Income (Estimated)</div>
+              <div class="value">QAR 450,000 - 500,000</div>
+              <div class="source">From T24 / CRP Risk Calculation</div>
+            </div>
+          </div>
+
+          <h4 style="margin-top: 20px; margin-bottom: 12px; color: var(--text-primary); font-weight: 700;">Investigator Assessment Required</h4>
+
+          <div class="edd-investigator-input">
+            <div class="label">📊 Provide detailed explanation of source of wealth *</div>
+            <textarea rows="4" placeholder="Verify the income stream and provide justification for account activity..." required></textarea>
+            <small style="color: var(--text-muted); display: block; margin-top: 6px;">Government salary aligns with expected transaction patterns. Document any other wealth sources.</small>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">✅ Is the stated income sufficient to support account activity? *</div>
+            <div style="display: flex; gap: 16px; margin-top: 8px;">
+              <label><input type="radio" name="income_sufficient"> Yes, income is sufficient</label>
+              <label><input type="radio" name="income_sufficient"> No, additional sources identified</label>
+              <label><input type="radio" name="income_sufficient" checked> Requires further investigation</label>
+            </div>
+          </div>
+
+          <!-- SALARY CERTIFICATE CREDIBILITY SCORING -->
+          <div class="edd-credibility-panel" style="margin-top: 20px;">
+            <div class="edd-credibility-header">
+              <div class="edd-credibility-icon">📄</div>
+              <div class="edd-credibility-title">
+                <h4>Income Documentation Credibility Assessment</h4>
+                <p>Salary certificate and supporting document verification</p>
+              </div>
+              <div class="edd-credibility-score">
+                <div class="edd-score-badge" style="background: linear-gradient(135deg, #FF9800, #FFB74D);">
+                  <div class="edd-score-value">60</div>
+                  <div class="edd-score-label">/100</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="edd-credibility-details">
+              <div class="edd-credibility-item">
+                <div class="label">DMS Salary Certificate Check</div>
+                <div class="value">
+                  <span class="edd-credibility-status missing">❌ Missing</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">No salary certificate currently stored in Document Management System (DMS).</div>
+              </div>
+              <div class="edd-credibility-item">
+                <div class="label">Employer Verification</div>
+                <div class="value">
+                  <span class="edd-credibility-status verified">✔ Government Entity</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Ministry of Interior is registered government employer. Employment history verified via CRP.</div>
+              </div>
+              <div class="edd-credibility-item">
+                <div class="label">Income Documentation Status</div>
+                <div class="value">
+                  <span class="edd-credibility-status warning">⚠ Insufficient</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Income estimated from T24/CRP. Actual salary certificate not provided. Risk: Incomplete documentation.</div>
+              </div>
+              <div class="edd-credibility-item">
+                <div class="label">Annual Income Level</div>
+                <div class="value" style="font-size: 13px; color: var(--text-primary); font-weight: 500;">
+                  QAR 450K - 500K
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Government salary range for this position matches market expectations. Estimate reliable.</div>
+              </div>
+            </div>
+
+            <div style="background: rgba(255,152,0,0.08); border-left: 4px solid #FF9800; padding: 12px; border-radius: 6px; margin-top: 14px; font-size: 12px; color: #E65100;">
+              <strong>⚠ Assessment Summary:</strong> Income credibility is MODERATE (60/100). Employment verified via government registry and T24 records, but formal salary certificate not yet uploaded to DMS. <strong>Investigator Action:</strong> Request updated salary certificate from Ministry of Interior HR or employee payroll records to complete income verification.
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: Initial Deposit -->
+
+        <!-- DATA GAP DETECTION ALERT -->
+        <div class="edd-data-gap-alert">
+          <div class="edd-alert-title">⚠ DATA GAP IDENTIFIED</div>
+          <div class="edd-alert-content">
+            <strong>Occupation:</strong> Government Official (Ministry of Interior)<br>
+            <strong>Missing Document:</strong> Formal Salary Certificate<br>
+            <strong>Risk Impact:</strong> Income source documentation incomplete. Government income is stated but not formally certified in DMS system.
+          </div>
+          <div class="edd-alert-recommendation">
+            <strong>📋 Investigator Recommendation:</strong> Request official salary certificate or payroll documentation from Ministry of Interior Human Resources department. Government salaries typically fall within expected range, but formal documentation should be obtained to complete EDD record and reduce audit risk.
+          </div>
+        </div>
+
+        <div class="edd-section-panel" data-section="5">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">5</div>
+            <div class="edd-section-title">
+              <h2>Initial Deposit</h2>
+              <p>Loaded from T24 Transaction History</p>
+            </div>
+            <div class="edd-data-source-badge readonly">🟢 T24 (External)</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+            <div class="edd-external-data-block">
+              <div class="label">Deposit Amount</div>
+              <div class="value" style="font-size: 20px;">QAR 250,000</div>
+              <div class="source">From T24 | Transaction ID: TXN20260215001</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Deposit Date</div>
+              <div class="value">February 15, 2026</div>
+              <div class="source">From T24 Transaction Log</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Deposit Method</div>
+              <div class="value">Cheque Transfer</div>
+              <div class="source">From T24 | Account: QIB-PB-001234</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 12px; color: var(--text-secondary);">
+            💡 <strong>Analysis:</strong> Initial deposit of QAR 250,000 is consistent with customer's HNWI (High Net Worth Individual) status and government employment income level.
+          </div>
+        </div>
+
+        <!-- SECTION 6: Expected Transactions -->
+        <div class="edd-section-panel" data-section="6">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">6</div>
+            <div class="edd-section-title">
+              <h2>Monthly Anticipated Transaction Activity</h2>
+              <p>You must document expected patterns</p>
+            </div>
+            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+            <div class="edd-investigator-input">
+              <div class="label">Expected Monthly Cash In (QAR)</div>
+              <input type="number" placeholder="e.g., 50000" required>
+              <small style="color: var(--text-muted); display: block; margin-top: 4px;">Salary deposits, investment income, etc.</small>
+            </div>
+            <div class="edd-investigator-input">
+              <div class="label">Expected Monthly Cash Out (QAR)</div>
+              <input type="number" placeholder="e.g., 30000" required>
+              <small style="color: var(--text-muted); display: block; margin-top: 4px;">Transfers, payments, withdrawals</small>
+            </div>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">📋 Describe expected transaction types and frequency</div>
+            <textarea rows="3" placeholder="Examples: Monthly salary, quarterly investments, frequent domestic transfers..." required></textarea>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">🌍 Expected volume of international transactions?</div>
+            <select required>
+              <option value="">-- Select --</option>
+              <option value="none">None expected</option>
+              <option value="occasional">Occasional (quarterly or less)</option>
+              <option value="regular">Regular (monthly)</option>
+              <option value="frequent">Frequent (weekly or more)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SECTION 7: Existing Bank Relations -->
+        <div class="edd-section-panel" data-section="7">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">7</div>
+            <div class="edd-section-title">
+              <h2>Existing Relationship within QIB</h2>
+              <p>Loaded from T24 Customer Portfolio</p>
+            </div>
+            <div class="edd-data-source-badge readonly">🟢 T24 (External)</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
+            <div class="edd-external-data-block">
+              <div class="label">Savings Account</div>
+              <div class="value">QIB-PB-001234</div>
+              <div class="source">Balance: QAR 1,250,000</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Investment Account</div>
+              <div class="value">QIB-INV-001234</div>
+              <div class="source">Balance: QAR 3,500,000</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Credit Facility</div>
+              <div class="value">QIB-CF-001234</div>
+              <div class="source">Limit: QAR 500,000</div>
+            </div>
+            <div class="edd-external-data-block">
+              <div class="label">Previous Account</div>
+              <div class="value">QIB-PB-OLD001</div>
+              <div class="source">Closed: 2023-01-15</div>
+            </div>
+          </div>
+
+          <div style="background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 12px; color: var(--text-secondary);">
+            📊 <strong>Summary:</strong> Customer has strong existing relationship with QIB spanning 8+ years. Total aggregate balance: QAR 4,750,000. All accounts in good standing.
+          </div>
+        </div>
+
+        <!-- SECTION 8: Other Banks -->
+        <div class="edd-section-panel" data-section="8">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">8</div>
+            <div class="edd-section-title">
+              <h2>Existing Relationship with Other Banks</h2>
+              <p>You must fill if customer has other bank accounts</p>
+            </div>
+            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">✅ Does customer maintain accounts with other banks?</div>
+            <div style="display: flex; gap: 16px; margin-top: 8px;">
+              <label><input type="radio" name="other_banks"> Yes</label>
+              <label><input type="radio" name="other_banks" checked> No</label>
+              <label><input type="radio" name="other_banks"> Unknown</label>
+            </div>
+          </div>
+
+          <div class="edd-investigator-input" style="display: none;" id="other-banks-details">
+            <div class="label">List banks and account types</div>
+            <textarea rows="3" placeholder="Bank name, account type, approximate balance..."></textarea>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">💬 If 'No', confirm reason or provide comment</div>
+            <textarea rows="2" placeholder="e.g., 'Customer stated all banking needs met at QIB' or 'Not disclosed by customer'"></textarea>
+          </div>
+
+          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px;">🔍 Note: If customer has other bank accounts, this may indicate diversified wealth management. Assess whether accounts are for different purposes or potential risk indicators.</small>
+        </div>
+
+        <!-- SECTION 9: Related Parties -->
+        <div class="edd-section-panel" data-section="9">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">9</div>
+            <div class="edd-section-title">
+              <h2>Related Parties and Beneficial Owners</h2>
+              <p>You must list if applicable</p>
+            </div>
+            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">✅ Are there related parties or beneficial owners? *</div>
+            <div style="display: flex; gap: 16px; margin-top: 8px;">
+              <label><input type="radio" name="related_parties"> Yes</label>
+              <label><input type="radio" name="related_parties" checked> No</label>
+              <label><input type="radio" name="related_parties"> Not disclosed</label>
+            </div>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">List all related parties (if "Yes")</div>
+            <textarea rows="4" placeholder="Name | Relationship | Ownership % | Purpose&#10;e.g., Fatima Al-Kuwari | Spouse | - | Joint family accounts&#10;Or confirm 'None identified' if applicable"></textarea>
+          </div>
+
+          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px;">👥 Related Parties include: spouse, children, parents, business partners, beneficial owners, authorized signatories, or any person with control over the account.</small>
+        </div>
+
+        <!-- SECTION 10: PEP Information -->
+        <div class="edd-section-panel" data-section="10">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">10</div>
+            <div class="edd-section-title">
+              <h2>PEP Identification & Enhanced Due Diligence</h2>
+              <p>Conditional: Only required if PEP flag = YES</p>
+            </div>
+            <div class="edd-data-source-badge hybrid">🟡 Hybrid (External + Manual)</div>
+          </div>
+
+          <div class="edd-external-data-block">
+            <div class="label">🚨 PEP Status (from Regulatory Database)</div>
+            <div class="value" style="font-size: 18px; font-weight: 700; color: #F44336;">YES - CONFIRMED PEP</div>
+            <div class="source">🔴 Source: Regulatory PEP Database | Type: Domestic | Position: Government Official</div>
+          </div>
+
+          <div class="edd-external-data-block">
+            <div class="label">PEP Details</div>
+            <div style="margin-top: 8px;">
+              <div style="padding: 6px 0;"><strong>Position:</strong> Ministry Official (Senior Level)</div>
+              <div style="padding: 6px 0;"><strong>Sanctioning Body:</strong> QCB Regulatory Database</div>
+              <div style="padding: 6px 0;"><strong>Risk Level:</strong> HIGH - Enhanced Due Diligence Required</div>
+            </div>
+          </div>
+
+          <h4 style="margin-top: 20px; margin-bottom: 12px; color: var(--text-primary); font-weight: 700;">Enhanced Investigator Assessment (MANDATORY for PEP)</h4>
+
+          <div class="edd-investigator-input">
+            <div class="label">🔍 Provide PEP risk assessment and justification for account opening *</div>
+            <textarea rows="4" placeholder="Assess whether business relationship is legitimate and justified. Document senior management approval if applicable." required></textarea>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">📊 Verify source of funds for PEP customer *</div>
+            <textarea rows="3" placeholder="Provide evidence that funds are from legitimate government salary or other lawful sources." required></textarea>
+          </div>
+
+          <div class="edd-investigator-input">
+            <div class="label">✅ Has senior management approved this PEP relationship? *</div>
+            <div style="display: flex; gap: 16px; margin-top: 8px;">
+              <label><input type="radio" name="pep_approved"> Yes, approved</label>
+              <label><input type="radio" name="pep_approved"> Requires approval</label>
+              <label><input type="radio" name="pep_approved"> Not applicable</label>
+            </div>
+          </div>
+
+          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(244,67,54,0.1); border-radius: 4px; border-left: 3px solid #F44336;">⚠️ <strong>PEP Requirement:</strong> All customer transactions must be monitored continuously. Enhanced due diligence required. Consider escalation to Compliance if sourced of funds cannot be verified or if transaction patterns deviate from expected activity profile.</small>
+        </div>
+
+        <!-- DATA RELIABILITY DASHBOARD & SUMMARY -->
+        <div class="edd-reliability-dashboard">
+          <div class="edd-reliability-header">
+            <div class="edd-reliability-icon">📊</div>
+            <div class="edd-reliability-title">
+              <h3>Data Reliability Summary</h3>
+              <p>Credibility assessment across key data categories</p>
+            </div>
+          </div>
+
+          <div class="edd-reliability-grid">
+            <div class="edd-reliability-item">
+              <div class="label">Identity Verification</div>
+              <div class="score">92%</div>
+              <div class="edd-reliability-bar">
+                <div class="edd-reliability-fill high" style="width: 92%;"></div>
+              </div>
+              <small style="color: var(--text-muted); display: block; margin-top: 6px;">MOI verified, documents confirmed</small>
+            </div>
+            <div class="edd-reliability-item">
+              <div class="label">Document Support</div>
+              <div class="score">75%</div>
+              <div class="edd-reliability-bar">
+                <div class="edd-reliability-fill high" style="width: 75%;"></div>
+              </div>
+              <small style="color: var(--text-muted); display: block; margin-top: 6px;">Passport valid, no salary cert</small>
+            </div>
+            <div class="edd-reliability-item">
+              <div class="label">Income Verification</div>
+              <div class="score">60%</div>
+              <div class="edd-reliability-bar">
+                <div class="edd-reliability-fill medium" style="width: 60%;"></div>
+              </div>
+              <small style="color: var(--text-muted); display: block; margin-top: 6px;">Government salary verified, docs pending</small>
+            </div>
+            <div class="edd-reliability-item">
+              <div class="label">Missing Data Impact</div>
+              <div class="score">1</div>
+              <div class="edd-reliability-bar">
+                <div class="edd-reliability-fill medium" style="width: 40%;"></div>
+              </div>
+              <small style="color: var(--text-muted); display: block; margin-top: 6px;"><strong>MEDIUM</strong> - Salary cert MIA</small>
+            </div>
+          </div>
+
+          <div style="background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(0,188,212,0.1)); border: 1px solid rgba(33,150,243,0.3); border-radius: 8px; padding: 14px; margin-top: 14px; text-align: center;">
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px;"><strong>OVERALL DATA CONFIDENCE SCORE</strong></div>
+            <div style="font-size: 28px; font-weight: 800; color: #2196F3;">76 <span style="font-size: 16px; font-weight: 600;">/100</span></div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+              <strong>Assessment:</strong> Customer data is generally reliable with good identity verification. Key gap: Missing formal salary documentation. Recommend obtaining salary certificate to increase confidence to 85+.
+            </div>
+          </div>
+        </div>
+
+        <!-- INVESTIGATOR DECISION PRIMACY STATEMENT -->
+        <div class="edd-investigator-primacy">
+          <h4>👤 INVESTIGATOR DECISION PRIMACY</h4>
+          <p>
+            This EDD system is designed to <strong>assist and advise the investigator</strong>, not replace human judgment. All automated scores, risk alerts, and recommendations provided in this form are advisory only. The investigator retains full authority to:
+            <ul style="margin: 10px 0 0 20px; padding-left: 0;">
+              <li>Accept, override, or modify any recommendation</li>
+              <li>Request additional information or clarification</li>
+              <li>Make final business decisions independently</li>
+              <li>Escalate cases to senior management or compliance</li>
+            </ul>
+          </p>
+          <p style="margin-top: 10px; border-top: 1px solid rgba(103,58,183,0.2); padding-top: 10px;">
+            The Maker (Investigator) and Checker (Manager) dual-approval workflow ensures that no customer decision is automated. All investigations are subject to human review and approval at multiple levels.
+          </p>
+        </div>
+
+        <!-- SECTION 11: Business Recommendation & Decision -->
+        <div class="edd-section-panel" data-section="11">
+          <div class="edd-section-header">
+            <div class="edd-section-icon">11</div>
+            <div class="edd-section-title">
+              <h2>Business Recommendation and Decision</h2>
+              <p>Investigator and Manager approval workflow</p>
+            </div>
+            <div class="edd-data-source-badge manual">🟣 Decision Engine</div>
+          </div>
+
+          <div class="edd-decision-section">
+            <h4 style="margin-top: 0; margin-bottom: 16px; color: var(--text-primary); font-weight: 700;">🔎 Investigator Assessment</h4>
+
+            <div class="edd-investigator-input">
+              <div class="label">💡 Overall EDD Assessment Summary *</div>
+              <textarea rows="4" placeholder="Summarize your findings from all 11 sections. Address any concerns found during investigation." required></textarea>
+            </div>
+
+            <div class="edd-investigator-input">
+              <div class="label">🎯 Business Recommendation *</div>
+              <div class="edd-decision-grid">
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="recommendation"> ✅ APPROVE - Accept and proceed with account</label>
+                </div>
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="recommendation"> ⚠️ ESCALATE - Refer to Compliance for decision</label>
+                </div>
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="recommendation"> ❌ REJECT - Decline account / Close case</label>
+                </div>
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="recommendation" checked> ⏳ REWORK - Request additional information</label>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 12px;">
+              ✉️ <strong>Investigator Signature:</strong> Your name and timestamp will be automatically captured.
+            </div>
+          </div>
+
+          <div class="edd-decision-section" style="background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(136,0,255,0.05));">
+            <h4 style="margin-top: 0; margin-bottom: 16px; color: var(--text-primary); font-weight: 700;">✅ Manager Approval (Checker)</h4>
+
+            <div class="edd-investigator-input">
+              <div class="label">Manager Review and Decision *</div>
+              <div class="edd-decision-grid">
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="manager_decision"> ✅ APPROVED - Reviewed and accepted</label>
+                </div>
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="manager_decision"> ❌ REJECTED - Reviewed and rejected</label>
+                </div>
+                <div class="edd-decision-option">
+                  <label><input type="radio" name="manager_decision"> 🔄 REQUEST REWORK - Return for additional investigation</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="edd-investigator-input">
+              <div class="label">Manager Comments (Optional)</div>
+              <textarea rows="2" placeholder="Any additional comments or guidance..."></textarea>
+            </div>
+
+            <div style="background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.2); border-radius: 8px; padding: 12px; margin-top: 16px; font-size: 12px;">
+              ✉️ <strong>Manager Signature:</strong> Your name and timestamp will be automatically captured.
+            </div>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
+            <button style="padding: 10px 20px; background: rgba(200,200,200,0.2); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; font-weight: 600;">Save Draft</button>
+            <button style="padding: 10px 20px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Submit Case for Review</button>
+          </div>
+
+          <!-- FINAL DECISION RESULT CARD -->
+          <div style="margin-top: 32px; padding: 24px; background: linear-gradient(135deg, rgba(244,67,54,0.1), rgba(255,152,0,0.1)), linear-gradient(135deg, rgba(76,175,80,0.05), rgba(0,200,83,0.05)); border: 2px solid rgba(244,67,54,0.3); border-radius: 16px;">
+            <div style="text-align: center; margin-bottom: 24px;">
+              <h3 style="margin: 0 0 16px 0; font-size: 28px; font-weight: 800; color: var(--text-primary);">INVESTIGATION RESULT</h3>
+              <div style="display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;">
+                <div style="background: rgba(244,67,54,0.15); padding: 16px 24px; border-radius: 10px; border-left: 4px solid #F44336;">
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Risk Level</div>
+                  <div style="font-size: 20px; font-weight: 800; color: #F44336;">HIGH RISK</div>
+                </div>
+                <div style="background: rgba(255,152,0,0.15); padding: 16px 24px; border-radius: 10px; border-left: 4px solid #FFB300;">
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">PEP Status</div>
+                  <div style="font-size: 20px; font-weight: 800; color: #FFB300;">NOT A PEP</div>
+                </div>
+                <div style="background: rgba(156,39,176,0.15); padding: 16px 24px; border-radius: 10px; border-left: 4px solid #9C27B0;">
+                  <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Behavior</div>
+                  <div style="font-size: 20px; font-weight: 800; color: #9C27B0;">ABNORMAL</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+              <h4 style="margin: 0 0 12px 0; color: var(--text-primary); font-weight: 700;">Recommendation</h4>
+              <div style="background: rgba(244,67,54,0.1); border-left: 4px solid #F44336; padding: 16px; border-radius: 8px;">
+                <div style="font-size: 18px; font-weight: 800; color: #F44336; margin-bottom: 8px;">⚠️ ESCALATE TO COMPLIANCE</div>
+                <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                  Due to HIGH RISK classification combined with abnormal transaction behavior, this case requires compliance team review before account activation.
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+              <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 6px;">👤</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Investigator</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Ahmed Al-Dosari</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Mar 10, 2026 | 14:37 UTC</div>
+              </div>
+              <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 6px;">✅</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Manager</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Senior Manager</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Mar 10, 2026 | 15:00 UTC</div>
+              </div>
+              <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: center;">
+                <div style="font-size: 24px; margin-bottom: 6px;">⚖️</div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Compliance</div>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Awaiting Review</div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Pending...</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px; padding: 12px; background: rgba(0,212,255,0.08); border-radius: 8px; font-size: 12px; text-align: center; color: var(--text-muted);">
+              <strong>Case Status:</strong> Escalated to Compliance Team | Case Duration: 75 minutes (Investigation + Review)
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/data_source_transparency.js"></script>
+  <script>
+    // Opening Screen Handler
+    function startInvestigation() {
+      const openingScreen = document.getElementById('openingScreen');
+      if (openingScreen) {
+        openingScreen.classList.add('hidden');
+      }
+    }
+
+    // Section Navigation
+    function switchSection(sectionNum) {
+      // Hide all panels
+      document.querySelectorAll('.edd-section-panel').forEach(p => p.classList.remove('active'));
+      
+      // Deactivate all nav items
+      document.querySelectorAll('.edd-section-item').forEach(i => i.classList.remove('active'));
+      
+      // Show selected panel
+      const panel = document.querySelector(`[data-section="${sectionNum}"]`);
+      if (panel) panel.classList.add('active');
+      
+      // Activate nav item
+      document.querySelectorAll('.edd-section-item')[sectionNum - 1].classList.add('active');
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load customer info
+      const urlParams = new URLSearchParams(window.location.search);
+      const rimNumber = urlParams.get('rim') || 'RIM001234';
+      document.getElementById('caseId').textContent = `EDD-2026-${rimNumber}`;
+    });
+  </script>
+  <!-- Accessibility Manager JavaScript -->
+  <script>
+    class AccessibilityManager {
+      constructor() {
+        this.settings = {
+          highContrast: false,
+          fontSize: 100,
+          audioFeedbackEnabled: true,
+          keyboardNavigation: true,
+          reducedMotion: false,
+          fullscreen: false
+        };
+        this.loadSettings();
+        this.initializeAudioContext();
+        this.setupEventListeners();
+      }
+
+      loadSettings() {
+        const saved = localStorage.getItem('a11y_settings');
+        if (saved) {
+          this.settings = { ...this.settings, ...JSON.parse(saved) };
+        }
+        if (window.matchMedia('(prefers-contrast: more)').matches) {
+          this.settings.highContrast = true;
+        }
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          this.settings.reducedMotion = true;
+        }
+        this.applySettings();
+      }
+
+      saveSettings() {
+        localStorage.setItem('a11y_settings', JSON.stringify(this.settings));
+      }
+
+      applySettings() {
+        if (this.settings.highContrast) {
+          document.documentElement.classList.add('high-contrast');
+        }
+        if (this.settings.fontSize !== 100) {
+          document.documentElement.style.fontSize = (this.settings.fontSize / 100) * 16 + 'px';
+          document.getElementById('fontSize-status').textContent = this.settings.fontSize + '%';
+        }
+      }
+
+      initializeAudioContext() {
+        try {
+          this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+          console.log('Audio context not available');
+          this.audioContext = null;
+        }
+      }
+
+      setupEventListeners() {
+        document.addEventListener('keydown', (e) => {
+          if (e.ctrlKey && e.altKey) {
+            if (e.key === 'a') { e.preventDefault(); document.querySelector('.a11y-panel-toggle').click(); }
+            if (e.key === 'f') { e.preventDefault(); this.toggleFullscreen(); }
+          }
+        });
+      }
+
+      toggleHighContrast() {
+        this.settings.highContrast = !this.settings.highContrast;
+        if (this.settings.highContrast) {
+          document.documentElement.classList.add('high-contrast');
+        } else {
+          document.documentElement.classList.remove('high-contrast');
+        }
+        this.saveSettings();
+        this.announce('High contrast mode ' + (this.settings.highContrast ? 'enabled' : 'disabled'));
+        const btn = document.getElementById('contrast-btn');
+        if (btn) {
+          btn.classList.toggle('active');
+          btn.textContent = this.settings.highContrast ? 'Disable High Contrast' : 'Enable High Contrast';
+        }
+      }
+
+      adjustFontSize(delta) {
+        this.settings.fontSize = Math.min(200, Math.max(75, this.settings.fontSize + delta));
+        document.documentElement.style.fontSize = (this.settings.fontSize / 100) * 16 + 'px';
+        document.getElementById('fontSize-status').textContent = this.settings.fontSize + '%';
+        this.saveSettings();
+        this.announce('Font size: ' + this.settings.fontSize + '%');
+      }
+
+      resetToDefault() {
+        this.settings = {
+          highContrast: false,
+          fontSize: 100,
+          audioFeedbackEnabled: true,
+          keyboardNavigation: true,
+          reducedMotion: false,
+          fullscreen: false
+        };
+        document.documentElement.classList.remove('high-contrast');
+        document.documentElement.style.fontSize = '16px';
+        document.getElementById('fontSize-status').textContent = '100%';
+        if (this.settings.fullscreen) this.toggleFullscreen();
+        this.saveSettings();
+        this.announce('Settings reset to default');
+      }
+
+      toggleFullscreen() {
+        const elem = document.documentElement;
+        if (!this.settings.fullscreen) {
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+          }
+          this.settings.fullscreen = true;
+          document.body.classList.add('fullscreen-mode');
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+          this.settings.fullscreen = false;
+          document.body.classList.remove('fullscreen-mode');
+        }
+        this.saveSettings();
+      }
+
+      announce(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.style.position = 'absolute';
+        announcement.style.left = '-10000px';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        
+        setTimeout(() => announcement.remove(), 1500);
+        
+        if (this.settings.audioFeedbackEnabled && 'speechSynthesis' in window) {
+          speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(message);
+          utterance.rate = 1;
+          speechSynthesis.speak(utterance);
+        }
+      }
+
+      playSound(type = 'notification') {
+        if (!this.settings.audioFeedbackEnabled || !this.audioContext) return;
+
+        const now = this.audioContext.currentTime;
+        const oscillator = this.audioContext.createOscillator();
+        const gainNode = this.audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(this.audioContext.destination);
+
+        const frequencies = {
+          notification: 800,
+          success: 1000,
+          error: 400,
+          warning: 600
+        };
+
+        oscillator.frequency.value = frequencies[type] || 800;
+        gainNode.gain.setValueAtTime(0.3, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.2);
+      }
+
+      enableVoiceCommands() {
+        // Check browser support
+        const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
+        
+        if (!SpeechRecognitionClass) {
+          console.error('Speech Recognition not supported');
+          this.announce('Voice commands not supported in this browser. Please use Chrome, Edge, or Firefox.');
+          return null;
+        }
+
+        try {
+          const recognition = new SpeechRecognitionClass();
+          
+          recognition.continuous = false;
+          recognition.interimResults = false;
+          recognition.lang = 'en-US';
+
+          recognition.onstart = () => {
+            console.log('Voice recognition started');
+            this.announce('Listening...');
+            this.playSound('notification');
+          };
+
+          recognition.onresult = (event) => {
+            console.log('Voice result received');
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              transcript += event.results[i][0].transcript;
+            }
+            console.log('Recognized:', transcript);
+            this.processVoiceCommand(transcript.toLowerCase().trim());
+          };
+
+          recognition.onerror = (event) => {
+            console.error('Voice recognition error:', event.error);
+            this.announce('Error: ' + event.error + '. Please try again.');
+            this.playSound('error');
+          };
+
+          recognition.onend = () => {
+            console.log('Voice recognition ended');
+          };
+
+          return recognition;
+        } catch (e) {
+          console.error('Error creating speech recognition:', e);
+          this.announce('Error initializing voice recognition');
+          return null;
+        }
+      }
+
+      processVoiceCommand(command) {
+        console.log('Processing command:', command);
+        
+        const commands = {
+          'next section': () => {
+            const items = document.querySelectorAll('.edd-section-item');
+            const active = document.querySelector('.edd-section-item.active');
+            const idx = Array.from(items).indexOf(active);
+            if (idx >= 0 && idx < items.length - 1) {
+              items[idx + 1].click();
+              return true;
+            }
+            return false;
+          },
+          'previous section': () => {
+            const items = document.querySelectorAll('.edd-section-item');
+            const active = document.querySelector('.edd-section-item.active');
+            const idx = Array.from(items).indexOf(active);
+            if (idx > 0) {
+              items[idx - 1].click();
+              return true;
+            }
+            return false;
+          },
+          'submit': () => {
+            const submitBtn = document.querySelector('[type="submit"]');
+            if (submitBtn) {
+              submitBtn.click();
+              return true;
+            }
+            return false;
+          },
+          'read page': () => {
+            const content = document.querySelector('.edd-section-panel.active')?.innerText || 
+                          document.querySelector('main')?.innerText ||
+                          document.body.innerText;
+            if (content) {
+              this.readText(content);
+              return true;
+            }
+            return false;
+          }
+        };
+
+        if (commands[command]) {
+          try {
+            const result = commands[command]();
+            if (result !== false) {
+              this.announce('Command: ' + command);
+              this.playSound('success');
+            } else {
+              this.announce('Cannot execute ' + command);
+              this.playSound('warning');
+            }
+          } catch (e) {
+            console.error('Command execution error:', e);
+            this.announce('Error executing command: ' + e.message);
+            this.playSound('error');
+          }
+        } else {
+          console.log('Command not found:', command);
+          // Try fuzzy matching
+          const matched = Object.keys(commands).find(cmd => 
+            cmd.includes(command) || command.includes(cmd)
+          );
+          if (matched) {
+            console.log('Fuzzy match found:', matched);
+            commands[matched]();
+            this.announce('Executing: ' + matched);
+            this.playSound('success');
+          } else {
+            this.announce('Command not recognized: ' + command);
+            this.playSound('error');
+          }
+        }
+      }
+
+      readText(text) {
+        if ('speechSynthesis' in window) {
+          try {
+            speechSynthesis.cancel(); // Cancel any ongoing speech
+            
+            // Truncate long text to avoid browser limits
+            let textToRead = text.substring(0, 3000); // Limit to 3000 chars
+            
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.rate = 0.9; // Slightly slower
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            utterance.onstart = () => {
+              console.log('Text-to-speech started');
+            };
+            
+            utterance.onend = () => {
+              console.log('Text-to-speech ended');
+            };
+            
+            utterance.onerror = (err) => {
+              console.error('Speech synthesis error:', err);
+              this.announce('Error reading text: ' + err.error);
+            };
+            
+            speechSynthesis.speak(utterance);
+          } catch (e) {
+            console.error('Read text error:', e);
+            this.announce('Error: ' + e.message);
+          }
+        } else {
+          this.announce('Text-to-speech not supported');
+        }
+      }
+    }
+
+    // Voice command handler function
+    function startVoiceCommandsHandler() {
+      try {
+        if (!window.accessibilityManager) {
+          console.error('AccessibilityManager not initialized');
+          alert('System not ready. Please refresh the page.');
+          return;
+        }
+        
+        const recognizer = window.accessibilityManager.enableVoiceCommands();
+        if (!recognizer) {
+          alert('Voice commands not supported in your browser.\n\nUse Chrome, Edge, or Firefox for best results.');
+          return;
+        }
+        
+        try {
+          recognizer.start();
+        } catch (e) {
+          console.error('Voice recognition error:', e);
+          // Already listening, no need to start again
+        }
+      } catch (e) {
+        console.error('Voice command error:', e);
+        alert('Error starting voice recognition. Please try again.');
+      }
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      window.accessibilityManager = new AccessibilityManager();
+      
+      // Add ARIA labels
+      document.querySelectorAll('[data-section]').forEach((el, idx) => {
+        el.setAttribute('role', 'region');
+        el.setAttribute('aria-label', 'Section ' + (idx + 1));
+      });
+
+      document.querySelectorAll('textarea, input').forEach(el => {
+        if (!el.getAttribute('aria-label')) {
+          const label = el.previousElementSibling?.textContent || el.placeholder;
+          if (label) el.setAttribute('aria-label', label);
+        }
+      });
+
+      document.querySelectorAll('button').forEach(btn => {
+        if (!btn.getAttribute('aria-label')) {
+          btn.setAttribute('aria-label', btn.textContent.trim());
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
