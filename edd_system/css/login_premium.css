@@ -405,7 +405,7 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
   border-radius: 14px;
-  padding: 20px;
+  padding: 16px 20px;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.3),
     inset 1px 1px 0 rgba(255, 255, 255, 0.1);
@@ -413,7 +413,7 @@ body {
 
 /* Form header */
 .form-header {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -421,10 +421,10 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-accent-green);
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -448,13 +448,13 @@ body {
 
 .form-title {
   font-family: var(--font-family-heading);
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .form-subtitle {
-  font-size: 13px;
+  font-size: 11px;
   color: var(--color-text-secondary);
   font-weight: 500;
   text-transform: uppercase;
@@ -517,11 +517,11 @@ body {
 }
 
 .form-section {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .form-section:last-of-type {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .section-title {
@@ -535,7 +535,7 @@ body {
 }
 
 .form-group {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .form-group:last-child {
@@ -595,9 +595,9 @@ input::placeholder {
 }
 
 .role-grid.premium {
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-top: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 6px;
 }
 
 .role-option {
@@ -611,22 +611,22 @@ input::placeholder {
 
 .role-card {
   position: relative;
-  padding: 16px 12px;
+  padding: 10px 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 1.5px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 10px;
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 3px;
 }
 
 .role-card.premium {
-  padding: 18px 10px;
-  border-radius: 14px;
+  padding: 10px 6px;
+  border-radius: 10px;
 }
 
 .role-option input[type="radio"]:checked + .role-card {
@@ -641,7 +641,7 @@ input::placeholder {
 }
 
 .role-icon {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .role-card .premium .role-icon {
@@ -670,7 +670,7 @@ input::placeholder {
 
 .btn-action {
   width: 100%;
-  padding: 10px 16px;
+  padding: 9px 16px;
   background: linear-gradient(135deg, var(--color-accent-gold) 0%, #e8c77e 100%);
   border: none;
   border-radius: 8px;
@@ -758,7 +758,7 @@ input::placeholder {
   text-align: center;
   font-size: 9px;
   color: var(--color-text-muted);
-  margin-top: 10px;
+  margin-top: 6px;
   text-transform: uppercase;
   letter-spacing: 0.2px;
 }
@@ -1087,8 +1087,8 @@ input::placeholder {
    ============================================================ */
 
 .security-footer {
-  margin-top: 24px;
-  padding-top: 16px;
+  margin-top: 12px;
+  padding-top: 8px;
   border-top: 1px solid var(--color-border-light);
 }
 
@@ -1223,7 +1223,7 @@ input::placeholder {
   }
   
   .role-grid.premium {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   
   .compliance-footer {
@@ -1276,16 +1276,16 @@ input::placeholder {
   }
   
   .role-grid.premium {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
   }
   
   .role-card {
-    padding: 12px 8px;
+    padding: 8px 6px;
   }
   
   .role-icon {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .compliance-footer {
