@@ -289,14 +289,14 @@ body {
 
 /* Brand messaging */
 .brand-message {
-  margin-bottom: 40px;
+  margin-bottom: 16px;
 }
 
 .brand-headline {
   font-family: var(--font-family-heading);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 800;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   background: linear-gradient(135deg, var(--color-accent-gold) 0%, var(--color-accent-cyan) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -305,19 +305,19 @@ body {
 }
 
 .brand-subheading {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
 }
 
 .brand-divider {
-  width: 40px;
-  height: 2px;
+  width: 30px;
+  height: 1px;
   background: linear-gradient(to right, transparent, var(--color-accent-gold), transparent);
-  margin: 20px auto 20px;
+  margin: 8px auto 8px;
 }
 
 .brand-descriptor {
@@ -331,19 +331,19 @@ body {
 .certification-badges {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 40px;
-  padding-top: 40px;
+  gap: 6px;
+  margin-top: 16px;
+  padding-top: 16px;
   border-top: 1px solid var(--color-border-light);
 }
 
 .badge {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 10px;
   color: var(--color-text-secondary);
-  opacity: 0.8;
+  opacity: 0.7;
   transition: opacity 0.3s ease;
 }
 
@@ -516,21 +516,21 @@ body {
 }
 
 .form-section {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .form-section:last-of-type {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .section-title {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   color: var(--color-text-secondary);
-  margin-bottom: 16px;
-  opacity: 0.8;
+  margin-bottom: 8px;
+  opacity: 0.7;
 }
 
 .form-group {
@@ -543,12 +543,12 @@ body {
 
 label {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 /* Input fields */
@@ -561,12 +561,12 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
   width: 100%;
-  padding: 12px 16px;
+  padding: 9px 12px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border-radius: 8px;
   color: var(--color-text-primary);
-  font-size: 14px;
+  font-size: 13px;
   font-family: inherit;
   transition: all 0.3s ease;
   backdrop-filter: blur(4px);
@@ -669,24 +669,24 @@ input::placeholder {
 
 .btn-action {
   width: 100%;
-  padding: 14px 20px;
+  padding: 10px 16px;
   background: linear-gradient(135deg, var(--color-accent-gold) 0%, #e8c77e 100%);
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   color: var(--color-primary);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+  letter-spacing: 0.3px;
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.25);
 }
 
 .btn-action:hover {
@@ -755,11 +755,11 @@ input::placeholder {
 
 .form-footer {
   text-align: center;
-  font-size: 11px;
+  font-size: 9px;
   color: var(--color-text-muted);
-  margin-top: 16px;
+  margin-top: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
 
 /* ============================================================
