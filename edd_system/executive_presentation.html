@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB — Executive Strategic Briefing</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23D4AF37'/><text x='16' y='22' font-size='16' font-weight='bold' fill='%230a1f3d' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #0a1628;
+      --navy-light: #0f1d32;
+      --gold: #D4AF37;
+      --gold-dim: rgba(212,175,55,0.15);
+      --cyan: #00D4FF;
+      --white-90: rgba(255,255,255,0.9);
+      --white-70: rgba(255,255,255,0.7);
+      --white-50: rgba(255,255,255,0.5);
+      --white-20: rgba(255,255,255,0.2);
+      --white-10: rgba(255,255,255,0.1);
+      --white-05: rgba(255,255,255,0.05);
+      --red: #FF4D6A;
+      --green: #00E676;
+      --orange: #FF9800;
+      --slide-max: 1100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--white-90);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ========================================
+       PRESENTATION SHELL
+    ======================================== */
+    .pres-shell {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(160deg, #080d18 0%, #0f1d32 40%, #0a1628 100%);
+      position: relative;
+    }
+
+    /* Ambient background effects */
+    .pres-shell::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 80vw;
+      height: 80vw;
+      background: radial-gradient(circle, rgba(212,175,55,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .pres-shell::after {
+      content: '';
+      position: absolute;
+      bottom: -40%;
+      left: -20%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(0,212,255,0.02) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ========================================
+       TOP BAR
+    ======================================== */
+    .top-bar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(0,0,0,0.35);
+      border-bottom: 1px solid var(--white-10);
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .qib-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--gold), #c49b2c);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--navy);
+      letter-spacing: -1px;
+    }
+
+    .top-bar-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white-70);
+      letter-spacing: 0.5px;
+    }
+
+    .top-bar-title span {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .classification-badge {
+      padding: 4px 14px;
+      background: rgba(255,77,106,0.12);
+      border: 1px solid rgba(255,77,106,0.3);
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .slide-counter {
+      font-size: 13px;
+      color: var(--white-50);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .slide-counter .current {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .btn-exit {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--white-20);
+      background: var(--white-05);
+      border-radius: 10px;
+      color: var(--white-70);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .btn-exit:hover {
+      background: rgba(255,77,106,0.15);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* ========================================
+       SLIDE AREA
+    ======================================== */
+    .slide-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .slide-viewport {
+      width: 100%;
+      max-width: var(--slide-max);
+      padding: 30px 60px;
+      position: relative;
+    }
+
+    /* Navigation arrows */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 56px;
+      height: 56px;
+      border: 1px solid var(--white-10);
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 50%;
+      color: var(--white-70);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .nav-arrow:hover {
+      background: rgba(212,175,55,0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .nav-arrow:disabled {
+      opacity: 0.15;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .nav-arrow.left { left: 24px; }
+    .nav-arrow.right { right: 24px; }
+
+    .nav-arrow svg { width: 24px; height: 24px; }
+
+    /* ========================================
+       SLIDE CONTENT STYLING
+    ======================================== */
+    .slide {
+      animation: fadeSlide 0.5s ease-out;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .slide h1 {
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.15;
+      color: white;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide h1 .gold { color: var(--gold); }
+    .slide h1 .cyan { color: var(--cyan); }
+
+    .slide .subtitle {
+      font-size: 18px;
+      color: var(--white-50);
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 800px;
+    }
+
+    .slide .subtitle-ar {
+      font-size: 16px;
+      color: var(--gold);
+      font-weight: 500;
+      direction: rtl;
+      text-align: right;
+      margin-bottom: 32px;
+      opacity: 0.8;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* Challenge cards */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .challenge-card {
+      background: rgba(255,77,106,0.04);
+      border: 1px solid rgba(255,77,106,0.12);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: all 0.3s;
+    }
+
+    .challenge-card:hover {
+      background: rgba(255,77,106,0.08);
+      border-color: rgba(255,77,106,0.25);
+      transform: translateY(-2px);
+    }
+
+    .challenge-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255,77,106,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .challenge-text h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white-90);
+      margin-bottom: 4px;
+    }
+
+    .challenge-text p {
+      font-size: 12px;
+      color: var(--white-50);
+      line-height: 1.5;
+    }
+
+    /* Impact cards */
+    .impact-strip {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .impact-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(255,152,0,0.08);
+      border: 1px solid rgba(255,152,0,0.2);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--orange);
+    }
+
+    /* Solution cards */
+    .solution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .solution-card {
+      background: rgba(0,212,255,0.04);
+      border: 1px solid rgba(0,212,255,0.12);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: all 0.3s;
+    }
+
+    .solution-card:hover {
+      background: rgba(0,212,255,0.08);
+      border-color: rgba(0,212,255,0.25);
+      transform: translateY(-2px);
+    }
+
+    .solution-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(0,212,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .solution-text h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white-90);
+      margin-bottom: 4px;
+    }
+
+    .solution-text p {
+      font-size: 12px;
+      color: var(--white-50);
+      line-height: 1.5;
+    }
+
+    /* Capability modules */
+    .capability-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .capability-card {
+      background: var(--white-05);
+      border: 1px solid var(--white-10);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .capability-card:hover {
+      background: rgba(212,175,55,0.06);
+      border-color: rgba(212,175,55,0.2);
+      transform: translateY(-3px);
+    }
+
+    .capability-card .cap-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .capability-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white-90);
+      margin-bottom: 6px;
+    }
+
+    .capability-card p {
+      font-size: 11px;
+      color: var(--white-50);
+      line-height: 1.5;
+    }
+
+    /* Workflow visual */
+    .workflow-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .wf-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      min-width: 130px;
+    }
+
+    .wf-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      border: 2px solid var(--white-20);
+      background: var(--white-05);
+      transition: all 0.3s;
+    }
+
+    .wf-step:hover .wf-circle {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+      transform: scale(1.1);
+    }
+
+    .wf-step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--white-70);
+      text-align: center;
+    }
+
+    .wf-step-role {
+      font-size: 10px;
+      color: var(--white-50);
+    }
+
+    .wf-arrow {
+      font-size: 20px;
+      color: var(--gold);
+      opacity: 0.5;
+      margin-top: -20px;
+    }
+
+    /* Security grid */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .security-card {
+      background: rgba(0,230,118,0.04);
+      border: 1px solid rgba(0,230,118,0.12);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .security-card:hover {
+      background: rgba(0,230,118,0.08);
+      border-color: rgba(0,230,118,0.25);
+      transform: translateY(-2px);
+    }
+
+    .security-card .sec-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .security-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white-90);
+      margin-bottom: 4px;
+    }
+
+    .security-card p {
+      font-size: 11px;
+      color: var(--white-50);
+      line-height: 1.4;
+    }
+
+    /* Roadmap timeline */
+    .roadmap-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .roadmap-phase {
+      position: relative;
+      background: var(--white-05);
+      border: 1px solid var(--white-10);
+      border-radius: 14px;
+      padding: 20px;
+      padding-top: 36px;
+      transition: all 0.3s;
+    }
+
+    .roadmap-phase:hover {
+      background: rgba(212,175,55,0.06);
+      border-color: rgba(212,175,55,0.2);
+      transform: translateY(-2px);
+    }
+
+    .phase-badge {
+      position: absolute;
+      top: -1px;
+      left: 16px;
+      padding: 4px 12px;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 0 0 8px 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .roadmap-phase h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white-90);
+      margin-bottom: 8px;
+    }
+
+    .roadmap-phase p {
+      font-size: 11px;
+      color: var(--white-50);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .roadmap-phase .duration {
+      font-size: 11px;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* KPI metrics */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .kpi-card {
+      background: var(--white-05);
+      border: 1px solid var(--white-10);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .kpi-card:hover {
+      border-color: rgba(212,175,55,0.3);
+      transform: translateY(-2px);
+    }
+
+    .kpi-value {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--white-50);
+      font-weight: 500;
+    }
+
+    /* Demo launcher */
+    .demo-section {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .demo-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .demo-card {
+      background: var(--white-05);
+      border: 1px solid var(--white-10);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .demo-card:hover {
+      background: rgba(0,212,255,0.06);
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .demo-card .demo-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .demo-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .demo-card p {
+      font-size: 11px;
+      color: var(--white-50);
+      line-height: 1.5;
+    }
+
+    /* Closing statement */
+    .closing-section {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .closing-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 24px auto;
+    }
+
+    .closing-quote {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--white-70);
+      line-height: 1.7;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    .closing-quote-ar {
+      font-size: 18px;
+      color: var(--gold);
+      direction: rtl;
+      text-align: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      line-height: 1.8;
+      opacity: 0.9;
+      margin-bottom: 32px;
+    }
+
+    .closing-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 36px;
+      background: linear-gradient(135deg, var(--gold), #c49b2c);
+      color: var(--navy);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .closing-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212,175,55,0.3);
+    }
+
+    /* ========================================
+       BOTTOM PROGRESS
+    ======================================== */
+    .bottom-bar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: rgba(0,0,0,0.3);
+      border-top: 1px solid var(--white-10);
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--white-20);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 0;
+    }
+
+    .dot:hover { background: var(--white-50); transform: scale(1.2); }
+
+    .dot.active {
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(212,175,55,0.5);
+      transform: scale(1.3);
+    }
+
+    .keyboard-hint {
+      font-size: 11px;
+      color: var(--white-50);
+    }
+
+    .keyboard-hint kbd {
+      background: var(--white-10);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 10px;
+    }
+
+    /* Title slide special */
+    .title-slide { text-align: center; }
+
+    .title-slide .qib-emblem {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--gold), #c49b2c);
+      border-radius: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 28px;
+      box-shadow: 0 8px 32px rgba(212,175,55,0.25);
+    }
+
+    .title-slide h1 {
+      font-size: 52px;
+      margin-bottom: 16px;
+    }
+
+    .title-slide .meta-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--white-50);
+    }
+
+    .title-slide .meta-info span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .slide h1 { font-size: 32px; }
+      .title-slide h1 { font-size: 38px; }
+      .slide-viewport { padding: 20px 40px; }
+      .nav-arrow { width: 44px; height: 44px; }
+      .nav-arrow.left { left: 12px; }
+      .nav-arrow.right { right: 12px; }
+      .challenge-grid, .solution-grid { grid-template-columns: 1fr; }
+      .capability-grid, .security-grid { grid-template-columns: 1fr 1fr; }
+      .roadmap-timeline { grid-template-columns: 1fr 1fr; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .demo-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="pres-shell">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <div class="qib-logo">Q</div>
+      <div class="top-bar-title"><span>Qatar Islamic Bank</span> — Executive Strategic Briefing</div>
+    </div>
+    <div class="top-bar-right">
+      <div class="classification-badge">CONFIDENTIAL</div>
+      <div class="slide-counter"><span class="current" id="currentNum">1</span> / <span id="totalNum">10</span></div>
+      <button class="btn-exit" onclick="exitPresentation()" title="Exit (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- SLIDE AREA -->
+  <div class="slide-area">
+    <button class="nav-arrow left" id="btnPrev" onclick="prevSlide()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+
+    <div class="slide-viewport">
+      <div id="slideContent"></div>
+    </div>
+
+    <button class="nav-arrow right" id="btnNext" onclick="nextSlide()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </button>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="progress-dots" id="progressDots"></div>
+    <div class="keyboard-hint">
+      <kbd>←</kbd> <kbd>→</kbd> Navigate &nbsp;|&nbsp; <kbd>Esc</kbd> Exit
+    </div>
+  </div>
+
+</div>
+
+<script>
+// =========================================================
+// EXECUTIVE PRESENTATION — SLIDES DATA
+// =========================================================
+const slides = [
+
+  // ── SLIDE 1: Title ──
+  {
+    render: () => `
+      <div class="slide title-slide">
+        <div class="qib-emblem">QIB</div>
+        <div class="slide-label">EXECUTIVE STRATEGIC BRIEFING</div>
+        <h1>Digital <span class="gold">CDD / EDD</span><br>Case Management Platform</h1>
+        <div class="subtitle">
+          A unified digital platform for managing Customer Due Diligence and Enhanced Due Diligence operations across the bank.
+        </div>
+        <div class="subtitle-ar">منصة رقمية موحدة لإدارة عمليات العناية الواجبة والعناية المعززة داخل البنك</div>
+        <div class="meta-info">
+          <span>📅 March 2026</span>
+          <span>🏛️ Qatar Islamic Bank</span>
+          <span>🔒 Confidential</span>
+          <span>📊 Board Presentation</span>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 2: Agenda ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">📋 AGENDA</div>
+        <h1>Presentation <span class="gold">Overview</span></h1>
+        <div class="subtitle">Strategic briefing structure for today's session</div>
+        <div class="capability-grid" style="grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px;">
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">1️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Current Operational Challenge</h4>
+            </div>
+            <p>Understanding the operational gaps in current CDD/EDD processes</p>
+          </div>
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">2️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Proposed Digital Platform</h4>
+            </div>
+            <p>How the platform addresses these challenges with a unified solution</p>
+          </div>
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">3️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Platform Capabilities</h4>
+            </div>
+            <p>Key modules, workflow engine, and compliance features</p>
+          </div>
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">4️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Security & Compliance</h4>
+            </div>
+            <p>Bank-grade security architecture and regulatory alignment</p>
+          </div>
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">5️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Implementation Roadmap</h4>
+            </div>
+            <p>Phased delivery plan and key milestones</p>
+          </div>
+          <div class="capability-card" style="text-align: left; padding: 22px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+              <span style="font-size:28px;">6️⃣</span>
+              <h4 style="margin:0;font-size:15px;">Live Platform Demonstration</h4>
+            </div>
+            <p>Interactive walkthrough of the platform from a user perspective</p>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 3: Current Operational Challenge ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">⚠️ CURRENT STATE</div>
+        <h1>Current Operational <span class="gold">Challenge</span></h1>
+        <div class="subtitle">
+          CDD and EDD case management currently relies on distributed processes across multiple teams and systems, presenting several operational challenges.
+        </div>
+        <div class="subtitle-ar">تعتمد إدارة حالات العناية الواجبة حالياً على إجراءات موزعة بين عدة فرق وأنظمة، مما يشكل تحديات تشغيلية</div>
+        <div class="challenge-grid">
+          <div class="challenge-card">
+            <div class="challenge-icon">📝</div>
+            <div class="challenge-text">
+              <h4>Manual & Non-Unified Processes</h4>
+              <p>Partial reliance on manual procedures and non-standardized forms across departments</p>
+            </div>
+          </div>
+          <div class="challenge-card">
+            <div class="challenge-icon">🔀</div>
+            <div class="challenge-text">
+              <h4>Fragmented Information Flow</h4>
+              <p>Information transfers between Business, CDD, Compliance, Risk, and Operations without a central platform</p>
+            </div>
+          </div>
+          <div class="challenge-card">
+            <div class="challenge-icon">👁️</div>
+            <div class="challenge-text">
+              <h4>Limited Real-Time Visibility</h4>
+              <p>Difficulty obtaining a comprehensive view of investigation status and high-risk cases in real time</p>
+            </div>
+          </div>
+          <div class="challenge-card">
+            <div class="challenge-icon">📊</div>
+            <div class="challenge-text">
+              <h4>Disconnected Data Sources</h4>
+              <p>No unified platform linking customer data, account activity, and financial risk analysis</p>
+            </div>
+          </div>
+        </div>
+        <div class="impact-strip">
+          <div class="impact-tag">⏱️ Processing Delays</div>
+          <div class="impact-tag">📞 Manual Coordination</div>
+          <div class="impact-tag">🔍 Tracking Difficulty</div>
+          <div class="impact-tag">📈 Operational Overhead</div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 4: Proposed Digital Platform ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">💡 PROPOSED SOLUTION</div>
+        <h1>Proposed <span class="cyan">Digital Platform</span></h1>
+        <div class="subtitle">
+          A unified digital platform designed to centrally manage and digitize CDD and EDD cases across the bank.
+        </div>
+        <div class="subtitle-ar">منصة رقمية موحدة لرقمنة وإدارة حالات العناية الواجبة بشكل مركزي داخل البنك</div>
+        <div class="solution-grid">
+          <div class="solution-card">
+            <div class="solution-icon">🗂️</div>
+            <div class="solution-text">
+              <h4>Unified Case Management</h4>
+              <p>A single platform connecting all teams in one clear workflow — from case creation to final decision</p>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">🔄</div>
+            <div class="solution-text">
+              <h4>Digital Workflow Engine</h4>
+              <p>Defined stages for case review and routing between teams with full process visibility</p>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">📊</div>
+            <div class="solution-text">
+              <h4>Financial Behaviour Analysis</h4>
+              <p>Compare declared income against actual account activity to highlight anomalies for review</p>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">📋</div>
+            <div class="solution-text">
+              <h4>Executive Dashboards</h4>
+              <p>Real-time overview of open cases, high-risk cases, and cases under review for management</p>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">📝</div>
+            <div class="solution-text">
+              <h4>Complete Audit Trail</h4>
+              <p>Full documentation of all actions and decisions supporting audit and compliance requirements</p>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">🔒</div>
+            <div class="solution-text">
+              <h4>Role-Based Access Control</h4>
+              <p>Each team sees only what they need — enforcing segregation of duties and data protection</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 5: Platform Capabilities ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">🏗️ PLATFORM MODULES</div>
+        <h1>Platform <span class="gold">Capabilities</span></h1>
+        <div class="subtitle">Eight core modules designed for banking operational excellence</div>
+        <div class="capability-grid">
+          <div class="capability-card">
+            <div class="cap-icon">🔐</div>
+            <h4>Secure Login Portal</h4>
+            <p>Multi-factor authentication with role selection and session control</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">👥</div>
+            <h4>Role Governance</h4>
+            <p>Maker/Checker workflow with 7+ defined roles and segregation of duties</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">📊</div>
+            <h4>Operational Dashboards</h4>
+            <p>KPI metrics, risk distribution, department workload, and trend analysis</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">📁</div>
+            <h4>Case Management</h4>
+            <p>Full lifecycle from creation to closure with multi-stage approval</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">💰</div>
+            <h4>Financial Analysis</h4>
+            <p>Income vs. activity comparison, transaction monitoring, and anomaly detection</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">📄</div>
+            <h4>Document Handling</h4>
+            <p>QID, passport, and CR verification with OCR integration capability</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">🔄</div>
+            <h4>Workflow Engine</h4>
+            <p>Automated routing: Business → CDD → Compliance → Management</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">📋</div>
+            <h4>Audit Trail</h4>
+            <p>Every action logged with user, timestamp, device, and decision record</p>
+          </div>
+          <div class="capability-card">
+            <div class="cap-icon">⚖️</div>
+            <h4>Compliance Reporting</h4>
+            <p>Regulatory reports, PEP handling, sanctions screening support</p>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 6: Workflow ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">🔄 WORKFLOW</div>
+        <h1>Investigation <span class="gold">Workflow</span></h1>
+        <div class="subtitle">Structured case lifecycle with clear ownership at every stage</div>
+        <div class="subtitle-ar">دورة حياة الحالة المنظمة مع ملكية واضحة في كل مرحلة</div>
+        <div class="workflow-visual">
+          <div class="wf-step">
+            <div class="wf-circle">📋</div>
+            <div class="wf-step-label">Case Created</div>
+            <div class="wf-step-role">System Trigger</div>
+          </div>
+          <div class="wf-arrow">→</div>
+          <div class="wf-step">
+            <div class="wf-circle">🏦</div>
+            <div class="wf-step-label">Business Review</div>
+            <div class="wf-step-role">Maker → Checker</div>
+          </div>
+          <div class="wf-arrow">→</div>
+          <div class="wf-step">
+            <div class="wf-circle">🔍</div>
+            <div class="wf-step-label">CDD Review</div>
+            <div class="wf-step-role">Maker → Checker</div>
+          </div>
+          <div class="wf-arrow">→</div>
+          <div class="wf-step">
+            <div class="wf-circle">⚖️</div>
+            <div class="wf-step-label">Compliance</div>
+            <div class="wf-step-role">If Escalated</div>
+          </div>
+          <div class="wf-arrow">→</div>
+          <div class="wf-step">
+            <div class="wf-circle">✅</div>
+            <div class="wf-step-label">Decision</div>
+            <div class="wf-step-role">Management</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;">
+          <h4 style="color:var(--gold);font-size:14px;margin-bottom:12px;">Each Stage Records:</h4>
+          <div class="impact-strip" style="justify-content:center;">
+            <div class="impact-tag" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);color:var(--cyan);">👤 Assigned User</div>
+            <div class="impact-tag" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);color:var(--cyan);">🏷️ Role & Department</div>
+            <div class="impact-tag" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);color:var(--cyan);">⏰ Timestamp</div>
+            <div class="impact-tag" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);color:var(--cyan);">📝 Decision & Comment</div>
+            <div class="impact-tag" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);color:var(--cyan);">🔏 Digital Signature</div>
+          </div>
+        </div>
+        <div style="margin-top:24px;text-align:center;">
+          <p style="font-size:13px;color:var(--white-50);">
+            <strong style="color:var(--gold);">Human-in-the-Loop:</strong> The system assists employees with data and indicators. All final decisions remain the responsibility of authorized personnel.
+          </p>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 7: Security & Compliance ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">🔒 SECURITY</div>
+        <h1>Security & <span class="gold">Compliance</span></h1>
+        <div class="subtitle">Bank-grade security architecture designed for regulatory requirements</div>
+        <div class="security-grid">
+          <div class="security-card">
+            <div class="sec-icon">🔑</div>
+            <h4>Multi-Factor Auth</h4>
+            <p>Employee ID + Password + OTP verification for secure access</p>
+          </div>
+          <div class="security-card">
+            <div class="sec-icon">⏱️</div>
+            <h4>Session Control</h4>
+            <p>Automatic timeout after 30 minutes of inactivity</p>
+          </div>
+          <div class="security-card">
+            <div class="sec-icon">🔐</div>
+            <h4>AES-256 Encryption</h4>
+            <p>All data encrypted at rest and in transit using AES-256-GCM</p>
+          </div>
+          <div class="security-card">
+            <div class="sec-icon">🌐</div>
+            <h4>TLS 1.3</h4>
+            <p>Latest transport layer security for all communications</p>
+          </div>
+          <div class="security-card">
+            <div class="sec-icon">👁️</div>
+            <h4>Access Matrix</h4>
+            <p>Each role sees only the data required for their function</p>
+          </div>
+          <div class="security-card">
+            <div class="sec-icon">📋</div>
+            <h4>Full Audit Logging</h4>
+            <p>Who, what, when, from which device — every action recorded</p>
+          </div>
+        </div>
+        <div style="margin-top:20px;text-align:center;">
+          <div class="impact-strip" style="justify-content:center;">
+            <div class="impact-tag" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);color:var(--green);">✅ QCB Regulated</div>
+            <div class="impact-tag" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);color:var(--green);">✅ FATF Aligned</div>
+            <div class="impact-tag" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);color:var(--green);">✅ Internal Audit Ready</div>
+            <div class="impact-tag" style="background:rgba(0,230,118,0.08);border-color:rgba(0,230,118,0.2);color:var(--green);">✅ ISO 27001 Framework</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 8: Implementation Roadmap ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">🗓️ ROADMAP</div>
+        <h1>Implementation <span class="gold">Roadmap</span></h1>
+        <div class="subtitle">Phased delivery plan ensuring quality at every milestone</div>
+        <div class="roadmap-timeline">
+          <div class="roadmap-phase">
+            <div class="phase-badge">PHASE 1</div>
+            <h4>Core System</h4>
+            <p>Authentication, roles, case engine, and workflow foundation</p>
+            <div class="duration">📅 Months 1–3</div>
+          </div>
+          <div class="roadmap-phase">
+            <div class="phase-badge">PHASE 2</div>
+            <h4>EDD Features</h4>
+            <p>Financial comparison, risk indicators, document verification</p>
+            <div class="duration">📅 Months 4–6</div>
+          </div>
+          <div class="roadmap-phase">
+            <div class="phase-badge">PHASE 3</div>
+            <h4>Integrations</h4>
+            <p>T24 core banking, ETL data warehouse, OCR document scanning</p>
+            <div class="duration">📅 Months 7–9</div>
+          </div>
+          <div class="roadmap-phase">
+            <div class="phase-badge">PHASE 4</div>
+            <h4>Analytics & Go-Live</h4>
+            <p>Executive dashboards, compliance reports, UAT, and production deployment</p>
+            <div class="duration">📅 Months 10–12</div>
+          </div>
+        </div>
+        <div class="kpi-row" style="margin-top:24px;">
+          <div class="kpi-card">
+            <div class="kpi-value">40%</div>
+            <div class="kpi-label">Faster Case Processing</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value">100%</div>
+            <div class="kpi-label">Digital Audit Trail</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value">60%</div>
+            <div class="kpi-label">Less Manual Coordination</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value">Real-Time</div>
+            <div class="kpi-label" style="font-size:12px;">Management Visibility</div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 9: Live Demo ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="slide-label">🖥️ PLATFORM DEMONSTRATION</div>
+        <h1>Live Platform <span class="cyan">Demonstration</span></h1>
+        <div class="subtitle">
+          The following demonstration showcases key platform workflows from a user perspective.
+        </div>
+        <div class="subtitle-ar">العرض التالي يوضح بشكل مختصر كيف تعمل المنصة من منظور المستخدم داخل البنك</div>
+        <div class="demo-cards">
+          <div class="demo-card" onclick="launchDemo('login')">
+            <div class="demo-icon">🔐</div>
+            <h4>1. System Login</h4>
+            <p>Secure authentication with role selection and MFA verification</p>
+          </div>
+          <div class="demo-card" onclick="launchDemo('dashboard')">
+            <div class="demo-icon">📊</div>
+            <h4>2. Executive Dashboard</h4>
+            <p>Overview of total cases, high-risk cases, and cases under review</p>
+          </div>
+          <div class="demo-card" onclick="launchDemo('case')">
+            <div class="demo-icon">📁</div>
+            <h4>3. Case Management</h4>
+            <p>Create, review, approve cases with full audit trail documentation</p>
+          </div>
+          <div class="demo-card" onclick="launchDemo('business')">
+            <div class="demo-icon">🏦</div>
+            <h4>4. Business View</h4>
+            <p>Business team perspective for case review and customer contact</p>
+          </div>
+          <div class="demo-card" onclick="launchDemo('compliance')">
+            <div class="demo-icon">⚖️</div>
+            <h4>5. Compliance View</h4>
+            <p>Escalation handling, PEP review, and regulatory reporting</p>
+          </div>
+          <div class="demo-card" onclick="launchDemo('management')">
+            <div class="demo-icon">📋</div>
+            <h4>6. Management Dashboard</h4>
+            <p>Strategic oversight with analytics, approvals, and department KPIs</p>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  // ── SLIDE 10: Closing Statement ──
+  {
+    render: () => `
+      <div class="slide">
+        <div class="closing-section">
+          <div class="qib-emblem" style="width:70px;height:70px;font-size:34px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gold),#c49b2c);color:var(--navy);font-weight:800;margin-bottom:20px;box-shadow:0 8px 32px rgba(212,175,55,0.25);">QIB</div>
+          <div class="slide-label" style="display:inline-flex;">✨ STRATEGIC VALUE</div>
+          <h1 style="margin-top:16px;">Enabling Digital <span class="gold">Transformation</span></h1>
+          <div class="closing-divider"></div>
+          <div class="closing-quote">
+            This platform represents a strategic step toward digitizing banking compliance operations — making them faster, more transparent, and fully auditable.
+          </div>
+          <div class="closing-quote-ar">
+            هذه المنصة تمثل خطوة استراتيجية نحو رقمنة عمليات الامتثال البنكي — لتصبح أسرع وأكثر شفافية وقابلة للتدقيق بالكامل
+          </div>
+          <div class="kpi-row" style="max-width:800px;margin:24px auto;">
+            <div class="kpi-card">
+              <div class="kpi-value" style="font-size:28px;">🏛️</div>
+              <div class="kpi-label">Regulatory<br>Compliance</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" style="font-size:28px;">⚡</div>
+              <div class="kpi-label">Operational<br>Efficiency</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" style="font-size:28px;">🔒</div>
+              <div class="kpi-label">Financial Crime<br>Controls</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" style="font-size:28px;">🚀</div>
+              <div class="kpi-label">Digital<br>Transformation</div>
+            </div>
+          </div>
+          <div class="closing-divider" style="margin:24px auto;"></div>
+          <p style="font-size:14px;color:var(--white-50);margin-bottom:24px;">
+            Aligned with <strong style="color:var(--gold);">Qatar National Vision 2030</strong> — Supporting the digital transformation of financial services
+          </p>
+          <a class="closing-cta" onclick="launchDemo('login')">
+            🚀 Launch Platform Demo
+          </a>
+        </div>
+      </div>
+    `
+  }
+];
+
+// =========================================================
+// PRESENTATION ENGINE
+// =========================================================
+let current = 0;
+
+function init() {
+  document.getElementById('totalNum').textContent = slides.length;
+
+  // Build dots
+  const dotsContainer = document.getElementById('progressDots');
+  dotsContainer.innerHTML = slides.map((_, i) =>
+    `<button class="dot ${i === 0 ? 'active' : ''}" onclick="goTo(${i})"></button>`
+  ).join('');
+
+  render();
+  document.addEventListener('keydown', onKey);
+}
+
+function render() {
+  const el = document.getElementById('slideContent');
+  el.innerHTML = slides[current].render();
+  el.querySelector('.slide').style.animation = 'none';
+  void el.offsetWidth;
+  el.querySelector('.slide').style.animation = 'fadeSlide 0.5s ease-out';
+
+  // Update counter
+  document.getElementById('currentNum').textContent = current + 1;
+
+  // Update dots
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+
+  // Update arrows
+  document.getElementById('btnPrev').disabled = current === 0;
+  document.getElementById('btnNext').disabled = current === slides.length - 1;
+}
+
+function nextSlide() { if (current < slides.length - 1) { current++; render(); } }
+function prevSlide() { if (current > 0) { current--; render(); } }
+function goTo(i) { current = i; render(); }
+
+function onKey(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  else if (e.key === 'Escape') { exitPresentation(); }
+  else if (e.key === 'Home') { goTo(0); }
+  else if (e.key === 'End') { goTo(slides.length - 1); }
+}
+
+function exitPresentation() {
+  window.location.href = 'presentations.html';
+}
+
+function launchDemo(target) {
+  const routes = {
+    login: 'login.html',
+    dashboard: 'dashboard.html',
+    case: 'edd_case.html',
+    business: 'business_view.html',
+    compliance: 'compliance_view.html',
+    management: 'management_dashboard.html'
+  };
+  if (routes[target]) window.location.href = routes[target];
+}
+
+// Touch support
+let touchX = 0;
+document.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+  const diff = touchX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 60) diff > 0 ? nextSlide() : prevSlide();
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
