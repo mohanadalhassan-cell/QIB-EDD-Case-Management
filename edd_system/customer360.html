@@ -515,6 +515,11 @@
   <script src="js/enterprise_features.js"></script>
   <script src="js/enterprise_ui.js"></script>
   <script>
+    // ═══ Session Authentication Check ═══
+    if (!sessionStorage.getItem('auth_token')) {
+      window.location.href = 'login.html';
+    }
+
     // User session
     document.addEventListener('DOMContentLoaded', function() {
       const userData = JSON.parse(sessionStorage.getItem('eddUser') || '{}');

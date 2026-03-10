@@ -260,5 +260,11 @@
 
   <script src="js/mock_data.js"></script>
   <script src="js/cdd_view.js"></script>
+  <script>
+    // ═══ Session Authentication Check ═══
+    if (!sessionStorage.getItem('auth_token')) {
+      window.location.href = 'login.html';
+    }
+  </script>
 </body>
 </html>

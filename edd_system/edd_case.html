@@ -2444,6 +2444,11 @@
   <script src="js/form_validation.js"></script>
   <script src="js/edd_case.js"></script>
   <script>
+    // ═══ Session Authentication Check ═══
+    if (!sessionStorage.getItem('auth_token')) {
+      window.location.href = 'login.html';
+    }
+
     // === NEW FEATURE FUNCTIONS === 
 
     // Drag-and-Drop Document Upload

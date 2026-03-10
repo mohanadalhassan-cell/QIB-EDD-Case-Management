@@ -602,6 +602,11 @@
 
   <script src="js/mock_data.js?v=1.2"></script>
   <script>
+    // ═══ Session Authentication Check ═══
+    if (!sessionStorage.getItem('auth_token')) {
+      window.location.href = 'login.html';
+    }
+
     // Segment Data
     const segmentCases = {
       mass: [

@@ -1796,6 +1796,11 @@
   </div>
 
   <script>
+    // ═══ Session Authentication Check ═══
+    if (!sessionStorage.getItem('auth_token')) {
+      window.location.href = 'login.html';
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // SESSION & INITIALIZATION
     // ═══════════════════════════════════════════════════════════════

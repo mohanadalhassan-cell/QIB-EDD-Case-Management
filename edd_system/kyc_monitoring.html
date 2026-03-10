@@ -944,6 +944,11 @@
 
   <script src="js/auth.js"></script>
   <script>
+    // ═══ Session Authentication Check ═══
+    if (!sessionStorage.getItem('auth_token')) {
+      window.location.href = 'login.html';
+    }
+
     // Initialize user info from session
     document.addEventListener('DOMContentLoaded', function() {
       const user = JSON.parse(sessionStorage.getItem('user') || '{}');
