@@ -16,7 +16,11 @@ const EDDMockData = {
     'EMP004': { id: 'EMP004', name: 'Sara Al-Khalifa', email: 'sara.alkhalifa@qib.com.qa', department: 'Private Banking', role: 'business', segment: 'Private' },
     'EMP005': { id: 'EMP005', name: 'Khalid Al-Dosari', email: 'khalid.aldosari@qib.com.qa', department: 'Tamayuz Banking', role: 'business', segment: 'Tamayuz' },
     'EMP006': { id: 'EMP006', name: 'Noor Al-Mahmoud', email: 'noor.almahmoud@qib.com.qa', department: 'Audit', role: 'audit', segment: null },
-    'EMP007': { id: 'EMP007', name: 'Hassan Al-Naimi', email: 'hassan.alnaimi@qib.com.qa', department: 'Management', role: 'management', segment: null }
+    'EMP007': { id: 'EMP007', name: 'Hassan Al-Naimi', email: 'hassan.alnaimi@qib.com.qa', department: 'Management', role: 'management', segment: null },
+    'EMP008': { id: 'EMP008', name: 'Layla Al-Karmi', email: 'layla.alkarmi@qib.com.qa', department: 'Call Center Operations', role: 'call_center', segment: null },
+    'EMP009': { id: 'EMP009', name: 'Rashid Al-Marri', email: 'rashid.almarri@qib.com.qa', department: 'Call Center Operations', role: 'call_center', segment: null },
+    'EMP010': { id: 'EMP010', name: 'Samira Al-Shammari', email: 'samira.alshammari@qib.com.qa', department: 'Call Center Management', role: 'call_center_supervisor', segment: null },
+    'EMP002-SUP': { id: 'EMP002-SUP', name: 'Ghaleb Essam', email: 'ghaleb.essam@qib.com.qa', department: 'CDD/EDD Management', role: 'cdd_supervisor', segment: null }
   },
 
   // Customers from T24 with Risk Scores (from ETL/SnapView)
@@ -751,7 +755,41 @@ const EDDMockData = {
       ],
       documents: ['DOC004', 'DOC005', 'DOC006'],
       recommendation: 'Proceed to CDD',
-      lastUpdated: '2024-02-12T10:15:00'
+      lastUpdated: '2024-02-12T10:15:00',
+      // Call Center Workflow - Sample Call Request
+      callRequests: [
+        {
+          requestId: 'CR-1710246000123-abc1234567',
+          caseId: 'EDD-2024-001235',
+          status: 'In Queue',
+          requestType: 'Customer Statement',
+          requestedBy: 'EMP002',
+          requestedByRole: 'cdd',
+          requestedByName: 'Fatima Al-Mansoor',
+          requestedDate: '2024-02-20T10:30:00',
+          requiresApproval: false,
+          approvedBy: 'EMP002-SUP',
+          approvalDate: '2024-02-20T11:00:00',
+          approvalNotes: 'Approved - customer clarification required on PEP source of income',
+          assignedAgent: null,
+          agentName: null,
+          agentDepartment: null,
+          callScheduledDate: '2024-02-21T14:00:00',
+          callCompletedDate: null,
+          callDuration: null,
+          callNotes: 'Need to clarify customer\'s business structure and income sources related to PEP designation',
+          customerStatement: '',
+          statementType: 'Oral',
+          statementLanguage: 'EN',
+          recordingReference: null,
+          recordingEncrypted: true,
+          recordingHashKey: null,
+          auditLog: [
+            { action: 'REQUEST_CREATED', performedBy: 'EMP002', performedByName: 'Fatima Al-Mansoor', timestamp: '2024-02-20T10:30:00', details: 'Contact request created by Fatima Al-Mansoor (cdd)' },
+            { action: 'REQUEST_APPROVED', performedBy: 'EMP002-SUP', performedByName: 'Ghaleb Essam', timestamp: '2024-02-20T11:00:00', details: 'Request approved by Ghaleb Essam. Approved - customer clarification required on PEP source of income' }
+          ]
+        }
+      ]
     },
     {
       caseId: 'EDD-2024-001236',

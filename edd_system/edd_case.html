@@ -144,6 +144,10 @@
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
               Network
             </button>
+            <button class="btn btn-sm" onclick="showCallRequestModal()" title="Customer Contact Request" style="background: linear-gradient(135deg, #00C853, #0097A7); border: none; padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+              Contact Request
+            </button>
           </div>
           <!-- Export & Resources -->
           <div style="display: flex; gap: 6px; padding: 4px 8px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--glass-border);">
@@ -1496,6 +1500,71 @@
               </div>
             </div>
           </div>
+
+          <!-- CALL REQUEST MODAL -->
+          <div id="call-request-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center;">
+            <div style="background: var(--bg-secondary); border-radius: 16px; padding: 32px; max-width: 580px; width: 92%; border: 1px solid rgba(0,212,255,0.2); max-height: 85vh; overflow-y: auto;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="color: var(--text-primary); margin: 0; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                  <svg viewBox="0 0 24 24" fill="#00C853" width="24" height="24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                  New Customer Contact Request
+                </h3>
+                <button onclick="document.getElementById('call-request-modal').style.display='none'" style="background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">✕</button>
+              </div>
+
+              <div style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); border-radius: 12px; padding: 14px; margin-bottom: 20px; font-size: 12px; color: var(--text-secondary);">
+                <strong style="color: #00D4FF;">ℹ️ Compliance Notice:</strong> This request will be routed to the Call Center for customer statement capture. CDD requests require supervisor approval. Customer statements and recordings will be securely stored within this case.
+              </div>
+
+              <form onsubmit="submitCallRequest(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Request Type -->
+                <div>
+                  <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">
+                    <span style="color: #F44336;">*</span> Request Type
+                  </label>
+                  <select id="call-request-type" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;" required>
+                    <option value="">Select Request Type</option>
+                    <option value="Customer Statement">Customer Statement</option>
+                    <option value="Transaction Verification">Transaction Verification</option>
+                    <option value="Source of Funds">Source of Funds Clarification</option>
+                    <option value="Dispute Resolution">Dispute Resolution</option>
+                    <option value="Compliance Verification">Compliance Verification</option>
+                  </select>
+                </div>
+
+                <!-- Request Notes -->
+                <div>
+                  <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">
+                    <span style="color: #F44336;">*</span> Reason for Request
+                  </label>
+                  <textarea id="call-request-notes" placeholder="Explain why customer contact is needed (internal use only, not visible to Call Center)" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px; min-height: 80px; resize: vertical; font-family: inherit;" required></textarea>
+                </div>
+
+                <!-- Scheduled Date -->
+                <div>
+                  <label style="display: block; font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Preferred Call Date/Time (Optional)</label>
+                  <input type="datetime-local" id="call-request-datetime" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;">
+                </div>
+
+                <!-- Current User Role Info -->
+                <div style="background: rgba(33,150,243,0.08); border-left: 3px solid #2196F3; padding: 12px; border-radius: 6px; font-size: 11px; color: var(--text-secondary);">
+                  <div><strong style="color: #2196F3;">Requested By:</strong> <span id="call-request-user-info">-</span></div>
+                  <div style="margin-top: 4px;"><strong style="color: #2196F3;">Department:</strong> <span id="call-request-dept-info">-</span></div>
+                  <div style="margin-top: 4px; display: none;" id="approval-notice-block">
+                    <strong style="color: #FF9800;">⚠️ Approval Notice:</strong> This request requires CDD Supervisor approval before routing to Call Center
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--glass-border);">
+                  <button type="button" class="btn btn-sm" style="background: rgba(255,255,255,0.05); color: var(--text-secondary);" onclick="document.getElementById('call-request-modal').style.display='none'">Cancel</button>
+                  <button type="submit" class="btn btn-sm" style="background: linear-gradient(135deg, #00C853, #00897B); border: none; color: white;">
+                    <span id="submit-button-text">Submit Request</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
 
         <!-- Tab Content: Communication -->
@@ -2434,6 +2503,7 @@
   </div>
 
   <script src="js/mock_data.js"></script>
+  <script src="js/call_request.js"></script>
   <script src="js/risk_engine.js"></script>
   <script src="js/joint_accounts.js"></script>
   <script src="js/transaction_activity.js"></script>
@@ -2453,6 +2523,106 @@
         }
       }, 100);
     });
+
+    // ═══ CALL CENTER WORKFLOW FUNCTIONS ═══
+
+    /**
+     * Show Call Request Modal
+     * Prepopulates user information and shows approval notice if applicable
+     */
+    function showCallRequestModal() {
+      const currentUser = EDDMockData.currentUser;
+      const caseId = document.getElementById('case-id').textContent;
+      
+      if (!currentUser) {
+        alert('Error: User session not found. Please log in again.');
+        return;
+      }
+
+      // Populate user information
+      document.getElementById('call-request-user-info').textContent = `${currentUser.name} (${currentUser.id})`;
+      document.getElementById('call-request-dept-info').textContent = currentUser.department || currentUser.role;
+
+      // Show approval notice for CDD users
+      const approvalBlock = document.getElementById('approval-notice-block');
+      if (currentUser.role === 'cdd') {
+        approvalBlock.style.display = 'block';
+      } else {
+        approvalBlock.style.display = 'none';
+      }
+
+      // Reset form
+      document.getElementById('call-request-type').value = '';
+      document.getElementById('call-request-notes').value = '';
+      document.getElementById('call-request-datetime').value = '';
+
+      // Show modal
+      document.getElementById('call-request-modal').style.display = 'flex';
+    }
+
+    /**
+     * Submit Call Request
+     * Creates call request via CallRequestManager and stores in case
+     */
+    function submitCallRequest(event) {
+      event.preventDefault();
+      
+      const caseId = document.getElementById('case-id').textContent;
+      const requestType = document.getElementById('call-request-type').value;
+      const callNotes = document.getElementById('call-request-notes').value;
+      const scheduledDate = document.getElementById('call-request-datetime').value;
+
+      if (!requestType || !callNotes) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      try {
+        // Create call request via CallRequestManager
+        const requestData = {
+          requestType: requestType,
+          callNotes: callNotes,
+          callScheduledDate: scheduledDate || null,
+          statementType: 'Oral',
+          statementLanguage: 'EN'
+        };
+
+        const callRequest = CallRequestManager.createContactRequest(caseId, requestData);
+
+        // Show success message
+        const toast = document.createElement('div');
+        toast.innerHTML = `
+          ✅ Contact request submitted successfully<br/>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.7);">Request ID: ${callRequest.requestId}</span>
+          <br/><span style="font-size: 11px; color: rgba(255,255,255,0.7);">${callRequest.requiresApproval ? '⏳ Pending Supervisor Approval' : '✓ Routed to Call Center'}</span>
+        `;
+        toast.style.cssText = 'position:fixed;bottom:90px;right:24px;background:rgba(0,230,118,0.15);border:1px solid rgba(0,230,118,0.3);color:#fff;padding:14px 20px;border-radius:10px;font-size:13px;z-index:10001;max-width:350px;';
+        document.body.appendChild(toast);
+
+        // Log to audit trail if available
+        if (window.AuditTrail) {
+          AuditTrail.logAction(
+            'Call Request Created',
+            {
+              requestType: requestType,
+              caseId: caseId,
+              requiresApproval: callRequest.requiresApproval
+            },
+            caseId,
+            'In Progress'
+          );
+        }
+
+        setTimeout(() => toast.remove(), 5000);
+
+        // Close modal
+        document.getElementById('call-request-modal').style.display = 'none';
+
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+        console.error('Call Request Error:', error);
+      }
+    }
 
     // === NEW FEATURE FUNCTIONS === 
 

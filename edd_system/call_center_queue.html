@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Governance System — Call Center Queue</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>Call Center</h1>
+          <span>Queue Management</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a href="call_center_queue.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            <span>Call Queue</span>
+            <span class="nav-badge" id="queue-badge">0</span>
+          </a>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header" style="padding: 16px 24px; background: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);">
+        <div class="header-left">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00C853, #009688); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </div>
+            <div>
+              <h1 class="page-title" style="font-size: 20px; font-weight: 700; margin: 0; background: linear-gradient(135deg, #00C853, #009688); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Call Center Queue</h1>
+              <div class="breadcrumb" style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                <a href="dashboard.html" style="color: var(--accent-primary); text-decoration: none;">Dashboard</a> 
+                <span style="margin: 0 6px; opacity: 0.5;">/</span> 
+                <span>Call Center Operations</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
+          <div style="display: flex; gap: 6px; padding: 4px 8px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--glass-border);">
+            <button class="btn btn-sm" onclick="refreshQueue()" title="Refresh Queue" style="background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); color: #00D4FF; padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+              Refresh
+            </button>
+            <button class="btn btn-sm" onclick="showMetrics()" title="Call Request Metrics" style="background: linear-gradient(135deg, #00C853, #009688); border: none; padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: white;">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+              Metrics
+            </button>
+          </div>
+          <button class="header-btn" id="logout-btn" title="Logout" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(244,67,54,0.1); border: 1px solid rgba(244,67,54,0.2); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;">
+            <svg viewBox="0 0 24 24" fill="#F44336" width="18" height="18"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Queue Status Summary -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+          <div class="card" style="background: linear-gradient(135deg, rgba(0,200,83,0.1), rgba(0,150,136,0.1)); border: 1px solid rgba(0,200,83,0.2); border-radius: 14px; overflow: hidden;">
+            <div style="padding: 20px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #00C853; font-weight: 700; margin-bottom: 8px;">In Queue</div>
+              <div style="font-size: 32px; font-weight: 700; color: #00C853; margin-bottom: 4px;" id="queue-in-queue">0</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Waiting for assignment</div>
+            </div>
+          </div>
+
+          <div class="card" style="background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(25,118,210,0.1)); border: 1px solid rgba(33,150,243,0.2); border-radius: 14px; overflow: hidden;">
+            <div style="padding: 20px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #2196F3; font-weight: 700; margin-bottom: 8px;">In Progress</div>
+              <div style="font-size: 32px; font-weight: 700; color: #2196F3; margin-bottom: 4px;" id="queue-in-progress">0</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Currently being processed</div>
+            </div>
+          </div>
+
+          <div class="card" style="background: linear-gradient(135deg, rgba(156,39,176,0.1), rgba(123,31,162,0.1)); border: 1px solid rgba(156,39,176,0.2); border-radius: 14px; overflow: hidden;">
+            <div style="padding: 20px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #9C27B0; font-weight: 700; margin-bottom: 8px;">Pending Approval</div>
+              <div style="font-size: 32px; font-weight: 700; color: #9C27B0; margin-bottom: 4px;" id="queue-pending">0</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Awaiting CDD Supervisor</div>
+            </div>
+          </div>
+
+          <div class="card" style="background: linear-gradient(135deg, rgba(76,175,80,0.1), rgba(56,142,60,0.1)); border: 1px solid rgba(76,175,80,0.2); border-radius: 14px; overflow: hidden;">
+            <div style="padding: 20px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #4CAF50; font-weight: 700; margin-bottom: 8px;">Completed</div>
+              <div style="font-size: 32px; font-weight: 700; color: #4CAF50; margin-bottom: 4px;" id="queue-completed">0</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Calls finalized</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call Queue Table -->
+        <div class="card" style="border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden; margin-bottom: 24px;">
+          <div class="card-header" style="background: linear-gradient(135deg, rgba(0,200,83,0.08), rgba(0,150,136,0.08)); padding: 16px 20px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between;">
+            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+              <svg viewBox="0 0 24 24" fill="#00C853" width="20" height="20"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+              Active Call Queue
+            </h3>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="text" id="queue-search" placeholder="Search by case ID or customer..." style="padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 12px; width: 200px;" onkeyup="filterQueue()">
+              <select id="queue-filter" style="padding: 8px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 12px;" onchange="filterQueue()">
+                <option value="">All Statuses</option>
+                <option value="In Queue">In Queue</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--glass-border);">
+                  <th style="padding: 12px 16px; text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Request ID</th>
+                  <th style="padding: 12px 16px; text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Case ID</th>
+                  <th style="padding: 12px 16px; text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Request Type</th>
+                  <th style="padding: 12px 16px; text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Status</th>
+                  <th style="padding: 12px 16px; text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Assigned Agent</th>
+                  <th style="padding: 12px 16px; text-align: left; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Requested Date</th>
+                  <th style="padding: 12px 16px; text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="queue-table-body">
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                  <td colspan="7" style="padding: 40px; color: var(--text-muted); font-size: 13px;">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32" style="opacity: 0.3; margin-bottom: 10px;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                    <p style="margin-top: 12px;">Loading call queue...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Compliance Notice -->
+        <div style="background: linear-gradient(135deg, rgba(0,200,83,0.08), rgba(0,150,136,0.08)); border: 1px solid rgba(0,200,83,0.2); border-radius: 12px; padding: 16px 20px;">
+          <div style="display: flex; gap: 12px;">
+            <div style="flex-shrink: 0;">
+              <svg viewBox="0 0 24 24" fill="#00C853" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 12px; font-weight: 600; color: #00C853; margin-bottom: 4px;">Regulatory Compliance Notice</div>
+              <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.5;">
+                <strong>QCB / FATF Compliance:</strong> Call Center agents have restricted visibility to customer cases. AML risk scores, EDD classifications, and compliance flags are NOT displayed. Recordings are encrypted and audit-logged per BCBS 239 governance requirements. All customer statements are retained for 5 years minimum.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Metrics Modal -->
+  <div id="metrics-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: var(--bg-secondary); border-radius: 16px; padding: 32px; max-width: 580px; width: 92%; border: 1px solid rgba(0,200,83,0.2);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <h3 style="color: var(--text-primary); margin: 0; font-size: 18px; font-weight: 700;">Call Request Metrics</h3>
+        <button onclick="document.getElementById('metrics-modal').style.display='none'" style="background: transparent; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">✕</button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+        <div style="background: rgba(0,200,83,0.1); padding: 16px; border-radius: 10px; border: 1px solid rgba(0,200,83,0.2); text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: #00C853;" id="metric-total">0</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Total Requests</div>
+        </div>
+        <div style="background: rgba(0,200,83,0.1); padding: 16px; border-radius: 10px; border: 1px solid rgba(0,200,83,0.2); text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: #4CAF50;" id="metric-completed">0</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Completed Calls</div>
+        </div>
+        <div style="background: rgba(156,39,176,0.1); padding: 16px; border-radius: 10px; border: 1px solid rgba(156,39,176,0.2); text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: #9C27B0;" id="metric-pending-approval">0</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Pending Approval</div>
+        </div>
+        <div style="background: rgba(33,150,243,0.1); padding: 16px; border-radius: 10px; border: 1px solid rgba(33,150,243,0.2); text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: #2196F3;" id="metric-in-queue">0</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">In Queue</div>
+        </div>
+        <div style="background: rgba(76,175,80,0.1); padding: 16px; border-radius: 10px; border: 1px solid rgba(76,175,80,0.2); text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: #4CAF50;" id="metric-recordings">0</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Secured Recordings</div>
+        </div>
+        <div style="background: rgba(244,67,54,0.1); padding: 16px; border-radius: 10px; border: 1px solid rgba(244,67,54,0.2); text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: #F44336;" id="metric-rejected">0</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Rejected</div>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('metrics-modal').style.display='none'" class="btn btn-sm" style="width: 100%; background: linear-gradient(135deg, #00C853, #009688); border: none; padding: 12px; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Close</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/mock_data.js"></script>
+  <script src="js/call_request.js"></script>
+  <script>
+    // Auth check
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!sessionStorage.getItem('edd_session') && !sessionStorage.getItem('auth_token')) {
+          window.location.href = 'login.html';
+        } else {
+          loadQueue();
+        }
+      }, 100);
+    });
+
+    // Load call queue
+    function loadQueue() {
+      try {
+        const queue = CallRequestManager.getCallQueue();
+        renderQueue(queue);
+        updateMetrics();
+      } catch (error) {
+        console.error('Queue Load Error:', error);
+      }
+    }
+
+    // Render queue table
+    function renderQueue(queue) {
+      const tbody = document.getElementById('queue-table-body');
+      
+      if (!queue || queue.length === 0) {
+        tbody.innerHTML = '<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);"><td colspan="7" style="padding: 40px; text-align: center; color: var(--text-muted);">No requests in queue</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = queue.map(req => `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); hover:background: rgba(0,200,83,0.05);">
+          <td style="padding: 12px 16px; font-size: 12px; color: #00C853; font-family: monospace; font-weight: 600;">${req.requestId}</td>
+          <td style="padding: 12px 16px; font-size: 12px; color: var(--text-primary);">${req.caseId}</td>
+          <td style="padding: 12px 16px; font-size: 12px; color: var(--text-secondary);">${req.requestType}</td>
+          <td style="padding: 12px 16px; font-size: 12px;">
+            <span style="padding: 4px 8px; border-radius: 6px; background: ${getStatusColor(req.status)}; color: white; font-size: 10px; font-weight: 600;">${req.status}</span>
+          </td>
+          <td style="padding: 12px 16px; font-size: 12px; color: var(--text-secondary);">${req.agentName || '-'}</td>
+          <td style="padding: 12px 16px; font-size: 12px; color: var(--text-muted);">${new Date(req.requestedDate).toLocaleDateString()}</td>
+          <td style="padding: 12px 16px; text-align: center;">
+            <button onclick="viewRequest('${req.requestId}')" class="btn btn-sm" style="background: rgba(0,212,255,0.1); color: #00D4FF; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;">View</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Get status color
+    function getStatusColor(status) {
+      const colors = {
+        'In Queue': 'rgba(0,200,83,0.6)',
+        'In Progress': 'rgba(33,150,243,0.6)',
+        'Completed': 'rgba(76,175,80,0.6)',
+        'Pending Approval': 'rgba(156,39,176,0.6)'
+      };
+      return colors[status] || 'rgba(158,158,158,0.6)';
+    }
+
+    // Filter queue
+    function filterQueue() {
+      const searchTerm = document.getElementById('queue-search').value.toLowerCase();
+      const statusFilter = document.getElementById('queue-filter').value;
+      
+      const queue = CallRequestManager.getCallQueue();
+      const filtered = queue.filter(req => 
+        (req.caseId.toLowerCase().includes(searchTerm) || req.requestId.toLowerCase().includes(searchTerm)) &&
+        (!statusFilter || req.status === statusFilter)
+      );
+      
+      renderQueue(filtered);
+    }
+
+    // Update metrics
+    function updateMetrics() {
+      const metrics = CallRequestManager.getMetrics();
+      document.getElementById('queue-badge').textContent = metrics.inQueue;
+      document.getElementById('queue-in-queue').textContent = metrics.inQueue;
+      document.getElementById('queue-in-progress').textContent = metrics.inProgress;
+      document.getElementById('queue-pending').textContent = metrics.pendingApproval;
+      document.getElementById('queue-completed').textContent = metrics.completed;
+      
+      // Update modal metrics
+      document.getElementById('metric-total').textContent = metrics.total;
+      document.getElementById('metric-completed').textContent = metrics.completed;
+      document.getElementById('metric-pending-approval').textContent = metrics.pendingApproval;
+      document.getElementById('metric-in-queue').textContent = metrics.inQueue;
+      document.getElementById('metric-recordings').textContent = metrics.recordingsSecured;
+      document.getElementById('metric-rejected').textContent = metrics.rejected;
+    }
+
+    // Refresh queue
+    function refreshQueue() {
+      loadQueue();
+      const toast = document.createElement('div');
+      toast.innerHTML = '✅ Queue refreshed';
+      toast.style.cssText = 'position:fixed;bottom:90px;right:24px;background:rgba(0,230,118,0.15);border:1px solid rgba(0,230,118,0.3);color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:10001;';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    }
+
+    // Show metrics
+    function showMetrics() {
+      document.getElementById('metrics-modal').style.display = 'flex';
+    }
+
+    // View request details
+    function viewRequest(requestId) {
+      const callRequest = CallRequestManager.findRequestById(requestId);
+      if (callRequest) {
+        alert(`Request: ${requestId}\nCase: ${callRequest.caseId}\nType: ${callRequest.requestType}\nStatus: ${callRequest.status}`);
+      }
+    }
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
