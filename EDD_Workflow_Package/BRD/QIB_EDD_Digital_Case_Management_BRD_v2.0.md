@@ -2069,16 +2069,20 @@ The following items require formal clarification from the Compliance Division be
 
 ## 24.1 Purpose
 
-The system includes a structured Change Management and Feedback Module that enables users across all departments to submit suggestions, improvement requests, and process feedback. This ensures continuous improvement of the EDD workflow and captures operational insights from front-line users.
+The system includes a structured Change Management and Feedback Module that enables **any employee** across all departments to submit suggestions, improvement requests, and process feedback on system usage. This ensures continuous improvement of the EDD workflow and captures operational insights from front-line users.
+
+All feedback is collected and reviewed by the **Information Technology Department**, reporting to **Mr. Saleem Ulhaq, Chief Operating Officer (COO)**.
 
 ## 24.2 Feedback Submission
 
 | Feature | Description |
 |---------|-------------|
+| Eligibility | Any employee with system access may submit feedback |
 | Access | Floating feedback button available on all EDD case screens |
 | Submission Method | Modal form with categorized fields |
 | Audit Integration | Every feedback submission is logged in the audit trail |
-| Routing | Submitted to Change Management team for review |
+| Collection & Review | Information Technology Department |
+| Executive Oversight | Mr. Saleem Ulhaq — Chief Operating Officer (COO) |
 
 ## 24.3 Feedback Categories
 
@@ -2107,12 +2111,12 @@ Submitted → Acknowledged → Under Review → Approved/Rejected → Implemente
 
 | Stage | Actor | SLA |
 |-------|-------|-----|
-| Submission | End User | Immediate |
-| Acknowledgment | Change Management Team | 2 business days |
-| Review | Change Management + IT | 7 business days |
-| Approval Decision | Change Advisory Board | 14 business days |
+| Submission | Any Employee | Immediate |
+| Acknowledgment | Information Technology Department | 2 business days |
+| Review | IT Department + Relevant Business Unit | 7 business days |
+| Approval Decision | COO (Mr. Saleem Ulhaq) / Change Advisory Board | 14 business days |
 | Implementation | IT Development | Per project plan |
-| Closure | Change Management | Post-deployment verification |
+| Closure | Information Technology Department | Post-deployment verification |
 
 ## 24.6 Change Request (CR) Process
 
