@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — KYC Compliance Monitoring</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    .kyc-segments {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .segment-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .segment-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-color);
+      box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    }
+    
+    .segment-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .segment-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .segment-icon.personal { background: linear-gradient(135deg, #00D4FF, #0088CC); }
+    .segment-icon.wholesale { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+    .segment-icon.wps { background: linear-gradient(135deg, #F59E0B, #D97706); }
+    
+    .segment-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .segment-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .segment-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    
+    .stat-item.valid .stat-value { color: #10B981; }
+    .stat-item.expiring .stat-value { color: #F59E0B; }
+    .stat-item.expired .stat-value { color: #EF4444; }
+    .stat-item.review .stat-value { color: #F97316; }
+    
+    .kyc-alerts-section {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .alert-badge {
+      background: #EF4444;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .filter-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-row .form-control {
+      min-width: 150px;
+    }
+    
+    .alert-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .alert-table th {
+      text-align: left;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .alert-table th:first-child { border-radius: 8px 0 0 0; }
+    .alert-table th:last-child { border-radius: 0 8px 0 0; }
+    
+    .alert-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+    
+    .alert-table tr:hover td {
+      background: rgba(0, 212, 255, 0.05);
+    }
+    
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .status-badge.expired {
+      background: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+    }
+    
+    .status-badge.expiring-soon {
+      background: rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+    }
+    
+    .status-badge.valid {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10B981;
+    }
+    
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    
+    .status-dot.expired { background: #EF4444; }
+    .status-dot.expiring-soon { background: #F59E0B; }
+    .status-dot.valid { background: #10B981; }
+    
+    .days-overdue {
+      color: #EF4444;
+      font-weight: 600;
+    }
+    
+    .days-remaining {
+      color: #F59E0B;
+      font-weight: 600;
+    }
+    
+    .risk-badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .risk-badge.high {
+      background: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+    }
+    
+    .risk-badge.medium {
+      background: rgba(245, 158, 11, 0.2);
+      color: #F59E0B;
+    }
+    
+    .risk-badge.low {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10B981;
+    }
+    
+    .escalation-level {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .escalation-indicator {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .escalation-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .escalation-dot.active { background: #EF4444; }
+    
+    .early-warning-section {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(109, 40, 217, 0.2));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .early-warning-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .ai-badge {
+      background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .prediction-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .prediction-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    
+    .prediction-value {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #8B5CF6, #00D4FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .prediction-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    
+    .risk-score-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .risk-score-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .risk-score-item:hover {
+      background: rgba(139, 92, 246, 0.2);
+    }
+    
+    .risk-score-value {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    
+    .risk-score-value.very-high {
+      background: linear-gradient(135deg, #EF4444, #DC2626);
+      color: white;
+    }
+    
+    .risk-score-value.high {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: white;
+    }
+    
+    .risk-score-value.medium {
+      background: linear-gradient(135deg, #F59E0B, #EAB308);
+      color: white;
+    }
+    
+    .risk-score-info {
+      flex: 1;
+    }
+    
+    .risk-score-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .risk-score-details {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    
+    .risk-score-action {
+      font-size: 0.75rem;
+      color: #8B5CF6;
+      margin-top: 0.5rem;
+    }
+    
+    .chart-placeholder {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+    
+    .action-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    
+    .action-btn.primary {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .action-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    @media (max-width: 1200px) {
+      .kyc-segments {
+        grid-template-columns: 1fr;
+      }
+      
+      .prediction-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">KYC Governance</div>
+          <a href="kyc_monitoring.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>KYC Monitoring</span>
+          </a>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User</div>
+          <div class="user-role" id="user-role">Role</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">KYC Compliance Monitoring</h1>
+          <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a> / <span>KYC Governance</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <select class="form-control" id="period-selector" style="width: auto;">
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month" selected>This Month</option>
+            <option value="quarter">This Quarter</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" onclick="exportReport()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="refreshData()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            Refresh
+          </button>
+        </div>
+      </header>
+
+      <!-- KYC Segments Overview -->
+      <div class="kyc-segments">
+        <!-- Personal Banking Segment -->
+        <div class="segment-card">
+          <div class="segment-header">
+            <div class="segment-icon personal">👤</div>
+            <div>
+              <div class="segment-title">Personal Banking</div>
+              <div class="segment-subtitle">Retail Customers</div>
+            </div>
+          </div>
+          <div class="segment-stats">
+            <div class="stat-item">
+              <div class="stat-value">45,782</div>
+              <div class="stat-label">Total Active</div>
+            </div>
+            <div class="stat-item valid">
+              <div class="stat-value">43,124</div>
+              <div class="stat-label">KYC Valid</div>
+            </div>
+            <div class="stat-item expiring">
+              <div class="stat-value">1,847</div>
+              <div class="stat-label">Expiring Soon</div>
+            </div>
+            <div class="stat-item expired">
+              <div class="stat-value">811</div>
+              <div class="stat-label">Expired</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Wholesale Banking Segment -->
+        <div class="segment-card">
+          <div class="segment-header">
+            <div class="segment-icon wholesale">🏢</div>
+            <div>
+              <div class="segment-title">Wholesale Banking</div>
+              <div class="segment-subtitle">Corporate Clients</div>
+            </div>
+          </div>
+          <div class="segment-stats">
+            <div class="stat-item">
+              <div class="stat-value">3,456</div>
+              <div class="stat-label">Total Active</div>
+            </div>
+            <div class="stat-item valid">
+              <div class="stat-value">3,201</div>
+              <div class="stat-label">KYC Valid</div>
+            </div>
+            <div class="stat-item expiring">
+              <div class="stat-value">187</div>
+              <div class="stat-label">Expiring Soon</div>
+            </div>
+            <div class="stat-item expired">
+              <div class="stat-value">68</div>
+              <div class="stat-label">Expired</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- WPS Segment -->
+        <div class="segment-card">
+          <div class="segment-header">
+            <div class="segment-icon wps">💼</div>
+            <div>
+              <div class="segment-title">WPS / Corporate Workers</div>
+              <div class="segment-subtitle">Wage Protection System</div>
+            </div>
+          </div>
+          <div class="segment-stats">
+            <div class="stat-item">
+              <div class="stat-value">128,934</div>
+              <div class="stat-label">Total Active</div>
+            </div>
+            <div class="stat-item valid">
+              <div class="stat-value">125,478</div>
+              <div class="stat-label">KYC Valid</div>
+            </div>
+            <div class="stat-item expiring">
+              <div class="stat-value">2,891</div>
+              <div class="stat-label">Expiring Soon</div>
+            </div>
+            <div class="stat-item expired">
+              <div class="stat-value">565</div>
+              <div class="stat-label">Expired</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KYC Early Warning Engine -->
+      <div class="early-warning-section">
+        <div class="early-warning-header">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="#8B5CF6"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <h2 class="section-title">KYC Early Warning Engine</h2>
+          <span class="ai-badge">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2M7.5 13A2.5 2.5 0 005 15.5 2.5 2.5 0 007.5 18a2.5 2.5 0 002.5-2.5A2.5 2.5 0 007.5 13m9 0a2.5 2.5 0 00-2.5 2.5 2.5 2.5 0 002.5 2.5 2.5 2.5 0 002.5-2.5 2.5 2.5 0 00-2.5-2.5z"/></svg>
+            AI Powered
+          </span>
+        </div>
+        
+        <div class="prediction-cards">
+          <div class="prediction-card">
+            <div class="prediction-value">47</div>
+            <div class="prediction-label">Predicted Non-Compliant (30 days)</div>
+          </div>
+          <div class="prediction-card">
+            <div class="prediction-value">89%</div>
+            <div class="prediction-label">Prediction Accuracy</div>
+          </div>
+          <div class="prediction-card">
+            <div class="prediction-value">156</div>
+            <div class="prediction-label">At-Risk Customers</div>
+          </div>
+          <div class="prediction-card">
+            <div class="prediction-value">23</div>
+            <div class="prediction-label">Proactive Outreach Queue</div>
+          </div>
+        </div>
+        
+        <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--text-muted);">Highest Risk Scores - Immediate Action Required</h3>
+        
+        <div class="risk-score-list">
+          <div class="risk-score-item">
+            <div class="risk-score-value very-high">92</div>
+            <div class="risk-score-info">
+              <div class="risk-score-name">Mohammed Al-Rashid</div>
+              <div class="risk-score-details">RIM: 12847593 • Personal Banking • KYC expires in 45 days</div>
+              <div class="risk-score-action">⚠️ Previous non-compliance history • 3 missed document submissions</div>
+            </div>
+            <button class="action-btn primary">Initiate Outreach</button>
+          </div>
+          
+          <div class="risk-score-item">
+            <div class="risk-score-value very-high">87</div>
+            <div class="risk-score-info">
+              <div class="risk-score-name">Al-Wakra Trading LLC</div>
+              <div class="risk-score-details">RIM: 98234571 • Wholesale Banking • KYC expires in 32 days</div>
+              <div class="risk-score-action">⚠️ High Risk Rating • Unresponsive to previous 2 contact attempts</div>
+            </div>
+            <button class="action-btn primary">Initiate Outreach</button>
+          </div>
+          
+          <div class="risk-score-item">
+            <div class="risk-score-value high">76</div>
+            <div class="risk-score-info">
+              <div class="risk-score-name">Fatima Hassan Al-Thani</div>
+              <div class="risk-score-details">RIM: 45782931 • Personal Banking • KYC expires in 67 days</div>
+              <div class="risk-score-action">⚠️ Transaction pattern change detected • Risk rating increased</div>
+            </div>
+            <button class="action-btn secondary">Schedule Follow-up</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expired KYC Alerts -->
+      <div class="kyc-alerts-section">
+        <div class="section-header">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#EF4444"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Expired KYC Alert Dashboard
+            <span class="alert-badge">1,444 Active Alerts</span>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="action-btn secondary" onclick="exportAlerts()">Export Alerts</button>
+            <button class="action-btn primary" onclick="escalateAll()">Bulk Escalate</button>
+          </div>
+        </div>
+        
+        <div class="filter-row">
+          <select class="form-control" id="sector-filter">
+            <option value="">All Sectors</option>
+            <option value="personal">Personal Banking</option>
+            <option value="wholesale">Wholesale Banking</option>
+            <option value="wps">WPS / Corporate Workers</option>
+          </select>
+          <select class="form-control" id="branch-filter">
+            <option value="">All Branches</option>
+            <option value="head-office">Head Office</option>
+            <option value="west-bay">West Bay</option>
+            <option value="al-sadd">Al Sadd</option>
+            <option value="wakra">Al Wakra</option>
+            <option value="industrial">Industrial Area</option>
+          </select>
+          <select class="form-control" id="risk-filter">
+            <option value="">All Risk Levels</option>
+            <option value="high">High Risk</option>
+            <option value="medium">Medium Risk</option>
+            <option value="low">Low Risk</option>
+          </select>
+          <select class="form-control" id="overdue-filter">
+            <option value="">Days Overdue</option>
+            <option value="1-30">1-30 days</option>
+            <option value="31-60">31-60 days</option>
+            <option value="61-90">61-90 days</option>
+            <option value="90+">90+ days</option>
+          </select>
+          <select class="form-control" id="escalation-filter">
+            <option value="">Escalation Status</option>
+            <option value="none">Not Escalated</option>
+            <option value="l1">L1 - Operations</option>
+            <option value="l2">L2 - Compliance</option>
+            <option value="l3">L3 - Management</option>
+          </select>
+        </div>
+        
+        <table class="alert-table">
+          <thead>
+            <tr>
+              <th>Customer Name</th>
+              <th>RIM</th>
+              <th>Segment</th>
+              <th>Branch</th>
+              <th>Risk</th>
+              <th>KYC Expiry</th>
+              <th>Days Overdue</th>
+              <th>Escalation</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ahmed Hassan Al-Mahmoud</td>
+              <td>12345678</td>
+              <td>
+                <span class="status-badge expired">
+                  <span class="status-dot expired"></span>
+                  Personal
+                </span>
+              </td>
+              <td>West Bay</td>
+              <td><span class="risk-badge high">HIGH</span></td>
+              <td>2026-02-01</td>
+              <td><span class="days-overdue">36 days</span></td>
+              <td>
+                <div class="escalation-level">
+                  <div class="escalation-indicator">
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                  </div>
+                  <span>L2</span>
+                </div>
+              </td>
+              <td><button class="action-btn primary" onclick="viewCase('12345678')">View</button></td>
+            </tr>
+            <tr>
+              <td>Khalifa Mohammed Al-Sulaiti</td>
+              <td>23456789</td>
+              <td>
+                <span class="status-badge expired">
+                  <span class="status-dot expired"></span>
+                  Personal
+                </span>
+              </td>
+              <td>Al Sadd</td>
+              <td><span class="risk-badge medium">MEDIUM</span></td>
+              <td>2026-02-15</td>
+              <td><span class="days-overdue">22 days</span></td>
+              <td>
+                <div class="escalation-level">
+                  <div class="escalation-indicator">
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                  </div>
+                  <span>L1</span>
+                </div>
+              </td>
+              <td><button class="action-btn primary" onclick="viewCase('23456789')">View</button></td>
+            </tr>
+            <tr>
+              <td>Qatar Construction Group WLL</td>
+              <td>34567890</td>
+              <td>
+                <span class="status-badge expired">
+                  <span class="status-dot expired"></span>
+                  Wholesale
+                </span>
+              </td>
+              <td>Head Office</td>
+              <td><span class="risk-badge high">HIGH</span></td>
+              <td>2026-01-20</td>
+              <td><span class="days-overdue">48 days</span></td>
+              <td>
+                <div class="escalation-level">
+                  <div class="escalation-indicator">
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot"></div>
+                  </div>
+                  <span>L3</span>
+                </div>
+              </td>
+              <td><button class="action-btn primary" onclick="viewCase('34567890')">View</button></td>
+            </tr>
+            <tr>
+              <td>Ravi Kumar Patel</td>
+              <td>45678901</td>
+              <td>
+                <span class="status-badge expired">
+                  <span class="status-dot expired"></span>
+                  WPS
+                </span>
+              </td>
+              <td>Industrial Area</td>
+              <td><span class="risk-badge low">LOW</span></td>
+              <td>2026-02-25</td>
+              <td><span class="days-overdue">12 days</span></td>
+              <td>
+                <div class="escalation-level">
+                  <div class="escalation-indicator">
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                  </div>
+                  <span>L1</span>
+                </div>
+              </td>
+              <td><button class="action-btn primary" onclick="viewCase('45678901')">View</button></td>
+            </tr>
+            <tr>
+              <td>Sarah Abdullah Al-Marri</td>
+              <td>56789012</td>
+              <td>
+                <span class="status-badge expiring-soon">
+                  <span class="status-dot expiring-soon"></span>
+                  Personal
+                </span>
+              </td>
+              <td>West Bay</td>
+              <td><span class="risk-badge high">HIGH</span></td>
+              <td>2026-03-15</td>
+              <td><span class="days-remaining">6 days remaining</span></td>
+              <td>
+                <div class="escalation-level">
+                  <div class="escalation-indicator">
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                    <div class="escalation-dot"></div>
+                  </div>
+                  <span>None</span>
+                </div>
+              </td>
+              <td><button class="action-btn secondary" onclick="viewCase('56789012')">View</button></td>
+            </tr>
+            <tr>
+              <td>Al Doha Contracting Est.</td>
+              <td>67890123</td>
+              <td>
+                <span class="status-badge expired">
+                  <span class="status-dot expired"></span>
+                  Wholesale
+                </span>
+              </td>
+              <td>Al Wakra</td>
+              <td><span class="risk-badge medium">MEDIUM</span></td>
+              <td>2025-12-15</td>
+              <td><span class="days-overdue">84 days</span></td>
+              <td>
+                <div class="escalation-level">
+                  <div class="escalation-indicator">
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot active"></div>
+                    <div class="escalation-dot active"></div>
+                  </div>
+                  <span>L4</span>
+                </div>
+              </td>
+              <td><button class="action-btn primary" onclick="viewCase('67890123')">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+          <div style="color: var(--text-muted); font-size: 0.85rem;">
+            Showing 6 of 1,444 alerts
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="action-btn secondary" disabled>Previous</button>
+            <button class="action-btn secondary">1</button>
+            <button class="action-btn primary">2</button>
+            <button class="action-btn secondary">3</button>
+            <button class="action-btn secondary">...</button>
+            <button class="action-btn secondary">241</button>
+            <button class="action-btn secondary">Next</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // Initialize user info from session
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      if (user.name) {
+        document.getElementById('user-name').textContent = user.name;
+        document.getElementById('user-role').textContent = user.role;
+        document.getElementById('user-avatar').textContent = user.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+      }
+    });
+
+    function refreshData() {
+      alert('Refreshing data from T24...');
+      // Simulated refresh
+      setTimeout(() => {
+        alert('Data refreshed successfully!');
+      }, 1000);
+    }
+
+    function exportReport() {
+      alert('Exporting KYC Compliance Report...');
+    }
+
+    function exportAlerts() {
+      alert('Exporting Expired KYC Alerts to Excel...');
+    }
+
+    function escalateAll() {
+      if (confirm('Are you sure you want to escalate all filtered alerts to the next level?')) {
+        alert('Bulk escalation initiated. Notifications sent to respective teams.');
+      }
+    }
+
+    function viewCase(rim) {
+      alert('Opening case details for RIM: ' + rim);
+      // In production, this would navigate to the detailed case view
+    }
+
+    // Filter functionality
+    document.querySelectorAll('.filter-row select').forEach(select => {
+      select.addEventListener('change', function() {
+        console.log('Filter changed:', this.id, this.value);
+        // In production, this would filter the table data
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB Digital Command Center — 3D Executive Control Room</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       QIB 3D DIGITAL COMMAND CENTER — PREMIUM EXECUTIVE CONTROL ROOM
+       ═════════════════════════════════════════════════════════════ */
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F5D95C;
+      --cyan: #00D4FF;
+      --cyan-dark: #0088BB;
+      --navy: #060e1a;
+      --navy-mid: #0c1929;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --danger: #FF4857;
+      --warning: #FFA500;
+      --success: #22C55E;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--navy);
+      color: #e2e8f0;
+    }
+
+    /* ─── 3D Canvas Container ─────────────────────────────────── */
+    #cc-3d-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      display: block;
+    }
+
+    /* ─── Content Overlay ─────────────────────────────────────── */
+    .cc-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      background: linear-gradient(180deg, rgba(6,14,26,0.85), rgba(12,25,41,0.9));
+      backdrop-filter: blur(8px);
+    }
+
+    .cc-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 32px;
+      max-width: 1920px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ─── Top Bar ─────────────────────────────────────────────── */
+    .cc-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gold);
+      animation: fadeUp 0.6s ease;
+      position: relative;
+    }
+
+    .cc-top-bar::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 250px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .cc-title {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cc-status {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .cc-status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 12px var(--success);
+      animation: pulse 2s ease infinite;
+    }
+
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes slideIn { from { opacity:0; transform:translateX(-30px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+    @keyframes glow { 0%,100% { box-shadow: 0 0 20px rgba(212,175,55,0.4); } 50% { box-shadow: 0 0 40px rgba(212,175,55,0.6); } }
+    @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+
+    /* ─── 3D Governance Map ───────────────────────────────────── */
+    .cc-governance-3d {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s 0.1s ease backwards;
+    }
+
+    .cc-3d-panel {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 380px;
+    }
+
+    .cc-3d-panel:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 30px rgba(212,175,55,0.3);
+      transform: translateY(-4px);
+    }
+
+    .cc-3d-panel h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #cc-3d-hierarchy {
+      width: 100%;
+      height: 340px;
+      border-radius: 12px;
+      background: rgba(6,14,26,0.5);
+    }
+
+    #cc-3d-metrics {
+      width: 100%;
+      height: 340px;
+      border-radius: 12px;
+      background: rgba(6,14,26,0.5);
+    }
+
+    /* ─── KPI Metrics Grid ────────────────────────────────────── */
+    .cc-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.2s ease backwards;
+    }
+
+    .cc-kpi-card {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .cc-kpi-card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 25px rgba(0,212,255,0.2);
+      transform: translateY(-3px);
+    }
+
+    .cc-kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    .cc-kpi-label {
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .cc-kpi-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .cc-kpi-change {
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .cc-kpi-change.negative {
+      color: var(--danger);
+    }
+
+    /* ─── Risk Control Center (3D Heatmap) ────────────────────── */
+    .cc-risk-section {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.3s ease backwards;
+    }
+
+    .cc-risk-panel {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cc-risk-panel h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #cc-3d-risk-heatmap {
+      width: 100%;
+      height: 300px;
+      border-radius: 12px;
+      background: rgba(6,14,26,0.5);
+    }
+
+    .cc-risk-indicators {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cc-risk-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cc-risk-indicator:hover {
+      background: rgba(212,175,55,0.1);
+      transform: translateX(4px);
+    }
+
+    .cc-risk-indicator-label {
+      font-size: 12px;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    .cc-risk-indicator-value {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--cyan);
+    }
+
+    /* ─── Workflow Visualization ──────────────────────────────── */
+    .cc-workflow-section {
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.4s ease backwards;
+    }
+
+    .cc-workflow-panel {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 22px;
+      position: relative;
+    }
+
+    .cc-workflow-panel h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    #cc-3d-workflow {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      background: rgba(6,14,26,0.5);
+    }
+
+    /* ─── Advanced Analytics Section ──────────────────────────── */
+    .cc-analytics-section {
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.5s ease backwards;
+    }
+
+    .cc-analytics-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cc-analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .cc-chart-panel {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .cc-chart-panel:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0,212,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    .cc-chart-panel h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .cc-chart-panel canvas {
+      max-height: 250px;
+    }
+
+    /* ─── Department Grid ─────────────────────────────────────── */
+    .cc-departments-section {
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.6s ease backwards;
+    }
+
+    .cc-departments-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cc-departments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .cc-dept-card {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 2px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cc-dept-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--cyan));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .cc-dept-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .cc-dept-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 25px rgba(212,175,55,0.2);
+      transform: translateY(-4px);
+    }
+
+    .cc-dept-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .cc-dept-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .cc-dept-metric {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--cyan);
+    }
+
+    /* ─── Alerts Section ──────────────────────────────────────── */
+    .cc-alerts-section {
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.6s ease backwards;
+    }
+
+    .cc-alerts-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cc-alerts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .cc-alert {
+      background: linear-gradient(135deg, rgba(255,72,87,0.1), rgba(255,165,0,0.1));
+      border: 1px solid rgba(255,72,87,0.3);
+      border-left: 4px solid var(--danger);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      animation: slideIn 0.4s ease;
+    }
+
+    .cc-alert-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .cc-alert-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cc-alert-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 4px;
+    }
+
+    .cc-alert-desc {
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    /* ─── Footer Stats ────────────────────────────────────────– */
+    .cc-footer-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--glass-border);
+      animation: fadeUp 0.6s 0.7s ease backwards;
+    }
+
+    .cc-footer-stat {
+      text-align: center;
+    }
+
+    .cc-footer-stat-label {
+      font-size: 10px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .cc-footer-stat-value {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    /* ─── Modal/Panel Overlay ─────────────────────────────────── */
+    .cc-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .cc-modal.active {
+      display: flex;
+    }
+
+    .cc-modal-content {
+      background: linear-gradient(135deg, var(--navy-mid), rgba(12,25,41,0.95));
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 60px rgba(212,175,55,0.3);
+      animation: scaleIn 0.4s ease;
+    }
+
+    .cc-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--gold);
+      cursor: pointer;
+      padding: 0;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .cc-modal-close:hover {
+      background: rgba(212,175,55,0.1);
+      transform: rotate(90deg);
+    }
+
+    /* ─── Responsive ──────────────────────────────────────────– */
+    @media (max-width: 1200px) {
+      .cc-governance-3d {
+        grid-template-columns: 1fr;
+      }
+
+      .cc-risk-section {
+        grid-template-columns: 1fr;
+      }
+
+      .cc-3d-panel,
+      .cc-risk-panel,
+      .cc-workflow-panel {
+        min-height: 300px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cc-wrapper {
+        padding: 16px;
+      }
+
+      .cc-title {
+        font-size: 20px;
+      }
+
+      .cc-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cc-departments-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ═══════════════════════════════════════════════════════════════
+       3D CANVAS LAYER
+       ═════════════════════════════════════════════════════════════ -->
+  <canvas id="cc-3d-canvas"></canvas>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       UI OVERLAY LAYER
+       ═════════════════════════════════════════════════════════════ -->
+  <div class="cc-overlay">
+    <div class="cc-wrapper">
+      <!-- Top Bar -->
+      <div class="cc-top-bar">
+        <h1 class="cc-title">⚡ QIB Digital Command Center — 3D Executive Control Room</h1>
+        <div class="cc-status">
+          <span class="cc-status-dot"></span>
+          <span>System: ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- KPI Metrics Grid -->
+      <div class="cc-kpi-grid">
+        <div class="cc-kpi-card">
+          <div class="cc-kpi-label">Active EDD Cases</div>
+          <div class="cc-kpi-value"><span id="kpi1">0</span></div>
+          <div class="cc-kpi-change">+12% from last week</div>
+        </div>
+        <div class="cc-kpi-card">
+          <div class="cc-kpi-label">Pending Reviews</div>
+          <div class="cc-kpi-value"><span id="kpi2">0</span></div>
+          <div class="cc-kpi-change negative">-8% average</div>
+        </div>
+        <div class="cc-kpi-card">
+          <div class="cc-kpi-label">Re-KYC Progress</div>
+          <div class="cc-kpi-value"><span id="kpi3">0</span>%</div>
+          <div class="cc-kpi-change">+18% acceleration</div>
+        </div>
+        <div class="cc-kpi-card">
+          <div class="cc-kpi-label">High-Risk Alerts</div>
+          <div class="cc-kpi-value"><span id="kpi4">0</span></div>
+          <div class="cc-kpi-change negative">+3 PEP matches</div>
+        </div>
+        <div class="cc-kpi-card">
+          <div class="cc-kpi-label">SLA Breaches</div>
+          <div class="cc-kpi-value"><span id="kpi5">0</span></div>
+          <div class="cc-kpi-change">Requires escalation</div>
+        </div>
+        <div class="cc-kpi-card">
+          <div class="cc-kpi-label">System Uptime</div>
+          <div class="cc-kpi-value"><span id="kpi6">0</span>%</div>
+          <div class="cc-kpi-change">All systems nominal</div>
+        </div>
+      </div>
+
+      <!-- 3D Governance Map & Metrics -->
+      <div class="cc-governance-3d">
+        <div class="cc-3d-panel">
+          <h3>🏛️ 3D Governance Hierarchy</h3>
+          <canvas id="cc-3d-hierarchy"></canvas>
+        </div>
+        <div class="cc-3d-panel">
+          <h3>📊 3D KPI Visualization</h3>
+          <canvas id="cc-chart-kpi" style="max-height: 340px;"></canvas>
+        </div>
+      </div>
+
+      <!-- Risk Control Center -->
+      <div class="cc-risk-section">
+        <div class="cc-risk-panel">
+          <h3>⚠️ Risk Control Center (3D Heatmap)</h3>
+          <canvas id="cc-3d-risk-heatmap"></canvas>
+        </div>
+        <div class="cc-risk-panel">
+          <h3>🎯 Risk Indicators</h3>
+          <div class="cc-risk-indicators">
+            <div class="cc-risk-indicator">
+              <span class="cc-risk-indicator-label">PEP Cases</span>
+              <span class="cc-risk-indicator-value">8</span>
+            </div>
+            <div class="cc-risk-indicator">
+              <span class="cc-risk-indicator-label">Sanctions Match</span>
+              <span class="cc-risk-indicator-value">3</span>
+            </div>
+            <div class="cc-risk-indicator">
+              <span class="cc-risk-indicator-label">Unusual Activity</span>
+              <span class="cc-risk-indicator-value">18</span>
+            </div>
+            <div class="cc-risk-indicator">
+              <span class="cc-risk-indicator-label">Verified Clear</span>
+              <span class="cc-risk-indicator-value">814</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workflow Visualization -->
+      <div class="cc-workflow-section">
+        <div class="cc-workflow-panel">
+          <h3>🔄 Workflow Pipeline Visualization</h3>
+          <canvas id="cc-3d-workflow"></canvas>
+        </div>
+      </div>
+
+      <!-- Advanced Analytics Section -->
+      <div class="cc-analytics-section">
+        <div class="cc-analytics-title">📈 Advanced Analytics Dashboard</div>
+        <div class="cc-analytics-grid">
+          <div class="cc-chart-panel">
+            <h4>🎯 KPI Trends (30 Days)</h4>
+            <canvas id="cc-chart-trends"></canvas>
+          </div>
+          <div class="cc-chart-panel">
+            <h4>⚠️ Risk Distribution</h4>
+            <canvas id="cc-chart-risk"></canvas>
+          </div>
+          <div class="cc-chart-panel">
+            <h4>🔄 Workflow Performance</h4>
+            <canvas id="cc-chart-workflow"></canvas>
+          </div>
+          <div class="cc-chart-panel">
+            <h4>👥 Department Workload</h4>
+            <canvas id="cc-chart-departments"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Department Dashboards -->
+      <div class="cc-departments-section">
+        <div class="cc-departments-title">🏢 Department Performance</div>
+        <div class="cc-departments-grid">
+          <div class="cc-dept-card" onclick="showDepartmentDashboard('business')">
+            <span class="cc-dept-icon">📈</span>
+            <div class="cc-dept-name">Business</div>
+            <div class="cc-dept-metric">47</div>
+          </div>
+          <div class="cc-dept-card" onclick="showDepartmentDashboard('risk')">
+            <span class="cc-dept-icon">🎯</span>
+            <div class="cc-dept-name">Risk Mgmt</div>
+            <div class="cc-dept-metric">23</div>
+          </div>
+          <div class="cc-dept-card" onclick="showDepartmentDashboard('compliance')">
+            <span class="cc-dept-icon">✅</span>
+            <div class="cc-dept-name">Compliance</div>
+            <div class="cc-dept-metric">15</div>
+          </div>
+          <div class="cc-dept-card" onclick="showDepartmentDashboard('operations')">
+            <span class="cc-dept-icon">⚙️</span>
+            <div class="cc-dept-name">Operations</div>
+            <div class="cc-dept-metric">89</div>
+          </div>
+          <div class="cc-dept-card" onclick="showDepartmentDashboard('change')">
+            <span class="cc-dept-icon">🚀</span>
+            <div class="cc-dept-name">Change Mgmt</div>
+            <div class="cc-dept-metric">12</div>
+          </div>
+          <div class="cc-dept-card" onclick="showDepartmentDashboard('it')">
+            <span class="cc-dept-icon">🖥️</span>
+            <div class="cc-dept-name">IT Systems</div>
+            <div class="cc-dept-metric">99.7%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive Alerts -->
+      <div class="cc-alerts-section">
+        <div class="cc-alerts-title">🚨 Executive Alerts</div>
+        <div class="cc-alerts-container">
+          <div class="cc-alert">
+            <div class="cc-alert-icon">⚠️</div>
+            <div class="cc-alert-content">
+              <div class="cc-alert-title">SANCTIONS MATCH DETECTED</div>
+              <div class="cc-alert-desc">3 customers matched against QCB sanctions list. Immediate processing required.</div>
+            </div>
+          </div>
+          <div class="cc-alert">
+            <div class="cc-alert-icon">⏱️</div>
+            <div class="cc-alert-content">
+              <div class="cc-alert-title">SLA BREACH ALERT</div>
+              <div class="cc-alert-desc">2 cases nearing SLA deadline. CEO escalation recommended.</div>
+            </div>
+          </div>
+          <div class="cc-alert">
+            <div class="cc-alert-icon">👤</div>
+            <div class="cc-alert-content">
+              <div class="cc-alert-title">PEP EXCEPTION CASES</div>
+              <div class="cc-alert-desc">4 Politically Exposed Persons requiring Compliance review and approval.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Stats -->
+      <div class="cc-footer-stats">
+        <div class="cc-footer-stat">
+          <div class="cc-footer-stat-label">SLA Compliance</div>
+          <div class="cc-footer-stat-value">87%</div>
+        </div>
+        <div class="cc-footer-stat">
+          <div class="cc-footer-stat-label">Re-KYC Progress</div>
+          <div class="cc-footer-stat-value">68%</div>
+        </div>
+        <div class="cc-footer-stat">
+          <div class="cc-footer-stat-label">Customer Satisfaction</div>
+          <div class="cc-footer-stat-value">92%</div>
+        </div>
+        <div class="cc-footer-stat">
+          <div class="cc-footer-stat-label">Compliance Score</div>
+          <div class="cc-footer-stat-value">94%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DEPARTMENT DASHBOARD MODAL
+       ═════════════════════════════════════════════════════════════ -->
+  <div class="cc-modal" id="deptModal">
+    <div class="cc-modal-content">
+      <button class="cc-modal-close" onclick="closeDeptModal()">✕</button>
+      <div id="deptModalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════════
+       THREE.JS 3D COMMAND CENTER ENGINE
+       ═════════════════════════════════════════════════════════════ */
+
+    let scene, camera, renderer;
+    let animationId;
+
+    const colors = {
+      gold: 0xD4AF37,
+      cyan: 0x00D4FF,
+      navy: 0x060e1a,
+      danger: 0xFF4857,
+      warning: 0xFFA500,
+      success: 0x22C55E
+    };
+
+    // ─── Initialize 3D Scenes ──────────────────────────────────
+    function init3D() {
+      const canvas = document.getElementById('cc-3d-canvas');
+      
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(colors.navy);
+      scene.fog = new THREE.Fog(colors.navy, 100, 500);
+
+      camera = new THREE.PerspectiveCamera(
+        75,
+        canvas.clientWidth / canvas.clientHeight,
+        0.1,
+        2000
+      );
+      camera.position.set(30, 20, 40);
+      camera.lookAt(0, 0, 0);
+
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance'
+      });
+
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFShadowShadowMap;
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(40, 40, 40);
+      directionalLight.castShadow = true;
+      directionalLight.shadow.mapSize.width = 2048;
+      directionalLight.shadow.mapSize.height = 2048;
+      directionalLight.shadow.camera.left = -100;
+      directionalLight.shadow.camera.right = 100;
+      directionalLight.shadow.camera.top = 100;
+      directionalLight.shadow.camera.bottom = -100;
+      scene.add(directionalLight);
+
+      const pointLight = new THREE.PointLight(colors.gold, 1);
+      pointLight.position.set(-30, 30, 30);
+      scene.add(pointLight);
+
+      // Create background grid
+      createBackgroundGrid();
+
+      // Create 3D hierarchy
+      create3DGovernanceHierarchy();
+
+      // Animate
+      animate3D();
+
+      // Handle resize
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function createBackgroundGrid() {
+      const gridHelper = new THREE.GridHelper(200, 20, 0x444444, 0x222222);
+      gridHelper.position.y = -40;
+      scene.add(gridHelper);
+    }
+
+    function create3DGovernanceHierarchy() {
+      // Board of Directors (Top Layer)
+      const boardY = 30;
+      const boardPositions = [
+        { x: -15, z: -10, name: 'Board Chair', color: colors.gold },
+        { x: 0, z: 0, name: 'Group CEO', color: colors.cyan },
+        { x: 15, z: -10, name: 'Deputy Chair', color: colors.gold }
+      ];
+
+      boardPositions.forEach((pos, idx) => {
+        const box = new THREE.BoxGeometry(4, 4, 4);
+        const material = new THREE.MeshStandardMaterial({
+          color: pos.color,
+          emissive: pos.color,
+          emissiveIntensity: 0.3,
+          metalness: 0.7,
+          roughness: 0.2
+        });
+        const mesh = new THREE.Mesh(box, material);
+        mesh.position.set(pos.x, boardY, pos.z);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        scene.add(mesh);
+
+        // Glow sphere
+        const glowGeometry = new THREE.SphereGeometry(6, 32, 32);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+          color: pos.color,
+          transparent: true,
+          opacity: 0.15
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        glow.position.copy(mesh.position);
+        scene.add(glow);
+      });
+
+      // Executive Layer
+      const execY = 15;
+      const departments = [
+        { x: -20, z: 10, name: 'Business', emoji: '📈', color: 0xFF6B6B },
+        { x: -10, z: 15, name: 'Risk', emoji: '🎯', color: 0xFFB84D },
+        { x: 0, z: 18, name: 'Compliance', emoji: '✅', color: 0x51CF66 },
+        { x: 10, z: 15, name: 'Operations', emoji: '⚙️', color: 0x339AF0 },
+        { x: 20, z: 10, name: 'Change', emoji: '🚀', color: 0xFF922B }
+      ];
+
+      departments.forEach((dept, idx) => {
+        const cylinder = new THREE.CylinderGeometry(3, 3, 4, 16);
+        const material = new THREE.MeshStandardMaterial({
+          color: dept.color,
+          emissive: dept.color,
+          emissiveIntensity: 0.2,
+          metalness: 0.6,
+          roughness: 0.3
+        });
+        const mesh = new THREE.Mesh(cylinder, material);
+        mesh.position.set(dept.x, execY, dept.z);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        scene.add(mesh);
+      });
+
+      // Operations Layer
+      const opsY = 0;
+      const operations = [
+        { x: -25, z: 25, name: 'EDD Processing' },
+        { x: 0, z: 28, name: 'CDD Monitoring' },
+        { x: 25, z: 25, name: 'Compliance Review' }
+      ];
+
+      operations.forEach((op, idx) => {
+        const sphere = new THREE.SphereGeometry(2.5, 16, 16);
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x888888,
+          emissive: colors.cyan,
+          emissiveIntensity: 0.1,
+          metalness: 0.5,
+          roughness: 0.4
+        });
+        const mesh = new THREE.Mesh(sphere, material);
+        mesh.position.set(op.x, opsY, op.z);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        scene.add(mesh);
+      });
+
+      // Draw connections
+      drawConnections();
+    }
+
+    function drawConnections() {
+      const linePositions = [
+        // Board to CEO
+        [0, 30, -10, 0, 30, 0],
+        // Board to Executives
+        [-15, 30, -10, -20, 15, 10],
+        [15, 30, -10, 20, 15, 10],
+        // CEO to Operations
+        [0, 30, 0, 0, 15, 18],
+        // Exec to Ops
+        [-20, 15, 10, -25, 0, 25],
+        [0, 18, 18, 0, 0, 28],
+        [20, 15, 10, 25, 0, 25]
+      ];
+
+      linePositions.forEach((coords) => {
+        const points = [
+          new THREE.Vector3(coords[0], coords[1], coords[2]),
+          new THREE.Vector3(coords[3], coords[4], coords[5])
+        ];
+
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const material = new THREE.LineBasicMaterial({
+          color: colors.cyan,
+          linewidth: 2,
+          fog: true
+        });
+        const line = new THREE.Line(geometry, material);
+        scene.add(line);
+      });
+    }
+
+    function animate3D() {
+      animationId = requestAnimationFrame(animate3D);
+
+      // Rotate camera slowly
+      const time = Date.now() * 0.0001;
+      camera.position.x = Math.cos(time) * 50;
+      camera.position.z = Math.sin(time) * 50;
+      camera.lookAt(0, 15, 0);
+
+      // Animate meshes
+      scene.children.forEach((obj) => {
+        if (obj.geometry && obj.position.y > -30) {
+          if (obj instanceof THREE.Mesh) {
+            if (obj.geometry.type === 'BoxGeometry') {
+              obj.rotation.x += 0.003;
+              obj.rotation.y += 0.005;
+            } else if (obj.geometry.type === 'CylinderGeometry') {
+              obj.rotation.z += 0.004;
+            } else if (obj.geometry.type === 'SphereGeometry') {
+              obj.rotation.x += 0.002;
+              obj.rotation.y += 0.003;
+            }
+          }
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      const canvas = document.getElementById('cc-3d-canvas');
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    // ─── Animate KPI Counters ──────────────────────────────────
+    function animateKPICounters() {
+      const targets = [847, 126, 68, 23, 6, 99.7];
+      const durations = [2000, 2000, 2000, 1800, 1600, 2200];
+
+      targets.forEach((target, idx) => {
+        animateCounter(`kpi${idx + 1}`, target, durations[idx]);
+      });
+    }
+
+    function animateCounter(elementId, target, duration) {
+      const element = document.getElementById(elementId);
+      const start = 0;
+      const startTime = Date.now();
+
+      function update() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.floor(start + (target - start) * easeOutQuad(progress));
+        
+        if (typeof target === 'number' && target % 1 !== 0) {
+          element.textContent = value.toFixed(1);
+        } else {
+          element.textContent = value;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      update();
+    }
+
+    function easeOutQuad(t) {
+      return 1 - (1 - t) * (1 - t);
+    }
+
+    // ─── Department Dashboards ────────────────────────────────
+    function showDepartmentDashboard(dept) {
+      const modal = document.getElementById('deptModal');
+      const content = document.getElementById('deptModalContent');
+
+      const dashboards = {
+        business: {
+          title: '📈 Business Dashboard',
+          metrics: [
+            { label: 'Active Customers', value: '847', trend: '+12%' },
+            { label: 'New Onboarding', value: '45', trend: '+8%' },
+            { label: 'Document Requests', value: '234', trend: '-3%' },
+            { label: 'Account Reviews', value: '156', trend: '+15%' }
+          ],
+          status: 'All operations nominal — No critical issues'
+        },
+        risk: {
+          title: '🎯 Risk Management Dashboard',
+          metrics: [
+            { label: 'High Risk Cases', value: '23', trend: '+3 alerts' },
+            { label: 'PEP Matches', value: '8', trend: 'Requires action' },
+            { label: 'Risk Score (Avg)', value: '4.2/10', trend: 'Acceptable' },
+            { label: 'Sanctions Hits', value: '3', trend: 'Escalated' }
+          ],
+          status: 'Risk control maintained — Monitor escalations'
+        },
+        compliance: {
+          title: '✅ Compliance Dashboard',
+          metrics: [
+            { label: 'Regulatory Reviews', value: '15', trend: 'In Progress' },
+            { label: 'Exception Cases', value: '4', trend: 'CEO Approval' },
+            { label: 'Re-KYC Due', value: '187', trend: '+5 this week' },
+            { label: 'Audit Findings', value: '2', trend: 'Remediation' }
+          ],
+          status: 'Compliance score: 94% — Excellent standing'
+        },
+        operations: {
+          title: '⚙️ Operations Dashboard',
+          metrics: [
+            { label: 'CDD Workload', value: '89', trend: '+12 queued' },
+            { label: 'SLA Adherence', value: '87%', trend: '+5% improvement' },
+            { label: 'Case Processing', value: '156', trend: '2.4 hrs avg' },
+            { label: 'System Uptime', value: '99.7%', trend: 'All systems OK' }
+          ],
+          status: 'Operations running smoothly — No delays'
+        },
+        change: {
+          title: '🚀 Change Management Dashboard',
+          metrics: [
+            { label: 'Active Initiatives', value: '12', trend: '8 on track' },
+            { label: 'Staff Feedback', value: '92%', trend: 'Positive sentiment' },
+            { label: 'Training Complete', value: '87%', trend: '+8% this month' },
+            { label: 'Process Updates', value: '6', trend: 'Rolled out' }
+          ],
+          status: 'Digital transformation progressing on schedule'
+        },
+        it: {
+          title: '🖥️ IT Systems Dashboard',
+          metrics: [
+            { label: 'API Uptime', value: '99.9%', trend: 'Excellent' },
+            { label: 'T24 Integration', value: 'Connected', trend: 'Real-time sync' },
+            { label: 'Response Time', value: '145ms', trend: 'Optimal' },
+            { label: 'Security Score', value: '95/100', trend: 'Secure' }
+          ],
+          status: 'All integrations active — Zero incidents'
+        }
+      };
+
+      const dashboard = dashboards[dept];
+      let html = `<h2 style="color: var(--gold); margin-bottom: 20px; font-size: 20px;">${dashboard.title}</h2>`;
+      
+      html += `<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">`;
+      dashboard.metrics.forEach(m => {
+        html += `
+          <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border-left: 3px solid var(--gold);">
+            <div style="font-size: 11px; color: #94a3b8; margin-bottom: 4px;">${m.label}</div>
+            <div style="font-size: 22px; font-weight: 900; color: var(--cyan); margin-bottom: 4px;">${m.value}</div>
+            <div style="font-size: 10px; color: var(--gold);">${m.trend}</div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+
+      html += `
+        <div style="background: rgba(0,212,255,0.1); border: 1px solid var(--cyan); padding: 12px; border-radius: 8px; color: #cbd5e1; font-size: 12px;">
+          <strong>Status:</strong> ${dashboard.status}
+        </div>
+      `;
+
+      content.innerHTML = html;
+      modal.classList.add('active');
+    }
+
+    function closeDeptModal() {
+      document.getElementById('deptModal').classList.remove('active');
+    }
+
+    // ─── Advanced Charts ──────────────────────────────────────
+    function initializeCharts() {
+      const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: '#cbd5e1', font: { size: 11, weight: 600 } } },
+          tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#D4AF37', bodyColor: '#e2e8f0' }
+        },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      };
+
+      // KPI Trends Chart
+      if (document.getElementById('cc-chart-kpi')) {
+        new Chart(document.getElementById('cc-chart-kpi'), {
+          type: 'line',
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [
+              {
+                label: 'EDD Cases',
+                data: [750, 780, 820, 847],
+                borderColor: '#D4AF37',
+                backgroundColor: 'rgba(212,175,55,0.1)',
+                tension: 0.4,
+                fill: true
+              },
+              {
+                label: 'Pending Reviews',
+                data: [145, 138, 132, 126],
+                borderColor: '#00D4FF',
+                backgroundColor: 'rgba(0,212,255,0.1)',
+                tension: 0.4,
+                fill: true
+              }
+            ]
+          },
+          options: { ...chartOptions, plugins: { ...chartOptions.plugins, legend: { position: 'bottom' } } }
+        });
+      }
+
+      // Risk Distribution Chart
+      if (document.getElementById('cc-chart-risk')) {
+        new Chart(document.getElementById('cc-chart-risk'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Low Risk', 'Medium Risk', 'High Risk', 'Critical'],
+            datasets: [{
+              data: [312, 487, 41, 7],
+              backgroundColor: ['#22C55E', '#F59E0B', '#EF4444', '#DC2626'],
+              borderColor: '#060e1a',
+              borderWidth: 2
+            }]
+          },
+          options: chartOptions
+        });
+      }
+
+      // Workflow Performance Chart
+      if (document.getElementById('cc-chart-workflow')) {
+        new Chart(document.getElementById('cc-chart-workflow'), {
+          type: 'bar',
+          data: {
+            labels: ['Business', 'CDD', 'Compliance', 'Ready'],
+            datasets: [{
+              label: 'Completion %',
+              data: [76, 82, 71, 68],
+              backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#F5D95C'],
+              borderRadius: 8,
+              borderSkipped: false
+            }]
+          },
+          options: { ...chartOptions, indexAxis: 'y' }
+        });
+      }
+
+      // Department Workload Chart
+      if (document.getElementById('cc-chart-departments')) {
+        new Chart(document.getElementById('cc-chart-departments'), {
+          type: 'radar',
+          data: {
+            labels: ['Business', 'Risk', 'Compliance', 'Ops', 'Change', 'IT'],
+            datasets: [{
+              label: 'Workload Distribution',
+              data: [47, 23, 15, 89, 12, 99],
+              borderColor: '#D4AF37',
+              backgroundColor: 'rgba(212,175,55,0.2)',
+              pointBackgroundColor: '#00D4FF',
+              pointBorderColor: '#D4AF37'
+            }]
+          },
+          options: {
+            ...chartOptions,
+            scales: {
+              r: {
+                ticks: { color: '#94a3b8' },
+                grid: { color: 'rgba(255,255,255,0.05)' }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // ─── Authentication Check ──────────────────────────────────
+    function checkAuth() {
+      const sessionData = sessionStorage.getItem('edd_session');
+      if (!sessionData) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      try {
+        const session = JSON.parse(sessionData);
+        if (!session.authenticated || !session.user) {
+          window.location.replace('login.html');
+          return;
+        }
+      } catch (e) {
+        window.location.replace('login.html');
+        return;
+      }
+    }
+
+    // ─── Initialize ────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      init3D();
+      animateKPICounters();
+      setTimeout(() => initializeCharts(), 500);
+    });
+
+    // Close modal on outside click
+    document.getElementById('deptModal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'deptModal') {
+        closeDeptModal();
+      }
+    });
+
+    // Stop animation on unload
+    window.addEventListener('beforeunload', () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    });
+  </script>
+</body>
+</html>

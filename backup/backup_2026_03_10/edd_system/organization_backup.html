@@ -1,0 +1,3465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization Structure - QIB EDD System</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-dark: #9A7B0A;
+      --royal-purple: #6B21A8;
+      --executive-blue: #1E40AF;
+      --glass-bg: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       GLOBAL ANIMATIONS - Reusable Premium Effects
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(167, 139, 250, 0.6); }
+    }
+
+    @keyframes slideInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(0.95); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+
+    @keyframes fadeInScale {
+      from { 
+        opacity: 0; 
+        transform: scale(0.9); 
+      }
+      to { 
+        opacity: 1; 
+        transform: scale(1); 
+      }
+    }
+
+    /* Smooth Page Load Animation */
+    .org-container {
+      animation: slideInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Smart animations for cards with stagger effect */
+    .hierarchy-section {
+      animation: fadeInScale 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+    }
+
+    .hierarchy-section:nth-child(1) { animation-delay: 0.1s; }
+    .hierarchy-section:nth-child(2) { animation-delay: 0.2s; }
+    .hierarchy-section:nth-child(3) { animation-delay: 0.3s; }
+
+    .org-container {
+      padding: 28px;
+      min-height: 100vh;
+    }
+
+    .org-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid rgba(255,255,255,0.08);
+      position: relative;
+    }
+
+    .org-header::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 150px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .org-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold), #F5D95C, var(--gold));
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleGradient 5s ease infinite;
+      letter-spacing: -0.5px;
+    }
+
+    .org-header p {
+      color: #94a3b8;
+      margin-top: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .org-header p::before {
+      content: '●';
+      font-size: 8px;
+      color: #22C55E;
+      animation: pulse 2s ease infinite;
+    }
+
+    .org-controls {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .org-search {
+      position: relative;
+    }
+
+    .org-search input {
+      padding: 14px 18px 14px 48px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      color: white;
+      font-size: 14px;
+      width: 300px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .org-search input:focus {
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.1);
+      outline: none;
+      box-shadow: 
+        0 0 0 4px rgba(212, 175, 55, 0.15),
+        0 8px 25px rgba(0, 0, 0, 0.2);
+      transform: scale(1.02);
+    }
+
+    .org-search::before {
+      content: '🔍';
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .org-search:focus-within::before {
+      transform: translateY(-50%) scale(1.2);
+    }
+
+    /* Hierarchical Tree Structure */
+    .hierarchy-container {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       HIERARCHY SECTIONS - Premium Glass Design
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .hierarchy-section {
+      background: linear-gradient(135deg, 
+        rgba(20, 20, 35, 0.9) 0%, 
+        rgba(30, 30, 50, 0.8) 50%,
+        rgba(20, 20, 35, 0.85) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hierarchy-section.hidden-section {
+      display: none !important;
+    }
+
+    .hierarchy-section.focused-section {
+      animation: focusIn 0.5s ease-out;
+    }
+
+    @keyframes focusIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Back to All Button */
+    .back-to-all-btn {
+      margin-bottom: 24px;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .back-to-all-btn button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(0,150,200,0.1) 100%);
+      border: 1px solid rgba(0,212,255,0.4);
+      border-radius: 14px;
+      color: #00D4FF;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .back-to-all-btn button:hover {
+      background: linear-gradient(135deg, rgba(0,212,255,0.25) 0%, rgba(0,150,200,0.2) 100%);
+      transform: translateX(-4px);
+      box-shadow: 0 8px 30px rgba(0,212,255,0.3);
+    }
+
+    .hierarchy-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), #F5D95C, transparent);
+      border-radius: 28px 28px 0 0;
+    }
+
+    /* Decorative Corner Accents */
+    .hierarchy-section::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hierarchy-section.executive::before {
+      background: linear-gradient(90deg, #00D4FF, #0EA5E9, transparent);
+    }
+
+    .hierarchy-section.executive::after {
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.1), transparent 70%);
+    }
+
+    .hierarchy-section.operations::before {
+      background: linear-gradient(90deg, #A78BFA, #7C3AED, transparent);
+    }
+
+    .hierarchy-section.operations::after {
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.1), transparent 70%);
+    }
+
+    /* Section Header - Interactive */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 36px;
+      cursor: pointer;
+      user-select: none;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .section-header:hover {
+      padding-left: 8px;
+    }
+
+    .section-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      box-shadow: 
+        0 10px 40px rgba(212, 175, 55, 0.35),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 0.4s ease;
+    }
+
+    .section-header:hover .section-icon {
+      transform: scale(1.08) rotate(5deg);
+      box-shadow: 
+        0 15px 50px rgba(212, 175, 55, 0.45),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .section-icon.executive {
+      background: linear-gradient(135deg, #00D4FF, #0288D1);
+      box-shadow: 
+        0 10px 40px rgba(0, 212, 255, 0.35),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .section-header:hover .section-icon.executive {
+      box-shadow: 
+        0 15px 50px rgba(0, 212, 255, 0.45),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .section-icon.operations {
+      background: linear-gradient(135deg, #A78BFA, #7C3AED);
+      box-shadow: 
+        0 10px 40px rgba(167, 139, 250, 0.35),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .section-header:hover .section-icon.operations {
+      box-shadow: 
+        0 15px 50px rgba(167, 139, 250, 0.45),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .section-title {
+      flex: 1;
+    }
+
+    .section-title h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: white;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .section-title h2.gold {
+      background: linear-gradient(135deg, var(--gold), #F5D95C);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title p {
+      color: #94a3b8;
+      font-size: 14px;
+      margin: 6px 0 0 0;
+    }
+
+    .section-toggle {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+
+    .section-toggle:hover {
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(59, 130, 246, 0.1));
+      border-color: rgba(167, 139, 250, 0.3);
+      transform: scale(1.1);
+    }
+
+    .section-toggle.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .section-toggle.collapsed:hover {
+      transform: rotate(-90deg) scale(1.1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       CHAIRMAN CARD - Ultra Premium Royal Style
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .chairman-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 48px;
+      perspective: 1200px;
+    }
+
+    .chairman-card {
+      background: linear-gradient(135deg, 
+        rgba(212, 175, 55, 0.2) 0%, 
+        rgba(154, 123, 10, 0.15) 50%,
+        rgba(212, 175, 55, 0.1) 100%);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 3px solid rgba(212, 175, 55, 0.5);
+      border-radius: 28px;
+      padding: 40px 56px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      min-width: 360px;
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+
+    /* Golden Animated Border */
+    .chairman-card::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: linear-gradient(135deg, 
+        #D4AF37, #F5D95C, #9A7B0A, #D4AF37, #F5D95C);
+      background-size: 400% 400%;
+      border-radius: 30px;
+      z-index: -2;
+      animation: goldenGlow 6s ease infinite;
+    }
+
+    .chairman-card::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: linear-gradient(135deg, 
+        rgba(20, 15, 10, 0.97), 
+        rgba(30, 25, 15, 0.95));
+      border-radius: 25px;
+      z-index: -1;
+    }
+
+    @keyframes goldenGlow {
+      0%, 100% { background-position: 0% 50%; filter: brightness(1); }
+      25% { background-position: 50% 0%; filter: brightness(1.2); }
+      50% { background-position: 100% 50%; filter: brightness(1); }
+      75% { background-position: 50% 100%; filter: brightness(1.1); }
+    }
+
+    /* Sparkle Effect */
+    .chairman-card .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #F5D95C;
+      border-radius: 50%;
+      animation: sparkle 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .chairman-card:hover {
+      transform: translateY(-12px) rotateX(5deg) scale(1.03);
+      box-shadow: 
+        0 30px 80px rgba(212, 175, 55, 0.35),
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(212, 175, 55, 0.15);
+    }
+
+    .chairman-badge {
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #D4AF37, #F5D95C, #9A7B0A);
+      background-size: 200% 200%;
+      color: #000;
+      padding: 10px 28px;
+      border-radius: 24px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      box-shadow: 
+        0 6px 25px rgba(212, 175, 55, 0.5),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+      animation: goldenGlow 4s ease infinite;
+      z-index: 10;
+    }
+
+    .chairman-photo {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 800;
+      color: #000;
+    }
+
+    .chairman-photo::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      background: linear-gradient(135deg, #D4AF37, #F5D95C, #9A7B0A, #D4AF37);
+      background-size: 300% 300%;
+      border-radius: 50%;
+      animation: photoRingGlow 5s ease infinite;
+    }
+
+    .chairman-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #D4AF37, #9A7B0A);
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .chairman-photo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.5s ease;
+    }
+
+    .chairman-card:hover .chairman-photo img {
+      transform: scale(1.08);
+    }
+
+    .chairman-name {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #D4AF37, #F5D95C);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 20px 0 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .chairman-name-ar {
+      font-size: 18px;
+      color: rgba(212, 175, 55, 0.8);
+      direction: rtl;
+      margin-bottom: 12px;
+    }
+
+    .chairman-title {
+      color: #94a3b8;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       CONNECTOR LINES - Animated Flow Indicators
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .connector-down {
+      width: 3px;
+      height: 50px;
+      background: linear-gradient(180deg, 
+        var(--gold), 
+        rgba(212, 175, 55, 0.6),
+        rgba(212, 175, 55, 0.2));
+      margin: 0 auto;
+      border-radius: 3px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .connector-down::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: connectorFlow 2s ease-in-out infinite;
+    }
+
+    @keyframes connectorFlow {
+      0% { top: -50%; }
+      100% { top: 150%; }
+    }
+
+    .connector-down.blue {
+      background: linear-gradient(180deg, 
+        #00D4FF, 
+        rgba(0, 212, 255, 0.6),
+        rgba(0, 212, 255, 0.2));
+    }
+
+    .connector-down.purple {
+      background: linear-gradient(180deg, 
+        #A78BFA, 
+        rgba(167, 139, 250, 0.6),
+        rgba(167, 139, 250, 0.2));
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       BOARD MEMBERS GRID - Premium Golden Style
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .board-members {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+      perspective: 1000px;
+    }
+
+    .board-member-card {
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0.06) 0%, 
+        rgba(255,255,255,0.02) 50%,
+        rgba(212, 175, 55, 0.05) 100%);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .board-member-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, #D4AF37, #F5D95C, #9A7B0A, #D4AF37);
+      background-size: 300% 300%;
+      border-radius: 21px;
+      z-index: -2;
+      opacity: 0;
+      animation: goldenGlow 6s ease infinite;
+      transition: opacity 0.4s ease;
+    }
+
+    .board-member-card::after {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      background: linear-gradient(135deg, 
+        rgba(20, 18, 12, 0.98), 
+        rgba(28, 25, 18, 0.95));
+      border-radius: 19px;
+      z-index: -1;
+    }
+
+    .board-member-card:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 
+        0 15px 35px rgba(212, 175, 55, 0.2),
+        0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .board-member-card:hover::before {
+      opacity: 1;
+    }
+
+    .board-member-photo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #D4AF37;
+      transition: all 0.4s ease;
+      overflow: hidden;
+    }
+
+    .board-member-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .board-member-photo::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: linear-gradient(135deg, #D4AF37, #F5D95C, #9A7B0A);
+      background-size: 200% 200%;
+      border-radius: 50%;
+      animation: photoRingGlow 4s ease infinite;
+      opacity: 0.5;
+    }
+
+    .board-member-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(154, 123, 10, 0.15));
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .board-member-card:hover .board-member-photo {
+      transform: scale(1.1);
+    }
+
+    .board-member-card:hover .board-member-photo::before {
+      opacity: 1;
+    }
+
+    .board-member-name {
+      font-size: 12px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #e2e8f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .board-member-title {
+      font-size: 9px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .board-member-title::before {
+      content: '◆';
+      font-size: 6px;
+      color: #D4AF37;
+    }
+
+    .board-member-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 12px;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(154, 123, 10, 0.15));
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 14px;
+      font-size: 10px;
+      color: #D4AF37;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       EXECUTIVE CARDS - Premium Leadership Style
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .executive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      perspective: 1000px;
+    }
+
+    .exec-card {
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0.08) 0%, 
+        rgba(255,255,255,0.02) 50%,
+        rgba(0, 212, 255, 0.05) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    /* Animated Left Border */
+    .exec-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #00D4FF, #0288D1, #00D4FF);
+      background-size: 100% 200%;
+      opacity: 0;
+      transition: all 0.4s ease;
+      animation: borderPulse 3s ease infinite;
+    }
+
+    @keyframes borderPulse {
+      0%, 100% { background-position: 0% 0%; }
+      50% { background-position: 0% 100%; }
+    }
+
+    /* Inner Glow Effect */
+    .exec-card::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.15), transparent 70%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .exec-card:hover {
+      background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.12), 
+        rgba(2, 136, 209, 0.08));
+      border-color: rgba(0, 212, 255, 0.4);
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 
+        0 16px 40px rgba(0, 212, 255, 0.15),
+        0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .exec-card:hover::before {
+      opacity: 1;
+      width: 6px;
+    }
+
+    .exec-card:hover::after {
+      opacity: 1;
+    }
+
+    /* GCEO Special Card */
+    .exec-card.gceo {
+      grid-column: 1 / -1;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      border: 2px solid rgba(0, 212, 255, 0.4);
+      background: linear-gradient(135deg, 
+        rgba(0, 212, 255, 0.15), 
+        rgba(2, 136, 209, 0.08),
+        rgba(0, 212, 255, 0.05));
+      padding: 32px;
+    }
+
+    .exec-card.gceo::before {
+      opacity: 1;
+      width: 6px;
+      background: linear-gradient(180deg, #00D4FF, #0EA5E9, #00D4FF);
+    }
+
+    .exec-card.gceo:hover {
+      box-shadow: 
+        0 25px 70px rgba(0, 212, 255, 0.3),
+        0 15px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .exec-photo {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 
+        0 6px 18px rgba(0,0,0,0.3),
+        0 3px 9px rgba(0, 212, 255, 0.15);
+      transition: all 0.4s ease;
+    }
+
+    .exec-card:hover .exec-photo {
+      transform: scale(1.06);
+      box-shadow: 
+        0 10px 28px rgba(0,0,0,0.35),
+        0 5px 15px rgba(0, 212, 255, 0.25);
+    }
+
+    .exec-photo::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: linear-gradient(135deg, #00D4FF, #0288D1, #00D4FF);
+      border-radius: 20px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .exec-card:hover .exec-photo::before {
+      opacity: 1;
+    }
+
+    .exec-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .exec-card:hover .exec-photo img {
+      transform: scale(1.15);
+    }
+
+    .exec-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #00D4FF, #0288D1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .exec-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .exec-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, #00D4FF, #0288D1);
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      width: fit-content;
+      box-shadow: 0 3px 12px rgba(0, 212, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exec-badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: badgeShine 3s ease infinite;
+    }
+
+    .exec-name {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #e2e8f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .exec-title {
+      font-size: 14px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .exec-title::before {
+      content: '●';
+      font-size: 6px;
+      color: #00D4FF;
+    }
+
+    .exec-dept {
+      font-size: 12px;
+      color: rgba(0, 212, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .exec-team-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(2, 136, 209, 0.1));
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #00D4FF;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exec-team-btn:hover {
+      background: linear-gradient(135deg, #00D4FF, #0288D1);
+      border-color: transparent;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       OPERATIONS HIERARCHY - Department Layout
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .ops-hierarchy {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .ops-level {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .ops-level::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 40px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(180deg, 
+        rgba(167, 139, 250, 0.4), 
+        rgba(167, 139, 250, 0.1));
+      border-radius: 2px;
+    }
+
+    .ops-level-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+
+    .ops-level-label span {
+      color: #94a3b8;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 8px;
+    }
+
+    .ops-level-label::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #A78BFA, #7C3AED);
+      box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
+      animation: pulse 2s ease infinite;
+    }
+
+    .ops-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      perspective: 1000px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       ULTRA-MODERN CARDS - Premium Enterprise Design
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    .ops-card {
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0.08) 0%, 
+        rgba(255,255,255,0.02) 50%,
+        rgba(167, 139, 250, 0.05) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    /* Animated Gradient Border */
+    .ops-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, 
+        #A78BFA, #7C3AED, #3B82F6, #00D4FF, #22C55E, #D4AF37, #A78BFA);
+      background-size: 400% 400%;
+      border-radius: 22px;
+      z-index: -2;
+      opacity: 0;
+      animation: gradientBorder 8s ease infinite;
+      transition: opacity 0.4s ease;
+    }
+
+    /* Inner Card Background */
+    .ops-card::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: linear-gradient(135deg, 
+        rgba(20, 20, 35, 0.98), 
+        rgba(30, 30, 50, 0.95));
+      border-radius: 18px;
+      z-index: -1;
+    }
+
+    @keyframes gradientBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Shimmer Effect */
+    .ops-card .shimmer {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255,255,255,0.1), 
+        transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+
+    .ops-card:hover .shimmer {
+      left: 150%;
+    }
+
+    .ops-card:hover {
+      transform: translateY(-8px) rotateX(2deg) scale(1.02);
+      box-shadow: 
+        0 20px 60px rgba(167, 139, 250, 0.25),
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+
+    .ops-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Featured Card - Special Treatment */
+    .ops-card.featured {
+      border: none;
+      background: linear-gradient(135deg, 
+        rgba(167, 139, 250, 0.15), 
+        rgba(124, 58, 237, 0.08));
+    }
+
+    .ops-card.featured::before {
+      opacity: 0.7;
+    }
+
+    .ops-card.featured:hover::before {
+      opacity: 1;
+    }
+
+    .ops-card.featured .ops-card-badge {
+      background: linear-gradient(135deg, #A78BFA, #7C3AED);
+      box-shadow: 0 4px 15px rgba(167, 139, 250, 0.5);
+    }
+
+    /* Card Badge - Premium Style */
+    .ops-card-badge {
+      position: absolute;
+      top: -1px;
+      right: 20px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #22C55E, #16A34A);
+      border-radius: 0 0 12px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+      z-index: 10;
+    }
+
+    .ops-card-badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -6px;
+      border-width: 0 6px 6px 0;
+      border-style: solid;
+      border-color: transparent #16A34A transparent transparent;
+    }
+
+    .ops-card-badge::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -6px;
+      border-width: 6px 6px 0 0;
+      border-style: solid;
+      border-color: #16A34A transparent transparent transparent;
+    }
+
+    /* Photo Container - 3D Effect */
+    .ops-card-photo {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      transform: translateZ(20px);
+      box-shadow: 
+        0 8px 20px rgba(0,0,0,0.3),
+        0 4px 10px rgba(167, 139, 250, 0.2);
+      transition: all 0.4s ease;
+    }
+
+    .ops-card:hover .ops-card-photo {
+      transform: translateZ(30px) scale(1.05);
+      box-shadow: 
+        0 12px 30px rgba(0,0,0,0.4),
+        0 6px 15px rgba(167, 139, 250, 0.3);
+    }
+
+    /* Photo Ring Animation */
+    .ops-card-photo::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: linear-gradient(135deg, #A78BFA, #3B82F6, #00D4FF);
+      border-radius: 18px;
+      z-index: -1;
+      opacity: 0;
+      animation: photoRing 3s ease infinite;
+      transition: opacity 0.3s ease;
+    }
+
+    .ops-card:hover .ops-card-photo::before {
+      opacity: 1;
+    }
+
+    @keyframes photoRing {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+    }
+
+    .ops-card-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .ops-card:hover .ops-card-photo img {
+      transform: scale(1.1);
+    }
+
+    .ops-card-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent), #0288D1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Card Info - Typography Enhancement */
+    .ops-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transform: translateZ(10px);
+    }
+
+    .ops-card-info h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin: 0;
+      background: linear-gradient(135deg, #fff, #e2e8f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+    }
+
+    .ops-card-info .title {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ops-card-info .title::before {
+      content: '●';
+      font-size: 6px;
+      color: #A78BFA;
+    }
+
+    /* Team Button - Interactive */
+    .ops-card-info .team-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(59, 130, 246, 0.1));
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #A78BFA;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ops-card-info .team-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #A78BFA, #3B82F6);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .ops-card-info .team-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ops-card-info .team-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+      color: white;
+      border-color: transparent;
+    }
+
+    .ops-card-info .team-btn:hover::before {
+      opacity: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       TEAM EXPANSION - Premium Dropdown Section
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .team-expand {
+      display: none;
+      margin-top: 24px;
+      padding: 28px;
+      background: linear-gradient(135deg, 
+        rgba(0,0,0,0.4) 0%, 
+        rgba(20,20,35,0.6) 100%);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-expand::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #A78BFA, #3B82F6, #22C55E);
+      background-size: 200% 100%;
+      animation: teamExpandGlow 3s ease infinite;
+    }
+
+    @keyframes teamExpandGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .team-expand.active {
+      display: block;
+      animation: teamExpandIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes teamExpandIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(-20px) scale(0.95);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       TEAM MEMBER CARDS - Modern Glassmorphism Style
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0.06) 0%, 
+        rgba(255,255,255,0.02) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated border on hover */
+    .team-member::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1.5px;
+      background: linear-gradient(135deg, #A78BFA, #3B82F6, #22C55E);
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .team-member:hover::before {
+      opacity: 1;
+    }
+
+    /* Glow effect */
+    .team-member::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.15), transparent 70%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .team-member:hover::after {
+      opacity: 1;
+    }
+
+    .team-member:hover {
+      transform: translateY(-4px) scale(1.02);
+      background: linear-gradient(135deg, 
+        rgba(167, 139, 250, 0.1) 0%, 
+        rgba(59, 130, 246, 0.05) 100%);
+      box-shadow: 
+        0 12px 30px rgba(167, 139, 250, 0.15),
+        0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    .team-member-photo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .team-member:hover .team-member-photo {
+      transform: scale(1.08);
+      box-shadow: 
+        0 6px 20px rgba(0,0,0,0.4),
+        0 0 15px rgba(167, 139, 250, 0.3);
+    }
+
+    .team-member-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .team-member:hover .team-member-photo img {
+      transform: scale(1.15);
+    }
+
+    .team-member-initials {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent), #0288D1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .team-member-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .team-member-info h5 {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.3s ease;
+    }
+
+    .team-member:hover .team-member-info h5 {
+      color: #A78BFA;
+    }
+
+    .team-member-info p {
+      font-size: 11px;
+      color: #94a3b8;
+      margin: 4px 0 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .team-member-info p::before {
+      content: '◆';
+      font-size: 6px;
+      color: #3B82F6;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════════
+       CREDITS SECTION - Premium Recognition Cards
+       ═══════════════════════════════════════════════════════════════════════════ */
+    .credits-section {
+      margin-top: 48px;
+      background: linear-gradient(135deg, 
+        rgba(167, 139, 250, 0.1) 0%, 
+        rgba(59, 130, 246, 0.08) 50%,
+        rgba(34, 197, 94, 0.05) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid rgba(167, 139, 250, 0.25);
+      border-radius: 28px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated Background Orbs */
+    .credits-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(167, 139, 250, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.08) 0%, transparent 50%);
+      animation: creditOrbs 15s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes creditOrbs {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(5%, -5%) rotate(5deg); }
+      50% { transform: translate(-3%, 3%) rotate(-3deg); }
+      75% { transform: translate(-5%, -3%) rotate(3deg); }
+    }
+
+    .credits-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .credits-header h3 {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #A78BFA, #3B82F6, #22C55E);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 12px;
+      animation: titleGradient 5s ease infinite;
+      letter-spacing: -0.5px;
+    }
+
+    @keyframes titleGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .credits-header p {
+      color: #94a3b8;
+      font-size: 14px;
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+
+    .credits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      max-width: 750px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .credit-card {
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0.08) 0%, 
+        rgba(255,255,255,0.02) 100%);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 2px solid rgba(167, 139, 250, 0.3);
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    /* Animated Gradient Border */
+    .credit-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, 
+        #A78BFA, #7C3AED, #3B82F6, #00D4FF, #22C55E, #D4AF37, #A78BFA);
+      background-size: 400% 400%;
+      border-radius: 26px;
+      z-index: -2;
+      opacity: 0.5;
+      animation: gradientBorder 6s ease infinite;
+      transition: opacity 0.4s ease;
+    }
+
+    .credit-card::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: linear-gradient(135deg, 
+        rgba(20, 20, 35, 0.97), 
+        rgba(30, 30, 50, 0.95));
+      border-radius: 22px;
+      z-index: -1;
+    }
+
+    .credit-card:hover {
+      transform: translateY(-10px) rotateX(5deg) scale(1.02);
+      box-shadow: 
+        0 25px 60px rgba(167, 139, 250, 0.25),
+        0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .credit-card:hover::before {
+      opacity: 1;
+    }
+
+    .credit-card.vision {
+      border-color: rgba(167, 139, 250, 0.5);
+    }
+
+    .credit-card.developer {
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    /* Premium Badge Styles */
+    .credit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .credit-badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: badgeShine 3s ease infinite;
+    }
+
+    @keyframes badgeShine {
+      0%, 100% { left: -100%; }
+      50% { left: 100%; }
+    }
+
+    .credit-badge.vision {
+      background: linear-gradient(135deg, #A78BFA, #7C3AED);
+      color: white;
+      box-shadow: 0 4px 20px rgba(167, 139, 250, 0.5);
+    }
+
+    .credit-badge.developer {
+      background: linear-gradient(135deg, #3B82F6, #2563EB);
+      color: white;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Photo with Ring Animation */
+    .credit-photo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .credit-photo::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      background: linear-gradient(135deg, #A78BFA, #3B82F6, #22C55E, #D4AF37);
+      background-size: 300% 300%;
+      border-radius: 50%;
+      z-index: -1;
+      animation: photoRingGlow 4s ease infinite;
+    }
+
+    @keyframes photoRingGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .credit-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+
+    .credit-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: transform 0.5s ease;
+    }
+
+    .credit-card:hover .credit-photo img {
+      transform: scale(1.1);
+    }
+
+    .credit-name {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #e2e8f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .credit-name-ar {
+      font-size: 15px;
+      color: #94a3b8;
+      direction: rtl;
+      margin-bottom: 12px;
+    }
+
+    .credit-title {
+      font-size: 14px;
+      color: #A78BFA;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .credit-desc {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .credit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(167, 139, 250, 0.15);
+    }
+
+    .credit-card.vision {
+      border-color: rgba(167, 139, 250, 0.5);
+    }
+
+    .credit-card.developer {
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .credit-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .credit-badge.vision {
+      background: linear-gradient(135deg, #A78BFA, #7C3AED);
+      color: white;
+    }
+
+    .credit-badge.developer {
+      background: linear-gradient(135deg, #3B82F6, #2563EB);
+      color: white;
+    }
+
+    .credit-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      overflow: hidden;
+      border: 3px solid rgba(167, 139, 250, 0.4);
+    }
+
+    .credit-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .credit-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .credit-name-ar {
+      font-size: 14px;
+      color: var(--text-muted);
+      direction: rtl;
+      margin-bottom: 8px;
+    }
+
+    .credit-title {
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .credit-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .org-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .org-search input {
+        width: 100%;
+      }
+
+      .hierarchy-section {
+        padding: 20px;
+      }
+
+      .chairman-card {
+        padding: 24px;
+        min-width: auto;
+      }
+
+      .board-members {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .executive-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Detail Panel */
+    .detail-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .detail-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      height: 100%;
+      background: linear-gradient(180deg, #1A1A2E, #16162A);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .detail-panel.open {
+      right: 0;
+    }
+
+    .detail-header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .detail-header h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .detail-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .detail-body {
+      padding: 24px;
+    }
+
+    .section-hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+          </a>
+          <a href="organization.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+          <a href="presentations.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+            <span>Presentations</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">KYC Governance</div>
+          <a href="kyc_monitoring.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span>KYC Monitoring</span>
+          </a>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Tools</div>
+          <a href="document_viewer.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+            <span>Documents</span>
+          </a>
+          <a href="notifications_center.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span>Notifications</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Admin User</div>
+          <div class="user-role" id="user-role">IT Administration</div>
+        </div>
+        <button id="logout-btn" style="background: rgba(239,68,68,0.2); border: none; padding: 8px; border-radius: 8px; cursor: pointer; margin-left: auto;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="#ef4444"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="org-container">
+        <!-- Header -->
+        <div class="org-header">
+          <div>
+            <h1>🏛️ Organization Structure</h1>
+            <p>Qatar Islamic Bank - Executive Leadership & Operations</p>
+          </div>
+          <div class="org-controls">
+            <div class="org-search">
+              <input type="text" placeholder="Search employees..." id="org-search">
+            </div>
+          </div>
+        </div>
+
+        <!-- Hierarchy Container -->
+        <div class="hierarchy-container">
+
+          <!-- Back Button - Hidden by default -->
+          <div id="back-to-all" class="back-to-all-btn" style="display: none;">
+            <button onclick="showAllSections()">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              <span>Back to All Sections | العودة للكل</span>
+            </button>
+          </div>
+
+          <!-- BOARD OF DIRECTORS -->
+          <div class="hierarchy-section" id="section-board">
+            <div class="section-header" onclick="toggleSection('board')">
+              <div class="section-icon">🏛️</div>
+              <div class="section-title">
+                <h2 class="gold">Board of Directors</h2>
+                <p>Strategic Governance & Oversight</p>
+              </div>
+              <div class="section-toggle" id="toggle-board">▼</div>
+            </div>
+
+            <div class="section-content" id="content-board">
+              <!-- Chairman -->
+              <div class="chairman-container">
+                <div class="chairman-card" onclick="showDetail('BOD-001')">
+                  <div class="chairman-badge">👑 CHAIRMAN</div>
+                  <div class="chairman-photo">
+                    <img id="chairman-img" src="https://www.qib.com.qa/wp-content/uploads/2019/09/Sheikh-Jassim-Bin-Hamad-Bin-Jassim-Bin-Jaber-AI-Thani-new2.png" alt="Chairman" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="chairman-name">Sheikh Jassim bin Hamad bin Jassim bin Jaber Al Thani</div>
+                  <div class="chairman-name-ar">الشيخ جاسم بن حمد بن جاسم بن جبر آل ثاني</div>
+                  <div class="chairman-title">Chairman of the Board (Non-Executive)</div>
+                </div>
+                <div class="connector-down"></div>
+              </div>
+
+              <!-- Vice Chairmen -->
+              <div class="board-members" style="margin-bottom: 24px;">
+                <div class="board-member-card" onclick="showDetail('BOD-002')" style="border-left: 3px solid #F59E0B;">
+                  <div class="board-member-photo" data-initials="AL" data-color="orange">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2019/09/Mr.Abdullatif-Bin-Abdulla-Al-Mahmoud.jpg" alt="VC1" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Abdullatif bin Abdullah Al Mahmoud</div>
+                  <div class="board-member-title">Vice Chairman (Non-Executive)</div>
+                  <div class="board-member-badge">نائب رئيس مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-003')" style="border-left: 3px solid #F59E0B;">
+                  <div class="board-member-photo" data-initials="MI" data-color="orange">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2019/09/Mr.Mohamed-Bin-Issa-Al-Mohanadi.jpg" alt="VC2" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Mohamed bin Issa Al Mohannadi</div>
+                  <div class="board-member-title">Vice Chairman (Non-Executive)</div>
+                  <div class="board-member-badge">نائب رئيس مجلس الإدارة</div>
+                </div>
+              </div>
+
+              <!-- Board Members -->
+              <div class="board-members" id="board-members">
+                <div class="board-member-card" onclick="showDetail('BOD-004')">
+                  <div class="board-member-photo" data-initials="AR" data-color="gold">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2019/09/Mr.Abdul-Rahman-Abdulla-Abdul-Ghani.jpg" alt="AR" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Abdulrahman Abdullah Al Abdulghani</div>
+                  <div class="board-member-title">Board Member (Non-Executive)</div>
+                  <div class="board-member-badge">عضو مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-005')">
+                  <div class="board-member-photo" data-initials="MM" data-color="gold">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2019/09/Mr.Mansour-Al-Muslah.jpg" alt="MM" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Mansour Mohammed Al Musleh</div>
+                  <div class="board-member-title">Board Member (Non-Executive)</div>
+                  <div class="board-member-badge">عضو مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-006')">
+                  <div class="board-member-photo" data-initials="AB" data-color="gold">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2019/09/Mr.Abdulla-Bin-Saeed-Al-Ledah.jpg" alt="AB" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Abdullah bin Saeed Al Eidah</div>
+                  <div class="board-member-title">Board Member (Non-Executive)</div>
+                  <div class="board-member-badge">عضو مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-007')">
+                  <div class="board-member-photo" data-initials="NR" data-color="gold">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2019/09/Mr.Nasser-Rashid-S.Al-Kaabi.jpg" alt="NR" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Nasser Rashid Sarie Al Kaabi</div>
+                  <div class="board-member-title">Board Member (Non-Executive)</div>
+                  <div class="board-member-badge">عضو مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-008')">
+                  <div class="board-member-photo" data-initials="KT" data-color="gold">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2023/09/Khalifa-Bin-Thani-Bin-Abdullah-al-Thani.png" alt="KT" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Sheikh Khalifa Thani Abdullah Al Thani</div>
+                  <div class="board-member-title">Board Member (Non-Executive)</div>
+                  <div class="board-member-badge">عضو مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-009')">
+                  <div class="board-member-photo" data-initials="JF" data-color="gold">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2023/10/Sheikh-Jassim-Bin-Faisal.png" alt="JF" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Sheikh Jassim Faisal Qassim Al Thani</div>
+                  <div class="board-member-title">Board Member (Non-Executive)</div>
+                  <div class="board-member-badge">عضو مجلس الإدارة</div>
+                </div>
+                <div class="board-member-card" onclick="showDetail('BOD-010')" style="border-left: 3px solid #22C55E;">
+                  <div class="board-member-photo" data-initials="NA" data-color="green">
+                    <img src="https://www.qib.com.qa/wp-content/uploads/2023/10/Nasser-Abdullah-Saad-Al-Mahmoud-Al-Shareef.png" alt="NA" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="board-member-name">Mr. Nasser Abdullah Al Mahmoud Al Shareef</div>
+                  <div class="board-member-title">Board Member (Independent)</div>
+                  <div class="board-member-badge" style="background: rgba(34, 197, 94, 0.2); color: #22C55E;">عضو مستقل</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EXECUTIVE MANAGEMENT -->
+          <div class="hierarchy-section executive" id="section-executive">
+            <div class="section-header" onclick="toggleSection('executive')">
+              <div class="section-icon executive">👔</div>
+              <div class="section-title">
+                <h2>Executive Management</h2>
+                <p>C-Suite & Direct Reports to GCEO</p>
+              </div>
+              <div class="section-toggle" id="toggle-executive">▼</div>
+            </div>
+
+            <div class="section-content" id="content-executive">
+              <!-- GCEO -->
+              <div class="chairman-container">
+                <div class="chairman-card" onclick="showDetail('EXE-001')" style="border-color: rgba(0, 212, 255, 0.5);">
+                  <div class="chairman-badge" style="background: linear-gradient(135deg, #00D4FF, #0288D1);">👨‍💼 GROUP CEO</div>
+                  <div class="chairman-photo" data-initials="BG" data-color="cyan">
+                    <img src="assets/employees/GCEO.jpeg" alt="GCEO" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="chairman-name">Mr. Bassel Gamal</div>
+                  <div class="chairman-name-ar">السيد باسل جمال</div>
+                  <div class="chairman-title">Group Chief Executive Officer</div>
+                </div>
+                <div class="connector-down"></div>
+              </div>
+
+              <!-- C-Suite Grid -->
+              <div class="executive-grid">
+                <!-- COO -->
+                <div class="exec-card" onclick="showDetail('EXE-002')">
+                  <div class="exec-photo" data-initials="SU" data-color="green">
+                    <img src="assets/employees/Saleem.jpeg" alt="COO" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #22C55E, #16A34A);">COO</div>
+                    <div class="exec-name">Saleem Ulhaq</div>
+                    <div class="exec-title">Chief Operating Officer</div>
+                    <div class="exec-dept">Operations & IT</div>
+                  </div>
+                  <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('coo')">👥 View Team</button>
+                </div>
+
+                <!-- Chief Personal Banking -->
+                <div class="exec-card" onclick="showDetail('EXE-003')">
+                  <div class="exec-photo" data-initials="DA" data-color="orange">
+                    <img src="assets/employees/Anand.jpeg" alt="CPB" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706);">CPBO</div>
+                    <div class="exec-name">D. Anand</div>
+                    <div class="exec-title">Chief Personal Banking Officer</div>
+                    <div class="exec-dept">Personal Banking</div>
+                  </div>
+                  <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('personal')">👥 View Team</button>
+                </div>
+
+                <!-- Chief Wholesale Banking -->
+                <div class="exec-card" onclick="showDetail('EXE-004')">
+                  <div class="exec-photo" data-initials="TF" data-color="purple">
+                    <img src="assets/employees/Tariq.jpeg" alt="CWBO" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">CWBO</div>
+                    <div class="exec-name">Tarek Y. Fawzi</div>
+                    <div class="exec-title">Chief Wholesale Banking Officer</div>
+                    <div class="exec-dept">Wholesale Banking Group</div>
+                  </div>
+                </div>
+
+                <!-- CFO -->
+                <div class="exec-card" onclick="showDetail('EXE-005')">
+                  <div class="exec-photo" data-initials="GH" data-color="pink">
+                    <img src="assets/employees/Gourang.jpeg" alt="CFO" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #EC4899, #DB2777);">CFO</div>
+                    <div class="exec-name">Gourang Hemani</div>
+                    <div class="exec-title">Chief Finance Officer</div>
+                    <div class="exec-dept">Finance Division</div>
+                  </div>
+                </div>
+
+                <!-- CRO -->
+                <div class="exec-card" onclick="showDetail('EXE-006')">
+                  <div class="exec-photo" data-initials="RS" data-color="red">
+                    <img src="assets/employees/Rakesh.jpeg" alt="CRO" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #EF4444, #DC2626);">CRO</div>
+                    <div class="exec-name">Rakesh Sanghvi</div>
+                    <div class="exec-title">Chief Risk Officer</div>
+                    <div class="exec-dept">Risk Management</div>
+                  </div>
+                </div>
+
+                <!-- CSDO -->
+                <div class="exec-card" onclick="showDetail('EXE-007')">
+                  <div class="exec-photo" data-initials="CC" data-color="emerald">
+                    <img src="assets/employees/DINOS.jpeg" alt="CSDO" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #14B8A6, #0D9488);">CSDO</div>
+                    <div class="exec-name">Constantinos Constantinides</div>
+                    <div class="exec-title">Chief Strategy & Digital Officer</div>
+                    <div class="exec-dept">Strategy & Digital</div>
+                  </div>
+                  <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('strategy')">👥 View Team</button>
+                </div>
+
+                <!-- Head HR -->
+                <div class="exec-card" onclick="showDetail('EXE-008')">
+                  <div class="exec-photo" data-initials="KM" data-color="indigo">
+                    <img src="assets/employees/Khalifa.jpeg" alt="HCG" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #6366F1, #4F46E5);">HCG</div>
+                    <div class="exec-name">Khalefa Al-Mesalam</div>
+                    <div class="exec-title">Head of Human Capital Group</div>
+                    <div class="exec-dept">Human Resources</div>
+                  </div>
+                  <button class="exec-team-btn" onclick="event.stopPropagation();toggleTeam('hcg')">👥 View Team</button>
+                </div>
+
+                <!-- EM GCEO Office -->
+                <div class="exec-card" onclick="showDetail('EXE-009')">
+                  <div class="exec-photo" data-initials="RA" data-color="gold">
+                    <div class="exec-photo-placeholder">RA</div>
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #64748B, #475569);">EM</div>
+                    <div class="exec-name">Raafat Alrantisi</div>
+                    <div class="exec-title">Executive Manager – GCEO Office</div>
+                    <div class="exec-dept">GCEO Office</div>
+                  </div>
+                </div>
+
+                <!-- Executive Secretary -->
+                <div class="exec-card" onclick="showDetail('EXE-010')">
+                  <div class="exec-photo">
+                    <div class="exec-photo-placeholder">AJ</div>
+                  </div>
+                  <div class="exec-info">
+                    <div class="exec-badge" style="background: linear-gradient(135deg, #94A3B8, #64748B);">ES</div>
+                    <div class="exec-name">Anjitha J. Menon</div>
+                    <div class="exec-title">Executive Secretary – GCEO Office</div>
+                    <div class="exec-dept">GCEO Office</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COO Team Expansion -->
+              <div class="team-expand" id="team-coo">
+                <h4 style="margin: 0 0 16px; color: #22C55E; font-size: 14px;">👥 COO Direct Reports - Operations & IT</h4>
+                <div class="team-grid">
+                  <div class="team-member" onclick="showDetail('OPS-001')">
+                    <div class="team-member-photo">
+                      <img src="assets/employees/MR.Amit.png" alt="Amit" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>AM</div>'">
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Mr. Amit Malhotra</h5>
+                      <p>Head of Operations</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-002')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">KQ</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Khurram Qadir</h5>
+                      <p>Chief Information Officer</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-003')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AS</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Abdulhadi Alshahwani</h5>
+                      <p>AGM – Business Services</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-004')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Ahmar Azmi</h5>
+                      <p>SEM – Internal Control</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-005')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AK</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Arslan Khan</h5>
+                      <p>Head of Change Management</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-006')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">BB</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Bader Ba-Khamis</h5>
+                      <p>SEM – Service Delivery</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-007')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">NA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Nadim Azar</h5>
+                      <p>Head of Premises & Projects</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showDetail('OPS-008')">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">NM</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Nourhen Mediouni</h5>
+                      <p>Admin Support</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Personal Banking Team -->
+              <div class="team-expand" id="team-personal">
+                <h4 style="margin: 0 0 16px; color: #F59E0B; font-size: 14px;">👥 Personal Banking Team</h4>
+                <div class="team-grid">
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <img src="assets/employees/NABIT.jpeg" alt="Abdulrahman Alnabit" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #F59E0B, #D97706);\'>AN</div>'">
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Abdulrahman Alnabit</h5>
+                      <p>Head of Wealth Management</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">AY</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Ali Younes</h5>
+                      <p>Senior Manager</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <img src="assets/employees/AYMAN_ZAIN.jpeg" alt="Ayman Zein" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>AZ</div>'">
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Ayman Zein</h5>
+                      <p>Head of Alternative Channels</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">FS</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Faiza Saber</h5>
+                      <p>Admin Assistant</p>
+                    </div>
+                  </div>
+                  <div class="team-member" onclick="showBranchSection()" style="cursor: pointer;">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #EF4444, #DC2626);">HA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5 style="color: #EF4444;">Hassan Alnoaimi</h5>
+                      <p>Division Head - Branch & Sales</p>
+                      <div style="margin-top: 6px; font-size: 11px; color: #EF4444; display: flex; align-items: center; gap: 4px;">
+                        <span>🏪</span> Click to view Branch Division
+                      </div>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">SA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Saleh Anam</h5>
+                      <p>Head of Retail Products</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <img src="assets/employees/HASSAN.jpeg" alt="Hassan Al-Jafali" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>HJ</div>'">
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Hassan Al-Jafali</h5>
+                      <p>BO Reports Specialist</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Strategy Team Expansion -->
+              <div class="team-expand" id="team-strategy">
+                <h4 style="margin: 0 0 16px; color: #14B8A6; font-size: 14px;">👥 Strategy & Digital Office</h4>
+                <div class="team-grid">
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #3B82F6, #2563EB);">AT</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Andonis Theodosiou</h5>
+                      <p>T24 Program Director</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials" style="background: linear-gradient(135deg, #F59E0B, #D97706);">HM</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5 style="color: #F59E0B;">Hussein Mokdad</h5>
+                      <p>Head Marketing & Research / Digital Experience</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">IB</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Imad Bourhfir</h5>
+                      <p>Head Strategy, Innovation & Data Science</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">MA</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Mashaal Alderham</h5>
+                      <p>AGM – Communications</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">SC</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Suzan Chaker</h5>
+                      <p>Manager – Business Support</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Human Capital Group Team -->
+              <div class="team-expand" id="team-hcg">
+                <h4 style="margin: 0 0 16px; color: #6366F1; font-size: 14px;">👥 Human Capital Group</h4>
+                <div class="team-grid">
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <img src="assets/employees/Mohammed_Khaja.jpeg" alt="Khaja Mohammed" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #6366F1, #4F46E5);\'>KM</div>'">
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Khaja Mohammed</h5>
+                      <p>Head of Rewards, Performance & Operations</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">MF</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Muhammed Finos</h5>
+                      <p>Head of Talent Acquisition & Workforce Planning</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">RS</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Rudraksh Shekhar</h5>
+                      <p>Head of Learning & Development</p>
+                    </div>
+                  </div>
+                  <div class="team-member">
+                    <div class="team-member-photo">
+                      <div class="team-member-initials">WM</div>
+                    </div>
+                    <div class="team-member-info">
+                      <h5>Wadha Al-Marri</h5>
+                      <p>SEM – Government Affairs</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BRANCH & SALES DIVISION - Hidden, shown under Personal Banking Team -->
+          <div class="hierarchy-section" id="section-branch" style="--section-color: #EF4444; display: none;">
+            <div class="section-header" onclick="toggleSection('branch')">
+              <div class="section-icon" style="background: linear-gradient(135deg, #EF4444, #DC2626);">🏪</div>
+              <div class="section-title">
+                <h2 style="color: #EF4444;">Branch & Sales Division</h2>
+                <p>Under Division Head - Hassan Alnoaimi</p>
+              </div>
+              <div class="section-toggle" id="toggle-branch">▼</div>
+            </div>
+
+            <div class="section-content" id="content-branch">
+              <div class="ops-hierarchy">
+                <div class="ops-level">
+                  <div class="ops-level-label" style="background: rgba(239, 68, 68, 0.1);"><span style="color: #EF4444;">Division Head</span></div>
+                  <div class="ops-cards">
+                    <div class="ops-card featured" style="border-color: rgba(239, 68, 68, 0.5);">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder" style="background: linear-gradient(135deg, #EF4444, #DC2626);">HA</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4 style="color: #EF4444;">Hassan Alnoaimi</h4>
+                        <div class="title">Division Head - Branch & Sales</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ops-level">
+                  <div class="ops-level-label"><span>Direct Reports</span></div>
+                  <div class="ops-cards">
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">AM</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Abdulkader Al-Masri</h4>
+                        <div class="title">Head of Branch Business Development</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">KN</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Khalid Alnaemi</h4>
+                        <div class="title">Area Manager</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">MM</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Mahmoud Marzughi</h4>
+                        <div class="title">Area Manager</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">NJ</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Naela Aljabir</h4>
+                        <div class="title">Branch Manager</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">NR</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Nasser Radhi</h4>
+                        <div class="title">SM – Branch Analytics & Information</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">SS</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Shrooq Saleh</h4>
+                        <div class="title">Supervisor – Customer Service</div>
+                      </div>
+                    </div>
+                    <div class="ops-card">
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder">TR</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Tag Rahmtalla</h4>
+                        <div class="title">Head of Sales & Service</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPERATIONS DIVISION -->
+          <div class="hierarchy-section operations" id="section-operations">
+            <div class="section-header" onclick="toggleSection('operations')">
+              <div class="section-icon operations">⚙️</div>
+              <div class="section-title">
+                <h2>Operations Division</h2>
+                <p>Under Head of Operations - Mr. Amit Malhotra</p>
+              </div>
+              <div class="section-toggle" id="toggle-operations">▼</div>
+            </div>
+
+            <div class="section-content" id="content-operations">
+              <div class="ops-hierarchy">
+                <!-- Head of Operations -->
+                <div class="ops-level">
+                  <div class="ops-level-label"><span>Division Head</span></div>
+                  <div class="ops-cards">
+                    <div class="ops-card featured" onclick="showDetail('OPS-001')">
+                      <div class="ops-card-photo">
+                        <img src="assets/employees/MR.Amit.png" alt="Amit" onerror="this.parentElement.innerHTML='<div class=\'ops-card-photo-placeholder\'>AM</div>'">
+                      </div>
+                      <div class="ops-card-info">
+                        <h4 style="color: #A78BFA;">Mr. Amit Malhotra</h4>
+                        <div class="title">Head of Operations</div>
+                        <div class="team-btn" onclick="event.stopPropagation();toggleTeam('ops')">👥 View Direct Reports</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Operations Team Expansion -->
+                <div class="team-expand" id="team-ops">
+                  <h4 style="margin: 0 0 16px; color: #A78BFA; font-size: 14px;">👥 Operations Direct Reports under Amit Malhotra</h4>
+                  <div class="team-grid">
+                    <div class="team-member" onclick="showDetail('OPS-010')">
+                      <div class="team-member-photo">
+                        <div class="team-member-initials" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">AA</div>
+                      </div>
+                      <div class="team-member-info">
+                        <h5 style="color: #8B5CF6;">Adel Abusbeitan</h5>
+                        <p>SEM – Wholesale Banking Operations</p>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="toggleTeam('sayed')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/sayed elmahdy.jpeg" alt="Sayed" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #3B82F6, #2563EB);\'>SE</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5 style="color: #3B82F6;">Sayed ElMahdy</h5>
+                        <p>Head of Retail & Shared Services Operations</p>
+                        <div class="team-btn" style="margin-top: 4px;">👥 View Direct Reports (4)</div>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showDetail('CHG-001')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Arslan.jpeg" alt="Arslan" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #F59E0B, #D97706);\'>AR</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5 style="color: #F59E0B;">Arslan</h5>
+                        <p>Head of Change Management</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sayed ElMahdy's Direct Reports -->
+                <div class="team-expand" id="team-sayed">
+                  <h4 style="margin: 0 0 16px; color: #3B82F6; font-size: 14px;">👥 Retail & Shared Services Operations - Reports to Sayed ElMahdy</h4>
+                  <div class="team-grid">
+                    <div class="team-member" onclick="showDetail('MGR-001')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/MR.MOHANAD ALHASSAM.jpeg" alt="Mohanad" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #22C55E, #16A34A);\'>MH</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5 style="color: #22C55E;">Mohanad Al Hassan</h5>
+                        <p>Manager - WPS & Digital Back Office</p>
+                        <div class="team-btn" onclick="event.stopPropagation();toggleTeam('wps')">👥 View Team</div>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showDetail('MGR-002')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Youssef.jpeg" alt="Youssef" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>YK</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Youssef Al-Khuzain</h5>
+                        <p>Manager - Special Services</p>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showDetail('MGR-004')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Ashraf.jpeg" alt="Ashraf" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>AS</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Ashraf</h5>
+                        <p>Manager - Main Vault</p>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showDetail('MGR-006')">
+                      <div class="team-member-photo">
+                        <div class="team-member-initials" style="background: linear-gradient(135deg, #EF4444, #DC2626);">GE</div>
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Ghaleb Essam</h5>
+                        <p>Manager - CDD & EDD</p>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showDetail('MGR-003')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Kader.jpeg" alt="Qader" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #8B5CF6, #7C3AED);\'>QA</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Qader Abdulwahab</h5>
+                        <p>Manager - Remittance & Cheques</p>
+                      </div>
+                    </div>
+                    <div class="team-member" onclick="showDetail('MGR-005')">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Hanaa.jpeg" alt="Hanaa" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\' style=\'background: linear-gradient(135deg, #EC4899, #DB2777);\'>HK</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Hanaa Al-Khazai</h5>
+                        <p>Manager - Cards, Gov Salaries & Dividends</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Note: Department Managers are displayed above in Direct Reports section -->
+                <!-- This visual grouping removed to prevent duplicate organizational records -->
+
+                <!-- WPS Team -->
+                <div class="team-expand" id="team-wps">
+                  <h4 style="margin: 0 0 16px; color: #22C55E; font-size: 14px;">👥 WPS & Digital Back Office Team</h4>
+                  <div class="team-grid">
+                    <div class="team-member">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/syed shah.jpeg" alt="Syed Shah" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>SS</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Syed Shah</h5>
+                        <p>Auditor</p>
+                      </div>
+                    </div>
+                    <div class="team-member">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Ahmed.jpeg" alt="Ahmed Zaghmout" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>AZ</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Ahmed Zaghmout</h5>
+                        <p>Auditor</p>
+                      </div>
+                    </div>
+                    <div class="team-member">
+                      <div class="team-member-photo">
+                        <img src="assets/employees/Amer.jpeg" alt="Amer" onerror="this.parentElement.innerHTML='<div class=\'team-member-initials\'>AM</div>'">
+                      </div>
+                      <div class="team-member-info">
+                        <h5>Amer</h5>
+                        <p>Customer Service</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- IT Department -->
+                <div class="ops-level">
+                  <div class="ops-level-label"><span>Information Technology</span></div>
+                  <div class="ops-cards">
+                    <div class="ops-card" onclick="showDetail('IT-001')">
+                      <div class="ops-card-badge" style="background: linear-gradient(135deg, #06B6D4, #0891B2);">HEAD IT</div>
+                      <div class="ops-card-photo">
+                        <div class="ops-card-photo-placeholder" style="background: linear-gradient(135deg, #06B6D4, #0891B2);">KH</div>
+                      </div>
+                      <div class="ops-card-info">
+                        <h4>Khurram</h4>
+                        <div class="title">Head of IT</div>
+                        <div class="team-btn" onclick="event.stopPropagation();toggleTeam('it')">👥 View Team</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- IT Team -->
+                <div class="team-expand" id="team-it">
+                  <h4 style="margin: 0 0 16px; color: #06B6D4; font-size: 14px;">👥 IT Department Team</h4>
+                  <div class="team-grid">
+                    <!-- Team members moved to their respective departments -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CREDITS SECTION - Hidden -->
+          <div class="credits-section" style="display: none;">
+            <div class="credits-header">
+              <h3>🏆 EDD System Development Team</h3>
+              <p>نظام إدارة حالات التدقيق المعزز</p>
+            </div>
+            <div class="credits-grid">
+              <div class="credit-card vision" onclick="showDetail('OPS-001')">
+                <div class="credit-badge vision">👁️ LEADERSHIP</div>
+                <div class="credit-photo">
+                  <img src="assets/employees/MR.Amit.png" alt="Amit Malhotra" onerror="this.parentElement.innerHTML='AM'">
+                </div>
+                <div class="credit-name">Mr. Amit Malhotra</div>
+                <div class="credit-title">Head of Operations</div>
+                <div class="credit-desc">صاحب الرؤية والتوجيه</div>
+              </div>
+              <div class="credit-card developer" onclick="showTeamDetail('Mohanad Al Hassan', 'System Developer & Business Analyst', 'assets/employees/mohanad.jpeg', 'مهند الحسن')">
+                <div class="credit-badge developer">⚡ DEVELOPER</div>
+                <div class="credit-photo" style="border-color: rgba(59, 130, 246, 0.4);">
+                  <img src="assets/employees/MR.MOHANAD ALHASSAM.jpeg" alt="Mohanad Al Hassan" onerror="this.parentElement.innerHTML='MA'">
+                </div>
+                <div class="credit-name">Mohanad Al Hassan</div>
+                <div class="credit-name-ar">مهند الحسن</div>
+                <div class="credit-title">System Developer & Business Analyst</div>
+                <div class="credit-desc">مطور ومحلل نظام EDD</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-header">
+      <h3>Employee Details</h3>
+      <button class="detail-close" onclick="closeDetail()">&times;</button>
+    </div>
+    <div class="detail-body" id="detail-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <script>
+    // Current focused section (global)
+    let currentFocusedSection = null;
+
+    // Session check
+    document.addEventListener('DOMContentLoaded', () => {
+      const sessionData = sessionStorage.getItem('edd_session');
+      if (!sessionData) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      let session;
+      try {
+        session = JSON.parse(sessionData);
+        if (!session.authenticated || !session.user) {
+          window.location.replace('login.html');
+          return;
+        }
+      } catch (e) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      const currentUser = session.user;
+      document.getElementById('user-name').textContent = currentUser.name || 'User';
+      document.getElementById('user-role').textContent = currentUser.role || 'Staff';
+      document.getElementById('user-avatar').textContent = getInitials(currentUser.name);
+
+      // Logout handler
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        sessionStorage.removeItem('edd_session');
+        sessionStorage.removeItem('edd_user');
+        window.location.replace('login.html');
+      });
+
+      // Search handler
+      document.getElementById('org-search')?.addEventListener('input', handleSearch);
+
+      // Escape key to go back to all sections
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && currentFocusedSection) {
+          showAllSections();
+        }
+      });
+    });
+
+    function getInitials(name) {
+      if (!name) return '??';
+      const parts = name.replace(/Mr\.|Mrs\.|Ms\.|Dr\./gi, '').trim().split(' ');
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+
+    // Toggle section - Focus on selected section and hide others
+    function toggleSection(sectionId) {
+      const allSections = document.querySelectorAll('.hierarchy-section');
+      const selectedSection = document.getElementById('section-' + sectionId);
+      const backBtn = document.getElementById('back-to-all');
+      const content = document.getElementById('content-' + sectionId);
+      const toggle = document.getElementById('toggle-' + sectionId);
+      
+      // If clicking on already focused section, just toggle its content
+      if (currentFocusedSection === sectionId) {
+        if (content.classList.contains('section-hidden')) {
+          content.classList.remove('section-hidden');
+          toggle.classList.remove('collapsed');
+        } else {
+          content.classList.add('section-hidden');
+          toggle.classList.add('collapsed');
+        }
+        return;
+      }
+      
+      // Focus on selected section
+      currentFocusedSection = sectionId;
+      
+      // Hide all sections except the selected one
+      allSections.forEach(section => {
+        if (section.id === 'section-' + sectionId) {
+          section.classList.remove('hidden-section');
+          section.classList.add('focused-section');
+          // Ensure content is visible
+          const sectionContent = section.querySelector('.section-content');
+          const sectionToggle = section.querySelector('.section-toggle');
+          if (sectionContent) {
+            sectionContent.classList.remove('section-hidden');
+          }
+          if (sectionToggle) {
+            sectionToggle.classList.remove('collapsed');
+          }
+        } else {
+          section.classList.add('hidden-section');
+          section.classList.remove('focused-section');
+        }
+      });
+      
+      // Show back button
+      backBtn.style.display = 'block';
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show all sections
+    function showAllSections() {
+      const allSections = document.querySelectorAll('.hierarchy-section');
+      const backBtn = document.getElementById('back-to-all');
+      
+      currentFocusedSection = null;
+      
+      // Show all sections (except branch which should stay hidden)
+      allSections.forEach(section => {
+        if (section.id !== 'section-branch') {
+          section.classList.remove('hidden-section');
+          section.classList.remove('focused-section');
+        }
+      });
+      
+      // Hide back button
+      backBtn.style.display = 'none';
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Show Branch Section (special case - from Personal Banking team)
+    function showBranchSection() {
+      const branchSection = document.getElementById('section-branch');
+      if (branchSection) {
+        branchSection.style.display = 'block';
+        toggleSection('branch');
+      }
+    }
+
+    // Toggle team expansion
+    function toggleTeam(teamId) {
+      const team = document.getElementById('team-' + teamId);
+      if (team) {
+        team.classList.toggle('active');
+      }
+    }
+
+    // Search handler
+    function handleSearch(e) {
+      const query = e.target.value.toLowerCase().trim();
+      
+      // Search through all cards
+      document.querySelectorAll('.chairman-card, .board-member-card, .exec-card, .ops-card, .team-member, .credit-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(query) || !query ? '' : 'none';
+      });
+    }
+
+    // Show employee detail
+    function showDetail(empId) {
+      const panel = document.getElementById('detail-panel');
+      const overlay = document.getElementById('detail-overlay');
+      const body = document.getElementById('detail-body');
+      
+      const emp = getEmployeeData(empId);
+      
+      if (!emp) {
+        body.innerHTML = `<p style="color: var(--text-muted);">Employee details not available</p>`;
+      } else {
+        body.innerHTML = `
+          ${emp.photo ? 
+            `<img src="${emp.photo}" style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; display: block; object-fit: cover; border: 3px solid var(--accent);" alt="${emp.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, var(--accent), #0288D1); display: none; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: white;">${getInitials(emp.name)}</div>` :
+            `<div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, var(--accent), #0288D1); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: white;">${getInitials(emp.name)}</div>`
+          }
+          ${emp.specialTag ? `<div style="text-align: center; margin-bottom: 12px;"><span style="padding: 6px 16px; background: ${getTagBackground(emp.specialTag)}; border-radius: 20px; font-size: 11px; color: white; font-weight: 600;">${emp.specialTag}</span></div>` : ''}
+          <h3 style="text-align: center; font-size: 20px; margin: 0 0 4px; color: white;">${emp.name}</h3>
+          ${emp.nameAr ? `<p style="text-align: center; font-size: 14px; color: var(--text-muted); direction: rtl; margin: 0 0 8px;">${emp.nameAr}</p>` : ''}
+          <p style="text-align: center; font-size: 14px; color: var(--accent); margin: 0 0 24px;">${emp.title}</p>
+          
+          <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <h4 style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px; text-transform: uppercase; letter-spacing: 1px;">Information</h4>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: var(--text-muted); font-size: 13px;">ID</span>
+              <span style="color: white; font-size: 13px;">${emp.id}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: var(--text-muted); font-size: 13px;">Department</span>
+              <span style="color: white; font-size: 13px;">${emp.department}</span>
+            </div>
+            ${emp.reportsTo ? `
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted); font-size: 13px;">Reports To</span>
+              <span style="color: white; font-size: 13px;">${emp.reportsTo}</span>
+            </div>
+            ` : ''}
+          </div>
+        `;
+      }
+      
+      panel.classList.add('open');
+      overlay.classList.add('visible');
+    }
+
+    // Show team member detail
+    function showTeamDetail(name, title, photo, nameAr) {
+      const panel = document.getElementById('detail-panel');
+      const overlay = document.getElementById('detail-overlay');
+      const body = document.getElementById('detail-body');
+      
+      const isDeveloper = name === 'Mohanad Al Hassan';
+      
+      body.innerHTML = `
+        ${photo ? 
+          `<img src="${photo}" style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; display: block; object-fit: cover; border: 3px solid ${isDeveloper ? '#3B82F6' : 'var(--accent)'};" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+           <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, ${isDeveloper ? '#3B82F6, #2563EB' : 'var(--accent), #0288D1'}); display: none; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: white;">${getInitials(name)}</div>` :
+          `<div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; background: linear-gradient(135deg, ${isDeveloper ? '#3B82F6, #2563EB' : 'var(--accent), #0288D1'}); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; color: white;">${getInitials(name)}</div>`
+        }
+        ${isDeveloper ? `<div style="text-align: center; margin-bottom: 12px;"><span style="padding: 6px 16px; background: linear-gradient(135deg, #3B82F6, #2563EB); border-radius: 20px; font-size: 11px; color: white; font-weight: 600;">⚡ EDD SYSTEM DEVELOPER</span></div>` : ''}
+        <h3 style="text-align: center; font-size: 20px; margin: 0 0 4px; color: ${isDeveloper ? '#3B82F6' : 'white'};">${name}</h3>
+        ${nameAr ? `<p style="text-align: center; font-size: 14px; color: var(--text-muted); direction: rtl; margin: 0 0 8px;">${nameAr}</p>` : ''}
+        <p style="text-align: center; font-size: 14px; color: var(--accent); margin: 0 0 24px;">${title}</p>
+        
+        <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+          <h4 style="font-size: 12px; color: var(--text-muted); margin: 0 0 12px; text-transform: uppercase; letter-spacing: 1px;">Information</h4>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 13px;">Department</span>
+            <span style="color: white; font-size: 13px;">WPS & Digital Back Office</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 13px;">Reports To</span>
+            <span style="color: white; font-size: 13px;">Sayed ElMahdy</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-muted); font-size: 13px;">Location</span>
+            <span style="color: white; font-size: 13px;">QIB Head Office</span>
+          </div>
+        </div>
+        
+        ${isDeveloper ? `
+        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 16px;">
+          <h4 style="font-size: 12px; color: #3B82F6; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 1px;">🚀 Key Project</h4>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 13px;">Project</span>
+            <span style="color: #3B82F6; font-size: 13px; font-weight: 600;">EDD Case Management System</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="color: var(--text-muted); font-size: 13px;">Technologies</span>
+            <span style="color: white; font-size: 13px;">JavaScript, HTML5, CSS3</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-muted); font-size: 13px;">Role</span>
+            <span style="color: white; font-size: 13px;">Full-Stack Development</span>
+          </div>
+        </div>
+        ` : ''}
+      `;
+      
+      panel.classList.add('open');
+      overlay.classList.add('visible');
+    }
+
+    function closeDetail() {
+      document.getElementById('detail-panel').classList.remove('open');
+      document.getElementById('detail-overlay').classList.remove('visible');
+    }
+
+    // Employee data
+    function getEmployeeData(id) {
+      const employees = {
+        'BOD-001': { id: 'BOD-001', name: 'Sheikh Jassim bin Hamad Al Thani', nameAr: 'الشيخ جاسم بن حمد آل ثاني', title: 'Chairman of the Board', department: 'Board of Directors', specialTag: '👑 CHAIRMAN' },
+        'BOD-002': { id: 'BOD-002', name: 'Sheikh Abdulrahman bin Hamad Al Thani', nameAr: 'الشيخ عبدالرحمن بن حمد آل ثاني', title: 'Vice Chairman', department: 'Board of Directors', specialTag: 'VICE CHAIRMAN' },
+        'BOD-003': { id: 'BOD-003', name: 'Mr. Khalid Al-Subeai', nameAr: 'السيد خالد السبيعي', title: 'Board Member', department: 'Board of Directors' },
+        'BOD-004': { id: 'BOD-004', name: 'Mr. Fahad Al-Khalifa', nameAr: 'السيد فهد الخليفة', title: 'Board Member', department: 'Board of Directors' },
+        'BOD-005': { id: 'BOD-005', name: 'Mr. Nasser Al-Misnad', nameAr: 'السيد ناصر المسند', title: 'Board Member', department: 'Board of Directors' },
+        'BOD-006': { id: 'BOD-006', name: 'Mr. Ahmed Al-Asmakh', nameAr: 'السيد أحمد الأسمخ', title: 'Independent Board Member', department: 'Board of Directors' },
+        'BOD-007': { id: 'BOD-007', name: 'Mr. Saad Al-Muhannadi', nameAr: 'السيد سعد المهندي', title: 'Independent Board Member', department: 'Board of Directors' },
+        'EXE-001': { id: 'EXE-001', name: 'Mr. Bassel Gamal', title: 'Group Chief Executive Officer', department: 'Executive Leadership', photo: 'assets/employees/GCEO.jpeg', specialTag: 'GROUP CEO', reportsTo: 'Board of Directors' },
+        'GM-001': { id: 'GM-001', name: 'Saleem Ulhiq', title: 'Chief Operating Officer', department: 'Operations & Technology', photo: 'assets/employees/Saleem.jpeg', specialTag: 'COO', reportsTo: 'GCEO' },
+        'GM-002': { id: 'GM-002', name: 'D. Anand', title: 'General Manager - Retail Banking', department: 'Retail Banking', photo: 'assets/employees/Anand.jpeg', reportsTo: 'GCEO' },
+        'GM-003': { id: 'GM-003', name: 'Tariq Fawzi', title: 'General Manager - Wholesale Banking', department: 'Wholesale Banking', photo: 'assets/employees/Tariq.jpeg', reportsTo: 'GCEO' },
+        'GM-004': { id: 'GM-004', name: 'Gourang', title: 'General Manager - Finance', department: 'Finance', photo: 'assets/employees/Gourang.jpeg', reportsTo: 'GCEO' },
+        'GM-005': { id: 'GM-005', name: 'Rakesh', title: 'General Manager - Risk', department: 'Risk Management', photo: 'assets/employees/Rakesh.jpeg', reportsTo: 'GCEO' },
+        'GM-006': { id: 'GM-006', name: 'Dinos', title: 'General Manager - Strategy & Projects', department: 'Strategy', photo: 'assets/employees/DINOS.jpeg', reportsTo: 'GCEO' },
+        'GM-007': { id: 'GM-007', name: 'Khalifa Al-Muslim', title: 'Head of HR Group', department: 'Human Resources', photo: 'assets/employees/Khalifa.jpeg', reportsTo: 'GCEO' },
+        'OPS-001': { id: 'OPS-001', name: 'Mr. Amit Malhotra', title: 'Head of Operations', department: 'Operations Division', photo: 'assets/employees/MR.Amit.png', reportsTo: 'COO' },
+        'IT-001': { id: 'IT-001', name: 'Khurram', title: 'Head of IT', department: 'Information Technology', reportsTo: 'COO' },
+        'MGR-001': { id: 'MGR-001', name: 'Mohanad Al Hassan', title: 'Manager - WPS & DBO', department: 'WPS & Digital Back Office', photo: 'assets/employees/MR.MOHANAD ALHASSAM.jpeg', specialTag: '🚀 PILOT', reportsTo: 'Head of Operations' },
+        'MGR-002': { id: 'MGR-002', name: 'Youssef Al-Khuzain', title: 'Manager - Special Services', department: 'Special Services', photo: 'assets/employees/Youssef.jpeg', reportsTo: 'Head of Operations' },
+        'MGR-004': { id: 'MGR-004', name: 'Ashraf', title: 'Manager - Main Vault', department: 'Main Vault', photo: 'assets/employees/Ashraf.jpeg', reportsTo: 'Head of Operations' },
+        'MGR-006': { id: 'MGR-006', name: 'Ghaleb Essam', title: 'Manager - CDD & EDD Operations', department: 'CDD & EDD Operations', specialTag: 'CDD/EDD', reportsTo: 'Sayed ElMahdy' },
+        'MGR-003': { id: 'MGR-003', name: 'Qader Abdulwahab', title: 'Manager - Remittance & Cheques', department: 'Remittance & Cheques', photo: 'assets/employees/Kader.jpeg', reportsTo: 'Sayed ElMahdy' },
+        'MGR-005': { id: 'MGR-005', name: 'Hanaa Al-Khazai', title: 'Manager - Cards, Government Salaries & Shareholders Dividends', department: 'Cards & Government Services', photo: 'assets/employees/Hanaa.jpeg', reportsTo: 'Sayed ElMahdy' }
+      };
+      return employees[id] || null;
+    }
+
+    function getTagBackground(tag) {
+      const colors = {
+        '👑 CHAIRMAN': 'linear-gradient(135deg, #D4AF37, #9A7B0A)',
+        'VICE CHAIRMAN': 'linear-gradient(135deg, #C0A030, #8A6B0A)',
+        'GROUP CEO': 'linear-gradient(135deg, #00D4FF, #0288D1)',
+        'COO': 'linear-gradient(135deg, #22C55E, #16A34A)',
+
+        '🚀 PILOT': 'linear-gradient(135deg, #22C55E, #16A34A)',
+        'CDD/EDD': 'linear-gradient(135deg, #EF4444, #DC2626)'
+      };
+      return colors[tag] || 'linear-gradient(135deg, var(--accent), #0288D1)';
+    }
+
+    // Close panel on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDetail();
+      }
+    });
+
+    // Initialize image error handling
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        initImageFallbacks();
+      }, 500);
+    });
+
+    function initImageFallbacks() {
+      // Handle all images with ID
+      const imgElements = [
+        { id: 'chairman-img', fallback: 'JT', color: 'linear-gradient(135deg,#D4AF37,#F5D95C)' },
+        // Add more images as needed
+      ];
+
+      imgElements.forEach(imgConfig => {
+        const img = document.getElementById(imgConfig.id);
+        if (img) {
+          img.addEventListener('error', function() {
+            this.style.display = 'none';
+            const div = document.createElement('div');
+            div.style.cssText = `
+              width:100%;height:100%;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              background:${imgConfig.color};
+              font-size:48px;
+              font-weight:800;
+              color:#000;
+              border-radius:inherit;
+            `;
+            div.textContent = imgConfig.fallback;
+            this.parentElement.appendChild(div);
+          });
+
+          // Trigger error if image doesn't load within 3 seconds
+          setTimeout(() => {
+            if (!img.complete || img.naturalHeight === 0) {
+              img.dispatchEvent(new Event('error'));
+            }
+          }, 3000);
+        }
+      });
+
+      // Handle Chairman photos (e.g., GCEO in chairman-photo div)
+      handlePhotosWithFallback('chairman-photo');
+      // Handle all Board member photos
+      handlePhotosWithFallback('board-member-photo');
+      // Handle all Exec photos
+      handlePhotosWithFallback('exec-photo');
+      // Handle all ops photos
+      handlePhotosWithFallback('ops-card-photo');
+    }
+
+    function handlePhotosWithFallback(className) {
+      const colorMap = {
+        'gold': 'linear-gradient(135deg,#D4AF37,#F5D95C)',
+        'orange': 'linear-gradient(135deg,#F59E0B,#D97706)',
+        'cyan': 'linear-gradient(135deg,#00D4FF,#0288D1)',
+        'purple': 'linear-gradient(135deg,#A78BFA,#7C3AED)',
+        'green': 'linear-gradient(135deg,#22C55E,#16A34A)',
+        'pink': 'linear-gradient(135deg,#EC4899,#DB2777)',
+        'teal': 'linear-gradient(135deg,#06B6D4,#0891B2)',
+        'red': 'linear-gradient(135deg,#EF4444,#DC2626)',
+        'emerald': 'linear-gradient(135deg,#14B8A6,#0D9488)',
+        'indigo': 'linear-gradient(135deg,#6366F1,#4F46E5)'
+      };
+
+      const createFallback = (photoDiv) => {
+        // Only create fallback if not already created
+        if (photoDiv.querySelector('.photo-fallback')) return;
+        
+        const img = photoDiv.querySelector('img');
+        if (img) img.style.display = 'none';
+        
+        const initials = photoDiv.getAttribute('data-initials') || '?';
+        const colorType = photoDiv.getAttribute('data-color') || 'gold';
+        const bgColor = colorMap[colorType] || colorMap['gold'];
+
+        const fallback = document.createElement('div');
+        fallback.className = 'photo-fallback';
+        fallback.style.cssText = `
+          width:100%;height:100%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          background:${bgColor};
+          font-size:20px;
+          font-weight:800;
+          color:#fff;
+          text-shadow:0 2px 4px rgba(0,0,0,0.3);
+          position:absolute;
+          top:0;left:0;
+          z-index:10;
+          border-radius:inherit;
+        `;
+        fallback.textContent = initials;
+        photoDiv.style.position = 'relative';
+        photoDiv.appendChild(fallback);
+      };
+
+      document.querySelectorAll(`.${className}`).forEach(photoDiv => {
+        const img = photoDiv.querySelector('img');
+        if (img) {
+          // Error handler
+          img.addEventListener('error', () => createFallback(photoDiv));
+
+          // Check immediately if already failed
+          if (img.complete && img.naturalHeight === 0) {
+            createFallback(photoDiv);
+          }
+
+          // Staggered fallback checks for slow/blocked image loads
+          setTimeout(() => {
+            if (!img.naturalHeight) {
+              createFallback(photoDiv);
+            }
+          }, 1200);
+
+          setTimeout(() => {
+            if (!img.naturalHeight) {
+              createFallback(photoDiv);
+            }
+          }, 3500);
+
+          setTimeout(() => {
+            if (!img.naturalHeight) {
+              createFallback(photoDiv);
+            }
+          }, 7000);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

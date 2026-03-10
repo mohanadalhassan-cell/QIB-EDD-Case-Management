@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — Retail Banking</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    /* Segment Tabs */
+    .segment-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: rgba(255,255,255,0.02);
+      padding: 8px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .segment-tab {
+      flex: 1;
+      padding: 16px 24px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .segment-tab:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .segment-tab.active {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--accent);
+    }
+    .segment-tab.mass.active {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05));
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #22C55E;
+    }
+    .segment-tab.tamayuz.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(168, 85, 247, 0.05));
+      border-color: rgba(168, 85, 247, 0.3);
+      color: #A855F7;
+    }
+    .segment-tab.private.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #F59E0B;
+    }
+    .segment-tab-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .segment-tab.mass .segment-tab-icon { background: rgba(34, 197, 94, 0.1); }
+    .segment-tab.tamayuz .segment-tab-icon { background: rgba(168, 85, 247, 0.1); }
+    .segment-tab.private .segment-tab-icon { background: rgba(245, 158, 11, 0.1); }
+    .segment-tab-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .segment-tab-count {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
+    }
+    .segment-tab.active .segment-tab-count {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 1200px) {
+      .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .dashboard-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s ease;
+    }
+    .dashboard-card:hover {
+      border-color: rgba(0, 212, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    .dashboard-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .dashboard-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dashboard-card-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+    .dashboard-card-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .dashboard-card-trend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .trend-up { color: #22C55E; }
+    .trend-down { color: #EF4444; }
+
+    /* Queue Section */
+    .queue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .queue-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+    }
+    .queue-badge {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .queue-badge.pending {
+      background: rgba(255, 82, 82, 0.1);
+      color: #FF5252;
+      border: 1px solid rgba(255, 82, 82, 0.3);
+    }
+
+    /* Case Cards */
+    .case-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .case-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .case-card:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+    .case-card.urgent {
+      border-left: 4px solid #EF4444;
+    }
+    .case-card.warning {
+      border-left: 4px solid #F59E0B;
+    }
+    .case-priority {
+      width: 8px;
+      height: 40px;
+      border-radius: 4px;
+    }
+    .case-priority.high { background: #EF4444; }
+    .case-priority.medium { background: #F59E0B; }
+    .case-priority.low { background: #22C55E; }
+    .case-info {
+      flex: 1;
+    }
+    .case-id {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .case-customer {
+      font-size: 15px;
+      font-weight: 500;
+      color: white;
+      margin-bottom: 4px;
+    }
+    .case-rim {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .case-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .case-days {
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .case-days.overdue {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .case-days.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .case-days.normal {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22C55E;
+    }
+    .case-status {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .case-action {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), #0288D1);
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .case-action:hover {
+      transform: scale(1.05);
+    }
+
+    /* Two Column Layout */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 1200px) {
+      .content-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Activity Feed */
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .activity-icon.review { background: rgba(0, 212, 255, 0.1); }
+    .activity-icon.complete { background: rgba(34, 197, 94, 0.1); }
+    .activity-icon.escalate { background: rgba(239, 68, 68, 0.1); }
+    .activity-content {
+      flex: 1;
+    }
+    .activity-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .activity-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Retail Banking</span>
+            <span class="nav-badge">12</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Tools</div>
+          <a href="document_viewer.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+            <span>Documents</span>
+          </a>
+          <a href="notifications_center.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span>Notifications</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User</div>
+          <div class="user-role" id="user-role">Role</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Retail Banking - EDD Queue</h1>
+          <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a> / <span>Retail Banking</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="header-btn" onclick="refreshData()" title="Refresh">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          </button>
+          <button class="header-btn" id="logout-btn" title="Logout">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Segment Tabs -->
+        <div class="segment-tabs">
+          <button class="segment-tab mass active" onclick="switchSegment('mass')" id="tab-mass">
+            <div class="segment-tab-icon">🏦</div>
+            <div class="segment-tab-name">Mass Banking</div>
+            <div class="segment-tab-count"><span id="mass-count">5</span> Cases</div>
+          </button>
+          <button class="segment-tab tamayuz" onclick="switchSegment('tamayuz')" id="tab-tamayuz">
+            <div class="segment-tab-icon">⭐</div>
+            <div class="segment-tab-name">Tamayuz Banking</div>
+            <div class="segment-tab-count"><span id="tamayuz-count">4</span> Cases</div>
+          </button>
+          <button class="segment-tab private" onclick="switchSegment('private')" id="tab-private">
+            <div class="segment-tab-icon">👑</div>
+            <div class="segment-tab-name">Private Banking</div>
+            <div class="segment-tab-count"><span id="private-count">3</span> Cases</div>
+          </button>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div>
+                <div class="dashboard-card-value" id="stat-pending">7</div>
+                <div class="dashboard-card-label">Pending Review</div>
+              </div>
+              <div class="dashboard-card-icon" style="background: rgba(255, 82, 82, 0.1);">
+                <svg viewBox="0 0 24 24" fill="#FF5252" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+              </div>
+            </div>
+            <div class="dashboard-card-trend trend-up">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M7 14l5-5 5 5z"/></svg>
+              +2 from yesterday
+            </div>
+          </div>
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div>
+                <div class="dashboard-card-value" id="stat-inprogress">3</div>
+                <div class="dashboard-card-label">In Progress</div>
+              </div>
+              <div class="dashboard-card-icon" style="background: rgba(0, 212, 255, 0.1);">
+                <svg viewBox="0 0 24 24" fill="#00D4FF" width="24" height="24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+              </div>
+            </div>
+            <div class="dashboard-card-trend" style="color: var(--text-muted);">
+              Active reviews
+            </div>
+          </div>
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div>
+                <div class="dashboard-card-value" id="stat-overdue">2</div>
+                <div class="dashboard-card-label">Overdue (SLA)</div>
+              </div>
+              <div class="dashboard-card-icon" style="background: rgba(245, 158, 11, 0.1);">
+                <svg viewBox="0 0 24 24" fill="#F59E0B" width="24" height="24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+              </div>
+            </div>
+            <div class="dashboard-card-trend trend-down">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M7 10l5 5 5-5z"/></svg>
+              Needs attention
+            </div>
+          </div>
+          <div class="dashboard-card">
+            <div class="dashboard-card-header">
+              <div>
+                <div class="dashboard-card-value" id="stat-completed">18</div>
+                <div class="dashboard-card-label">Completed (Month)</div>
+              </div>
+              <div class="dashboard-card-icon" style="background: rgba(34, 197, 94, 0.1);">
+                <svg viewBox="0 0 24 24" fill="#22C55E" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              </div>
+            </div>
+            <div class="dashboard-card-trend trend-up">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M7 14l5-5 5 5z"/></svg>
+              +5 vs last month
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+          <!-- Queue Section -->
+          <div class="card">
+            <div class="card-header">
+              <div class="queue-header" style="width: 100%;">
+                <div>
+                  <h2 class="queue-title" id="queue-title">Mass Banking Queue</h2>
+                  <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Pending EDD cases requiring review</p>
+                </div>
+                <span class="queue-badge pending" id="queue-badge">5 Pending</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="case-cards" id="case-list">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Quick Actions -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Quick Actions</h2>
+              </div>
+              <div class="card-body">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <button onclick="window.location.href='edd_case.html'" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 10px; color: white; cursor: pointer; transition: all 0.3s;">
+                    <span style="font-size: 20px;">📋</span>
+                    <span style="font-size: 14px;">View All Cases</span>
+                  </button>
+                  <button onclick="requestDocs()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 10px; color: white; cursor: pointer; transition: all 0.3s;">
+                    <span style="font-size: 20px;">📄</span>
+                    <span style="font-size: 14px;">Request Documents</span>
+                  </button>
+                  <button onclick="contactCustomer()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 10px; color: white; cursor: pointer; transition: all 0.3s;">
+                    <span style="font-size: 20px;">📞</span>
+                    <span style="font-size: 14px;">Contact Customer</span>
+                  </button>
+                  <button onclick="escalateCase()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px; color: white; cursor: pointer; transition: all 0.3s;">
+                    <span style="font-size: 20px;">⚠️</span>
+                    <span style="font-size: 14px;">Escalate to CDD</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Recent Activity</h2>
+              </div>
+              <div class="card-body">
+                <div class="activity-item">
+                  <div class="activity-icon review">📝</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Case EDD-2024-001242 updated</div>
+                    <div class="activity-time">5 minutes ago</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon complete">✅</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Case EDD-2024-001238 completed</div>
+                    <div class="activity-time">1 hour ago</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon escalate">⚠️</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Case EDD-2024-001245 escalated</div>
+                    <div class="activity-time">2 hours ago</div>
+                  </div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-icon review">📄</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Documents received for RIM789012</div>
+                    <div class="activity-time">3 hours ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/mock_data.js?v=1.2"></script>
+  <script>
+    // Segment Data
+    const segmentCases = {
+      mass: [
+        { id: 'EDD-2024-001242', customer: 'Mohammed Ali Hassan', rim: 'RIM010234', risk: 'high', days: 12, status: 'Pending Review', trigger: 'High Risk Nationality' },
+        { id: 'EDD-2024-001243', customer: 'Fatima Al-Rashid', rim: 'RIM011345', risk: 'high', days: 8, status: 'Pending Review', trigger: 'Large Cash Deposit' },
+        { id: 'EDD-2024-001244', customer: 'Ahmed Al-Mansouri', rim: 'RIM012456', risk: 'medium', days: 5, status: 'In Progress', trigger: 'Occupation Risk' },
+        { id: 'EDD-2024-001250', customer: 'Khalid Al-Thani', rim: 'RIM018012', risk: 'medium', days: 3, status: 'Pending Review', trigger: 'KYC Update Required' },
+        { id: 'EDD-2024-001251', customer: 'Sara Al-Emadi', rim: 'RIM019123', risk: 'low', days: 2, status: 'In Progress', trigger: 'Periodic Review' }
+      ],
+      tamayuz: [
+        { id: 'EDD-2024-001245', customer: 'Yousef Al-Naimi', rim: 'RIM013567', risk: 'high', days: 15, status: 'Pending Review', trigger: 'PEP Related' },
+        { id: 'EDD-2024-001246', customer: 'Noor Al-Kaabi', rim: 'RIM014678', risk: 'high', days: 10, status: 'Pending Review', trigger: 'Unusual Transaction' },
+        { id: 'EDD-2024-001252', customer: 'Omar Al-Sulaiti', rim: 'RIM020234', risk: 'medium', days: 6, status: 'In Progress', trigger: 'Source of Funds' },
+        { id: 'EDD-2024-001253', customer: 'Mariam Al-Hajri', rim: 'RIM021345', risk: 'medium', days: 4, status: 'Pending Review', trigger: 'Activity Pattern' }
+      ],
+      private: [
+        { id: 'EDD-2024-001247', customer: 'Sheikh Mohammed Al-Attiyah', rim: 'RIM015789', risk: 'high', days: 18, status: 'Pending Review', trigger: 'PEP - Senior Official' },
+        { id: 'EDD-2024-001248', customer: 'Dr. Aisha Al-Kuwari', rim: 'RIM016890', risk: 'high', days: 14, status: 'Pending Review', trigger: 'High Value Account' },
+        { id: 'EDD-2024-001249', customer: 'Hassan Al-Mohannadi', rim: 'RIM017901', risk: 'medium', days: 7, status: 'In Progress', trigger: 'International Transfers' }
+      ]
+    };
+
+    const segmentNames = {
+      mass: 'Mass Banking',
+      tamayuz: 'Tamayuz Banking',
+      private: 'Private Banking'
+    };
+
+    let currentSegment = 'mass';
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserInfo();
+      updateCounts();
+      renderCases();
+      setupLogout();
+    });
+
+    function loadUserInfo() {
+      const session = JSON.parse(localStorage.getItem('qibEddSession') || '{}');
+      if (session.employeeName) {
+        document.getElementById('user-name').textContent = session.employeeName;
+        document.getElementById('user-role').textContent = session.role || 'Retail Banking';
+        document.getElementById('user-avatar').textContent = session.employeeName.split(' ').map(n => n[0]).join('').substring(0, 2);
+      }
+    }
+
+    function switchSegment(segment) {
+      currentSegment = segment;
+      
+      // Update tabs
+      document.querySelectorAll('.segment-tab').forEach(tab => tab.classList.remove('active'));
+      document.getElementById('tab-' + segment).classList.add('active');
+      
+      // Update queue title
+      document.getElementById('queue-title').textContent = segmentNames[segment] + ' Queue';
+      document.getElementById('queue-badge').textContent = segmentCases[segment].length + ' Pending';
+      
+      // Render cases
+      renderCases();
+    }
+
+    function updateCounts() {
+      document.getElementById('mass-count').textContent = segmentCases.mass.length;
+      document.getElementById('tamayuz-count').textContent = segmentCases.tamayuz.length;
+      document.getElementById('private-count').textContent = segmentCases.private.length;
+      
+      // Calculate stats
+      const allCases = [...segmentCases.mass, ...segmentCases.tamayuz, ...segmentCases.private];
+      const pending = allCases.filter(c => c.status === 'Pending Review').length;
+      const inProgress = allCases.filter(c => c.status === 'In Progress').length;
+      const overdue = allCases.filter(c => c.days > 10).length;
+      
+      document.getElementById('stat-pending').textContent = pending;
+      document.getElementById('stat-inprogress').textContent = inProgress;
+      document.getElementById('stat-overdue').textContent = overdue;
+    }
+
+    function renderCases() {
+      const container = document.getElementById('case-list');
+      const cases = segmentCases[currentSegment];
+      
+      container.innerHTML = cases.map(c => {
+        const daysClass = c.days > 10 ? 'overdue' : c.days > 5 ? 'warning' : 'normal';
+        const urgentClass = c.days > 14 ? 'urgent' : c.days > 10 ? 'warning' : '';
+        
+        return `
+          <div class="case-card ${urgentClass}" onclick="openCase('${c.id}')">
+            <div class="case-priority ${c.risk}"></div>
+            <div class="case-info">
+              <div class="case-id">${c.id}</div>
+              <div class="case-customer">${c.customer}</div>
+              <div class="case-rim">${c.rim} • ${c.trigger}</div>
+            </div>
+            <div class="case-meta">
+              <div class="case-days ${daysClass}">${c.days} days</div>
+              <div class="case-status">${c.status}</div>
+            </div>
+            <button class="case-action" onclick="event.stopPropagation(); reviewCase('${c.id}')">Review</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCase(caseId) {
+      window.location.href = 'edd_case.html?id=' + caseId;
+    }
+
+    function reviewCase(caseId) {
+      window.location.href = 'edd_case.html?id=' + caseId + '&action=review';
+    }
+
+    function refreshData() {
+      location.reload();
+    }
+
+    function requestDocs() {
+      alert('Document Request feature - Select a case first');
+    }
+
+    function contactCustomer() {
+      alert('Customer Contact feature - Select a case first');
+    }
+
+    function escalateCase() {
+      alert('Escalation feature - Select a case first');
+    }
+
+    function setupLogout() {
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('qibEddSession');
+        window.location.href = 'login.html';
+      });
+    }
+  </script>
+</body>
+</html>

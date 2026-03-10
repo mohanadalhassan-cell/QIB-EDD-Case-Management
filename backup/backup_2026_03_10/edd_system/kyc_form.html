@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QIB KYC/EDD Digital Form - Enhanced Due Diligence</title>
+    <link rel="stylesheet" href="../css/edd_system.css">
+    <style>
+        :root {
+            --primary-color: #1a4d7a;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-bg: #f3f4f6;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .kyc-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .kyc-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2a7ba8 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .kyc-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .kyc-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .kyc-progress {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .progress-step.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .kyc-body {
+            padding: 40px;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group label .required {
+            color: var(--danger-color);
+            margin-left: 3px;
+        }
+
+        .form-group label .lock-icon {
+            color: var(--primary-color);
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(26, 77, 122, 0.1);
+        }
+
+        .form-group input:disabled,
+        .form-group select:disabled {
+            background: #f3f4f6;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #1e40af;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        .success-box {
+            background: #ecfdf5;
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #065f46;
+        }
+
+        .danger-box {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #7f1d1d;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-item input[type="radio"],
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .radio-item label,
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .ratio-indicator {
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .ratio-indicator.warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 3px solid var(--warning-color);
+        }
+
+        .ratio-indicator.danger {
+            background: #fef2f2;
+            color: #7f1d1d;
+            border-left: 3px solid var(--danger-color);
+        }
+
+        .risk-score {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .risk-score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 20px;
+        }
+
+        .risk-score-circle.low {
+            background: var(--success-color);
+        }
+
+        .risk-score-circle.medium {
+            background: var(--warning-color);
+        }
+
+        .risk-score-circle.high {
+            background: var(--danger-color);
+        }
+
+        .risk-score-text h3 {
+            margin-bottom: 5px;
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        .risk-score-text p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #154a6f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 77, 122, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .validation-error {
+            color: var(--danger-color);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .document-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: var(--light-bg);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .document-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(26, 77, 122, 0.05);
+        }
+
+        .document-upload.active {
+            border-color: var(--primary-color);
+            background: rgba(26, 77, 122, 0.1);
+        }
+
+        .document-list {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--light-bg);
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .summary-section {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .summary-item label {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .summary-item value {
+            display: block;
+            color: #1f2937;
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        @media (max-width: 768px) {
+            .kyc-body {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="kyc-container">
+        <div class="kyc-header">
+            <h1>🏦 KYC/EDD Digital Form</h1>
+            <p>Enhanced Due Diligence - Customer Onboarding</p>
+            <div class="kyc-progress">
+                <div class="progress-step active" data-step="1">1</div>
+                <div class="progress-step" data-step="2">2</div>
+                <div class="progress-step" data-step="3">3</div>
+                <div class="progress-step" data-step="4">4</div>
+                <div class="progress-step" data-step="5">5</div>
+                <div class="progress-step" data-step="6">6</div>
+            </div>
+        </div>
+
+        <div class="kyc-body">
+            <!-- SECTION 1: CUSTOMER IDENTIFICATION -->
+            <div class="form-section active" id="section1">
+                <div class="section-title">
+                    <span class="section-icon">👤</span>
+                    Customer Identification
+                </div>
+
+                <div class="info-box">
+                    📌 These fields are sourced from MOI (Ministry of Interior) and are READ-ONLY
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name (English) <span class="lock-icon">🔒</span></label>
+                        <input type="text" id="fullNameEn" placeholder="Ahmed Mohammed Al-Thani" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name (Arabic) <span class="lock-icon">🔒</span></label>
+                        <input type="text" id="fullNameAr" placeholder="أحمد محمد الثاني" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>QID Number <span class="required">*</span><span class="lock-icon">🔒</span></label>
+                        <input type="text" id="qidNumber" placeholder="11234567890" maxlength="11" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>QID Expiry Date <span class="lock-icon">🔒</span></label>
+                        <input type="date" id="qidExpiry" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth <span class="lock-icon">🔒</span></label>
+                        <input type="date" id="dob" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Nationality <span class="lock-icon">🔒</span></label>
+                        <input type="text" id="nationality" placeholder="QAT" maxlength="3" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender <span class="lock-icon">🔒</span></label>
+                        <select id="gender" disabled>
+                            <option value="">Select Gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Passport Number <span class="lock-icon">🔒</span></label>
+                        <input type="text" id="passportNumber" placeholder="P12345678" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Passport Expiry Date <span class="lock-icon">🔒</span></label>
+                        <input type="date" id="passportExpiry" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Marital Status <span class="required">*</span></label>
+                        <select id="maritalStatus">
+                            <option value="">Select Status</option>
+                            <option value="SINGLE">Single</option>
+                            <option value="MARRIED">Married</option>
+                            <option value="DIVORCED">Divorced</option>
+                            <option value="WIDOWED">Widowed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next: Contact Details →
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: CONTACT INFORMATION -->
+            <div class="form-section" id="section2">
+                <div class="section-title">
+                    <span class="section-icon">📱</span>
+                    Contact Information
+                </div>
+
+                <div class="info-box">
+                    📌 Please provide accurate contact details for verification
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Mobile Number <span class="required">*</span></label>
+                        <input type="tel" id="mobileNumber" placeholder="+974 4444 1234" required>
+                        <span class="validation-error" id="mobileError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" placeholder="name@example.qa" required>
+                        <span class="validation-error" id="emailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Alternate Phone</label>
+                        <input type="tel" id="alternatePhone" placeholder="+974 4444 5678">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Street Name <span class="required">*</span></label>
+                        <input type="text" id="streetName" placeholder="Al-Corniche Road" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Building Number <span class="required">*</span></label>
+                        <input type="text" id="buildingNumber" placeholder="123" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Zone/District <span class="required">*</span></label>
+                        <input type="text" id="zone" placeholder="Doha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>City <span class="required">*</span></label>
+                        <input type="text" id="city" placeholder="Doha" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Postal Code <span class="required">*</span></label>
+                        <input type="text" id="postalCode" placeholder="22001" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Back: Identification
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next: Employment →
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: EMPLOYMENT -->
+            <div class="form-section" id="section3">
+                <div class="section-title">
+                    <span class="section-icon">💼</span>
+                    Employment Information
+                </div>
+
+                <div class="info-box">
+                    📌 Employment details are essential for income verification
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Employment Status <span class="required">*</span></label>
+                        <select id="employmentStatus" onchange="updateEmploymentFields()" required>
+                            <option value="">Select Status</option>
+                            <option value="EMPLOYED">Employed (Government/Private)</option>
+                            <option value="SELF_EMPLOYED">Self-Employed</option>
+                            <option value="RETIRED">Retired</option>
+                            <option value="STUDENT">Student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Employer Name <span class="required">*</span></label>
+                        <input type="text" id="employerName" placeholder="QIB - Qatar Islamic Bank" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Employer CR Number</label>
+                        <input type="text" id="employerCR" placeholder="Company Registration #">
+                    </div>
+                    <div class="form-group">
+                        <label>Job Title/Occupation <span class="required">*</span></label>
+                        <input type="text" id="jobTitle" placeholder="Senior Manager" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Industry <span class="required">*</span></label>
+                        <select id="industry" required>
+                            <option value="">Select Industry</option>
+                            <option value="Banking">Banking & Finance</option>
+                            <option value="Oil_Gas">Oil & Gas</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Government">Government</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Employment Start Date</label>
+                        <input type="date" id="employmentStartDate">
+                    </div>
+                </div>
+
+                <div class="warning-box" id="gosiVerificationBox" style="display: none;">
+                    ✓ GOSI (Government Social Insurance) verification will be performed automatically
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Back: Contact Details
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next: Financial Profile →
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 4: FINANCIAL PROFILE -->
+            <div class="form-section" id="section4">
+                <div class="section-title">
+                    <span class="section-icon">💰</span>
+                    Financial Profile
+                </div>
+
+                <div class="warning-box">
+                    ⚠️ Financial information is critical for STP (Straight-Through Processing) eligibility
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Monthly Income (QAR) <span class="required">*</span></label>
+                        <input type="number" id="monthlyIncome" placeholder="15000" min="0" step="0.01" 
+                               oninput="calculateActivityRatio()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Income Source <span class="required">*</span></label>
+                        <select id="incomeSource" required>
+                            <option value="">Select Source</option>
+                            <option value="SALARY">Salary (Government/Private)</option>
+                            <option value="BUSINESS">Business Income</option>
+                            <option value="INVESTMENT">Investment Returns</option>
+                            <option value="RENTAL">Rental Income</option>
+                            <option value="PENSION">Pension</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Expected Monthly Deposits (QAR) <span class="required">*</span></label>
+                        <input type="text" id="expectedDeposits" placeholder="15000" 
+                               oninput="calculateActivityRatio()" required>
+                        <div id="ratioIndicator"></div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Expected Monthly Withdrawals (QAR)</label>
+                        <input type="text" id="expectedWithdrawals" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <label>Source of Funds <span class="required">*</span></label>
+                        <select id="sourceOfFunds" required>
+                            <option value="">Select Source</option>
+                            <option value="SALARY">Salary</option>
+                            <option value="BUSINESS">Business</option>
+                            <option value="INVESTMENT">Investment</option>
+                            <option value="INHERITANCE">Inheritance</option>
+                            <option value="SAVINGS">Savings</option>
+                            <option value="GIFT">Gift</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="additionalIncomeSection" style="display: none;">
+                    <div class="danger-box">
+                        ⚠️ Your expected activity EXCEEDS 120% of declared income. Additional documentation required.
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Additional Income Source <span class="required">*</span></label>
+                            <input type="text" id="additionalIncomeSource" placeholder="Describe additional income">
+                        </div>
+                        <div class="form-group">
+                            <label>Additional Income Amount (QAR) <span class="required">*</span></label>
+                            <input type="number" id="additionalIncomeAmount" placeholder="0" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Supporting Documentation <span class="required">*</span></label>
+                        <div class="document-upload" id="incomeDocUpload">
+                            <p>📎 Drag & drop your supporting documents here or click to browse</p>
+                            <small>Accepted: PDF, JPG, PNG (Max 5MB)</small>
+                        </div>
+                        <div class="document-list" id="incomeDocList"></div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Back: Employment
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next: Risk Assessment →
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 5: RISK & COMPLIANCE -->
+            <div class="form-section" id="section5">
+                <div class="section-title">
+                    <span class="section-icon">⚖️</span>
+                    Risk & Compliance Assessment
+                </div>
+
+                <div id="riskScoreDisplay" class="risk-score" style="display: none;">
+                    <div class="risk-score-circle" id="riskCircle"></div>
+                    <div class="risk-score-text">
+                        <h3>Risk Rating: <span id="riskRating">CALCULATING...</span></h3>
+                        <p id="riskDescription"></p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    📌 PEP (Politically Exposed Person) and Sanctions screening will be performed automatically
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Are you a PEP (Politically Exposed Person)?</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="pepNo" name="pepStatus" value="NO" checked 
+                                       onchange="updatePepFields()">
+                                <label for="pepNo">No</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="pepYes" name="pepStatus" value="YES" 
+                                       onchange="updatePepFields()">
+                                <label for="pepYes">Yes</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="pepRelative" name="pepStatus" value="RELATIVE_OF_PEP" 
+                                       onchange="updatePepFields()">
+                                <label for="pepRelative">Relative of PEP</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="pepRelationshipField" style="display: none;">
+                        <label>Relationship to PEP <span class="required">*</span></label>
+                        <input type="text" id="pepRelationship" placeholder="Describe relationship">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>US Tax Person Status</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="usPersonNo" name="usPerson" value="NO" checked 
+                                       onchange="updateTaxFields()">
+                                <label for="usPersonNo">No</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="usPersonYes" name="usPerson" value="YES" 
+                                       onchange="updateTaxFields()">
+                                <label for="usPersonYes">Yes (FATCA Reporting)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="taxIdField" style="display: none;">
+                        <label>Tax Identification Number (TIN) <span class="required">*</span></label>
+                        <input type="text" id="taxId" placeholder="SSN or ITIN">
+                    </div>
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Tax Residency Country <span class="required">*</span></label>
+                    <input type="text" id="taxResidency" placeholder="QAT" maxlength="3">
+                </div>
+
+                <div class="success-box">
+                    ✓ All compliance checks will be automatically performed upon submission
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Back: Financial Profile
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection()">
+                        Next: Review & Submit →
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 6: REVIEW & SUBMIT -->
+            <div class="form-section" id="section6">
+                <div class="section-title">
+                    <span class="section-icon">✅</span>
+                    Review & Submit
+                </div>
+
+                <div class="info-box">
+                    📌 Please review all information before submission. Changes can be made in previous sections.
+                </div>
+
+                <div class="summary-section">
+                    <div style="font-weight: bold; margin-bottom: 20px; color: var(--primary-color);">
+                        📋 CUSTOMER IDENTIFICATION SUMMARY
+                    </div>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <label>Full Name (EN)</label>
+                            <value id="sumFullNameEn">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Full Name (AR)</label>
+                            <value id="sumFullNameAr">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>QID Number</label>
+                            <value id="sumQid">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Date of Birth</label>
+                            <value id="sumDob">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Nationality</label>
+                            <value id="sumNationality">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Marital Status</label>
+                            <value id="sumMaritalStatus">-</value>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-section">
+                    <div style="font-weight: bold; margin-bottom: 20px; color: var(--primary-color);">
+                        📱 CONTACT & EMPLOYMENT SUMMARY
+                    </div>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <label>Mobile Number</label>
+                            <value id="sumMobile">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Email</label>
+                            <value id="sumEmail">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Employer</label>
+                            <value id="sumEmployer">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Job Title</label>
+                            <value id="sumJobTitle">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Monthly Income</label>
+                            <value id="sumIncome">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Activity/Income Ratio</label>
+                            <value id="sumRatio">-</value>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-section">
+                    <div style="font-weight: bold; margin-bottom: 20px; color: var(--primary-color);">
+                        ⚖️ RISK & COMPLIANCE SUMMARY
+                    </div>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <label>PEP Status</label>
+                            <value id="sumPep">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>US Tax Person</label>
+                            <value id="sumUsPerson">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Tax Residency</label>
+                            <value id="sumTaxResidency">-</value>
+                        </div>
+                        <div class="summary-item">
+                            <label>Risk Rating</label>
+                            <value id="sumFinalRisk">-</value>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="consentAgree" required>
+                        <label for="consentAgree">
+                            I confirm that all information provided is accurate, complete, and up-to-date. 
+                            I authorize QIB to verify this information with relevant government agencies and perform 
+                            all necessary compliance checks including PEP screening, sanctions list verification, and FATCA/CRS reporting.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="prevSection()">
+                        ← Back: Risk Assessment
+                    </button>
+                    <button class="btn btn-success" onclick="submitForm()">
+                        ✓ SUBMIT KYC FORM
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">✅ KYC Submission Successful!</div>
+            <div class="modal-body">
+                <p>Your Enhanced Due Diligence form has been submitted successfully.</p>
+                <p><strong>KYC ID:</strong> <span id="kycId">KYC20260309001</span></p>
+                <p><strong>Status:</strong> <span id="statusText">Under Review</span></p>
+                <p id="eddMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/organization_data.js"></script>
+    <script>
+        let currentSection = 1;
+        const totalSections = 6;
+
+        function nextSection() {
+            if (validateCurrentSection()) {
+                if (currentSection < totalSections) {
+                    currentSection++;
+                    showSection(currentSection);
+                    updateProgress();
+                }
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 1) {
+                currentSection--;
+                showSection(currentSection);
+                updateProgress();
+            }
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section${section}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Populate summary on final section
+            if (section === 6) {
+                populateSummary();
+            }
+        }
+
+        function updateProgress() {
+            document.querySelectorAll('.progress-step').forEach(step => {
+                const stepNum = parseInt(step.getAttribute('data-step'));
+                step.classList.remove('active', 'completed');
+                if (stepNum < currentSection) step.classList.add('completed');
+                if (stepNum === currentSection) step.classList.add('active');
+            });
+        }
+
+        function validateCurrentSection() {
+            const requiredFields = document.querySelectorAll(`#section${currentSection} input[required], #section${currentSection} select[required]`);
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.style.borderColor = 'var(--danger-color)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = 'var(--border-color)';
+                }
+            });
+
+            return isValid;
+        }
+
+        function calculateActivityRatio() {
+            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+            const deposits = parseFloat(document.getElementById('expectedDeposits').value) || 0;
+
+            const ratio = income > 0 ? (deposits / income).toFixed(2) : 0;
+            const ratioIndicator = document.getElementById('ratioIndicator');
+            const additionalIncomeSection = document.getElementById('additionalIncomeSection');
+
+            if (ratio > 1.2) {
+                additionalIncomeSection.style.display = 'block';
+                ratioIndicator.innerHTML = `
+                    <div class="ratio-indicator danger">
+                        ⚠️ Activity/Income Ratio: ${ratio} (EXCEEDS 120%)
+                        <br>Additional income documentation is REQUIRED
+                    </div>
+                `;
+            } else if (ratio > 1.0) {
+                additionalIncomeSection.style.display = 'none';
+                ratioIndicator.innerHTML = `
+                    <div class="ratio-indicator warning">
+                        ⚠️ Activity/Income Ratio: ${ratio} (Caution - Approaching 120%)
+                    </div>
+                `;
+            } else {
+                additionalIncomeSection.style.display = 'none';
+                ratioIndicator.innerHTML = `
+                    <div style="color: var(--success-color); padding: 10px; margin-top: 10px;">
+                        ✓ Activity/Income Ratio: ${ratio} (STP ELIGIBLE)
+                    </div>
+                `;
+            }
+        }
+
+        function updateEmploymentFields() {
+            const status = document.getElementById('employmentStatus').value;
+            const gosiBox = document.getElementById('gosiVerificationBox');
+
+            if (status === 'EMPLOYED' || status === 'SELF_EMPLOYED') {
+                gosiBox.style.display = 'block';
+            } else {
+                gosiBox.style.display = 'none';
+            }
+        }
+
+        function updatePepFields() {
+            const pepStatus = document.querySelector('input[name="pepStatus"]:checked').value;
+            const relationshipField = document.getElementById('pepRelationshipField');
+
+            if (pepStatus === 'RELATIVE_OF_PEP') {
+                relationshipField.style.display = 'block';
+            } else {
+                relationshipField.style.display = 'none';
+            }
+        }
+
+        function updateTaxFields() {
+            const usPerson = document.querySelector('input[name="usPerson"]:checked').value;
+            const taxIdField = document.getElementById('taxIdField');
+
+            if (usPerson === 'YES') {
+                taxIdField.style.display = 'grid';
+            } else {
+                taxIdField.style.display = 'none';
+            }
+        }
+
+        function populateSummary() {
+            // Populate all summary fields
+            document.getElementById('sumFullNameEn').textContent = document.getElementById('fullNameEn').value || '-';
+            document.getElementById('sumFullNameAr').textContent = document.getElementById('fullNameAr').value || '-';
+            document.getElementById('sumQid').textContent = document.getElementById('qidNumber').value || '-';
+            document.getElementById('sumDob').textContent = document.getElementById('dob').value || '-';
+            document.getElementById('sumNationality').textContent = document.getElementById('nationality').value || '-';
+            
+            const maritalStatusLabel = {
+                'SINGLE': 'Single',
+                'MARRIED': 'Married',
+                'DIVORCED': 'Divorced',
+                'WIDOWED': 'Widowed'
+            };
+            const maritalStatus = document.getElementById('maritalStatus').value;
+            document.getElementById('sumMaritalStatus').textContent = maritalStatusLabel[maritalStatus] || '-';
+
+            document.getElementById('sumMobile').textContent = document.getElementById('mobileNumber').value || '-';
+            document.getElementById('sumEmail').textContent = document.getElementById('email').value || '-';
+            document.getElementById('sumEmployer').textContent = document.getElementById('employerName').value || '-';
+            document.getElementById('sumJobTitle').textContent = document.getElementById('jobTitle').value || '-';
+
+            const income = document.getElementById('monthlyIncome').value;
+            document.getElementById('sumIncome').textContent = income ? `QAR ${parseFloat(income).toLocaleString()}` : '-';
+
+            const deposits = document.getElementById('expectedDeposits').value;
+            const ratio = income && deposits ? (parseFloat(deposits) / parseFloat(income)).toFixed(2) : '-';
+            document.getElementById('sumRatio').textContent = ratio !== '-' ? `${ratio} (${ratio > 1.2 ? 'EXCEEDS' : 'OK'})` : '-';
+
+            const pepStatus = document.querySelector('input[name="pepStatus"]:checked').value;
+            document.getElementById('sumPep').textContent = pepStatus === 'NO' ? 'No' : pepStatus;
+
+            const usPerson = document.querySelector('input[name="usPerson"]:checked').value;
+            document.getElementById('sumUsPerson').textContent = usPerson === 'NO' ? 'No' : 'Yes (FATCA Reporting)';
+
+            document.getElementById('sumTaxResidency').textContent = document.getElementById('taxResidency').value || '-';
+            document.getElementById('sumFinalRisk').textContent = calculateFinalRisk();
+        }
+
+        function calculateFinalRisk() {
+            let risk = 'LOW';
+            const pepStatus = document.querySelector('input[name="pepStatus"]:checked').value;
+            const income = parseFloat(document.getElementById('monthlyIncome').value) || 0;
+            const deposits = parseFloat(document.getElementById('expectedDeposits').value) || 0;
+            const ratio = income > 0 ? deposits / income : 0;
+
+            if (pepStatus === 'YES' || pepStatus === 'RELATIVE_OF_PEP') {
+                risk = 'HIGH';
+            } else if (ratio > 1.2) {
+                risk = 'MEDIUM';
+            }
+
+            return risk;
+        }
+
+        function submitForm() {
+            if (!document.getElementById('consentAgree').checked) {
+                alert('Please agree to the consent statement before submitting.');
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = event.target;
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            // Collect all form data
+            const kycData = collectFormData();
+
+            // Call backend API to create case via EDD Case Engine
+            fetch('/api/v1/kyc/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getAuthToken()}`
+                },
+                body: JSON.stringify(kycData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display success modal with case information
+                displaySubmissionResult(data);
+                showModal();
+            })
+            .catch(error => {
+                console.error('KYC Submission Error:', error);
+                alert('Error submitting form: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            });
+        }
+
+        async function collectFormData() {
+            return {
+                // SECTION 1: PERSONAL INFO
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                middleName: document.getElementById('middleName').value.trim(),
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                nationality: document.getElementById('nationality').value,
+                idType: document.getElementById('idType').value,
+                idNumber: document.getElementById('idNumber').value.trim(),
+                idIssueDate: document.getElementById('idIssueDate').value,
+                idExpiryDate: document.getElementById('idExpiryDate').value,
+
+                // SECTION 2: CONTACT DETAILS
+                mobileNumber: document.getElementById('mobileNumber').value.trim(),
+                email: document.getElementById('email').value.trim().toLowerCase(),
+                country: document.getElementById('country').value,
+                emirate: document.getElementById('emirate').value,
+                city: document.getElementById('city').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                postalCode: document.getElementById('postalCode').value.trim(),
+
+                // SECTION 3: EMPLOYMENT
+                employmentStatus: document.getElementById('employmentStatus').value,
+                employerName: document.getElementById('employerName').value.trim(),
+                employerCR: document.getElementById('employerCR').value.trim(),
+                jobTitle: document.getElementById('jobTitle').value.trim(),
+                industry: document.getElementById('industry').value,
+                employmentStartDate: document.getElementById('employmentStartDate').value,
+
+                // SECTION 4: FINANCIAL
+                monthlyIncome: parseFloat(document.getElementById('monthlyIncome').value) || 0,
+                incomeSource: document.getElementById('incomeSource').value,
+                expectedDeposits: parseFloat(document.getElementById('expectedDeposits').value) || 0,
+                expectedWithdrawals: parseFloat(document.getElementById('expectedWithdrawals').value) || 0,
+                sourceOfFunds: document.getElementById('sourceOfFunds').value,
+                taxResidency: document.getElementById('taxResidency').value,
+                usPerson: document.querySelector('input[name="usPerson"]:checked').value === 'YES',
+                
+                // SECTION 5: RISK & COMPLIANCE
+                pepStatus: document.querySelector('input[name="pepStatus"]:checked').value,
+                pepName: document.getElementById('pepName')?.value.trim() || '',
+                pepRelationship: document.getElementById('pepRelationship')?.value || '',
+                sanctions: document.querySelector('input[name="sanctions"]:checked').value === 'YES',
+                criminalRecord: document.querySelector('input[name="criminalRecord"]:checked').value === 'YES',
+
+                // Submission metadata
+                submitDate: new Date().toISOString(),
+                ipAddress: await getClientIP(),
+                userAgent: navigator.userAgent
+            };
+        }
+
+        function displaySubmissionResult(data) {
+            const { case_id, kyc_id, edd_triggered, risk_rating, status, message } = data;
+
+            document.getElementById('kycId').textContent = kyc_id;
+            document.getElementById('statusText').textContent = edd_triggered 
+                ? 'Enhanced Due Diligence Case Created' 
+                : status;
+
+            if (edd_triggered) {
+                document.getElementById('eddMessage').innerHTML = `
+                    <strong style="color: var(--danger-color);">⚠️ Enhanced Due Diligence Required</strong><br>
+                    <p>Case ID: <code>${case_id}</code></p>
+                    <p>Risk Rating: <strong>${risk_rating}</strong></p>
+                    <p>A dedicated case officer will contact you within 2 business days.</p>
+                    <p><small>${message || 'Your application is under review.'}</small></p>
+                `;
+            } else {
+                document.getElementById('eddMessage').innerHTML = `
+                    <strong style="color: var(--success-color);">✓ Account Approved</strong><br>
+                    <p>KYC ID: <code>${kyc_id}</code></p>
+                    <p>Your account has been approved for opening.</p>
+                `;
+            }
+
+            // Store case ID for reference
+            sessionStorage.setItem('latestCaseId', case_id || '');
+            sessionStorage.setItem('latestKYCId', kyc_id || '');
+        }
+
+        function getAuthToken() {
+            // In production, retrieve from secure storage
+            return localStorage.getItem('authToken') || sessionStorage.getItem('authToken') || '';
+        }
+
+        async function getClientIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (e) {
+                return '0.0.0.0';
+            }
+        }
+
+        function showModal() {
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            // Redirect to dashboard or reset form
+            window.location.href = 'dashboard.html';
+        }
+
+        // Initialize
+        showSection(1);
+        updateProgress();
+    </script>
+</body>
+</html>

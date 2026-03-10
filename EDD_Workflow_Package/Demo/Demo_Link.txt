@@ -1,0 +1,70 @@
+============================================================
+  EDD DIGITAL WORKFLOW — DEMO LINK
+  Qatar Islamic Bank
+============================================================
+
+DEMO URL:
+http://localhost:8585/login.html
+
+DEMO CREDENTIALS:
+  Username: admin
+  Password: admin123
+
+============================================================
+WHAT THE DEMO SHOWS:
+============================================================
+
+The demo provides an end-to-end visualization of the EDD
+digital workflow covering:
+
+  1. Login & Authentication (Role-Based)
+  2. Dashboard (Real-time case queue & KPIs)
+  3. EDD Case View (Full case management)
+  4. Business Review Stage
+  5. CDD Operations (Maker/Checker)
+  6. Compliance Review
+  7. Document Viewer
+  8. Organization Structure
+  9. Audit Console
+  10. Management Dashboard
+  11. Notifications Center
+
+============================================================
+END-TO-END WORKFLOW DEMONSTRATED:
+============================================================
+
+  EDD Trigger
+       ↓
+  Business Review (Document collection & verification)
+       ↓
+  CDD Operations (Due diligence & Maker/Checker)
+       ↓
+  Compliance Review (PEP/Sanctions/AML screening)
+       ↓
+  Final Decision (Approve / Reject / Conditions)
+
+============================================================
+NAVIGATION:
+============================================================
+
+  /login.html          — Login page
+  /dashboard.html      — Main dashboard
+  /edd_case.html       — EDD case management
+  /business_view.html  — Business review stage
+  /cdd_view.html       — CDD operations
+  /compliance_view.html — Compliance review
+  /document_viewer.html — Document viewer
+  /organization.html   — Organization structure
+  /audit_console.html  — Audit trail
+  /management_dashboard.html — Management KPIs
+  /notifications_center.html — Notifications
+
+============================================================
+NOTE:
+============================================================
+
+This demo represents the front-end workflow visualization.
+The production implementation will be configured within the
+FLOW Workflow Platform with full T24/ESB/DMS integration.
+
+============================================================

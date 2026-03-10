@@ -1,3 +1,530 @@
+# QIB ENHANCED DUE DILIGENCE (EDD) PLATFORM
+# Business Requirements Document (BRD) v1.0
+
+---
+
+## DOCUMENT CONTROL
+
+### 1.1 Document Information
+
+| Field | Value |
+|-------|-------|
+| **Document Title** | Enhanced Due Diligence Platform - BRD |
+| **System Name** | EDD Case Management System |
+| **Department** | Retail Banking / Operations |
+| **Version** | 1.0 - Final |
+| **Date** | March 2026 |
+| **Classification** | Internal - Confidential |
+
+---
+
+### 1.2 Key Stakeholders
+
+| Department | Role | Authority |
+|-----------|------|-----------|
+| **Retail Banking** | Business Owner | Case Routing & Approval |
+| **Operations** | Case Management Owner | Daily Operations |
+| **Compliance** | Regulatory Oversight | Risk Assessment |
+| **IT - CIO (Khurram Qadir)** | Technical Implementation | System Development & Support |
+| **Risk Management** | Risk Monitoring | Risk Indicators |
+| **Audit** | Audit & Governance | Audit Trail Verification |
+
+---
+
+### 1.3 Document History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | Mar 2026 | EDD Team | Initial Enterprise Release |
+
+---
+
+## 2. EXECUTIVE SUMMARY
+
+### 2.1 System Overview
+
+The **EDD Case Management System** is an enterprise platform designed to manage Enhanced Due Diligence (EDD) cases for high-risk customers at Qatar Islamic Bank (QIB). The system operates as a complement to the **Re-KYC System** and integrates with multiple core banking systems.
+
+### 2.2 Key Objectives
+
+- ✅ Automate and manage high-risk customer review workflows
+- ✅ Ensure compliance with Qatar Central Bank (QCB) requirements
+- ✅ Provide complete audit trail and governance
+- ✅ Improve operational efficiency across Retail Banking segments
+- ✅ Integrate with T24, QCB KYC API, and enterprise systems
+
+### 2.3 Business Value
+
+| Aspect | Current State | With EDD System |
+|--------|---------------|-----------------|
+| **Case Processing Time** | Manual / Slow | Automated / Fast |
+| **Compliance Risk** | High | Low |
+| **Audit Readiness** | Difficult | Complete Trail |
+| **Team Visibility** | Limited | Full Dashboard |
+
+---
+
+## 3. BUSINESS OBJECTIVES
+
+### 3.1 Primary Goals
+
+1. **Compliance Excellence**
+   - Meet QCB AML/KYC requirements
+   - Maintain audit-ready documentation
+   - Support regulatory inspections
+
+2. **Operational Efficiency**
+   - Reduce manual case processing
+   - Improve SLA compliance
+   - Optimize resource allocation
+
+3. **Risk Management**
+   - Identify high-risk customers early
+   - Monitor ongoing relationships
+   - Escalate appropriately
+
+4. **Customer Experience**
+   - Clear communication with customers
+   - Easy document submission
+   - Transparent process tracking
+
+---
+
+## 4. SYSTEM SCOPE
+
+### 4.1 In Scope
+
+✅ EDD case creation and management  
+✅ Business department review workflow  
+✅ CDD operations and approvals  
+✅ Customer notification and document collection  
+✅ Compliance escalation and governance  
+✅ Dashboard reporting and analytics  
+✅ Integration with T24, QCB API, DMS  
+✅ Role-based access control  
+✅ Complete audit trail  
+
+### 4.2 Out of Scope
+
+❌ Initial risk classification (upstream systems)  
+❌ AML transaction monitoring logic  
+❌ T24 customer data modification  
+❌ QCB API data quality management  
+
+---
+
+## 5. INTEGRATION ARCHITECTURE
+
+### 5.1 System Integration Map
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    QIB EDD Platform                              │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │  Retail      │  │   Tamayuz    │  │   Private    │          │
+│  │  Banking     │  │   Banking    │  │   Banking    │          │
+│  │              │  │              │  │              │          │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
+│         │                 │                 │                   │
+│         └─────────────────┼─────────────────┘                   │
+│                           │                                      │
+│                    ┌──────▼──────┐                              │
+│                    │  FLOW Engine │                              │
+│                    │ (Workflow)   │                              │
+│                    └──────┬───────┘                              │
+│                           │                                      │
+│    ┌──────────────────────┼──────────────────────┐              │
+│    │                      │                      │              │
+│    ▼                      ▼                      ▼              │
+│ ┌────────┐           ┌─────────┐          ┌──────────┐        │
+│ │  T24   │           │ ETL/    │          │ QCB KYC  │        │
+│ │ Core   │           │ SnapView│          │   API    │        │
+│ │Banking │           │         │          │          │        │
+│ └────────┘           └─────────┘          └──────────┘        │
+│    │                      │                      │              │
+│    └──────────────────────┼──────────────────────┘              │
+│                           │                                      │
+│                    ┌──────▼──────┐                              │
+│                    │ Data Lake /  │                              │
+│                    │ Enterprise   │                              │
+│                    │ Database     │                              │
+│                    └──────┬───────┘                              │
+│                           │                                      │
+│    ┌──────────┬──────────┬┴───────┬───────────┐                │
+│    │          │          │        │           │                │
+│    ▼          ▼          ▼        ▼           ▼                │
+│ ┌────────┐ ┌──────┐ ┌───────┐ ┌────────┐ ┌─────────┐         │
+│ │  DMS   │ │ SMS/ │ │ Audit │ │ Risk   │ │ Report  │         │
+│ │(Files) │ │Email │ │ Trail │ │Monitor │ │ Engine  │         │
+│ └────────┘ └──────┘ └───────┘ └────────┘ └─────────┘         │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 6. INTEGRATION WITH RE-KYC SYSTEM
+
+### 6.1 System Relationship
+
+```
+┌─────────────────────────────────────────────────┐
+│            RE-KYC SYSTEM                         │
+│  (Customer Classification & KYC Refresh)        │
+└─────────────────┬───────────────────────────────┘
+                  │
+                  │ High Risk Detected?
+                  │ YES ↓
+                  │
+        ┌─────────▼──────────┐
+        │ Create EDD Case    │
+        │  - Link to Customer│
+        │  - Set Risk Reason │
+        │  - Assign Segment  │
+        └─────────┬──────────┘
+                  │
+        ┌─────────▼──────────────────┐
+        │  EDD CASE MANAGEMENT SYSTEM│
+        │   (This System)             │
+        │                             │
+        │  1. Business Review         │
+        │  2. CDD Review              │
+        │  3. Compliance Escalation   │
+        │  4. Case Closure            │
+        └─────────┬──────────────────┘
+                  │
+        ┌─────────▼──────────────────┐
+        │ Update RE-KYC with          │
+        │ EDD Decision & Next Review  │
+        └─────────────────────────────┘
+```
+
+---
+
+## 7. RETAIL BANKING STRUCTURE
+
+### 7.1 Organizational Hierarchy
+
+```
+┌────────────────────────────────────────────────┐
+│   D. Anand                                      │
+│   Chief Personal Banking Officer               │
+└────────────────────────┬───────────────────────┘
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+        ▼                ▼                ▼
+    ┌────────┐      ┌─────────┐     ┌──────────┐
+    │  Mass  │      │ Tamayuz │     │ Private  │
+    │Banking │      │ Banking │     │ Banking  │
+    └────────┘      └─────────┘     └──────────┘
+        │                │                │
+        ├─ Supervisor    ├─ Supervisor    ├─ Supervisor
+        ├─ Team Members  ├─ Team Members  ├─ Team Members
+        └─ RM's          └─ RM's          └─ RM's
+```
+
+### 7.2 Segment Details
+
+| Segment | Manager | Focus | Dashboard |
+|---------|---------|-------|-----------|
+| **Mass Banking** | Sector Supervisor | High Volume / Standard Risk | Sector Dashboard |
+| **Tamayuz Banking** | Sector Supervisor | Premium / Growing Risk | Sector Dashboard |
+| **Private Banking** | Sector Supervisor | Ultra-Premium / Complex Risk | Sector Dashboard |
+
+---
+
+## 8. DEPARTMENTS USING THE SYSTEM
+
+### 8.1 Department Access Matrix
+
+| Department | Role | Visibility | Actions |
+|-----------|------|-----------|---------|
+| **Business** | Case Review & Recommendation | Own Cases / Segment | Review, Comment, Recommend |
+| **CDD** | Document Review & Approval | CDD Cases | Review, Request Additional Docs, Approve |
+| **Compliance** | Escalation & Governance | Escalated Cases Only | Review, Provide Opinion, Escalate |
+| **Operations** | Execution & Monitoring | All (Supervisors) | Execute Decisions, Monitor SLA |
+| **Call Center** | Customer Follow-up | Contact Cases | Make Call, Document Response |
+| **Marketing** | Message Governance | Notification Messages | Review, Approve, Manage Templates |
+
+---
+
+## 10. SYSTEM ARCHITECTURE & DATA FLOW
+
+### 10.1 High-Level System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                     USER INTERFACES (Layer 1)                        │
+├──────────────────┬──────────────────┬──────────────────┬────────────┤
+│   Business       │   CDD            │  Compliance      │ Operations │
+│   Dashboard      │   Dashboard      │  Dashboard       │ Dashboard  │
+└──────────────────┴──────────────────┴──────────────────┴────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│              APPLICATION LAYER (Layer 2)                             │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │ Case         │  │ Document     │  │ Workflow     │          │
+│  │ Management   │  │ Management   │  │ Engine       │          │
+│  │ Module       │  │ Module       │  │ (FLOW)       │          │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
+│         │                 │                 │                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │ Risk         │  │ Notification │  │ Role-Based   │          │
+│  │ Analysis     │  │ Engine       │  │ Access       │          │
+│  │ Module       │  │              │  │ Control      │          │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
+│         │                 │                 │                   │
+└─────────┼─────────────────┼─────────────────┼────────────────────┘
+          │                 │                 │
+          ▼                 ▼                 ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│          INTEGRATION LAYER (Layer 3 - ESB)                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌────────────────────────────────────────────────────────────┐    │
+│  │  Enterprise Service Bus (ESB)                              │    │
+│  │  - Request/Response Handling                               │    │
+│  │  - Data Transformation                                     │    │
+│  │  - Error Handling & Retry Logic                            │    │
+│  └────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+└──────────────┬───────────────┬───────────────┬─────────────────────┘
+               │               │               │
+    ┌──────────▼──┐ ┌──────────▼──┐ ┌─────────▼──┐
+    │   T24       │ │ QCB KYC API │ │ ETL/       │
+    │   Core      │ │ Integration │ │ SnapView   │
+    │   Banking   │ │             │ │ Data Lake  │
+    └──────┬──────┘ └──────┬──────┘ └─────┬──────┘
+           │               │              │
+└──────────┼───────────────┼──────────────┼──────────────────┐
+           │               │              │                  │
+    ┌──────▼──┐ ┌──────────▼──┐ ┌─────────▼──┐ ┌────────────▼──┐
+    │  DMS    │ │ Notification│ │ Document   │ │ Audit Log    │
+    │ (Files) │ │ Gateway     │ │ Queue      │ │ Database     │
+    └─────────┘ └─────────────┘ └────────────┘ └──────────────┘
+```
+
+### 10.2 Data Flow Diagram - Case Creation
+
+```
+┌──────────┐
+│  T24     │ Detects High Risk Customer
+│  System  │
+└─────┬────┘
+      │ HIGH_RISK_TRIGGER
+      │
+      ▼
+┌──────────────────────────┐
+│  EDD System              │
+│  - Check CRP             │
+│  - Get Segment           │
+│  - Get Risk Reason       │
+└──────┬───────────────────┘
+       │
+       ├─────────────────────────┐
+       │                         │
+       ▼                         ▼
+   CASE CREATED          AUTO-ROUTE TO
+   - Case ID             BUSINESS DEPT
+   - Risk Reason         - Mass Banking
+   - Segment             - Tamayuz
+   - Customer Data       - Private Banking
+       │                         │
+       └─────────────┬───────────┘
+                     │
+                     ▼
+              ┌──────────────┐
+              │  Business    │
+              │  Dashboard   │
+              │  Shows Case  │
+              └──────────────┘
+```
+
+### 10.3 Data Flow Diagram - Case Workflow
+
+```
+BUSINESS REVIEW STAGE
+┌──────────────────────────────────────┐
+│  Supervisor Assigns Case to RM       │
+└────────┬─────────────────────────────┘
+         │
+         ▼
+┌──────────────────────────────────────┐
+│  RM Reviews Case                     │
+│  - Verify Customer Info              │
+│  - Check Documents (DMS)             │
+│  - Verify Funds Source              │
+└────────┬─────────────────────────────┘
+         │
+         ▼
+┌──────────────────────────────────────┐
+│  Maker: Prepares Recommendation      │
+│  - Comment & Analysis                │
+│  - Save Draft                        │
+└────────┬─────────────────────────────┘
+         │
+         ▼
+┌──────────────────────────────────────┐
+│  Checker: Reviews & Approves         │
+│  => SUBMIT TO CDD OPERATIONS         │
+└────────┬─────────────────────────────┘
+         │
+         ▼
+CDD OPERATIONS STAGE
+┌──────────────────────────────────────┐
+│  CDD Maker: Reviews Documents        │
+│  - Request Additional Docs if needed │
+│  - Notify Customer via SMS/Mobile    │
+└────────┬─────────────────────────────┘
+         │
+         ▼
+┌──────────────────────────────────────┐
+│  CDD Checker: Final Approval         │
+│  - Approve or Escalate               │
+│  - Close or Restrict Account         │
+└────────┬─────────────────────────────┘
+         │
+         ▼
+┌──────────────────────────────────────┐
+│  Update T24 with Decision            │
+│  - Set Next EDD Review Date          │
+│  - Record Completion                 │
+│  - Create Audit Trail                │
+└──────────────────────────────────────┘
+```
+
+### 10.4 System Integration Points
+
+| System | Data Flow | Frequency | Owner |
+|--------|-----------|-----------|-------|
+| **T24** | Push Case Data, Pull Risk Data | Real-time | CIO |
+| **QCB KYC API** | Pull Enhanced KYC Data | On-demand | Compliance |
+| **ETL/SnapView** | Pull Risk Indicators | Daily Batch | Risk Management |
+| **DMS** | Retrieve & Store Documents | On-demand | Operations |
+| **FLOW** | Workflow Management | Real-time | IT Operations |
+| **Notification Gateway** | Send SMS/Email/Push | Real-time | Operations |
+
+---
+
+## 11. TECHNICAL INFRASTRUCTURE REQUIREMENTS (For IT)
+
+### 11.1 Infrastructure Stack
+
+| Layer | Technology | Owner |
+|-------|-----------|-------|
+| **Web Application** | HTML5, CSS3, JavaScript | IT Development |
+| **Backend Services** | Java / .NET Microservices | IT Development |
+| **Workflow Engine** | FLOW (Bank Standard) | IT Operations |
+| **Database** | Oracle / SQL Server | IT Database Team |
+| **Message Queue** | ActiveMQ / RabbitMQ | IT Infrastructure |
+| **Cache Layer** | Redis / Memcached | IT Infrastructure |
+| **API Gateway** | WSO2 / MuleSoft | IT Integration |
+| **Security** | OAuth 2.0, HTTPS/TLS 1.3 | IT Security |
+| **Monitoring** | Splunk / New Relic | IT Operations |
+| **Version Control** | Git / Azure DevOps | IT Development |
+
+### 11.2 API Endpoints (For Integration)
+
+```
+POST   /api/v1/cases                    Create EDD Case
+GET    /api/v1/cases/{caseId}           Get Case Details
+PUT    /api/v1/cases/{caseId}           Update Case
+GET    /api/v1/cases?segment=mass       Get Segment Cases
+
+POST   /api/v1/assignments              Assign Case to User
+POST   /api/v1/approvals                Submit Approval
+GET    /api/v1/audit-trail/{caseId}     Get Audit Trail
+
+GET    /api/v1/dashboards/business      Business Dashboard Data
+GET    /api/v1/dashboards/operations    Operations Dashboard Data
+GET    /api/v1/dashboards/management    Management Dashboard Data
+```
+
+### 11.3 Non-Functional Requirements
+
+| Attribute | Requirement | Owner |
+|-----------|------------|-------|
+| **Availability** | 99.5% uptime | IT Operations |
+| **Response Time** | < 2 seconds (90th percentile) | IT Performance |
+| **Throughput** | 1000+ concurrent users | IT Infrastructure |
+| **Data Retention** | 7 years (per QCB) | IT Database |
+| **Disaster Recovery** | RTO: 4 hours, RPO: 1 hour | IT Disaster Recovery |
+| **Encryption** | AES-256 for data at rest | IT Security |
+| **Audit Logging** | 100% of transactions logged | IT Security |
+
+---
+
+## 12. RESPONSIBILITIES BY ROLE (For IT Leadership)
+
+### 12.1 CIO (Chief Information Officer - Khurram Qadir)
+
+**Responsibilities:**
+- Overall system architecture and design approval
+- T24 and external API integration roadmap
+- Infrastructure provisioning and capacity planning
+- Security and compliance standards
+- IT team allocation and project delivery
+- System performance and availability SLA
+
+**Key Decisions:**
+- ✅ Approve tech stack
+- ✅ Approve infrastructure budget  
+- ✅ Sign-off on go-live
+- ✅ Approve production changes
+
+### 12.2 IT Development Lead
+
+**Responsibilities:**
+- Application development (Backend & Frontend)
+- Code quality and testing
+- API development and integration
+- Performance optimization
+- Technical documentation
+
+**Deliverables:**
+- ✅ Source code repository
+- ✅ API documentation
+- ✅ Technical design documents
+- ✅ Unit/Integration test coverage
+
+### 12.3 IT Infrastructure Lead
+
+**Responsibilities:**
+- Server provisioning and configuration
+- Database administration
+- Disaster recovery setup
+- Monitoring and alerting
+- Capacity planning
+
+**Deliverables:**
+- ✅ Infrastructure architecture diagram
+- ✅ Runbooks for operations
+- ✅ Monitoring dashboards
+- ✅ Backup/recovery procedures
+
+### 12.4 IT Security Officer
+
+**Responsibilities:**
+- Security requirements validation
+- Access control implementation
+- Encryption and data protection
+- Security testing (penetration testing, vulnerability scanning)
+- Compliance with banking regulations
+
+**Deliverables:**
+- ✅ Security requirements specification
+- ✅ Security test results
+- ✅ Access control matrix
+- ✅ Encryption validation report
+
+---
+
 Business Requirements Document (BRD) – EDD Case Management System (English)
 Scope: Enhanced Due Diligence (EDD) only – excluding Volooras Risk Classification Engine. The system monitors and manages high‑risk clients based on T24 data and QCB KYC API input. It tracks EDD triggers, assigns cases, manages workflows, and ensures compliance with Qatar Islamic Bank (QIB) policies and central bank requirements.
 1. Purpose
@@ -4539,7 +5066,1024 @@ All hierarchy data integrity events shall be logged:
 
 ---
 
-## 46. Final Conclusion
+## 46. Compliance Escalation Governance (Four-Eyes Principle)
+
+This section defines the mandatory review process when cases are escalated to the Compliance Department, implementing the Four-Eyes Principle for regulatory accuracy and governance oversight.
+
+---
+
+### 46.1 Overview
+
+When an **EDD case** is escalated to the Compliance and Regulatory Affairs Department, it must not be reviewed by a single officer only.
+
+The **Four-Eyes Principle** must be applied to ensure:
+- Independent review before recommendations are issued
+- Regulatory accuracy validation
+- Audit-ready decision documentation
+- Segregation of duties within Compliance
+
+---
+
+### 46.2 Compliance Department Roles
+
+Cases must pass through two mandatory stages within Compliance:
+
+| Role | Responsibility | Authority Level |
+|------|----------------|-----------------|
+| **Compliance Officer** | Review case, analyze risk, provide opinion | L1 - Initial Review |
+| **Compliance Checker** | Validate opinion, approve recommendation | L2 - Final Approval |
+
+**Note:** The same person cannot act as both Compliance Officer and Compliance Checker on the same case.
+
+---
+
+### 46.3 Escalation Workflow to Compliance
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    COMPLIANCE ESCALATION WORKFLOW                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│    ┌─────────────────────┐                                                  │
+│    │ Business / CDD      │  Case requires Compliance review                 │
+│    │ Escalation          │                                                  │
+│    └─────────┬───────────┘                                                  │
+│              │                                                              │
+│              ▼                                                              │
+│    ┌─────────────────────┐                                                  │
+│    │ Compliance Officer  │  L1 Review                                       │
+│    │ Review              │  • Full case analysis                            │
+│    │                     │  • Risk assessment                               │
+│    │                     │  • AML indicators review                         │
+│    │                     │  • Compliance opinion draft                      │
+│    └─────────┬───────────┘                                                  │
+│              │                                                              │
+│              ▼                                                              │
+│    ┌─────────────────────┐                                                  │
+│    │ Compliance Checker  │  L2 Validation                                   │
+│    │ Validation          │  • Opinion accuracy check                        │
+│    │                     │  • Regulatory alignment                          │
+│    │                     │  • Final approval/rejection                      │
+│    └─────────┬───────────┘                                                  │
+│              │                                                              │
+│              ▼                                                              │
+│    ┌─────────────────────┐                                                  │
+│    │ Compliance          │  Official Recommendation                         │
+│    │ Recommendation      │  Documented and sealed                           │
+│    └─────────┬───────────┘                                                  │
+│              │                                                              │
+│              ▼                                                              │
+│    ┌─────────────────────┐                                                  │
+│    │ Return to Business  │  For action based on recommendation              │
+│    └─────────┬───────────┘                                                  │
+│              │                                                              │
+│              ▼                                                              │
+│    ┌─────────────────────┐                                                  │
+│    │ Operations          │  Execute decision                                │
+│    │ Execution / Closure │  Close case with compliance clearance            │
+│    └─────────────────────┘                                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 46.4 Compliance Officer Responsibilities (L1)
+
+The first-level Compliance Officer shall:
+
+| Task | Description |
+|------|-------------|
+| Full Case Review | Review entire case file, documents, history |
+| Risk Classification Analysis | Analyze reasons for High-Risk classification |
+| AML Indicator Review | Check for money laundering indicators |
+| Customer Data Analysis | Profile analysis, transaction patterns |
+| Source of Funds Verification | Validate SOF documentation |
+| PEP/Sanctions Check | Confirm screening results |
+
+**Output:** Compliance Opinion (Draft)
+
+---
+
+### 46.5 Compliance Checker Responsibilities (L2)
+
+The second-level Compliance Checker shall:
+
+| Task | Description |
+|------|-------------|
+| Opinion Validation | Verify officer's analysis is complete |
+| Recommendation Accuracy | Ensure recommendation aligns with regulations |
+| Risk Assessment Verification | Confirm risk assessment is accurate |
+| Regulatory Compliance | Align with QCB/FATF requirements |
+| Final Decision | Approve, modify, or reject recommendation |
+
+**Output:** Approved Compliance Recommendation
+
+---
+
+### 46.6 Compliance Recommendation Types
+
+The Compliance Department may issue the following recommendations:
+
+| Recommendation Code | Description | Follow-up Required |
+|--------------------|-------------|-------------------|
+| **REQ_DOCS** | Request Additional Documents | Business/Operations |
+| **DATA_UPDATE** | Customer Data Correction Required | CDD/Operations |
+| **ACCEPT_AS_IS** | Accept Current Documentation | Operations (Close) |
+| **ESCALATE_INV** | Escalate to Investigation/FIU | Investigation Team |
+| **CLOSE_CASE** | Close Case - No Further Action | Operations |
+| **RESTRICT_ACC** | Recommend Account Restriction | Operations/Business |
+| **EXIT_CUST** | Recommend Customer Exit | Business/Compliance |
+
+---
+
+### 46.7 Return to Originating Departments
+
+After Compliance approval, the case returns to relevant departments:
+
+| Department | Action Required |
+|------------|-----------------|
+| **Business (RM)** | Review recommendation, approve customer communication |
+| **Operations** | Execute recommended action (restrictions, data updates) |
+| **CDD** | Update customer KYC data if required |
+| **Branch** | Physical verification if mandated |
+
+---
+
+### 46.8 Compliance Decision Panel (UI Component)
+
+The system shall display a **Compliance Decision Panel** within each case:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  COMPLIANCE DECISION PANEL                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  📋 COMPLIANCE OPINION                                          │
+│  ─────────────────────────────────────────────────────────────  │
+│  Risk Assessment:    ⚠️ HIGH                                    │
+│  AML Indicators:     2 flags identified                         │
+│  SOF Verification:   ✅ Verified                                │
+│  PEP Status:         ❌ Not PEP                                 │
+│  Sanctions:          ✅ Clear                                   │
+│                                                                 │
+│  📌 RECOMMENDED ACTION                                          │
+│  ─────────────────────────────────────────────────────────────  │
+│  Request additional source of wealth documentation              │
+│  Customer should provide 6-month bank statements                │
+│                                                                 │
+│  📝 REGULATORY NOTES                                            │
+│  ─────────────────────────────────────────────────────────────  │
+│  Case requires enhanced monitoring per QCB Circular 2024/12     │
+│  Annual review mandatory for continued relationship             │
+│                                                                 │
+│  👤 REVIEWED BY                                                 │
+│  ─────────────────────────────────────────────────────────────  │
+│  Compliance Officer: Ahmad Al-Mahmoud                           │
+│  Review Date: 2026-03-09 10:30 AM                              │
+│                                                                 │
+│  ✅ APPROVED BY                                                 │
+│  ─────────────────────────────────────────────────────────────  │
+│  Compliance Checker: Sarah Al-Thani                             │
+│  Approval Date: 2026-03-09 02:15 PM                            │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 46.9 Audit Trail Requirements
+
+All Compliance escalation actions must be logged:
+
+| Field | Description |
+|-------|-------------|
+| Case ID | Unique case identifier |
+| Escalation Time | When case reached Compliance queue |
+| Officer Assigned | Compliance Officer name and ID |
+| Officer Review Time | L1 review completion timestamp |
+| Officer Opinion | Full text of compliance opinion |
+| Checker Assigned | Compliance Checker name and ID |
+| Checker Review Time | L2 validation completion timestamp |
+| Final Recommendation | Approved recommendation code |
+| Justification | Detailed reasoning for decision |
+| Return Time | When case returned to Business/Operations |
+| Receiving Department | Which department received the case |
+
+---
+
+### 46.10 SLA for Compliance Review
+
+| Stage | Maximum Duration | Escalation If Breached |
+|-------|------------------|------------------------|
+| Officer Review (L1) | 2 Business Days | Compliance Manager |
+| Checker Validation (L2) | 1 Business Day | Compliance Manager |
+| Total Compliance Review | 3 Business Days | Head of Compliance |
+
+---
+
+### 46.11 System Integration Requirements
+
+| System | Integration Purpose |
+|--------|---------------------|
+| FLOW | Route cases to Compliance queue |
+| T24 | Fetch customer risk data |
+| CRP | Risk profile and AML flags |
+| Sanctions DB | Real-time sanctions screening |
+| DMS | Store compliance documents |
+| Audit System | Log all compliance actions |
+
+---
+
+### 46.12 Compliance Governance Metrics
+
+| Metric | Target | Frequency |
+|--------|--------|-----------|
+| Four-Eyes Compliance Rate | 100% | Daily |
+| L1 Review SLA Achievement | ≥95% | Weekly |
+| L2 Validation SLA Achievement | ≥98% | Weekly |
+| Recommendation Accuracy | ≥99% | Monthly |
+| Audit Finding Rate | <1% | Quarterly |
+
+---
+
+### 46.13 Technical Implementation Note
+
+```
+All cases escalated to the Compliance Department must follow a Four-Eyes 
+review principle.
+
+The case must first be reviewed by a Compliance Officer who will provide 
+a compliance opinion.
+
+The compliance opinion must then be validated by a Compliance Checker to 
+ensure regulatory accuracy.
+
+Once validated, the recommendation will be returned to the relevant 
+departments including Business and Operations for final action or 
+case closure.
+
+All actions must be recorded in the system audit trail including user 
+identity, timestamp, and decision justification.
+```
+
+---
+
+## 47. Retail Banking Dashboard Structure (Hierarchical Dashboard)
+
+This section defines the hierarchical dashboard architecture for Retail Banking, enabling drill-down from group level to individual sector dashboards with dynamic data filtering.
+
+---
+
+### 47.1 Overview
+
+The system must provide a **Hierarchical Dashboard** allowing data visualization at two levels:
+
+| Level | Description | Users |
+|-------|-------------|-------|
+| **Level 1** | Retail Group Dashboard | Retail Management, GM Retail |
+| **Level 2** | Sector Dashboard | Sector Managers, RMs |
+
+The Retail Banking sectors are:
+
+| Sector Code | Sector Name | Description |
+|-------------|-------------|-------------|
+| MASS | Mass Banking | General retail customers |
+| TAMZ | Tamayuz Banking | Premium retail customers |
+| PRIV | Private Banking | High net worth individuals |
+
+---
+
+### 47.2 Retail Group Dashboard (Level 1)
+
+When a Retail Banking user logs in, they first see the group overview dashboard.
+
+**Dashboard Layout:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     RETAIL BANKING OVERVIEW                                 │
+│                     EDD Case Management Dashboard                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌───────────────────┐ ┌───────────────────┐ ┌───────────────────┐          │
+│  │ 🏦 MASS BANKING   │ │ ⭐ TAMAYUZ        │ │ 👑 PRIVATE        │          │
+│  │                   │ │                   │ │                   │          │
+│  │    5 Cases        │ │    4 Cases        │ │    3 Cases        │          │
+│  │    ▶ View         │ │    ▶ View         │ │    ▶ View         │          │
+│  └───────────────────┘ └───────────────────┘ └───────────────────┘          │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                         GROUP SUMMARY                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │      8      │  │      4      │  │      4      │  │     18      │         │
+│  │   Pending   │  │ In Progress │  │   Overdue   │  │  Completed  │         │
+│  │   Review    │  │             │  │    (SLA)    │  │   (Month)   │         │
+│  │             │  │             │  │             │  │             │         │
+│  │ +2 from     │  │ Active      │  │ ⚠️ Needs    │  │ +5 vs last  │         │
+│  │ yesterday   │  │ reviews     │  │ attention   │  │ month       │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘         │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                    SECTOR COMPARISON CHART                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Mass Banking     ████████████████████████  42%                             │
+│  Tamayuz Banking  ███████████████████       33%                             │
+│  Private Banking  ███████████████           25%                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 47.3 Sector Navigation
+
+Clicking on any sector card navigates to the sector-specific dashboard.
+
+| User Action | Result |
+|-------------|--------|
+| Click "Mass Banking" | Navigate to Mass Banking Dashboard |
+| Click "Tamayuz" | Navigate to Tamayuz Dashboard |
+| Click "Private Banking" | Navigate to Private Banking Dashboard |
+| Click any KPI number | Open filtered case list |
+
+---
+
+### 47.4 Sector Dashboard (Level 2)
+
+Each sector has its own dedicated dashboard displaying sector-specific data only.
+
+**Mass Banking Dashboard:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  🏦 MASS BANKING DASHBOARD                              [← Back to Retail]  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │      3      │  │      1      │  │      1      │  │      8      │         │
+│  │   Pending   │  │ In Progress │  │   Overdue   │  │  Completed  │         │
+│  │   Review    │  │             │  │    (SLA)    │  │   (Month)   │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘         │
+│                                                                             │
+│  📋 Recent Cases                                                            │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│  EDD-2026-0045  Ahmad Ali         High Risk    Pending    2 days           │
+│  EDD-2026-0044  Mohammed Salem    PEP          In Progress 1 day           │
+│  EDD-2026-0043  Fatima Hassan     High Risk    Overdue    5 days ⚠️        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Tamayuz Banking Dashboard:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ⭐ TAMAYUZ BANKING DASHBOARD                           [← Back to Retail]  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │      2      │  │      1      │  │      0      │  │      5      │         │
+│  │   Pending   │  │ In Progress │  │   Overdue   │  │  Completed  │         │
+│  │   Review    │  │             │  │    (SLA)    │  │   (Month)   │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Private Banking Dashboard:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  👑 PRIVATE BANKING DASHBOARD                           [← Back to Retail]  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │      3      │  │      2      │  │      1      │  │      5      │         │
+│  │   Pending   │  │ In Progress │  │   Overdue   │  │  Completed  │         │
+│  │   Review    │  │             │  │    (SLA)    │  │   (Month)   │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 47.5 Dynamic Data Filtering
+
+All dashboard metrics must be dynamically filtered based on customer sector.
+
+**Data Source:**
+
+| Field | Source System | Description |
+|-------|---------------|-------------|
+| Customer Sector | T24 | SECTOR field in customer record |
+| Customer Segment | CRP | Segment classification |
+| Risk Level | CRP | High Risk indicator |
+| Case Status | FLOW | Current case state |
+
+**Filter Logic:**
+
+```
+SELECT COUNT(*) 
+FROM EDD_CASES 
+WHERE CUSTOMER_SECTOR = :selected_sector
+AND CASE_STATUS = :status_filter
+```
+
+---
+
+### 47.6 Case Drill-Down
+
+Clicking on any KPI number opens a filtered case list.
+
+| Click Action | Result |
+|-------------|--------|
+| Pending Review (Mass) | Shows only Mass Banking pending cases |
+| Overdue (Tamayuz) | Shows only Tamayuz overdue cases |
+| Completed (Private) | Shows only Private Banking completed cases |
+
+---
+
+### 47.7 SLA Visibility by Sector
+
+Each sector sees only its own overdue cases.
+
+| Sector | SLA Visibility |
+|--------|----------------|
+| Mass | Mass Banking overdue cases only |
+| Tamayuz | Tamayuz overdue cases only |
+| Private | Private Banking overdue cases only |
+| Retail GM | All sectors with breakdown |
+
+---
+
+### 47.8 Retail Management View
+
+The Retail Group Manager sees a comparison dashboard:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    RETAIL MANAGEMENT DASHBOARD                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  SECTOR COMPARISON                                                          │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│                                                                             │
+│  Sector          Cases    Pending    Overdue    SLA %    Trend             │
+│  ──────────────────────────────────────────────────────────────────────── │
+│  Mass Banking      5         3          1       80%      📈 +2             │
+│  Tamayuz           4         2          0       100%     📊 0              │
+│  Private           3         3          1       67%      📉 -1             │
+│  ──────────────────────────────────────────────────────────────────────── │
+│  TOTAL            12         8          2       82%                        │
+│                                                                             │
+│  VISUAL COMPARISON                                                          │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│                                                                             │
+│  Cases by Sector                    SLA Compliance                          │
+│  Mass     ████████████ 42%          Mass     ████████   80%                │
+│  Tamayuz  █████████    33%          Tamayuz  ██████████ 100%               │
+│  Private  ██████       25%          Private  ██████     67%                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 47.9 Technical Implementation Note
+
+```
+The Retail Banking dashboard must follow a hierarchical structure.
+
+The first level must display an overview dashboard for the Retail Group 
+including Mass Banking, Tamayuz Banking, and Private Banking sectors.
+
+Users must be able to click on each sector to navigate to the corresponding 
+sector dashboard.
+
+Each sector dashboard must dynamically display case statistics including 
+Pending Review, In Progress, Overdue (SLA), and Completed cases specific 
+to that sector.
+
+All dashboard metrics must be dynamically filtered based on the customer 
+sector information retrieved from the core banking system (T24).
+
+The dashboard must support drill-down from KPI numbers to filtered case lists.
+```
+
+---
+
+## 48. Risk Intelligence Dashboard (AML Analytics)
+
+This section defines the Risk Intelligence Dashboard providing advanced analytics on high-risk customer patterns, essential for Risk Management and Central Bank reporting.
+
+---
+
+### 48.1 Overview
+
+The Risk Intelligence Dashboard provides analytical insights into:
+
+| Category | Description | Stakeholders |
+|----------|-------------|--------------|
+| Risk Triggers | Why customers are classified High Risk | Compliance, Risk |
+| Demographics | Nationality and occupation patterns | QCB, AML Team |
+| Trends | Risk pattern changes over time | Management, Audit |
+| Concentration | Risk concentration by segment | Risk Committee |
+
+---
+
+### 48.2 Dashboard Layout
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     RISK INTELLIGENCE DASHBOARD                             │
+│                     AML Analytics & Pattern Recognition                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  📊 KEY RISK INDICATORS (KRI)                                               │
+│  ─────────────────────────────────────────────────────────────────────────  │
+│                                                                             │
+│  ┌───────────────┐ ┌───────────────┐ ┌───────────────┐ ┌───────────────┐   │
+│  │     234       │ │      45       │ │      12       │ │      8        │   │
+│  │  High Risk    │ │     PEP       │ │   Sanctions   │ │   Adverse     │   │
+│  │  Customers    │ │  Customers    │ │   Matches     │ │   Media       │   │
+│  │               │ │               │ │               │ │               │   │
+│  │  +15 MTD      │ │  +3 MTD       │ │  +2 MTD       │ │  +1 MTD       │   │
+│  └───────────────┘ └───────────────┘ └───────────────┘ └───────────────┘   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  🎯 TOP HIGH RISK TRIGGERS                    📍 TOP NATIONALITIES          │
+│  ─────────────────────────────────────        ─────────────────────────────  │
+│                                                                             │
+│  1. Cash Intensive Business    28%            1. Syria          18%         │
+│     ████████████████████████████              ██████████████████            │
+│                                                                             │
+│  2. High Risk Country          22%            2. Iran           15%         │
+│     ████████████████████████                  ███████████████               │
+│                                                                             │
+│  3. PEP Status                 18%            3. Lebanon        12%         │
+│     ████████████████████                      ████████████                  │
+│                                                                             │
+│  4. Complex Ownership          15%            4. Yemen          10%         │
+│     █████████████████                         ██████████                    │
+│                                                                             │
+│  5. Source of Funds Unknown    10%            5. Sudan           8%         │
+│     ████████████                              ████████                      │
+│                                                                             │
+│  6. Other                       7%            6. Other          37%         │
+│     ████████                                  ████████████████████████████  │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  💼 TOP HIGH RISK OCCUPATIONS                 📈 RISK TREND (6 MONTHS)      │
+│  ─────────────────────────────────────        ─────────────────────────────  │
+│                                                                             │
+│  1. Money Exchange            25%                  240 │         ┌─────    │
+│     ███████████████████████████                        │      ┌──┘         │
+│                                                    200 │   ┌──┘            │
+│  2. Real Estate               20%                      │┌──┘               │
+│     ████████████████████████                       160 ├┘                  │
+│                                                        │                   │
+│  3. Jewelry Trading           15%                  120 │                   │
+│     █████████████████                                  └─────────────────  │
+│                                                        Oct Nov Dec Jan Feb Mar│
+│  4. Import/Export             12%                                          │
+│     ████████████████                                                       │
+│                                                                             │
+│  5. Government Official       10%                                          │
+│     ████████████                                                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 48.3 Top High Risk Triggers Analysis
+
+The system must track and display the primary reasons for high-risk classification.
+
+**Risk Trigger Categories:**
+
+| Trigger Code | Trigger Name | Description | Weight |
+|--------------|--------------|-------------|--------|
+| CIB | Cash Intensive Business | Business with high cash transactions | High |
+| HRC | High Risk Country | Customer from FATF grey/black list | High |
+| PEP | Politically Exposed Person | Government official or associate | High |
+| COO | Complex Ownership | Complex corporate structure | Medium |
+| SOF | Source of Funds Unknown | Unclear source of wealth | High |
+| ADM | Adverse Media | Negative news coverage | Medium |
+| SAR | Previous SAR | Previous suspicious activity | Critical |
+| TXN | Unusual Transactions | Transaction pattern anomalies | Medium |
+| STR | Sanctioned Territory | Operations in sanctioned regions | Critical |
+| DUL | Dual Nationality | High-risk dual nationality | Medium |
+
+**Trigger Analytics Query:**
+
+```sql
+SELECT 
+    RISK_TRIGGER_CODE,
+    RISK_TRIGGER_NAME,
+    COUNT(*) as trigger_count,
+    ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER(), 2) as percentage
+FROM EDD_CASES ec
+JOIN RISK_TRIGGERS rt ON ec.CASE_ID = rt.CASE_ID
+WHERE ec.CREATE_DATE >= ADD_MONTHS(SYSDATE, -1)
+GROUP BY RISK_TRIGGER_CODE, RISK_TRIGGER_NAME
+ORDER BY trigger_count DESC
+```
+
+---
+
+### 48.4 Nationality Pattern Analysis
+
+Track high-risk classification patterns by customer nationality.
+
+**High-Risk Nationalities Dashboard:**
+
+| Metric | Description |
+|--------|-------------|
+| Top 10 Nationalities | Most common nationalities in high-risk cases |
+| Trend Analysis | Changes in nationality patterns over time |
+| Concentration Risk | Over-representation of specific nationalities |
+| QCB Alignment | Alignment with QCB high-risk country list |
+
+**Data Source:**
+
+```sql
+SELECT 
+    NATIONALITY_CODE,
+    NATIONALITY_NAME,
+    COUNT(*) as case_count,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM EDD_CASES), 2) as pct
+FROM EDD_CASES ec
+JOIN T24_CUSTOMER tc ON ec.CUSTOMER_ID = tc.CUSTOMER_ID
+WHERE ec.RISK_LEVEL = 'HIGH'
+GROUP BY NATIONALITY_CODE, NATIONALITY_NAME
+ORDER BY case_count DESC
+FETCH FIRST 10 ROWS ONLY
+```
+
+---
+
+### 48.5 Occupation Pattern Analysis
+
+Track high-risk classification patterns by customer occupation.
+
+**High-Risk Occupations Dashboard:**
+
+| Occupation Category | Risk Level | Description |
+|--------------------|------------|-------------|
+| Money Exchange | Critical | Currency exchange businesses |
+| Real Estate | High | Property developers, agents |
+| Jewelry Trading | High | Precious metals, stones dealers |
+| Import/Export | Medium-High | International trade businesses |
+| Government Official | High | PEP-related occupations |
+| Legal Professional | Medium | Lawyers, notaries |
+| Accounting | Medium | Accountants, auditors |
+| Casino/Gaming | Critical | Gaming industry |
+
+---
+
+### 48.6 Risk Concentration Analysis
+
+**By Business Segment:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     RISK CONCENTRATION BY SEGMENT                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  RETAIL BANKING                              WHOLESALE BANKING              │
+│  ─────────────────────                       ─────────────────────          │
+│  Mass        ████████████████  45%           SME      ████████████  40%    │
+│  Tamayuz     ██████████        30%           Corporate ██████████  35%     │
+│  Private     ████████          25%           Trade    ███████       25%    │
+│                                                                             │
+│  Total: 234 High Risk Customers              Total: 156 High Risk Customers│
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 48.7 Regulatory Reporting Support
+
+The Risk Intelligence Dashboard supports regulatory reporting requirements:
+
+| Report | Frequency | Content | Recipient |
+|--------|-----------|---------|-----------|
+| Risk Pattern Report | Monthly | Top triggers, nationalities, occupations | QCB |
+| PEP Monitoring Report | Quarterly | PEP customer statistics | Compliance Committee |
+| Concentration Report | Quarterly | Risk concentration by segment | Risk Committee |
+| Trend Analysis | Monthly | Risk pattern changes | Senior Management |
+| SAR Support Data | On-demand | Supporting data for STRs | FIU |
+
+---
+
+### 48.8 Alert Thresholds
+
+The system shall generate alerts when thresholds are breached:
+
+| Metric | Warning Threshold | Critical Threshold | Action |
+|--------|-------------------|-------------------|--------|
+| New High Risk (Monthly) | >20 | >40 | Notify Risk Manager |
+| Single Nationality % | >15% | >25% | Concentration Alert |
+| Single Trigger % | >30% | >50% | Pattern Alert |
+| PEP Increase | >10% MoM | >25% MoM | Management Alert |
+
+---
+
+### 48.9 Machine Learning Integration
+
+The dashboard shall support ML-based pattern detection:
+
+| Feature | Description |
+|---------|-------------|
+| Anomaly Detection | Identify unusual patterns in risk triggers |
+| Predictive Scoring | Predict likelihood of high-risk classification |
+| Cluster Analysis | Group similar risk profiles |
+| Trend Prediction | Forecast risk pattern changes |
+
+---
+
+### 48.10 Technical Implementation Note
+
+```
+The Risk Intelligence Dashboard must provide analytical insights into 
+high-risk customer patterns.
+
+The dashboard must display:
+1. Top reasons for high-risk classification with percentages
+2. Most common nationalities among high-risk customers
+3. Most common occupations among high-risk customers
+4. Risk concentration by business segment
+5. Trend analysis over the past 6-12 months
+
+All data must be sourced from T24 customer records and CRP risk profiles.
+
+The dashboard must support drill-down to individual customer lists.
+
+Threshold-based alerts must be generated when concentration limits are breached.
+
+The dashboard must support export to PDF/Excel for regulatory reporting.
+```
+
+---
+
+## 49. Role-Based Case Visibility and Assignment (RBAC)
+
+### 49.1 Overview
+
+The system must implement **Role-Based Access Control (RBAC)** where each user can only view and access cases related to their role or department.
+
+**Objectives:**
+- Information confidentiality
+- Proper workload distribution
+- Clear case oversight and accountability
+- Complete audit trail
+
+---
+
+### 49.2 User Roles
+
+The system must support the following user roles:
+
+| Role | Description | Visibility |
+|------|-------------|------------|
+| Business Maker | Create and review cases | Own cases + Assigned cases |
+| Business Checker | Review and approve business recommendations | Cases pending approval |
+| CDD Maker | Review customer documents | Cases assigned to CDD |
+| CDD Checker | Approve CDD decisions | Cases pending CDD approval |
+| Compliance Officer | Review escalated cases | Escalated cases only |
+| Compliance Checker | Approve compliance opinion | Cases pending compliance approval |
+| Operations | Execute decisions | Cases pending execution |
+| Call Center | Customer follow-up | Customer contact cases |
+| Department Supervisor | Department oversight | All department cases |
+
+---
+
+### 49.3 Case Visibility Rules
+
+Each employee can only view cases assigned to them or relevant to their role.
+
+#### Business Maker View
+```
+Cases I Created
+Cases Assigned to Me
+Cases Returned for Action
+```
+
+#### Business Checker View
+```
+Cases Pending Business Review
+Cases I Approved/Rejected
+```
+
+#### CDD Team View
+```
+Cases Transferred to CDD
+Cases Pending Document Review
+```
+
+#### Compliance Team View
+```
+Cases Escalated to Compliance
+Cases Pending Compliance Decision
+```
+
+#### Operations View
+```
+Cases Pending Execution
+Cases Completed by Operations
+```
+
+---
+
+### 49.4 Supervisor Dashboard (Super User)
+
+Department managers or **Sector Supervisors** must have access to:
+
+- View all cases within their department
+- Full dashboard for department performance
+- SLA monitoring for all team members
+
+```
++--------------------------------------------------+
+|         SUPERVISOR DASHBOARD                      |
++--------------------------------------------------+
+|                                                  |
+|  Mass Banking Dashboard     [View All]           |
+|  Tamayuz Banking Dashboard  [View All]           |
+|  Private Banking Dashboard  [View All]           |
+|                                                  |
+|  Team Performance                                |
+|  ----------------                                |
+|  Employee A    5 Cases    2 Overdue              |
+|  Employee B    3 Cases    0 Overdue              |
+|  Employee C    4 Cases    1 Overdue              |
+|                                                  |
++--------------------------------------------------+
+```
+
+---
+
+### 49.5 Supervisor Permissions
+
+The Super User has the following permissions **within their department only**:
+
+| Permission | Description |
+|------------|-------------|
+| View All Cases | See all department cases |
+| Reassign Cases | Redistribute cases between employees |
+| Delegate Cases | Assign cases to specific employees |
+| Monitor SLA | Track overdue cases |
+| Export Reports | Generate department reports |
+| Manage Delegation | Set up temporary delegation |
+
+---
+
+### 49.6 Case Assignment Actions
+
+Supervisors can assign cases using:
+
+| Method | Field |
+|--------|-------|
+| Employee ID | Staff number (e.g., QIB12345) |
+| Employee Name | Full name from HR system |
+| Email Address | Corporate email |
+
+**Assignment Interface:**
+```
++------------------------------------------+
+|         ASSIGN CASE                       |
++------------------------------------------+
+|  Case ID: EDD-2024-001234                |
+|                                          |
+|  Assign To:                              |
+|  [Search Employee...            ] [🔍]   |
+|                                          |
+|  ○ By Employee ID                        |
+|  ○ By Name                               |
+|  ○ By Email                              |
+|                                          |
+|  Assignment Reason:                      |
+|  [________________________]              |
+|                                          |
+|  [Cancel]              [Assign Case]     |
++------------------------------------------+
+```
+
+---
+
+### 49.7 Delegation Management
+
+Supervisors can delegate their authority to another employee temporarily.
+
+**Delegation Record:**
+| Field | Description |
+|-------|-------------|
+| Delegating User | Supervisor granting authority |
+| Delegate User | Employee receiving authority |
+| Start Date | Delegation start |
+| End Date | Delegation expiry |
+| Delegation Reason | Leave, Travel, etc. |
+| Permissions Granted | List of delegated permissions |
+
+All delegations must be recorded in the system audit trail.
+
+---
+
+### 49.8 Assignment Audit Trail
+
+Every assignment action must be recorded:
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| Case ID | Case reference | EDD-2024-001234 |
+| Previous Owner | Original assignee | John Smith |
+| New Owner | New assignee | Sarah Ahmed |
+| Assigned By | Supervisor name | Mohammed Ali |
+| Assigned By ID | Supervisor employee ID | QIB10001 |
+| Timestamp | Date and time | 2024-03-15 10:30:45 |
+| Reason | Assignment justification | Workload balancing |
+
+---
+
+### 49.9 Individual Employee Dashboard
+
+Each employee must see a personal dashboard:
+
+```
++--------------------------------------------------+
+|         MY CASES                                  |
++--------------------------------------------------+
+|                                                  |
+|  📋 Assigned to Me          3                    |
+|  🔄 Pending My Review       2                    |
+|  ⚠️ Overdue (SLA)           1                    |
+|  ✅ Completed (Month)       5                    |
+|                                                  |
++--------------------------------------------------+
+|  My Recent Activity                              |
+|  -----------------                               |
+|  Case EDD-001234  Submitted     10:30 AM         |
+|  Case EDD-001235  Document Req   9:45 AM         |
+|  Case EDD-001230  Completed     Yesterday        |
+|                                                  |
++--------------------------------------------------+
+```
+
+---
+
+### 49.10 Cross-Department Visibility Rules
+
+| Scenario | Rule |
+|----------|------|
+| Same Department | Full visibility for supervisors |
+| Different Department | No visibility (except escalated cases) |
+| Compliance Department | Sees only escalated cases |
+| Risk Department | Sees risk reports only |
+| Audit Department | Full read-only access (special role) |
+
+---
+
+### 49.11 Technical Implementation Note
+
+```
+The system must implement role-based access control where users can only 
+view cases assigned to them or relevant to their department.
+
+Each user must have visibility limited to their assigned tasks unless 
+they hold a supervisory role.
+
+Department supervisors must have a full dashboard view of all cases 
+within their department and must be able to assign or reassign cases 
+to employees within their department.
+
+All assignment actions must be recorded in the system including the 
+employee ID of the assigning user and the assigned user.
+
+The system must maintain a full audit trail of all actions performed 
+on each case including:
+- User identity (name and employee ID)
+- Department
+- Timestamp
+- Action type
+- Action details
+- Previous and new values for any changes
+
+Role permissions must be configurable at the system administration level.
+Changes to role permissions must require maker-checker approval.
+```
+
+---
+
+## 50. Final Conclusion
 
 This Business Requirements Document (BRD) defines the complete requirements for the QIB EDD Case Management System, covering:
 
@@ -4672,6 +6216,53 @@ This Business Requirements Document (BRD) defines the complete requirements for 
   - Correction Procedures
   - Demo Environment Compliance
 
+**Compliance Escalation Requirements:**
+- Compliance Escalation Governance (Section 46)
+  - Four-Eyes Principle Implementation
+  - Compliance Officer (L1) Review
+  - Compliance Checker (L2) Validation
+  - Compliance Decision Panel UI
+  - Recommendation Types (REQ_DOCS, DATA_UPDATE, ACCEPT_AS_IS, etc.)
+  - Return to Business/Operations Workflow
+  - Audit Trail for All Compliance Actions
+  - SLA Management (3 Business Days Total)
+  - System Integration (FLOW, T24, CRP, Sanctions DB)
+  - Governance Metrics and KPIs
+
+**Dashboard Architecture Requirements:**
+- Retail Banking Dashboard Structure (Section 47)
+  - Hierarchical Dashboard (Level 1 & Level 2)
+  - Retail Group Overview Dashboard
+  - Sector-Specific Dashboards (Mass, Tamayuz, Private)
+  - Dynamic Data Filtering by Customer Sector
+  - Case Drill-Down Navigation
+  - SLA Visibility by Sector
+  - Retail Management Comparison View
+  - Sector Comparison Charts
+
+- Risk Intelligence Dashboard (Section 48)
+  - Key Risk Indicators (KRI) Display
+  - Top High Risk Triggers Analysis
+  - Nationality Pattern Analysis
+  - Occupation Pattern Analysis
+  - Risk Concentration by Segment
+  - Regulatory Reporting Support
+  - Alert Thresholds Configuration
+  - Machine Learning Integration
+  - QCB/FATF Alignment Analytics
+
+**Access Control & Case Assignment Requirements:**
+- Role-Based Case Visibility (Section 49)
+  - User Role Definitions (Maker/Checker/Supervisor)
+  - Case Visibility Rules by Role
+  - Supervisor Dashboard with Full Department View
+  - Case Assignment and Reassignment
+  - Delegation Management
+  - Assignment Audit Trail
+  - Individual Employee Dashboard
+  - Cross-Department Visibility Rules
+  - Configurable Role Permissions
+
 **System Integrations:**
 - FLOW Workflow Engine
 - T24 Core Banking
@@ -4694,3 +6285,307 @@ This Business Requirements Document (BRD) defines the complete requirements for 
 - Audit Readiness Requirements
 
 This BRD serves as the complete foundation for system development, ensuring alignment between Business, IT, Compliance, and Audit requirements at enterprise-grade standards.
+
+---
+
+# SECTION 13: EDD FORM TEMPLATE & DATA MAPPING REFERENCE
+
+## 13.1 EDD Form Overview
+
+The system implements a comprehensive **Enhanced Due Diligence (EDD) Form** that serves as the operational template for all EDD case reviews. This form captures all customer information, risk indicators, financial analysis, document requirements, and approval workflows.
+
+### Form Structure
+
+The EDD Form consists of **9 main sections**:
+
+1. **Customer Identification** - RIM, Name, Account, Segment, DOB, Nationality
+2. **Risk Classification Reasons** - PEP status, Occupation, Products, AML Indicators, Resident status
+3. **Financial Analysis** - Declared income, salary data, source of funds
+4. **Joint Accounts & Exposure** - Joint account holders and balances
+5. **Required Documents** - Salary certificates, residence proof, source of funds docs, ID updates, selfie verification
+6. **Business Review** - Maker/Checker workflow and recommendations
+7. **CDD Review** - CDD Maker/Checker document verification
+8. **Compliance Review** - Compliance Officer opinion (if escalated)
+9. **Digital Signatures & Audit Trail** - Digital signatures and complete audit logging
+
+---
+
+## 13.2 Complete Field Mapping Reference
+
+**See attached document:** `EDD_FORM_DATA_MAPPING.md`
+
+This reference document contains:
+
+- **Complete field specifications** for all 40+ form fields
+- **Data source mapping** (T24, CRP, ETL, DMS)
+- **Data types, validation rules, and business logic**
+- **API endpoints** for mobile/web integration
+- **UI component requirements** (input types, dropdowns, file uploads)
+- **Field dependencies and conditional logic**
+- **Security and compliance requirements**
+
+### Quick Reference Table
+
+| Category | Fields | Source |
+|----------|--------|--------|
+| **Customer Data** | Name, RIM, Account, Segment, DOB, Nationality | T24 / CRP |
+| **Risk Indicators** | PEP, Occupation, Products, AML Flags | CRP / ETL |
+| **Financial Data** | Income, Salary, Inflows, Outflows | T24 / ETL |
+| **Accounts** | Joint accounts, exposures | T24 |
+| **Documents** | 5 document types required | DMS (FileNet) |
+| **Approvals** | 6 approval stages (Maker/Checker) | Internal Workflow Engine |
+
+---
+
+## 13.3 Read-Only vs Editable Fields
+
+### Read-Only Fields (From Source Systems)
+
+These fields are **automatically populated** from T24, CRP, or ETL and **cannot be manually edited**:
+
+- Customer Name, RIM, Account Number, Segment
+- Date of Birth, Nationality
+- PEP Status, Occupation, Products, Non-Resident Flag
+- AML Indicators, Risk Scores
+- Joint Account Details, Total Inflows/Outflows
+- Last Salary Amount, Salary Date, Average Salary
+
+### Editable Fields (By Business User)
+
+| Field | Editable By | Purpose |
+|-------|------------|---------|
+| **Source of Funds Explanation** | Business Maker | Justify income source |
+| **Comments** | All reviewers | Add observations/concerns |
+| **Recommendation** | Business Maker/Checker | Provide approval decision |
+| **Document Comments** | CDD Maker/Checker | Flag document issues |
+| **Risk Opinion** | Compliance Officer | Professional opinion |
+
+---
+
+## 13.4 API Endpoints for Form Data
+
+### Customer Profile Endpoints
+
+```
+GET /api/v1/customers/{rim}
+GET /api/v1/customers/{rim}/risk-profile
+GET /api/v1/customers/{rim}/financial
+GET /api/v1/customers/{rim}/joint-accounts
+GET /api/v1/customers/{rim}/kyc
+```
+
+### Document Management Endpoints
+
+```
+POST /api/v1/documents/upload
+GET /api/v1/cases/{caseId}/documents
+DELETE /api/v1/documents/{documentId}
+```
+
+### Case Workflow Endpoints
+
+```
+POST /api/v1/cases/{caseId}/submit
+POST /api/v1/cases/{caseId}/approve
+POST /api/v1/cases/{caseId}/return
+POST /api/v1/cases/{caseId}/escalate
+```
+
+---
+
+## 13.5 Form Validation Architecture
+
+### Client-Side Validation
+
+- Real-time field validation
+- Pattern matching (RIM format, account number, etc.)
+- File type and size validation
+- Conditional field requirements
+- Cross-field validation (e.g., declared income vs actual)
+
+### Server-Side Validation
+
+- Data type verification
+- Business logic enforcement
+- Duplicate detection
+- Database constraints
+- Audit trail verification
+
+---
+
+## 13.6 Maker-Checker Approval Workflow
+
+The form enforces strict **Maker-Checker principle** across 6 approval stages:
+
+### Stage 1: Business Maker
+- **Role**: Relationship Manager (RM)
+- **Action**: Review customer data, provide observations, recommendation
+- **Status**: Draft → Submitted for Checker
+
+### Stage 2: Business Checker  
+- **Role**: Department Supervisor
+- **Action**: Review RM analysis, approve or return
+- **Status**: Checker Approved OR Returned to Maker
+
+### Stage 3: CDD Maker
+- **Role**: Document Specialist
+- **Action**: Request missing documents, verify authenticity
+- **Status**: Docs Requested → Docs Submitted
+
+### Stage 4: CDD Checker
+- **Role**: Head of CDD
+- **Action**: Approve documents or escalate to Compliance
+- **Status**: Approved OR Escalated to Compliance
+
+### Stage 5: Compliance Officer (If Escalated)
+- **Role**: Compliance Officer (L1)
+- **Action**: Analyze risk, provide compliance opinion
+- **Status**: Opinion Submitted
+
+### Stage 6: Compliance Checker (If Escalated)
+- **Role**: Compliance Checker (L2)
+- **Action**: Final compliance decision
+- **Status**: Approved / Denied
+
+---
+
+## 13.7 Document Upload Requirements
+
+| Document | Required If | Format | Size | Validation |
+|----------|-------------|--------|------|-----------|
+| **Salary Certificate** | Customer employed | PDF/JPG/PNG | ≤10MB | Must match declared income |
+| **Rental Agreement** | Always | PDF/JPG/PNG | ≤10MB | Must match address in T24 |
+| **Source of Funds** | Risk score ≥200 | PDF/JPG/PNG | ≤10MB | Justification for income source |
+| **ID/Passport Update** | If details changed | PDF/JPG/PNG | ≤10MB | Current, valid ID |
+| **Selfie Verification** | Online onboarding OR high-risk | JPG/PNG/MP4 | ≤20MB | Liveness detection pass required |
+
+---
+
+## 13.8 Audit Trail & Compliance Logging
+
+Every interaction with the EDD Form is logged including:
+
+- **Who**: User name, Employee ID, Department
+- **What**: Field changed, value before/after, action performed
+- **When**: Exact timestamp (ISO 8601 format)
+- **Where**: IP address, system module
+- **Why**: Reason code for action
+
+### Sample Audit Entry
+
+```json
+{
+  "audit_id": "AUD-20260309-001234",
+  "case_id": "EDD-2024-001234",
+  "user_id": "EMP001234",
+  "user_name": "Ahmed Al-Sulaiti",
+  "department": "Retail Banking",
+  "action": "FIELD_UPDATED",
+  "field_name": "source_of_funds",
+  "previous_value": "Initial investment",
+  "new_value": "Salary from QIB + family gift",
+  "timestamp": "2026-03-09T10:30:45Z",
+  "ip_address": "192.168.1.100",
+  "module": "EDD Case Management",
+  "signature": "<digital_signature>"
+}
+```
+
+---
+
+## 13.9 Form Integration with System Modules
+
+### Workflow Engine Integration
+- Activates approval tasks when form submitted
+- Routes based on risk score and case classification
+- Manages SLA timers per stage
+- Sends notifications to next approver
+
+### Dashboard Integration
+- Form data populates case summary cards
+- Risk indicators display in case header
+- Document status shows in panels
+- Approval timeline visible in workflow view
+
+### Reporting & Analytics
+- Forms submitted per day/week/month
+- Approval time per stage (SLA tracking)
+- Document request rates
+- Escalation patterns to compliance
+
+### Integration with FLOW Workflow Engine
+- Case status changes trigger workflow events
+- Approvals create FLOW tasks
+- Document uploads update FLOW case context
+- Notifications send via FLOW notification gateway
+
+---
+
+## 13.10 Mobile & Web Form Access
+
+### Web Form Features
+- Two-column responsive layout
+- Full document preview capability
+- Batch comment functionality
+- Export to PDF for archive
+
+### Mobile Form Features  
+- Single-column responsive design
+- Simplified navigation (section tabs)
+- Photo capture for documents
+- Offline draft capability
+
+### API-Driven Architecture
+- Front-end calls REST APIs for all data
+- Separation of concerns (UI vs Business Logic)
+- Stateless API design
+- Platform-agnostic (web, mobile, tablet)
+
+---
+
+## 13.11 Testing Requirements
+
+### Unit Testing
+- Field validation logic
+- API endpoint responses
+- Database stored procedures
+- Approval workflow state transitions
+
+### Integration Testing
+- T24 data retrieval
+- CRP risk profile loading
+- ETL financial data population
+- DMS document storage
+- Workflow notifications
+
+### User Acceptance Testing
+- Business Maker form review flow
+- Business Checker approval process
+- CDD document request process
+- Compliance escalation scenarios
+- Audit trail completeness
+
+### Security Testing
+- SQL injection prevention
+- File upload security
+- XSS protection
+- CSRF token validation
+- Role-based access control
+
+---
+
+## 13.12 Performance Requirements
+
+| Requirement | Target |
+|------------|--------|
+| **Form Load Time** | <2 seconds |
+| **Field Validation** | <500ms |
+| **Document Upload** | <5 seconds (10MB) |
+| **Approval Submit** | <1 second |
+| **Audit Log Write** | <100ms |
+| **Concurrent Users** | 1000+ simultaneous form usage |
+| **Database Query** | <500ms for all form data |
+
+---
+
+This section provides the complete technical specification for the EDD Form implementation, ensuring developers have all details needed for accurate, compliant development without further clarification.
