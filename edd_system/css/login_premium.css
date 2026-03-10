@@ -142,22 +142,23 @@ body {
   left: 0;
   right: 0;
   z-index: 10;
-  padding: 8px 16px;
-  background: linear-gradient(to bottom, rgba(10, 31, 61, 0.95), rgba(10, 31, 61, 0.7));
+  padding: 4px 12px;
+  background: linear-gradient(to bottom, rgba(10, 31, 61, 0.95), rgba(10, 31, 61, 0.8));
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border-light);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  font-size: 9px;
+  gap: 6px;
+  font-size: 7px;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   text-transform: uppercase;
   color: var(--color-accent-gold);
   animation: slideDown 0.6s ease-out;
-  height: 32px;
-  flex-wrap: wrap;
+  height: 22px;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .cred-item {
@@ -198,7 +199,7 @@ body {
   bottom: 0;
   display: flex;
   z-index: 1;
-  padding-top: 32px;
+  padding-top: 22px;
   padding-bottom: 32px;
   height: 100vh;
   overflow: hidden;
@@ -214,7 +215,7 @@ body {
   background: linear-gradient(135deg, rgba(15, 42, 82, 0.8) 0%, rgba(10, 31, 61, 0.9) 100%);
   backdrop-filter: blur(10px);
   border-right: 1px solid var(--color-border-light);
-  padding: 30px 25px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -372,7 +373,7 @@ body {
 
 .portal-form-section {
   background: linear-gradient(135deg, rgba(10, 31, 61, 0.5) 0%, rgba(15, 42, 82, 0.6) 100%);
-  padding: 30px 25px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -403,8 +404,8 @@ body {
   background: rgba(20, 40, 70, 0.6);
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 28px;
+  border-radius: 14px;
+  padding: 20px;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.3),
     inset 1px 1px 0 rgba(255, 255, 255, 0.1);
