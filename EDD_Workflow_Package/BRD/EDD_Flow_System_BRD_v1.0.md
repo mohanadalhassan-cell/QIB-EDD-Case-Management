@@ -426,6 +426,126 @@ COMPLIANCE AUTHORITY MATRIX:
 
 ---
 
+# 8B. DECISION AUTHORITY MODEL
+
+## 8B.1 Operating Principle
+
+The EDD workflow adopts a **CDD-Centric Decision Authority Model** where the CDD Team is the primary and default decision authority for all EDD cases. Escalation is reserved exclusively for exceptional circumstances.
+
+```
+┌───────────────────────────────────────────────────────────────────────┐
+│                 DECISION AUTHORITY MODEL                             │
+│                                                                       │
+│  ┌─────────────────┐                                                 │
+│  │  DEFAULT PATH    │  95% of cases                                  │
+│  │  (Standard)      │                                                │
+│  │                  │                                                │
+│  │  Case Created    │                                                │
+│  │      ↓           │                                                │
+│  │  Business Input  │  (Document collection, initial info)           │
+│  │      ↓           │                                                │
+│  │  CDD Review      │  (Full due diligence assessment)              │
+│  │      ↓           │                                                │
+│  │  CDD Decision    │  ← PRIMARY DECISION POINT                    │
+│  │      ↓           │                                                │
+│  │  Completed       │                                                │
+│  └─────────────────┘                                                 │
+│                                                                       │
+│  ┌─────────────────┐                                                 │
+│  │  ESCALATION PATH │  ≤ 5% of cases                                │
+│  │  (Exceptional)   │                                                │
+│  │                  │                                                │
+│  │  Case Created    │                                                │
+│  │      ↓           │                                                │
+│  │  Business Input  │                                                │
+│  │      ↓           │                                                │
+│  │  CDD Review      │                                                │
+│  │      ↓           │                                                │
+│  │  ESCALATION      │  (Mandatory justification required)           │
+│  │      ↓           │                                                │
+│  │  Senior Review   │  (Compliance Head / Risk Committee)           │
+│  │      ↓           │                                                │
+│  │  Decision        │                                                │
+│  └─────────────────┘                                                 │
+│                                                                       │
+└───────────────────────────────────────────────────────────────────────┘
+```
+
+## 8B.2 Default Decision Authority
+
+The **CDD Team** is the designated decision authority for all Enhanced Due Diligence cases. This includes:
+
+| Responsibility | Description |
+|----------------|-------------|
+| File Review | Complete review of customer documentation and verification |
+| Risk Assessment | Evaluate risk indicators, financial profile, and transaction patterns |
+| Decision | Approve, Approve with Conditions, or Reject the case |
+
+## 8B.3 Exceptional Escalation Criteria
+
+Escalation is permitted **only** when one or more of the following conditions are met:
+
+| # | Condition | Example |
+|---|-----------|--------|
+| 1 | High-risk PEP indicators | Senior government official, foreign PEP |
+| 2 | Sanctioned country involvement | Customer linked to FATF high-risk jurisdiction |
+| 3 | Information conflict | Source of funds contradicts known profile |
+| 4 | Management directive | Explicit request from Risk Management or Compliance |
+| 5 | Regulatory trigger | QCB or external regulator inquiry |
+
+## 8B.4 Escalation Threshold
+
+**Maximum Escalation Rate: ≤ 5% of total EDD cases.**
+
+The system enforces this through:
+
+| Control | Description |
+|---------|-------------|
+| Real-time monitoring | Dashboard displays current escalation ratio |
+| Threshold alert | System alert when escalation rate exceeds 4% (warning) |
+| Breach notification | Automatic notification to Head of CDD when rate exceeds 5% |
+| Monthly reporting | Escalation trend report generated for Risk Management |
+
+## 8B.5 Mandatory Escalation Fields
+
+When a case is escalated, the system requires the following mandatory fields before submission:
+
+| # | Field | Type | Required |
+|---|-------|------|----------|
+| 1 | Reason for Escalation | Dropdown + Text | YES |
+| 2 | Risk Justification | Textarea | YES |
+| 3 | Supporting Documents | File Upload | YES |
+| 4 | Escalation Level | Dropdown | YES |
+
+**Escalation Levels:**
+- CDD Manager
+- Compliance Head
+- Risk Committee
+- Board Risk Committee
+
+## 8B.6 Escalation Source
+
+Escalation can be initiated by:
+
+| Source | Authority | Condition |
+|--------|-----------|----------|
+| Business Team | RM / Branch Manager | During Business Input stage |
+| CDD Team | CDD Officer / CDD Manager | During CDD Review stage |
+
+## 8B.7 Governance Benefits
+
+This model achieves:
+
+| Benefit | Impact |
+|---------|--------|
+| Reduced processing time | CDD decides without unnecessary escalation layers |
+| CDD empowerment | CDD team has full authority and accountability |
+| Controlled escalation | ≤ 5% threshold prevents escalation abuse |
+| Stronger governance | Clear decision authority with complete audit trail |
+| Regulatory alignment | Meets QCB and FATF expectations for human-in-the-loop |
+
+---
+
 # 9. DECISION SUPPORT SYSTEM PHILOSOPHY
 
 ## 9.1 What the System Does

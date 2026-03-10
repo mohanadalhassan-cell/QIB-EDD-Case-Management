@@ -230,6 +230,66 @@
           </div>
         </div>
 
+        <!-- Escalation Monitoring Panel (Decision Authority Model) -->
+        <div style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(255,152,0,0.06), rgba(255,87,34,0.06)); border: 1px solid rgba(255,152,0,0.2); border-radius: 16px; padding: 20px 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" fill="#FF9800" width="22" height="22"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+              <div>
+                <h3 style="margin: 0; font-size: 15px; font-weight: 700;">Escalation Monitoring</h3>
+                <span style="font-size: 11px; color: var(--text-muted);">CDD-Centric Decision Authority Model — Threshold: ≤ 5%</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Total EDD</div>
+                <div style="font-size: 22px; font-weight: 700; color: var(--text-primary);">1,247</div>
+              </div>
+              <div style="width: 1px; height: 36px; background: rgba(255,255,255,0.1);"></div>
+              <div style="text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Escalated</div>
+                <div style="font-size: 22px; font-weight: 700; color: #FF9800;">48</div>
+              </div>
+              <div style="width: 1px; height: 36px; background: rgba(255,255,255,0.1);"></div>
+              <div style="text-align: center;">
+                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Escalation Rate</div>
+                <div style="font-size: 22px; font-weight: 700; color: #4CAF50;">3.8%</div>
+              </div>
+              <div style="background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.3); padding: 6px 14px; border-radius: 20px;">
+                <span style="font-size: 11px; font-weight: 700; color: #4CAF50;">✓ WITHIN THRESHOLD</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 16px;">
+            <div style="flex: 1; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Escalation Sources</div>
+              <div style="display: flex; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2196F3;"></span><span style="font-size: 12px;">Business: 18</span></div>
+                <div style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #FF9800;"></span><span style="font-size: 12px;">CDD: 30</span></div>
+              </div>
+            </div>
+            <div style="flex: 1; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Top Escalation Reasons</div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <span style="font-size: 11px; padding: 3px 10px; background: rgba(244,67,54,0.15); color: #F44336; border-radius: 10px;">PEP High-Risk (22)</span>
+                <span style="font-size: 11px; padding: 3px 10px; background: rgba(255,152,0,0.15); color: #FFB300; border-radius: 10px;">SOF Conflict (14)</span>
+                <span style="font-size: 11px; padding: 3px 10px; background: rgba(156,39,176,0.15); color: #CE93D8; border-radius: 10px;">Sanctioned Country (12)</span>
+              </div>
+            </div>
+            <div style="flex: 1; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Decision Authority</div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: 96.2%; background: linear-gradient(90deg, #4CAF50, #00E676); border-radius: 4px;"></div></div>
+                <span style="font-size: 12px; font-weight: 600; color: #4CAF50;">96.2% CDD</span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center; margin-top: 6px;">
+                <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;"><div style="height: 100%; width: 3.8%; background: linear-gradient(90deg, #FF9800, #FF5722); border-radius: 4px;"></div></div>
+                <span style="font-size: 12px; font-weight: 600; color: #FF9800;">3.8% Escalated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Main Content Grid -->
         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
           <!-- Recent Cases -->

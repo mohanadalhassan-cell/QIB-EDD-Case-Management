@@ -139,14 +139,26 @@ function loadCase(caseId) {
 
 function updateWorkflow(status) {
   const steps = document.querySelectorAll('.workflow-step');
-  const statusOrder = ['pending_business', 'business_review', 'pending_business_approval', 'pending_cdd', 'pending_cdd_approval', 'pending_compliance', 'completed'];
-  const currentIndex = statusOrder.indexOf(status);
+  // CDD-Centric Decision Authority Model (5-step workflow)
+  const statusOrder = ['case_created', 'business_input', 'cdd_review', 'cdd_decision', 'completed'];
+  // Map legacy statuses to new model
+  const statusMap = {
+    'pending_business': 'business_input',
+    'business_review': 'business_input',
+    'pending_business_approval': 'cdd_review',
+    'pending_cdd': 'cdd_review',
+    'pending_cdd_approval': 'cdd_decision',
+    'pending_compliance': 'cdd_decision',
+    'completed': 'completed'
+  };
+  const mappedStatus = statusMap[status] || status;
+  const currentIndex = statusOrder.indexOf(mappedStatus);
 
   steps.forEach((step, index) => {
     step.classList.remove('completed', 'active');
-    if (index < Math.floor(currentIndex / 1.2)) {
+    if (index < currentIndex) {
       step.classList.add('completed');
-    } else if (index === Math.floor(currentIndex / 1.2)) {
+    } else if (index === currentIndex) {
       step.classList.add('active');
     }
   });
