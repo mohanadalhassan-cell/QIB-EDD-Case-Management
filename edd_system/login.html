@@ -10,6 +10,23 @@
   
   <style>
     /* ═══════════════════════════════════════════════════════════════ */
+    /* ROOT COLORS - DEEP MAROON WITH INTERACTIVE EFFECTS */
+    /* ═══════════════════════════════════════════════════════════════ */
+    :root {
+      --maroon: #5C0A28;
+      --maroon-light: #8B1538;
+      --maroon-dark: #3D0619;
+      --navy: #0a1f3d;
+      --navy-mid: #0c1929;
+      --navy-light: #132238;
+      --cyan: #00D4FF;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --glow-maroon: rgba(92, 10, 40, 0.4);
+      --glow-cyan: rgba(0,212,255,0.3);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
     /* FOUNDATION & TYPOGRAPHY */
     /* ═══════════════════════════════════════════════════════════════ */
     * {
@@ -29,6 +46,43 @@
 
     body.fullscreen-mode {
       overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* INTERACTIVE ANIMATIONS & PARTICLE EFFECTS */
+    /* ═══════════════════════════════════════════════════════════════ */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes scaleIn { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 20px var(--glow-maroon); } 50% { box-shadow: 0 0 40px var(--glow-maroon), 0 0 60px rgba(92,10,40,0.15); } }
+    @keyframes gradientShift { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
+    @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+    @keyframes borderRotate { 0% { background-position:0% 0%; } 100% { background-position:200% 0%; } }
+    @keyframes countUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes particleFloat {
+      0% { transform: translate(0,0) scale(1); opacity:0; }
+      10% { opacity:0.6; }
+      90% { opacity:0.6; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0.3); opacity:0; }
+    }
+    @keyframes dashboardSlide {
+      from { opacity:0; transform:translateX(30px) scale(0.95); }
+      to { opacity:1; transform:translateX(0) scale(1); }
+    }
+
+    /* ─── Particle Background ──────────────────────────────────── */
+    .particle-field {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      pointer-events:none; z-index:0; overflow:hidden;
+    }
+    .particle {
+      position:absolute;
+      width:3px; height:3px;
+      background: var(--maroon);
+      border-radius:50%;
+      opacity:0;
+      animation: particleFloat var(--dur) var(--delay) ease-in-out infinite;
     }
 
     /* ═══════════════════════════════════════════════════════════════ */
@@ -61,6 +115,18 @@
       text-align: center;
       border-bottom: 1px solid rgba(92, 10, 40, 0.1);
       background: linear-gradient(180deg, rgba(92, 10, 40, 0.05) 0%, transparent 100%);
+      animation: fadeUp 0.8s ease;
+      position: relative;
+    }
+
+    .sovereign-gateway-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(92, 10, 40, 0.8), transparent);
     }
 
     .hero-title {
@@ -73,6 +139,19 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       line-height: 1.1;
+      animation: fadeUp 0.8s 0.1s ease backwards;
+      position: relative;
+    }
+
+    .hero-title::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, rgba(92, 10, 40, 0.3), rgba(92, 10, 40, 0.1));
+      border-radius: 8px;
+      z-index: -1;
+      animation: pulseGlow 4s ease infinite;
+      opacity: 0.3;
     }
 
     .hero-subtitle {
@@ -204,13 +283,18 @@
       color: rgba(255, 255, 255, 0.75);
       font-weight: 500;
       letter-spacing: 0.6px;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
+      animation: fadeUp 0.6s 0.3s ease backwards;
+      cursor: pointer;
+      position: relative;
     }
 
     .security-badge-item:hover {
       background: linear-gradient(135deg, rgba(92, 10, 40, 0.1) 0%, rgba(92, 10, 40, 0.06) 100%);
-      border-color: rgba(92, 10, 40, 0.25);
+      border-color: rgba(92, 10, 40, 0.35);
       color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(92, 10, 40, 0.2);
     }
 
     .security-badge-dot {
@@ -234,10 +318,29 @@
       max-width: 480px;
       background: rgba(10, 31, 61, 0.7);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(92, 10, 40, 0.2);
+      border: 2px solid rgba(92, 10, 40, 0.3);
       border-radius: 16px;
       padding: 48px;
       box-shadow: 0 20px 60px rgba(92, 10, 40, 0.2);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card:hover {
+      border-color: rgba(92, 10, 40, 0.6);
+      box-shadow: 0 30px 80px rgba(92, 10, 40, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .login-card::before {
+      content:'';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(92, 10, 40, 0.8), transparent);
     }
 
     /* Vision 2030 Strip (Footer of pre-auth) */
@@ -548,6 +651,7 @@
       text-align: center;
       border-bottom: 1px solid rgba(92, 10, 40, 0.15);
       background: linear-gradient(180deg, rgba(92, 10, 40, 0.08) 0%, transparent 100%);
+      animation: fadeUp 0.8s 0.2s ease backwards;
     }
 
     .brand-logo-reveal {
@@ -562,7 +666,14 @@
       font-size: 32px;
       font-weight: 900;
       color: #ffffff;
-      box-shadow: 0 8px 24px rgba(92, 10, 40, 0.3);
+      box-shadow: 0 12px 32px rgba(92, 10, 40, 0.3);
+      animation: scaleIn 0.6s 0.3s cubic-bezier(0.175,0.885,0.32,1.275) backwards;
+      transition: all 0.4s ease;
+    }
+
+    .brand-logo-reveal:hover {
+      transform: scale(1.05);
+      box-shadow: 0 16px 40px rgba(92, 10, 40, 0.4), inset 0 0 20px rgba(255,255,255,0.1);
     }
 
     .reveal-title {
@@ -570,12 +681,14 @@
       font-weight: 800;
       color: #ffffff;
       margin-bottom: 8px;
+      animation: slideDown 0.6s 0.4s ease backwards;
     }
 
     .reveal-subtitle {
       font-size: 14px;
       color: rgba(255, 255, 255, 0.7);
       margin-bottom: 16px;
+      animation: slideDown 0.6s 0.5s ease backwards;
     }
 
     .reveal-partner {
@@ -584,6 +697,7 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       font-weight: 700;
+      animation: slideDown 0.6s 0.6s ease backwards;
     }
 
     /* T24 Intelligence Block */
@@ -593,6 +707,31 @@
       background: linear-gradient(135deg, rgba(92, 10, 40, 0.08) 0%, rgba(92, 10, 40, 0.04) 100%);
       border: 1px solid rgba(92, 10, 40, 0.15);
       border-radius: 12px;
+      animation: fadeUp 0.8s 0.4s ease backwards;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .t24-intelligence-block::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: linear-gradient(135deg, rgba(92,10,40,0.2), transparent);
+      border-radius: 12px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .t24-intelligence-block:hover {
+      border-color: rgba(92, 10, 40, 0.3);
+      box-shadow: 0 12px 32px rgba(92, 10, 40, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .t24-intelligence-block:hover::before {
+      opacity: 1;
     }
 
     .t24-header {
@@ -734,26 +873,47 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 10px;
-      background: rgba(92, 10, 40, 0.1);
-      border: 1px solid rgba(92, 10, 40, 0.2);
-      border-radius: 6px;
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.7);
+      padding: 8px 12px;
+      background: linear-gradient(135deg, rgba(92, 10, 40, 0.1) 0%, rgba(92, 10, 40, 0.05) 100%);
+      border: 1px solid rgba(92, 10, 40, 0.25);
+      border-radius: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
       white-space: nowrap;
-    }
-
-    .reference-badge:hover {
-      background: rgba(92, 10, 40, 0.15);
-      border-color: #5C0A28;
-      color: #ffffff;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
     }
 
     .reference-badge::before {
       content: "∅";
       font-size: 10px;
+      margin-right: 2px;
+    }
+
+    .reference-badge::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(92,10,40,0.2), transparent);
+      border-radius: 8px;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .reference-badge:hover {
+      background: linear-gradient(135deg, rgba(92, 10, 40, 0.15) 0%, rgba(92, 10, 40, 0.1) 100%);
+      border-color: #5C0A28;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(92, 10, 40, 0.25);
+    }
+
+    .reference-badge:hover::after {
+      opacity: 1;
     }
 
     /* Stakeholder Cards */
@@ -782,13 +942,33 @@
       border: 1px solid rgba(92, 10, 40, 0.15);
       border-radius: 8px;
       text-align: center;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.6s ease backwards;
+    }
+
+    .stakeholder-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(92, 10, 40, 0.8), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .stakeholder-card:hover {
       border-color: rgba(92, 10, 40, 0.4);
       background: rgba(92, 10, 40, 0.12);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(92, 10, 40, 0.2);
+    }
+
+    .stakeholder-card:hover::before {
+      opacity: 1;
     }
 
     .stakeholder-initials {
@@ -1149,6 +1329,11 @@
   </style>
 </head>
 <body>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- PARTICLE FIELD - INTERACTIVE BACKGROUND EFFECT -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="particle-field" id="particle-field"></div>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- PRE-AUTH: SOVEREIGN GATEWAY -->
@@ -1651,8 +1836,31 @@
       document.getElementById('referencesDrawer').classList.remove('open');
     }
 
+    // ═══════════════════════════════════════════════════════════════
+    // PARTICLE SYSTEM - INTERACTIVE BACKGROUND EFFECTS
+    // ═══════════════════════════════════════════════════════════════
+    function createParticles() {
+      const field = document.getElementById('particle-field');
+      for (let i = 0; i < 50; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random()*100 + '%';
+        p.style.top = Math.random()*100 + '%';
+        p.style.setProperty('--tx', (Math.random()*200-100)+'px');
+        p.style.setProperty('--ty', (Math.random()*200-100)+'px');
+        p.style.setProperty('--dur', (8+Math.random()*12)+'s');
+        p.style.setProperty('--delay', (Math.random()*8)+'s');
+        p.style.background = Math.random()>0.5 ? 'var(--maroon)' : 'var(--cyan)';
+        p.style.width = p.style.height = (2+Math.random()*3)+'px';
+        field.appendChild(p);
+      }
+    }
+
     // OTP Input auto-advance
     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize particles
+      createParticles();
+
       const otpInputs = document.querySelectorAll('.otp-digit-input');
       otpInputs.forEach((input, index) => {
         input.addEventListener('input', (e) => {
