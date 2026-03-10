@@ -3,327 +3,855 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Qatar National Vision 2030 - Enterprise Digital Governance Platform. Powered by advanced AI governance and distributed ledger technology.">
+  <meta name="description" content="Qatar National Vision 2030 - Enterprise Digital Governance Platform">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="theme-color" content="#0a1f3d">
-  <title>Qatar National Vision 2030 — Enterprise Digital Governance Portal</title>
-  <link rel="stylesheet" href="css/login_premium.css">
+  <title>Qatar Vision 2030 — Digital Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23D4AF37'/><stop offset='100%' style='stop-color:%2300D4FF'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23grad)'/><text x='16' y='22' font-size='14' font-weight='900' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
-  <!-- Important: Load fonts from CDN for professional typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      background: #0a1f3d;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* VISION 2030 SPLASH SCREEN */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .splash-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: splashFadeIn 0.8s ease-out;
+    }
+
+    @keyframes splashFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 40px;
+      animation: splashLogoFloat 2s ease-in-out infinite;
+    }
+
+    @keyframes splashLogoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .splash-logo svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.8));
+    }
+
+    .splash-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: #D4AF37;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      animation: splashTitleSlide 1s ease-out;
+    }
+
+    @keyframes splashTitleSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-subtitle {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+      letter-spacing: 1px;
+      animation: splashSubtitleSlide 1s ease-out 0.2s both;
+    }
+
+    @keyframes splashSubtitleSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-bar {
+      width: 200px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #D4AF37, #00D4FF, transparent);
+      margin-top: 32px;
+      animation: splashBarGrow 1.5s ease-out 0.4s both;
+    }
+
+    @keyframes splashBarGrow {
+      from { width: 0; opacity: 0; }
+      to { width: 200px; opacity: 1; }
+    }
+
+    .splash-features {
+      margin-top: 48px;
+      display: flex;
+      gap: 40px;
+      animation: splashFeaturesSlide 1s ease-out 0.6s both;
+    }
+
+    @keyframes splashFeaturesSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 20px;
+      color: #D4AF37;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* MAIN LOGIN PORTAL */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .login-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .login-wrapper.visible {
+      opacity: 1;
+    }
+
+    /* Background effects */
+    .bg-effects {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .grid-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0, 212, 255, 0.05) 25%, rgba(0, 212, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 212, 255, 0.05) 75%, rgba(0, 212, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 212, 255, 0.05) 25%, rgba(0, 212, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 212, 255, 0.05) 75%, rgba(0, 212, 255, 0.05) 76%, transparent 77%, transparent);
+      background-size: 60px 60px;
+      animation: gridFlow 20s linear infinite;
+    }
+
+    @keyframes gridFlow {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(60px); }
+    }
+
+    .light-rays {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .ray {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+      opacity: 0.5;
+      animation: rayMove 6s ease-in-out infinite;
+    }
+
+    .ray:nth-child(1) {
+      width: 1px;
+      height: 100%;
+      left: 20%;
+      animation-delay: 0s;
+    }
+
+    .ray:nth-child(2) {
+      width: 1px;
+      height: 100%;
+      left: 40%;
+      animation-delay: 1s;
+    }
+
+    .ray:nth-child(3) {
+      width: 1px;
+      height: 100%;
+      left: 60%;
+      animation-delay: 2s;
+    }
+
+    .ray:nth-child(4) {
+      width: 1px;
+      height: 100%;
+      left: 80%;
+      animation-delay: 3s;
+    }
+
+    @keyframes rayMove {
+      0% { opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
+
+    /* Portal container */
+    .portal-container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .portal-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      background: linear-gradient(135deg, rgba(10, 31, 61, 0.8) 0%, rgba(15, 42, 77, 0.6) 100%);
+    }
+
+    .brand-section {
+      text-align: center;
+      animation: contentSlideIn 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes contentSlideIn {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .brand-logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 30px;
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
+      50% { filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.8)); }
+      100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
+    }
+
+    .brand-title {
+      font-size: 42px;
+      font-weight: 900;
+      color: #D4AF37;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .brand-subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 30px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D4AF37, #00D4FF, transparent);
+      margin: 30px auto;
+    }
+
+    .brand-description {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.8;
+      max-width: 280px;
+      margin-bottom: 40px;
+      letter-spacing: 0.3px;
+    }
+
+    .trust-badges {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 10px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+
+    .badge-icon {
+      font-size: 20px;
+    }
+
+    /* Portal right - Login form */
+    .portal-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      background: rgba(15, 42, 77, 0.4);
+    }
+
+    .login-panel {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(10, 31, 61, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 20px;
+      padding: 50px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      animation: panelSlideIn 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes panelSlideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .panel-header {
+      margin-bottom: 40px;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #00E676;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+      50% { box-shadow: 0 0 0 6px rgba(0, 230, 118, 0); }
+    }
+
+    .status-text {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .panel-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-subtitle {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.5px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(212, 175, 55, 0.5);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .role-btn {
+      padding: 12px;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .role-btn:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+      color: #D4AF37;
+    }
+
+    .role-btn.active {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: #D4AF37;
+      color: #D4AF37;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #D4AF37, #E8C77E);
+      border: none;
+      border-radius: 10px;
+      color: #0a1f3d;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.35);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .security-notice {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      text-align: center;
+      line-height: 1.6;
+      letter-spacing: 0.3px;
+    }
+
+    /* Message styling */
+    .message {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      text-align: center;
+      border: 1px solid;
+    }
+
+    .message.error {
+      background: rgba(244, 67, 54, 0.1);
+      border-color: rgba(244, 67, 54, 0.3);
+      color: #FF7F7F;
+    }
+
+    .message.success {
+      background: rgba(0, 230, 118, 0.1);
+      border-color: rgba(0, 230, 118, 0.3);
+      color: #00E676;
+    }
+
+    /* Transition animation */
+    .transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f3d 0%, #D4AF37 50%, #0a1f3d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .transition-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .qib-logo-animation {
+      width: 200px;
+      height: 200px;
+      animation: logoZoom 1s ease-out forwards;
+    }
+
+    @keyframes logoZoom {
+      from { 
+        transform: scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      to { 
+        transform: scale(2) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .portal-left { padding: 40px; }
+      .portal-right { padding: 40px; }
+      .login-panel { max-width: 380px; padding: 40px; }
+      .brand-title { font-size: 36px; }
+      .panel-title { font-size: 28px; }
+    }
+
+    @media (max-width: 768px) {
+      .portal-container { flex-direction: column; }
+      .portal-left { 
+        min-height: 40%;
+        padding: 30px;
+        justify-content: flex-end;
+      }
+      .portal-right { 
+        min-height: 60%;
+        padding: 30px;
+        align-items: flex-start;
+      }
+      .brand-logo { width: 70px; height: 70px; }
+      .brand-title { font-size: 28px; }
+      .brand-description { max-width: 100%; }
+      .trust-badges { gap: 15px; }
+      .role-selector { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Enterprise-grade background system -->
-  <div class="enterprise-background">
-    <div class="bg-gradient-primary"></div>
-    <div class="bg-gradient-secondary"></div>
-    <div class="bg-mesh-pattern"></div>
-    <div class="bg-light-rays"></div>
-    <canvas id="particle-canvas" class="particle-canvas"></canvas>
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- VISION 2030 SPLASH SCREEN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-content">
+      <svg class="splash-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#D4AF37"/>
+            <stop offset="100%" style="stop-color:#00D4FF"/>
+          </linearGradient>
+        </defs>
+        <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="2"/>
+        <circle cx="120" cy="120" r="110" fill="none" stroke="url(#splashGrad)" stroke-width="3"/>
+        <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#splashGrad)" stroke-width="2.5"/>
+        <circle cx="120" cy="120" r="8" fill="#D4AF37"/>
+      </svg>
+      <h1 class="splash-title">QATAR VISION 2030</h1>
+      <p class="splash-subtitle">Digital Governance Platform</p>
+      <div class="splash-bar"></div>
+      <div class="splash-features">
+        <div class="feature-pill">🔐 Enterprise Security</div>
+        <div class="feature-pill">⚡ Mission Critical</div>
+        <div class="feature-pill">✓ Fully Audited</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Floating credential bar (top) -->
-  <div class="credential-bar">
-    <span class="cred-item">ISO 27001:2013</span>
-    <span class="cred-divider"></span>
-    <span class="cred-item">SOC 2 Type II</span>
-    <span class="cred-divider"></span>
-    <span class="cred-item">GDPR Compliant</span>
-    <span class="cred-divider"></span>
-    <span class="cred-item">256-bit AES</span>
-  </div>
-
-  <!-- Main login portal -->
-  <div class="login-container enterprise-portal">
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- MAIN LOGIN PORTAL -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="login-wrapper" id="loginWrapper">
     
-    <!-- Left sidebar: National branding -->
-    <div class="portal-sidebar">
-      <div class="sidebar-content">
-        <!-- Qatar Vision 2030 Premium Logo -->
-        <div class="premium-logo">
-          <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
-            <defs>
-              <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
-                <stop offset="50%" style="stop-color:#E8C77E;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
-              </linearGradient>
-              <filter id="logoGlow">
-                <feGaussianBlur stdDeviation="2" />
-              </filter>
-            </defs>
-            <!-- Outer security ring -->
-            <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="1.5" opacity="0.8"/>
-            <circle cx="120" cy="120" r="110" fill="none" stroke="url(#premiumGrad)" stroke-width="2.5" opacity="0.9" filter="url(#logoGlow)"/>
-            <!-- Center emblem -->
-            <circle cx="120" cy="120" r="80" fill="none" stroke="rgba(212,175,55,0.4)" stroke-width="1"/>
-            <!-- Geometric pattern -->
-            <path d="M 120 40 L 160 80 L 160 160 L 120 180 L 80 160 L 80 80 Z" fill="none" stroke="url(#premiumGrad)" stroke-width="2" opacity="0.6"/>
-            <!-- Center dot -->
-            <circle cx="120" cy="120" r="6" fill="#D4AF37" opacity="0.9"/>
-            <!-- Certification text -->
-            <text x="120" y="215" font-size="12" font-weight="bold" fill="#D4AF37" text-anchor="middle" letter-spacing="2">QATAR VISION</text>
-          </svg>
-          <div class="logo-glow-ring"></div>
-        </div>
-
-        <!-- Brand messaging -->
-        <div class="brand-message">
-          <h2 class="brand-headline">Qatar National<br>Vision 2030</h2>
-          <p class="brand-subheading">Enterprise Digital Governance</p>
-          <div class="brand-divider"></div>
-          <p class="brand-descriptor">Powering financial sector transformation through advanced governance infrastructure, distributed intelligence, and comprehensive regulatory compliance.</p>
-        </div>
-
-        <!-- Certification badges -->
-        <div class="certification-badges">
-          <div class="badge">
-            <span class="badge-icon">🔐</span>
-            <span class="badge-text">Enterprise Security</span>
-          </div>
-          <div class="badge">
-            <span class="badge-icon">✓</span>
-            <span class="badge-text">Fully Audited</span>
-          </div>
-          <div class="badge">
-            <span class="badge-icon">⚡</span>
-            <span class="badge-text">Mission Critical</span>
-          </div>
-        </div>
+    <!-- Background effects -->
+    <div class="bg-effects">
+      <div class="grid-bg"></div>
+      <div class="light-rays">
+        <div class="ray"></div>
+        <div class="ray"></div>
+        <div class="ray"></div>
+        <div class="ray"></div>
       </div>
     </div>
 
-    <!-- Right panel: Login form -->
-    <div class="portal-form-section">
-      <div class="form-container glass-panel">
-        <!-- Header with system status -->
-        <div class="form-header">
-          <div class="system-status">
-            <span class="status-indicator active"></span>
-            <span class="status-text">System Operational</span>
+    <!-- Main portal content -->
+    <div class="portal-container">
+      
+      <!-- Left side: Branding -->
+      <div class="portal-left">
+        <div class="brand-section">
+          <svg class="brand-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#D4AF37"/>
+                <stop offset="100%" style="stop-color:#00D4FF"/>
+              </linearGradient>
+            </defs>
+            <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="2"/>
+            <circle cx="120" cy="120" r="110" fill="none" stroke="url(#brandGrad)" stroke-width="3"/>
+            <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#brandGrad)" stroke-width="2.5"/>
+            <circle cx="120" cy="120" r="8" fill="#D4AF37"/>
+          </svg>
+          <h2 class="brand-title">Qatar<br>Islamic Bank</h2>
+          <p class="brand-subtitle">Digital Governance Center</p>
+          <div class="brand-divider"></div>
+          <p class="brand-description">Operating within the framework of Qatar National Vision 2030 for sustainable financial governance and digital transformation.</p>
+          <div class="trust-badges">
+            <div class="badge-item">
+              <span class="badge-icon">🔐</span>
+              <span>ISO 27001</span>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">✓</span>
+              <span>SOC 2 Type II</span>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">⚡</span>
+              <span>GDPR Ready</span>
+            </div>
           </div>
-          <h1 class="form-title">Secure Portal Access</h1>
-          <p class="form-subtitle">Multi-factor Authentication</p>
         </div>
+      </div>
 
-        <!-- Status message -->
-        <div id="status-message" class="status-message"></div>
-
-        <!-- Step 1: Credentials -->
-        <div id="step-credentials" class="login-step active">
-          <form id="login-form" class="enterprise-form" autocomplete="off">
-            
-            <!-- Credentials section -->
-            <div class="form-section">
-              <h3 class="section-title">Credentials</h3>
-              <div class="form-group">
-                <label for="employee-id">Employee ID or Email</label>
-                <div class="input-wrapper">
-                  <input type="text" id="employee-id" placeholder="Enter your employee ID" required>
-                  <span class="input-border"></span>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <label for="password">Password</label>
-                <div class="input-wrapper">
-                  <input type="password" id="password" placeholder="Enter your password" required>
-                  <span class="input-border"></span>
-                </div>
-              </div>
+      <!-- Right side: Login form -->
+      <div class="portal-right">
+        <div class="login-panel">
+          <div class="panel-header">
+            <div class="system-status">
+              <div class="status-dot"></div>
+              <span class="status-text">System Operational</span>
             </div>
+            <h1 class="panel-title">Secure Portal</h1>
+            <p class="panel-subtitle">Enter your credentials to access the Command Center</p>
+          </div>
 
-            <!-- Role selection section -->
-            <div class="form-section">
-              <h3 class="section-title">Role & Department</h3>
-              <div class="role-grid premium">
-                <label class="role-option premium">
-                  <input type="radio" name="role" value="business" checked>
-                  <div class="role-card premium">
-                    <div class="role-icon">👔</div>
-                    <span class="role-name">Business</span>
-                    <span class="role-hint">Trading Desk</span>
-                  </div>
-                </label>
-                <label class="role-option premium">
-                  <input type="radio" name="role" value="cdd">
-                  <div class="role-card premium">
-                    <div class="role-icon">🔍</div>
-                    <span class="role-name">CDD</span>
-                    <span class="role-hint">Due Diligence</span>
-                  </div>
-                </label>
-                <label class="role-option premium">
-                  <input type="radio" name="role" value="compliance">
-                  <div class="role-card premium">
-                    <div class="role-icon">⚖️</div>
-                    <span class="role-name">Compliance</span>
-                    <span class="role-hint">Regulations</span>
-                  </div>
-                </label>
-                <label class="role-option premium">
-                  <input type="radio" name="role" value="management">
-                  <div class="role-card premium">
-                    <div class="role-icon">📊</div>
-                    <span class="role-name">Management</span>
-                    <span class="role-hint">Executive</span>
-                  </div>
-                </label>
-                <label class="role-option premium">
-                  <input type="radio" name="role" value="audit">
-                  <div class="role-card premium">
-                    <div class="role-icon">✓</div>
-                    <span class="role-name">Audit</span>
-                    <span class="role-hint">Internal Audit</span>
-                  </div>
-                </label>
-                <label class="role-option premium">
-                  <input type="radio" name="role" value="it">
-                  <div class="role-card premium">
-                    <div class="role-icon">⚙️</div>
-                    <span class="role-name">IT</span>
-                    <span class="role-hint">Infrastructure</span>
-                  </div>
-                </label>
-              </div>
-            </div>
+          <div id="message" class="message" style="display: none;"></div>
 
-            <!-- Submit button -->
-            <button type="submit" id="btn-login" class="btn-action btn-primary">
-              <span class="btn-label">Authenticate • Access Platform</span>
-              <span class="btn-icon">→</span>
-              <span class="btn-shimmer"></span>
-            </button>
-            
-            <p class="form-footer">Secure MFA authentication • All sessions logged & audited</p>
-          </form>
-        </div>
-
-        <!-- Step 2: OTP Verification -->
-        <div id="step-otp" class="login-step">
-          <form id="otp-form" class="enterprise-form" autocomplete="off">
-            <div class="otp-header">
-              <h3>Multi-Factor Authentication</h3>
-              <p>Enter the 6-digit verification code</p>
+          <form class="login-form" id="loginForm">
+            <div class="form-group">
+              <label class="form-label">Employee ID</label>
+              <input type="text" class="form-input" id="employeeId" placeholder="QIB-XXXXX" required>
             </div>
 
             <div class="form-group">
-              <div class="otp-grid">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-input" id="password" placeholder="••••••••" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Role</label>
+              <div class="role-selector">
+                <button type="button" class="role-btn active" data-role="business">👔 Business</button>
+                <button type="button" class="role-btn" data-role="cdd">📋 CDD</button>
+                <button type="button" class="role-btn" data-role="compliance">⚖️ Compliance</button>
               </div>
             </div>
 
-            <div id="otp-timer" class="otp-timer">
-              <span class="timer-label">Code expires in</span>
-              <span class="timer-value"><span class="time">05:00</span></span>
+            <div class="form-group">
+              <label class="form-label">OTP Code</label>
+              <input type="text" class="form-input" id="otp" placeholder="Enter 6-digit code" maxlength="6" required>
             </div>
 
-            <button type="submit" id="btn-verify-otp" class="btn-action btn-primary">
-              <span class="btn-label">Verify & Continue</span>
-              <span class="btn-icon">→</span>
-            </button>
+            <button type="submit" class="submit-btn">ENTER DIGITAL COMMAND CENTER</button>
 
-            <div class="otp-actions">
-              <button type="button" id="btn-back" class="btn-link">← Return to Credentials</button>
-              <button type="button" id="btn-resend" class="btn-link">Resend Code</button>
+            <div class="security-notice">
+              🔒 This portal is secured with 256-bit AES encryption and multi-factor authentication. All activities are logged and audited for compliance.
             </div>
           </form>
         </div>
-
-        <!-- Step 3: QIB Digital Animation -->
-        <div id="step-qib-animation" class="login-step">
-          <div class="qib-animation-panel">
-            <div class="qib-logo-container">
-              <svg class="qib-logo-animated" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="qibGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#00D4FF;stop-opacity:1" />
-                  </linearGradient>
-                </defs>
-                <path d="M60 10L20 35v40c0 33 23 64 40 72 17-8 40-39 40-72V35L60 10zm0 50h42c-3 25-20 47-42 53V60H18V28l42-18v50z" fill="url(#qibGrad2)"/>
-              </svg>
-              <div class="qib-pulse-ring"></div>
-              <div class="qib-pulse-ring"></div>
-            </div>
-            <h2 class="qib-welcome">Initializing Platform</h2>
-            <p class="qib-subtitle">Authenticating your session...</p>
-            <div class="loading-bar">
-              <div class="loading-fill"></div>
-            </div>
-          </div>
-        </div>
-
-
-        <!-- Step 4: Success & Launch -->
-        <div id="step-success" class="login-step">
-          <div class="success-panel">
-            <div class="success-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              <div class="success-ring"></div>
-            </div>
-            <h2 class="success-title">Authentication Successful</h2>
-            <p class="success-user">Welcome, <span id="user-display"></span></p>
-            <p class="success-role">Role: <span id="role-display" class="role-badge"></span></p>
-            
-            <div class="success-checklist">
-              <div class="check-item completed">
-                <span class="check-icon">✓</span>
-                <span>Identity Verified</span>
-              </div>
-              <div class="check-item completed">
-                <span class="check-icon">✓</span>
-                <span>Session Encrypted (TLS 1.3)</span>
-              </div>
-              <div class="check-item completed">
-                <span class="check-icon">✓</span>
-                <span>Role Permissions Loaded</span>
-              </div>
-              <div class="check-item in-progress">
-                <span class="check-icon">⟳</span>
-                <span>Launching Dashboard...</span>
-              </div>
-            </div>
-            <div class="spinner"></div>
-          </div>
-        </div>
-
-        <!-- Security certification footer -->
-        <div class="security-footer">
-          <div class="security-badge">
-            <span class="badge-dot"></span>
-            <span class="badge-text">AES-256-GCM • TLS 1.3 • QCB REGULATED</span>
-          </div>
-        </div>
       </div>
+
     </div>
   </div>
 
-  <!-- Compliance footer bar -->
-  <footer class="compliance-footer">
-    <div class="compliance-text">
-      <span class="compliance-batch">PCI-DSS Level 1 Certified</span>
-      <span class="sep">•</span>
-      <span class="compliance-batch">ISO 27001:2022</span>
-      <span class="sep">•</span>
-      <span class="compliance-batch">SOC 2 Type II</span>
-      <span class="sep">•</span>
-      <span class="compliance-batch">QCB Regulated</span>
-    </div>
-    <div class="platform-info">
-      Qatar National Vision 2030 • Digital Governance Platform • Build 2026.03
-    </div>
-  </footer>
+  <!-- Transition overlay -->
+  <div class="transition-overlay" id="transitionOverlay">
+    <svg class="qib-logo-animation" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="transGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#D4AF37"/>
+          <stop offset="100%" style="stop-color:#00D4FF"/>
+        </linearGradient>
+      </defs>
+      <circle cx="120" cy="120" r="115" fill="none" stroke="white" stroke-width="2"/>
+      <circle cx="120" cy="120" r="110" fill="none" stroke="url(#transGrad)" stroke-width="3"/>
+      <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#transGrad)" stroke-width="2.5"/>
+      <circle cx="120" cy="120" r="8" fill="#D4AF37"/>
+    </svg>
+  </div>
 
-  <script src="js/particles.js?v=1.1"></script>
-  <script src="js/login.js?v=1.1"></script>
+  <!-- Scripts -->
+  <script>
+    // Splash screen manager
+    const splashScreen = document.getElementById('splashScreen');
+    const loginWrapper = document.getElementById('loginWrapper');
+    const transitionOverlay = document.getElementById('transitionOverlay');
+
+    // Show splash screen for 2.5 seconds
+    setTimeout(() => {
+      splashScreen.classList.add('hidden');
+      loginWrapper.classList.add('visible');
+    }, 2500);
+
+    // Login form handler
+    const loginForm = document.getElementById('loginForm');
+    const messageDiv = document.getElementById('message');
+
+    // Demo credentials
+    const VALID_CREDENTIALS = {
+      'QIB-10234': 'Qib@2030',
+      'QIB-10235': 'Qib@2030',
+      'QIB-10236': 'Qib@2030'
+    };
+
+    const VALID_OTP = '123456';
+
+    // Role selection
+    document.querySelectorAll('.role-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Form submission
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const employeeId = document.getElementById('employeeId').value.trim();
+      const password = document.getElementById('password').value;
+      const otp = document.getElementById('otp').value.trim();
+
+      // Validation
+      if (!employeeId || !password || !otp) {
+        showMessage('Please fill in all fields', 'error');
+        return;
+      }
+
+      // Check credentials
+      if (VALID_CREDENTIALS[employeeId] !== password) {
+        showMessage('Invalid employee ID or password', 'error');
+        document.getElementById('password').value = '';
+        return;
+      }
+
+      // Check OTP
+      if (otp !== VALID_OTP) {
+        showMessage('Invalid OTP code', 'error');
+        document.getElementById('otp').value = '';
+        return;
+      }
+
+      // Success
+      showMessage('Authentication successful. Initializing Command Center...', 'success');
+
+      // Trigger transition
+      setTimeout(() => {
+        transitionOverlay.classList.add('active');
+        
+        // Redirect after animation
+        setTimeout(() => {
+          // Store session
+          sessionStorage.setItem('auth_token', btoa(employeeId));
+          sessionStorage.setItem('user_role', document.querySelector('.role-btn.active').dataset.role);
+          
+          // Redirect to dashboard
+          window.location.href = 'dashboard.html';
+        }, 1800);
+      }, 500);
+    });
+
+    function showMessage(text, type) {
+      messageDiv.textContent = text;
+      messageDiv.className = `message ${type}`;
+      messageDiv.style.display = 'block';
+      
+      if (type === 'error') {
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 4000);
+      }
+    }
+  </script>
+
 </body>
 </html>
