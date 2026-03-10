@@ -516,9 +516,13 @@
   <script src="js/enterprise_ui.js"></script>
   <script>
     // ═══ Session Authentication Check ═══
-    if (!sessionStorage.getItem('auth_token')) {
-      window.location.href = 'login.html';
-    }
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!sessionStorage.getItem('edd_session') && !sessionStorage.getItem('auth_token')) {
+          window.location.href = 'login.html';
+        }
+      }, 100);
+    });
 
     // User session
     document.addEventListener('DOMContentLoaded', function() {

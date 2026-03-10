@@ -2445,9 +2445,14 @@
   <script src="js/edd_case.js"></script>
   <script>
     // ═══ Session Authentication Check ═══
-    if (!sessionStorage.getItem('auth_token')) {
-      window.location.href = 'login.html';
-    }
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!sessionStorage.getItem('edd_session') && !sessionStorage.getItem('auth_token')) {
+          console.warn('NO VALID SESSION - REDIRECTING TO LOGIN');
+          window.location.href = 'login.html';
+        }
+      }, 100);
+    });
 
     // === NEW FEATURE FUNCTIONS === 
 

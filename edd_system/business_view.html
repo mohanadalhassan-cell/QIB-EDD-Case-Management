@@ -603,9 +603,13 @@
   <script src="js/mock_data.js?v=1.2"></script>
   <script>
     // ═══ Session Authentication Check ═══
-    if (!sessionStorage.getItem('auth_token')) {
-      window.location.href = 'login.html';
-    }
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (!sessionStorage.getItem('edd_session') && !sessionStorage.getItem('auth_token')) {
+          window.location.href = 'login.html';
+        }
+      }, 100);
+    });
 
     // Segment Data
     const segmentCases = {

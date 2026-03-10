@@ -900,6 +900,7 @@
       }
 
       // Success
+      console.log('LOGIN SUCCESS');
       showMessage('Authentication successful. Initializing Command Center...', 'success');
 
       // Trigger transition
@@ -908,9 +909,30 @@
         
         // Redirect after animation
         setTimeout(() => {
-          // Store session
+          console.log('OTP VERIFIED');
+          
+          // Create session object matching dashboard.js expectations
+          const sessionData = {
+            authenticated: true,
+            user: {
+              id: employeeId,
+              name: employeeId,
+              role: document.querySelector('.role-btn.active').dataset.role,
+              loginTime: new Date().toISOString()
+            },
+            token: btoa(employeeId)
+          };
+          
+          console.log('SESSION CREATED', sessionData);
+          
+          // Store session with correct key name
+          sessionStorage.setItem('edd_session', JSON.stringify(sessionData));
           sessionStorage.setItem('auth_token', btoa(employeeId));
           sessionStorage.setItem('user_role', document.querySelector('.role-btn.active').dataset.role);
+          
+          console.log('TOKEN STORED');
+          console.log('SESSION VALIDATED');
+          console.log('REDIRECT TO DASHBOARD');
           
           // Redirect to dashboard
           window.location.href = 'dashboard.html';

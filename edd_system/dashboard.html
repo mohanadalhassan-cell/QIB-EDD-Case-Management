@@ -409,10 +409,22 @@
   <script src="js/enterprise_ui.js"></script>
   <script src="js/dashboard.js"></script>
   <script>
-    // ═══ Session Authentication Check ═══
-    if (!sessionStorage.getItem('auth_token')) {
-      window.location.href = 'login.html';
-    }
+    // ═══════════════════════════════════════════════════════════════
+    // SECONDARY AUTH FALLBACK (for direct URL access)
+    // ═══════════════════════════════════════════════════════════════
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const eddSession = sessionStorage.getItem('edd_session');
+        const authToken = sessionStorage.getItem('auth_token');
+        
+        if (!eddSession && !authToken) {
+          console.warn('NO VALID SESSION - REDIRECTING TO LOGIN');
+          window.location.href = 'login.html';
+        } else {
+          console.log('AUTH VERIFIED - SESSION ACTIVE');
+        }
+      }, 100);
+    });
 
     // ═══ Banking Segment Theme Switcher ═══
     const segmentThemes = {
