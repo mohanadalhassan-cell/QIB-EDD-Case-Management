@@ -896,6 +896,202 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════ */
+    /* PRINT STYLES - AUDIT-FRIENDLY EXPORT */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    @media print {
+      * {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 20px;
+        background: #fff;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      }
+
+      .pre-auth-wrapper,
+      .btn-control,
+      .login-controls,
+      .references-drawer,
+      .intelligence-ribbons-container {
+        display: none !important;
+      }
+
+      .post-auth-wrapper {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        background: #fff;
+      }
+
+      .brand-reveal-header {
+        border-bottom: 2px solid #333;
+        background: transparent;
+        padding: 20px 0;
+        margin-bottom: 20px;
+      }
+
+      .brand-logo-reveal {
+        background: #f5f5f5;
+        color: #000;
+        margin-bottom: 16px;
+      }
+
+      .reveal-title {
+        color: #000;
+        font-size: 24px;
+      }
+
+      .reveal-subtitle,
+      .reveal-partner {
+        color: #333;
+      }
+
+      .t24-intelligence-block,
+      .stakeholder-section {
+        border: 1px solid #ccc;
+        background: #fafafa;
+        page-break-inside: avoid;
+        margin: 20px 0;
+        padding: 16px;
+      }
+
+      .t24-header,
+      .stakeholder-title {
+        color: #000;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 8px;
+      }
+
+      .field-cloud {
+        background: transparent;
+        border: 1px dashed #999;
+      }
+
+      .field-tag {
+        background: #e8e8e8;
+        border: 1px solid #bbb;
+        color: #000;
+        margin: 4px 2px;
+      }
+
+      .stakeholder-card {
+        border: 1px solid #999;
+        background: #f0f0f0;
+        page-break-inside: avoid;
+      }
+
+      .stakeholder-initials {
+        background: #d0d0d0;
+        color: #000;
+      }
+
+      .stakeholder-title-card,
+      .t24-stat {
+        color: #000;
+      }
+
+      .app-footer {
+        border-top: 2px solid #333;
+        color: #666;
+        margin-top: 20px;
+        padding-top: 16px;
+      }
+
+      .reference-badge {
+        display: inline-block;
+        border: 1px solid #999;
+        background: #f5f5f5;
+        color: #000;
+      }
+
+      a {
+        color: #0066cc;
+        text-decoration: underline;
+      }
+
+      h1, h2, h3 {
+        color: #000;
+        page-break-after: avoid;
+      }
+
+      ul, ol {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 16px 0;
+      }
+
+      th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background: #e8e8e8;
+        font-weight: bold;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ACCESSIBILITY & FOCUS STATES */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    *:focus-visible {
+      outline: 2px solid #5C0A28;
+      outline-offset: 2px;
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: more) {
+      .form-input,
+      .role-button,
+      .otp-digit-input {
+        border-width: 2px;
+      }
+
+      .security-badge-item,
+      .reference-badge {
+        border-width: 2px;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .ribbon-track {
+        animation: none;
+      }
+
+      .intelligence-ribbon:hover .ribbon-track {
+        animation-play-state: running;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
     /* UTILITIES & HELPERS */
     /* ═══════════════════════════════════════════════════════════════ */
 
@@ -1055,17 +1251,17 @@
             <h3>Employee Verification</h3>
             <p>Enter your credentials</p>
           </div>
-          <form id="loginForm" class="login-steps-container">
+          <form id="loginForm" class="login-steps-container" aria-label="Login form - Step 1 Employee Verification">
             <div class="form-group">
-              <label class="form-label">Employee ID</label>
-              <input type="text" id="employeeId" class="form-input" placeholder="emp@example.com" required>
+              <label class="form-label" for="employeeId">Employee ID</label>
+              <input type="text" id="employeeId" class="form-input" placeholder="emp@example.com" aria-label="Employee ID input" required>
               <span class="form-hint">💡 Try: ahmed.thani, Demo-2030, admin, QIB2030</span>
             </div>
             <div class="form-group">
-              <label class="form-label">Password</label>
-              <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+              <label class="form-label" for="password">Password</label>
+              <input type="password" id="password" class="form-input" placeholder="••••••••" aria-label="Password input" required>
             </div>
-            <button type="button" class="btn-primary" onclick="nextStep(1)">PROCEED TO ROLE SELECTION</button>
+            <button type="button" class="btn-primary" aria-label="Proceed to role selection" onclick="nextStep(1)">PROCEED TO ROLE SELECTION</button>
           </form>
         </div>
 
@@ -1075,15 +1271,17 @@
             <h3>Role Assignment</h3>
             <p>Select your operational role</p>
           </div>
-          <div class="role-selection-grid">
-            <button class="role-button" onclick="selectRole('Analyst')">Analyst</button>
-            <button class="role-button" onclick="selectRole('Manager')">Manager</button>
-            <button class="role-button" onclick="selectRole('Admin')">Admin</button>
-            <button class="role-button" onclick="selectRole('Auditor')">Auditor</button>
-            <button class="role-button" onclick="selectRole('Officer')">Officer</button>
-            <button class="role-button" onclick="selectRole('Viewer')">Viewer</button>
-          </div>
-          <button class="btn-primary" onclick="nextStep(2)">PROCEED TO VERIFICATION</button>
+          <fieldset aria-label="Role selection options">
+            <div class="role-selection-grid">
+              <button type="button" class="role-button" aria-label="Analyst role" onclick="selectRole('Analyst')">Analyst</button>
+              <button type="button" class="role-button" aria-label="Manager role" onclick="selectRole('Manager')">Manager</button>
+              <button type="button" class="role-button" aria-label="Admin role" onclick="selectRole('Admin')">Admin</button>
+              <button type="button" class="role-button" aria-label="Auditor role" onclick="selectRole('Auditor')">Auditor</button>
+              <button type="button" class="role-button" aria-label="Officer role" onclick="selectRole('Officer')">Officer</button>
+              <button type="button" class="role-button" aria-label="Viewer role" onclick="selectRole('Viewer')">Viewer</button>
+            </div>
+          </fieldset>
+          <button type="button" class="btn-primary" aria-label="Proceed to OTP verification" onclick="nextStep(2)">PROCEED TO VERIFICATION</button>
         </div>
 
         <!-- Step 3: OTP -->
@@ -1092,24 +1290,26 @@
             <h3>Multi-Factor Authentication</h3>
             <p>Enter your 6-digit verification code</p>
           </div>
-          <div class="otp-input-group" id="otpInputGroup">
-            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
-          </div>
+          <fieldset aria-label="OTP input fields">
+            <div class="otp-input-group" id="otpInputGroup" role="group" aria-label="One-time password digits">
+              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 1">
+              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 2">
+              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 3">
+              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 4">
+              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 5">
+              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 6">
+            </div>
+          </fieldset>
           <div class="form-hint" style="text-align: center;">Demo OTP: 123456</div>
-          <button class="btn-primary" onclick="verifyOTP()">VERIFY & GAIN ACCESS</button>
+          <button type="button" class="btn-primary" aria-label="Verify OTP and gain access" onclick="verifyOTP()">VERIFY & GAIN ACCESS</button>
         </div>
 
         <!-- Control Buttons -->
         <div class="login-controls">
-          <button class="btn-control" id="btnFullscreen" onclick="toggleFullscreen()">
+          <button type="button" class="btn-control" id="btnFullscreen" aria-label="Toggle fullscreen presentation mode" onclick="toggleFullscreen()">
             <span>⛶</span> <span>Fullscreen</span>
           </button>
-          <button class="btn-control" id="btnPrint" onclick="printSession()" disabled>
+          <button type="button" class="btn-control" id="btnPrint" aria-label="Print session summary and audit trail" onclick="printSession()" disabled>
             <span>⎙</span> <span>Print</span>
           </button>
         </div>
@@ -1358,15 +1558,20 @@
       'CUSTOMER_CODE', 'LM_CUST_TYPE', 'RESIDENCE', 'TARGET', 'SECTOR', 
       'INDUSTRY', 'CUSTOMER_STATUS', 'KYC_NEXT_DATE', 'OCCUPATION', 'EMPLOYER',
       'NATIONALITY', 'ID_EXPIRY', 'EMPLOYMENT_TYPE', 'ANNUAL_INCOME', 'RISK_PROFILE',
-      'TRADING_MARKET', 'PAYMENT_MODE', 'ACCOUNT_CURRENCY', 'LINKED_ENTITIES', 'BENEFICIAL_OWNER'
+      'TRADING_MARKET', 'PAYMENT_MODE', 'ACCOUNT_CURRENCY', 'LINKED_ENTITIES', 'BENEFICIAL_OWNER',
+      'TAX_JURISDICTION', 'PEP_FLAG', 'SANCTION_FLAG', 'FATCA_STATUS', 'CRS_STATUS',
+      'CREDIT_RATING', 'ACCOUNT_OPENING_DATE', 'LAST_TRANSACTION_DATE', 'FACILITY_TYPE', 'COLLATERAL_VALUE',
+      'BRANCH_CODE', 'PRODUCT_FAMILY', 'RELATIONSHIP_MANAGER', 'CREDIT_LIMIT', 'BALANCE',
+      'INTEREST_RATE', 'MATURITY_DATE', 'COUNTERPARTY_TYPE', 'DMS_LINK', 'COMPLIANCE_STATUS',
+      'MONITORING_FLAG', 'REVIEW_FREQUENCY', 'INTERNAL_RATING', 'EXTERNAL_RATING', 'EXPOSURE_LIMIT'
     ];
 
     function rotateFieldCloud() {
       const cloud = document.getElementById('fieldCloud');
-      const selectedFields = ALL_FIELD_TAGS.sort(() => Math.random() - 0.5).slice(0, 12);
+      const selectedFields = ALL_FIELD_TAGS.sort(() => Math.random() - 0.5).slice(0, 18);
       
       cloud.innerHTML = selectedFields.map(field => 
-        `<span class="field-tag">${field}</span>`
+        `<span class="field-tag" title="Example T24 field (demo)">${field}</span>`
       ).join('');
     }
 
