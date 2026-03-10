@@ -12,7 +12,7 @@
 |---|---|
 | **Document Title** | Business Requirements Document — EDD Digital Case Management System |
 | **Document ID** | BRD-EDD-FLOW-2026-002 |
-| **Version** | 2.0 |
+| **Version** | 2.1 |
 | **Date** | March 10, 2026 |
 | **Classification** | Internal — QIB Confidential |
 | **Target Platform** | FLOW Workflow System (Extension Module) |
@@ -29,7 +29,7 @@
 |-----------|-------|
 | Document Title | Business Requirements Document — EDD Digital Case Management System |
 | Document ID | BRD-EDD-FLOW-2026-002 |
-| Version | 2.0 |
+| Version | 2.1 |
 | Status | Submitted for Stakeholder Review |
 | Classification | Internal — QIB Confidential |
 | Created Date | March 10, 2026 |
@@ -60,6 +60,8 @@
 | 3 | EDD Form Data Mapping & Field Specification | BRD-EDD-FORM-2026-001 | 1.0 | Data dictionary |
 | 4 | Organization Structure Guide | DOC-ORG-2026-001 | 1.0 | Organizational reference |
 | 5 | Implementation Roadmap | DOC-ROAD-2026-001 | 1.0 | Delivery plan |
+| 6 | Integration Architecture Specification | BRD-EDD-INT-2026-001 | 1.0 | Integration companion |
+| 7 | QCB API Integration Readiness | BRD-EDD-QCB-2026-001 | 1.0 | QCB API readiness |
 
 ---
 
@@ -72,6 +74,7 @@
 | 1.0 | March 2026 | Retail Banking Operations | Full BRD — 16 sections, appendix | All stakeholders |
 | 1.1 | March 2026 | Retail Banking Operations | Added Section 1.3 Regulatory Framework, enhanced NFRs | Compliance Head |
 | 2.0 | March 10, 2026 | Retail Banking Operations | Complete restructure to 28-section QIB format; added Escalation Governance, Audit Trail, Security, Change Management, detailed validation rules, regulatory alignment matrix | All stakeholders |
+| 2.1 | March 10, 2026 | Retail Banking Operations | Added Section 22: Risk Governance — Data Management Controls (High-Risk Nationality List, High-Risk Occupation List, Occupation Control Rules, Maker/Checker governance, Audit logging for risk data changes); expanded to 29 sections; added Appendix G and H | Risk Management, Compliance |
 
 ---
 
@@ -747,6 +750,21 @@ Case Creation → Business Input → CDD Review → Escalation → Senior Compli
 | FR-INT-005 | System shall write back EDD decisions to T24 upon case closure | Must Have | — |
 | FR-INT-006 | System shall integrate with email/SMS infrastructure for notifications | Must Have | — |
 
+## 14.7 Risk Data Governance
+
+| Req ID | Requirement | Priority | Reference |
+|--------|-------------|----------|-----------|
+| FR-RG-001 | System shall provide a governance-controlled module for managing the High-Risk Nationality List | Must Have | QCB AML/CFT |
+| FR-RG-002 | System shall provide a governance-controlled module for managing the High-Risk Occupation List | Must Have | QCB AML/CFT |
+| FR-RG-003 | System shall support manual entry and update of nationality and occupation risk records | Must Have | — |
+| FR-RG-004 | System shall support bulk upload of risk lists via Excel (.xlsx) or CSV file | Must Have | — |
+| FR-RG-005 | System shall enforce Maker/Checker dual approval for all changes to risk data lists | Must Have | COBIT DSS05.04 |
+| FR-RG-006 | System shall block KYC completion if a customer selects a High-Risk Occupation without uploading required supporting documentation | Must Have | FATF Rec 10 |
+| FR-RG-007 | System shall record every change to risk data lists in the audit trail including previous value, new value, user ID, timestamp, and IP address | Must Have | ISO 27001 A.8.15 |
+| FR-RG-008 | System shall apply occupation-based documentation blocking to all account types (Current, Savings, Investment, and others) | Must Have | QCB AML/CFT |
+| FR-RG-009 | System shall prevent activated risk data changes from taking effect until Checker approval is obtained | Must Have | COBIT DSS05.04 |
+| FR-RG-010 | System shall validate bulk upload file structure (required columns, data types, allowed values) before accepting the upload | Must Have | BCBS 239 |
+
 ---
 
 # SECTION 15: DATA FIELDS AND VALIDATION RULES
@@ -986,24 +1004,30 @@ The system implements an enterprise-grade validation engine aligned with the fol
 | 6 | COMPLIANCE_CHECKER | Compliance Manager | مدير الالتزام | Reviews and approves compliance decisions |
 | 7 | COMPLIANCE_HEAD | Compliance Head | رئيس الالتزام | Senior authority for PEP/Sanctions escalations |
 | 8 | RISK_MANAGER | Risk Dashboard Viewer | مدير المخاطر | Read-only governance dashboard access |
-| 9 | CALL_CENTER | Call Center View | عرض مركز الاتصال | Read-only customer status view |
+| 9 | RISK_OFFICER | Risk Officer | ضابط المخاطر | Maker for risk data list changes (nationality, occupation) |
+| 10 | CALL_CENTER | Call Center View | عرض مركز الاتصال | Read-only customer status view |
 
 ## 16.2 Access Control Matrix
 
-| Function | BUS_MAKER | BUS_CHECK | CDD_MAKER | CDD_CHECK | COMP_MAKER | COMP_CHECK | COMP_HEAD | RISK_MGR | CALL_CTR |
-|----------|-----------|-----------|-----------|-----------|------------|------------|-----------|----------|----------|
-| Create Case | ✅ | — | — | — | — | — | — | — | — |
-| Edit EDD Form | ✅ | — | ✅ | — | — | — | — | — | — |
-| View Case | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Approve (Maker→Checker) | — | ✅ | — | ✅ | — | ✅ | ✅ | — | — |
-| Return for Rework | — | ✅ | — | ✅ | — | ✅ | ✅ | — | — |
-| Escalate to Compliance | — | — | — | ✅ | — | — | — | — | — |
-| PEP/Sanctions Decision | — | — | — | — | ✅ | ✅ | ✅ | — | — |
-| Upload Documents | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — |
-| View Dashboard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
-| View Audit Trail | — | — | — | — | — | ✅ | ✅ | ✅ | — |
-| Risk Governance Dashboard | — | — | — | — | — | — | ✅ | ✅ | — |
-| System Configuration | — | — | — | — | — | — | — | — | — |
+| Function | BUS_MAKER | BUS_CHECK | CDD_MAKER | CDD_CHECK | COMP_MAKER | COMP_CHECK | COMP_HEAD | RISK_MGR | RISK_OFF | CALL_CTR |
+|----------|-----------|-----------|-----------|-----------|------------|------------|-----------|----------|----------|----------|
+| Create Case | ✅ | — | — | — | — | — | — | — | — | — |
+| Edit EDD Form | ✅ | — | ✅ | — | — | — | — | — | — | — |
+| View Case | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| Approve (Maker→Checker) | — | ✅ | — | ✅ | — | ✅ | ✅ | — | — | — |
+| Return for Rework | — | ✅ | — | ✅ | — | ✅ | ✅ | — | — | — |
+| Escalate to Compliance | — | — | — | ✅ | — | — | — | — | — | — |
+| PEP/Sanctions Decision | — | — | — | — | ✅ | ✅ | ✅ | — | — | — |
+| Upload Documents | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — | — |
+| View Dashboard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| View Audit Trail | — | — | — | — | — | ✅ | ✅ | ✅ | — | — |
+| Manage Nationality List (Maker) | — | — | — | — | — | — | — | — | ✅ | — |
+| Manage Occupation List (Maker) | — | — | — | — | — | — | — | — | ✅ | — |
+| Approve Risk Data Changes (Checker) | — | — | — | — | — | ✅ | ✅ | — | — | — |
+| Bulk Upload Risk Lists | — | — | — | — | — | — | — | — | ✅ | — |
+| View Risk Data Audit Log | — | — | — | — | — | ✅ | ✅ | ✅ | — | — |
+| Risk Governance Dashboard | — | — | — | — | — | — | ✅ | ✅ | ✅ | — |
+| System Configuration | — | — | — | — | — | — | — | — | — | — |
 
 **Note:** System Configuration is restricted to IT Administrators (not a business role in the EDD workflow).
 
@@ -1014,6 +1038,7 @@ The system implements an enterprise-grade validation engine aligned with the fol
 | Business Maker ≠ Business Checker | System prevents same user from acting as both |
 | CDD Maker ≠ CDD Checker | System prevents same user from acting as both |
 | Compliance Maker ≠ Compliance Checker | System prevents same user from acting as both |
+| Risk Data Maker ≠ Risk Data Checker | System prevents same user from both creating and approving risk data changes |
 | Case Creator cannot be Final Approver | System prevents end-to-end single-user processing |
 | Maximum rework cycles: 3 per stage | System enforces after 3 returns |
 
@@ -1342,12 +1367,324 @@ The EDD Digital Case Management System is designed to comply with the following 
 | Suspicious Transaction | FATF Rec 20, QCB | Financial Threshold Alerts |
 | Ongoing Monitoring | FATF Rec 10, 11 | Re-KYC Alignment + Annual Review |
 | Wire Transfer Monitoring | FATF Rec 16 | Section 6 Wire Transfer Alerts |
+| High-Risk Nationality Governance | QCB AML/CFT, FATF Rec 10 | Nationality Risk List + Maker/Checker |
+| High-Risk Occupation Governance | QCB AML/CFT, FATF Rec 10 | Occupation Risk List + Documentation Blocking |
 
 ---
 
-# SECTION 22: REPORTING AND DASHBOARD REQUIREMENTS
+# SECTION 22: RISK GOVERNANCE — DATA MANAGEMENT CONTROLS
 
-## 22.1 Dashboard Hierarchy
+This section defines the governance framework for managing risk classification reference data used by the EDD Risk Engine. All risk data lists are maintained through controlled processes with dual approval, full audit trail, and regulatory alignment.
+
+**Regulatory Basis:**
+- **FATF Recommendation 10** — Customer Due Diligence risk-based approach
+- **FATF Recommendation 12** — Enhanced measures for PEP and high-risk categories
+- **QCB AML/CFT Regulatory Framework** — Risk classification and monitoring
+- **COBIT 2019 DSS05.04** — Dual control / Maker-Checker enforcement
+- **ISO 27001:2022 A.8.15** — Logging and monitoring of all data changes
+- **BCBS 239** — Risk data accuracy, completeness, and governance
+
+---
+
+## 22.1 High-Risk Nationality Governance
+
+### 22.1.1 Purpose
+
+The system must include a governance-controlled module allowing Risk and Compliance teams to manage the High-Risk Nationality List used in the customer risk engine. This list directly influences:
+
+1. Customer Risk Profile (CRP) scoring in T24
+2. EDD case triggering thresholds
+3. Escalation routing decisions
+4. PEP screening priority levels
+
+### 22.1.2 Management Capabilities
+
+| # | Capability | Description | Authorization |
+|---|-----------|-------------|---------------|
+| 1 | Manual Update | Add, modify, or deactivate individual nationality entries | Risk Officer (Maker) + Compliance Manager (Checker) |
+| 2 | Bulk Upload | Upload nationality list via Excel (.xlsx) or CSV file | Risk Officer (Maker) + Compliance Manager (Checker) |
+| 3 | View Current List | Display all active high-risk nationalities with scores | Risk Officer, Compliance Officer, Compliance Manager |
+| 4 | View Change History | Display full audit trail of all list modifications | Compliance Manager, Compliance Head, Internal Audit |
+| 5 | Export List | Export current active list in Excel or CSV format | Risk Officer, Compliance Manager |
+
+### 22.1.3 Data Structure
+
+Each entry in the High-Risk Nationality List must conform to the following structure:
+
+| Field Name | Column Header | Data Type | Required | Validation Rule |
+|-----------|---------------|-----------|----------|----------------|
+| Country Code | NATIONAL_COUNTRY | Text (2 chars) | YES | ISO 3166-1 Alpha-2 code |
+| Risk Score | COUNTRY_RISK_SCORE | Integer | YES | Range: 1–200 |
+| Risk Category | COUNTRY_RISK_CATEGORY | Text | YES | Allowed values: HIGH, MEDIUM, LOW |
+
+### 22.1.4 Initial High-Risk Nationality Dataset
+
+The following nationalities are classified as HIGH risk in the initial system configuration:
+
+| # | Country Code | Country | Risk Score | Risk Category |
+|---|-------------|---------|-----------|---------------|
+| 1 | YE | Yemen | 150 | HIGH |
+| 2 | SD | Sudan | 150 | HIGH |
+| 3 | PS | Palestine | 150 | HIGH |
+| 4 | IQ | Iraq | 150 | HIGH |
+| 5 | DZ | Algeria | 150 | HIGH |
+| 6 | TR | Turkey | 150 | HIGH |
+| 7 | SY | Syria | 150 | HIGH |
+| 8 | ER | Eritrea | 150 | HIGH |
+| 9 | IR | Iran | 150 | HIGH |
+| 10 | PH | Philippines | 150 | HIGH |
+| 11 | TN | Tunisia | 150 | HIGH |
+| 12 | ET | Ethiopia | 150 | HIGH |
+| 13 | SO | Somalia | 150 | HIGH |
+| 14 | LB | Lebanon | 150 | HIGH |
+| 15 | AF | Afghanistan | 150 | HIGH |
+| 16 | LY | Libya | 150 | HIGH |
+| 17 | NP | Nepal | 150 | HIGH |
+| 18 | PK | Pakistan | 150 | HIGH |
+| 19 | EG | Egypt | 150 | HIGH |
+| 20 | JO | Jordan | 150 | HIGH |
+| 21 | RU | Russia | 150 | HIGH |
+| 22 | NG | Nigeria | 150 | HIGH |
+| 23 | CN | China | 150 | HIGH |
+| 24 | IN | India | 150 | HIGH |
+| 25 | US | United States | 150 | HIGH |
+| 26 | GB | United Kingdom | 150 | HIGH |
+| 27 | AU | Australia | 150 | HIGH |
+| 28 | FR | France | 150 | HIGH |
+
+**Note:** This list is maintained through governance controls and may be updated by authorized Risk/Compliance personnel through the Maker/Checker workflow described in Section 22.5.
+
+---
+
+## 22.2 High-Risk Occupation Governance
+
+### 22.2.1 Purpose
+
+The system must include a governance-controlled list of High-Risk Occupations used during KYC and EDD reviews. This list determines:
+
+1. Whether additional documentation is required before account activation
+2. Enhanced monitoring triggers for specific occupation types
+3. Risk score contribution to the overall Customer Risk Profile
+
+### 22.2.2 Occupation-Based Account Blocking Rule
+
+Customers selecting any occupation from the High-Risk Occupation List must provide supporting documentation **before account activation**. This rule applies to:
+
+| # | Account Type | Blocking Enforced | Documentation Required |
+|---|-------------|-------------------|----------------------|
+| 1 | Current Accounts | YES | Proof of business, income verification |
+| 2 | Savings Accounts | YES | Proof of business, income verification |
+| 3 | Investment Accounts | YES | Proof of business, income verification, source of wealth |
+| 4 | Any other customer account type | YES | Proof of business, income verification |
+
+**System Enforcement:** Account opening or KYC completion must **not proceed** until supporting evidence is uploaded and verified by the reviewing officer.
+
+### 22.2.3 Required Documentation for High-Risk Occupations
+
+When a customer selects an occupation categorized as HIGH risk, the system must require the following mandatory documentation:
+
+| # | Document Type | Description | Mandatory |
+|---|-------------|-------------|-----------|
+| 1 | Proof of Business Activity | Evidence of active business operations or employment in the declared field | YES |
+| 2 | Commercial Registration or License | Valid CR/license from the relevant authority (if applicable to the occupation) | Conditional |
+| 3 | Income Verification | Salary certificate, tax return, bank statements, or audited financials | YES |
+| 4 | Supporting Documents | Additional documents validating the legitimacy of the declared occupation | YES |
+
+**Blocking Rule:** Without the required documentation, the system must **block KYC completion** and prevent the case from advancing to the next workflow stage.
+
+### 22.2.4 Data Structure
+
+Each entry in the High-Risk Occupation List must conform to the following structure:
+
+| Field Name | Column Header | Data Type | Required | Validation Rule |
+|-----------|---------------|-----------|----------|----------------|
+| Occupation Description | OCCUP_DESC | Text (max 200 chars) | YES | Free text — must not be empty |
+| Occupation Risk Score | OCCP_RISK_SCORE | Integer | YES | Range: 1–200 |
+| Occupation Risk Category | OCCP_RISK_CATEGORY | Text | YES | Allowed values: HIGH, MEDIUM, LOW |
+
+### 22.2.5 Management Capabilities
+
+| # | Capability | Description | Authorization |
+|---|-----------|-------------|---------------|
+| 1 | Manual Entry/Update | Add, modify, or deactivate individual occupation entries | Risk Officer (Maker) + Compliance Manager (Checker) |
+| 2 | Bulk Upload | Upload occupation list via Excel (.xlsx) or CSV file | Risk Officer (Maker) + Compliance Manager (Checker) |
+| 3 | View Current List | Display all active high-risk occupations with scores | Risk Officer, Compliance Officer, Compliance Manager |
+| 4 | View Change History | Display full audit trail of all list modifications | Compliance Manager, Compliance Head, Internal Audit |
+| 5 | Export List | Export current active list in Excel or CSV format | Risk Officer, Compliance Manager |
+
+---
+
+## 22.3 High-Risk Occupation Dataset
+
+The following occupations are classified as HIGH risk in the initial system configuration:
+
+| # | Occupation Description | Risk Score | Risk Category |
+|---|----------------------|-----------|---------------|
+| 1 | Broker (Financial Broker) | 90 | HIGH |
+| 2 | High Ranking Military Officials | 100 | HIGH |
+| 3 | High Ranking Government Officials | 100 | HIGH |
+| 4 | Broker (Real Estate) | 90 | HIGH |
+| 5 | Diplomatic Officials | 100 | HIGH |
+| 6 | Technology Solutions Provider | 80 | HIGH |
+| 7 | High Ranking MOI Officials | 100 | HIGH |
+| 8 | Minister | 100 | HIGH |
+| 9 | Consultant | 90 | HIGH |
+| 10 | Custom Officer | 100 | HIGH |
+| 11 | Media Producer | 80 | HIGH |
+| 12 | Car Dealer | 90 | HIGH |
+| 13 | Coffee Shop Owner | 100 | HIGH |
+| 14 | Financial Consultant | 80 | HIGH |
+| 15 | Restaurant Owner | 80 | HIGH |
+| 16 | Lawyer / Attorney | 90 | HIGH |
+| 17 | Cattle / Camel Trading | 80 | HIGH |
+| 18 | Antiques Trader / Collector | 100 | HIGH |
+| 19 | Hotel Owner | 100 | HIGH |
+| 20 | Exchange House Owner | 80 | HIGH |
+| 21 | Artist | 80 | HIGH |
+| 22 | Lawyer | 90 | HIGH |
+
+**Note:** This list is maintained through governance controls and may be updated by authorized Risk/Compliance personnel through the Maker/Checker workflow described in Section 22.5.
+
+---
+
+## 22.4 Bulk Upload Specification
+
+### 22.4.1 File Format Requirements
+
+| Parameter | Specification |
+|-----------|--------------|
+| Supported Formats | Excel (.xlsx), CSV (.csv) |
+| Encoding | UTF-8 (for CSV) |
+| Maximum File Size | 5 MB |
+| Maximum Rows per Upload | 500 |
+| Header Row | Required — must match column headers exactly |
+
+### 22.4.2 Nationality Upload File Structure
+
+| Column # | Header | Data Type | Required | Validation |
+|----------|--------|-----------|----------|------------|
+| 1 | NATIONAL_COUNTRY | Text (2) | YES | ISO 3166-1 Alpha-2 |
+| 2 | COUNTRY_RISK_SCORE | Integer | YES | 1–200 |
+| 3 | COUNTRY_RISK_CATEGORY | Text | YES | HIGH, MEDIUM, LOW |
+
+### 22.4.3 Occupation Upload File Structure
+
+| Column # | Header | Data Type | Required | Validation |
+|----------|--------|-----------|----------|------------|
+| 1 | OCCUP_DESC | Text (200) | YES | Non-empty |
+| 2 | OCCP_RISK_SCORE | Integer | YES | 1–200 |
+| 3 | OCCP_RISK_CATEGORY | Text | YES | HIGH, MEDIUM, LOW |
+
+### 22.4.4 Upload Processing Rules
+
+| # | Rule | Description |
+|---|------|-------------|
+| 1 | Pre-Validation | System validates file structure, column headers, and data types before processing |
+| 2 | Duplicate Detection | System flags duplicate entries (same country code or occupation description) |
+| 3 | Error Report | Invalid rows are rejected with detailed error messages; valid rows are staged for approval |
+| 4 | Partial Upload | System supports partial upload — valid entries are staged, invalid entries are reported |
+| 5 | Staging | All uploaded entries enter a Pending Approval state and require Checker approval |
+| 6 | Rollback | If Checker rejects, all staged entries from the upload are discarded |
+
+---
+
+## 22.5 Maker / Checker Dual Approval Control
+
+### 22.5.1 Governance Principle
+
+All updates to the following risk data lists must follow dual approval (Maker/Checker) control:
+
+| # | Risk Data List | Maker Role | Checker Role |
+|---|---------------|-----------|-------------|
+| 1 | High-Risk Nationality List | Risk Officer | Compliance Manager |
+| 2 | High-Risk Occupation List | Risk Officer | Compliance Manager |
+
+### 22.5.2 Workflow
+
+```
+┌────────────────┐     ┌────────────────┐     ┌────────────────┐
+│   MAKER        │     │   PENDING      │     │   CHECKER      │
+│                │     │   APPROVAL     │     │                │
+│ Creates or     │────▶│ Change staged  │────▶│ Reviews and    │
+│ uploads change │     │ (not active)   │     │ approves/      │
+│                │     │                │     │ rejects        │
+└────────────────┘     └────────────────┘     └────────┬───────┘
+                                                       │
+                                              ┌────────┴───────┐
+                                              │                │
+                                        ┌─────▼─────┐   ┌─────▼─────┐
+                                        │ APPROVED  │   │ REJECTED  │
+                                        │           │   │           │
+                                        │ Changes   │   │ Changes   │
+                                        │ activated │   │ discarded │
+                                        │ in risk   │   │ Maker     │
+                                        │ engine    │   │ notified  │
+                                        └───────────┘   └───────────┘
+```
+
+### 22.5.3 Control Rules
+
+| # | Rule | Enforcement |
+|---|------|-------------|
+| 1 | Maker ≠ Checker | System prevents the same user from both creating and approving a change |
+| 2 | Pending Changes Not Active | Changes remain inactive until Checker approval is obtained |
+| 3 | Only Approved Changes Become Active | Only Checker-approved entries are applied to the risk engine |
+| 4 | Rejection Requires Reason | Checker must provide a written reason when rejecting a change |
+| 5 | Notification on Action | Maker is notified when Checker approves or rejects the change |
+| 6 | Escalation on Delay | If Checker does not act within 24 hours, the request is escalated to Compliance Head |
+
+---
+
+## 22.6 Audit Trail for Risk Data Changes
+
+### 22.6.1 Auditable Events
+
+Every change to the High-Risk Nationality List or High-Risk Occupation List must be recorded in the audit trail. The following events are logged:
+
+| # | Event | Description |
+|---|-------|-------------|
+| 1 | Entry Created | New nationality or occupation record added |
+| 2 | Entry Modified | Existing record updated (score, category, or description change) |
+| 3 | Entry Deactivated | Record removed from active list (soft delete) |
+| 4 | Bulk Upload Initiated | File upload started with row count |
+| 5 | Bulk Upload Validated | Pre-validation completed with pass/fail count |
+| 6 | Change Approved | Checker approved a pending change |
+| 7 | Change Rejected | Checker rejected a pending change with reason |
+| 8 | List Exported | Current active list exported by a user |
+
+### 22.6.2 Audit Entry Structure
+
+Each audit entry for risk data changes must include:
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| Entry ID | Unique sequential identifier | RDA-2026-00001 |
+| Timestamp | ISO 8601 timestamp with timezone | 2026-03-10T14:32:15+03:00 |
+| User ID | Employee ID of the actor | EMP-1234 |
+| Department | Department of the actor | Risk Management |
+| Action Performed | Description of the action | Modified COUNTRY_RISK_SCORE |
+| List Type | NATIONALITY or OCCUPATION | NATIONALITY |
+| Record Identifier | Country code or occupation description | YE |
+| Previous Value | Value before the change | Risk Score: 120 |
+| New Value | Value after the change | Risk Score: 150 |
+| IP Address | Source IP address of the actor | 10.10.xx.xx |
+| Approval Status | PENDING / APPROVED / REJECTED | APPROVED |
+| Approver ID | Employee ID of the Checker (if approved) | EMP-5678 |
+
+### 22.6.3 Retention and Integrity
+
+| Requirement | Specification | Reference |
+|-------------|---------------|-----------|
+| Minimum Retention | 7 years from date of change | FATF Rec 11, Qatar Law No. 20/2019 |
+| Immutability | Audit entries cannot be modified or deleted | ISO 27001 A.8.15 |
+| Hash-Chain Integrity | Risk data audit entries are linked to the system-wide hash chain | ISO 27001 A.8.15 |
+| Access Control | Only Compliance Head, Risk Manager, and Internal Audit may view risk data audit logs | COBIT DSS05.04 |
+
+---
+
+# SECTION 23: REPORTING AND DASHBOARD REQUIREMENTS
+
+## 23.1 Dashboard Hierarchy
 
 | # | Dashboard | Primary Users | Purpose |
 |---|-----------|--------------|---------|
@@ -1357,7 +1694,7 @@ The EDD Digital Case Management System is designed to comply with the following 
 | 4 | Risk Governance Dashboard | Risk Management Head, Compliance Head | Enterprise risk indicators, escalation analytics |
 | 5 | Executive Dashboard | Senior Management, Board | Strategic KPIs, trend analysis |
 
-## 22.2 Operational Dashboard Requirements
+## 23.2 Operational Dashboard Requirements
 
 | Widget | Description | Update Frequency |
 |--------|-------------|-----------------|
@@ -1367,7 +1704,7 @@ The EDD Digital Case Management System is designed to comply with the following 
 | Recent Activity | Timeline of recent actions on assigned cases | Real-time |
 | Document Pending | Cases with missing or unverified documents | Daily |
 
-## 22.3 Management Dashboard Requirements
+## 23.3 Management Dashboard Requirements
 
 | Widget | Description | Update Frequency |
 |--------|-------------|-----------------|
@@ -1377,7 +1714,7 @@ The EDD Digital Case Management System is designed to comply with the following 
 | Average Processing Time | Mean case duration by stage and segment | Daily |
 | Rework Rate | Percentage of cases returned for rework | Daily |
 
-## 22.4 Compliance Dashboard Requirements
+## 23.4 Compliance Dashboard Requirements
 
 | Widget | Description | Update Frequency |
 |--------|-------------|-----------------|
@@ -1387,7 +1724,7 @@ The EDD Digital Case Management System is designed to comply with the following 
 | Escalation by Reason | Breakdown: PEP, Cash, Sanctions, Documents | Monthly |
 | Sanctions Screening Queue | Cases pending sanctions screening | Real-time |
 
-## 22.5 Risk Governance Dashboard Requirements
+## 23.5 Risk Governance Dashboard Requirements
 
 | Widget | Description | Update Frequency |
 |--------|-------------|-----------------|
@@ -1397,7 +1734,7 @@ The EDD Digital Case Management System is designed to comply with the following 
 | Restricted Accounts | Accounts under restriction due to EDD decisions | Real-time |
 | Regulatory Reporting Status | Status of pending QCB reports | Weekly |
 
-## 22.6 Report Types
+## 23.6 Report Types
 
 | # | Report | Format | Frequency | Distribution |
 |---|--------|--------|-----------|-------------|
@@ -1411,13 +1748,13 @@ The EDD Digital Case Management System is designed to comply with the following 
 
 ---
 
-# SECTION 23: CHANGE MANAGEMENT AND FEEDBACK MODULE
+# SECTION 24: CHANGE MANAGEMENT AND FEEDBACK MODULE
 
-## 23.1 Purpose
+## 24.1 Purpose
 
 The system includes a structured Change Management and Feedback Module that enables users across all departments to submit suggestions, improvement requests, and process feedback. This ensures continuous improvement of the EDD workflow and captures operational insights from front-line users.
 
-## 23.2 Feedback Submission
+## 24.2 Feedback Submission
 
 | Feature | Description |
 |---------|-------------|
@@ -1426,7 +1763,7 @@ The system includes a structured Change Management and Feedback Module that enab
 | Audit Integration | Every feedback submission is logged in the audit trail |
 | Routing | Submitted to Change Management team for review |
 
-## 23.3 Feedback Categories
+## 24.3 Feedback Categories
 
 | # | Category | Description |
 |---|----------|-------------|
@@ -1437,7 +1774,7 @@ The system includes a structured Change Management and Feedback Module that enab
 | 5 | System Integration | Requests for new or enhanced system integrations |
 | 6 | Other | General feedback not covered by above categories |
 
-## 23.4 Feedback Priority Levels
+## 24.4 Feedback Priority Levels
 
 | Priority | Description | Expected Response Time |
 |----------|-------------|----------------------|
@@ -1445,7 +1782,7 @@ The system includes a structured Change Management and Feedback Module that enab
 | 🟡 Medium | Operational enhancement | Within 14 days |
 | 🔴 High | Critical issue or regulatory gap | Within 5 business days |
 
-## 23.5 Feedback Lifecycle
+## 24.5 Feedback Lifecycle
 
 ```
 Submitted → Acknowledged → Under Review → Approved/Rejected → Implemented → Closed
@@ -1460,7 +1797,7 @@ Submitted → Acknowledged → Under Review → Approved/Rejected → Implemente
 | Implementation | IT Development | Per project plan |
 | Closure | Change Management | Post-deployment verification |
 
-## 23.6 Change Request (CR) Process
+## 24.6 Change Request (CR) Process
 
 For material changes that impact scope, workflow, or regulatory alignment:
 
@@ -1472,7 +1809,7 @@ For material changes that impact scope, workflow, or regulatory alignment:
 
 ---
 
-# SECTION 24: NON-FUNCTIONAL REQUIREMENTS
+# SECTION 25: NON-FUNCTIONAL REQUIREMENTS
 
 | # | Requirement | Specification | Regulatory Reference |
 |---|------------|---------------|---------------------|
@@ -1494,10 +1831,13 @@ For material changes that impact scope, workflow, or regulatory alignment:
 | 16 | Browser Compatibility | Chrome 90+, Edge 90+, Safari 14+, Firefox 90+ | — |
 | 17 | Localization | Bilingual support: English and Arabic (RTL) | QCB Requirement |
 | 18 | Accessibility | WCAG 2.1 Level AA compliance | — |
+| 19 | Risk Data Governance | Maker/Checker dual approval for all risk list changes | COBIT 2019 DSS05.04 |
+| 20 | Bulk Upload Validation | Pre-validation of file structure before risk data processing | BCBS 239 |
+| 21 | Occupation-Based Blocking | KYC completion blocked for high-risk occupations without documentation | QCB AML/CFT, FATF Rec 10 |
 
 ---
 
-# SECTION 25: ASSUMPTIONS
+# SECTION 26: ASSUMPTIONS
 
 | # | Assumption | Impact if Invalid |
 |---|-----------|-------------------|
@@ -1515,7 +1855,7 @@ For material changes that impact scope, workflow, or regulatory alignment:
 
 ---
 
-# SECTION 26: RISKS AND MITIGATION
+# SECTION 27: RISKS AND MITIGATION
 
 | # | Risk | Probability | Impact | Mitigation Strategy |
 |---|------|-------------|--------|-------------------|
@@ -1532,9 +1872,9 @@ For material changes that impact scope, workflow, or regulatory alignment:
 
 ---
 
-# SECTION 27: DEPENDENCIES
+# SECTION 28: DEPENDENCIES
 
-## 27.1 Technical Dependencies
+## 28.1 Technical Dependencies
 
 | # | Dependency | Owner | Status | Required By |
 |---|-----------|-------|--------|-------------|
@@ -1547,7 +1887,7 @@ For material changes that impact scope, workflow, or regulatory alignment:
 | 7 | SSL certificates for API endpoints | IT Security | To be provisioned | Phase 1 |
 | 8 | VLAN segmentation for EDD module | IT Network | To be configured | Phase 1 |
 
-## 27.2 Business Dependencies
+## 28.2 Business Dependencies
 
 | # | Dependency | Owner | Status | Required By |
 |---|-----------|-------|--------|-------------|
@@ -1558,7 +1898,7 @@ For material changes that impact scope, workflow, or regulatory alignment:
 | 5 | User training material | Training / L&D | Not started | Phase 3 |
 | 6 | Department champion nominations | All departments | Not started | Phase 2 |
 
-## 27.3 Regulatory Dependencies
+## 28.3 Regulatory Dependencies
 
 | # | Dependency | Owner | Status | Required By |
 |---|-----------|-------|--------|-------------|
@@ -1568,7 +1908,7 @@ For material changes that impact scope, workflow, or regulatory alignment:
 
 ---
 
-# SECTION 28: APPENDIX
+# SECTION 29: APPENDIX
 
 ## Appendix A: EDD Form — Complete Visual Layout
 
@@ -1682,6 +2022,85 @@ PRIVATE BANKING:
 | SnapView | QIB's financial analytics and reporting platform |
 | RBAC | Role-Based Access Control — Access permissions based on defined roles |
 | Hash-Chain | Cryptographic linking of records to ensure tamper resistance |
+| CRP | Customer Risk Profile — Risk classification assigned in T24 core banking |
+| Maker/Checker | Dual-control governance model requiring separate users for creation and approval |
+| Bulk Upload | Process of uploading multiple data records via Excel or CSV file |
+| Risk Data List | Governance-controlled reference data (High-Risk Nationalities, High-Risk Occupations) |
+| KYC Blocking | System enforcement preventing KYC completion until mandatory conditions are met |
+
+---
+
+## Appendix G: High-Risk Nationality Reference Dataset
+
+This appendix provides the complete initial High-Risk Nationality list as configured in the system. This list is governed by the Maker/Checker controls defined in Section 22.
+
+| # | NATIONAL_COUNTRY | Country Name | COUNTRY_RISK_SCORE | COUNTRY_RISK_CATEGORY |
+|---|-----------------|-------------|-------------------|----------------------|
+| 1 | YE | Yemen | 150 | HIGH |
+| 2 | SD | Sudan | 150 | HIGH |
+| 3 | PS | Palestine | 150 | HIGH |
+| 4 | IQ | Iraq | 150 | HIGH |
+| 5 | DZ | Algeria | 150 | HIGH |
+| 6 | TR | Turkey | 150 | HIGH |
+| 7 | SY | Syria | 150 | HIGH |
+| 8 | ER | Eritrea | 150 | HIGH |
+| 9 | IR | Iran | 150 | HIGH |
+| 10 | PH | Philippines | 150 | HIGH |
+| 11 | TN | Tunisia | 150 | HIGH |
+| 12 | ET | Ethiopia | 150 | HIGH |
+| 13 | SO | Somalia | 150 | HIGH |
+| 14 | LB | Lebanon | 150 | HIGH |
+| 15 | AF | Afghanistan | 150 | HIGH |
+| 16 | LY | Libya | 150 | HIGH |
+| 17 | NP | Nepal | 150 | HIGH |
+| 18 | PK | Pakistan | 150 | HIGH |
+| 19 | EG | Egypt | 150 | HIGH |
+| 20 | JO | Jordan | 150 | HIGH |
+| 21 | RU | Russia | 150 | HIGH |
+| 22 | NG | Nigeria | 150 | HIGH |
+| 23 | CN | China | 150 | HIGH |
+| 24 | IN | India | 150 | HIGH |
+| 25 | US | United States | 150 | HIGH |
+| 26 | GB | United Kingdom | 150 | HIGH |
+| 27 | AU | Australia | 150 | HIGH |
+| 28 | FR | France | 150 | HIGH |
+
+**Governance:** All changes to this list require Maker/Checker approval per Section 22.5.
+
+---
+
+## Appendix H: High-Risk Occupation Reference Dataset
+
+This appendix provides the complete initial High-Risk Occupation list as configured in the system. This list is governed by the Maker/Checker controls defined in Section 22.
+
+| # | OCCUP_DESC | OCCP_RISK_SCORE | OCCP_RISK_CATEGORY |
+|---|-----------|----------------|-------------------|
+| 1 | Broker (Financial Broker) | 90 | HIGH |
+| 2 | High Ranking Military Officials | 100 | HIGH |
+| 3 | High Ranking Government Officials | 100 | HIGH |
+| 4 | Broker (Real Estate) | 90 | HIGH |
+| 5 | Diplomatic Officials | 100 | HIGH |
+| 6 | Technology Solutions Provider | 80 | HIGH |
+| 7 | High Ranking MOI Officials | 100 | HIGH |
+| 8 | Minister | 100 | HIGH |
+| 9 | Consultant | 90 | HIGH |
+| 10 | Custom Officer | 100 | HIGH |
+| 11 | Media Producer | 80 | HIGH |
+| 12 | Car Dealer | 90 | HIGH |
+| 13 | Coffee Shop Owner | 100 | HIGH |
+| 14 | Financial Consultant | 80 | HIGH |
+| 15 | Restaurant Owner | 80 | HIGH |
+| 16 | Lawyer / Attorney | 90 | HIGH |
+| 17 | Cattle / Camel Trading | 80 | HIGH |
+| 18 | Antiques Trader / Collector | 100 | HIGH |
+| 19 | Hotel Owner | 100 | HIGH |
+| 20 | Exchange House Owner | 80 | HIGH |
+| 21 | Artist | 80 | HIGH |
+| 22 | Lawyer | 90 | HIGH |
+
+**Governance:** All changes to this list require Maker/Checker approval per Section 22.5.
+
+**Occupation Control Rule:** Any customer selecting an occupation from this list must provide mandatory documentation (proof of business, commercial registration, income verification) before KYC completion. Without documentation, the system blocks account activation across all account types.
 
 ---
 
@@ -1690,7 +2109,7 @@ PRIVATE BANKING:
 | | |
 |---|---|
 | **Document ID** | BRD-EDD-FLOW-2026-002 |
-| **Version** | 2.0 |
+| **Version** | 2.1 |
 | **Date** | March 10, 2026 |
 | **Status** | Submitted for Stakeholder Review |
 | **Classification** | Internal — QIB Confidential |
