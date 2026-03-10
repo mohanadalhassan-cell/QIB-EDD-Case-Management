@@ -64,21 +64,23 @@
     }
 
     .hero-title {
-      font-size: 48px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.85) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      line-height: 1.1;
     }
 
     .hero-subtitle {
-      font-size: 20px;
-      font-weight: 300;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 350;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 20px;
+      line-height: 1.4;
     }
 
     .hero-microcopy {
@@ -99,11 +101,12 @@
     .ribbon-label {
       text-align: center;
       font-size: 11px;
-      color: rgba(92, 10, 40, 0.8);
+      color: rgba(92, 10, 40, 0.85);
       text-transform: uppercase;
       letter-spacing: 2px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      font-family: 'Courier New', monospace;
     }
 
     .ribbon-group {
@@ -115,14 +118,15 @@
     }
 
     .intelligence-ribbon {
-      height: 32px;
+      height: 36px;
       overflow: hidden;
-      border-radius: 8px;
-      background: rgba(92, 10, 40, 0.03);
-      border: 1px solid rgba(92, 10, 40, 0.08);
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(92, 10, 40, 0.02) 0%, rgba(92, 10, 40, 0.04) 50%, rgba(92, 10, 40, 0.02) 100%);
+      border: 1px solid rgba(92, 10, 40, 0.12);
       display: flex;
       align-items: center;
       position: relative;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
     }
 
     .ribbon-track {
@@ -143,11 +147,22 @@
       100% { transform: translateX(-50%); }
     }
 
+    @keyframes field-fade-in {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes subtle-pulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(92, 10, 40, 0.1); }
+      50% { box-shadow: 0 0 8px rgba(92, 10, 40, 0.15); }
+    }
+
     .ribbon-item {
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.65);
       flex-shrink: 0;
-      padding: 0 4px;
+      padding: 0 6px;
+      font-weight: 500;
     }
 
     .ribbon-separator {
@@ -180,15 +195,22 @@
     .security-badge-item {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      background: rgba(92, 10, 40, 0.05);
-      border: 1px solid rgba(92, 10, 40, 0.15);
-      border-radius: 20px;
+      gap: 8px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, rgba(92, 10, 40, 0.06) 0%, rgba(92, 10, 40, 0.03) 100%);
+      border: 1px solid rgba(92, 10, 40, 0.18);
+      border-radius: 22px;
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.75);
       font-weight: 500;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
+      transition: all 0.3s ease;
+    }
+
+    .security-badge-item:hover {
+      background: linear-gradient(135deg, rgba(92, 10, 40, 0.1) 0%, rgba(92, 10, 40, 0.06) 100%);
+      border-color: rgba(92, 10, 40, 0.25);
+      color: #ffffff;
     }
 
     .security-badge-dot {
@@ -599,34 +621,21 @@
     }
 
     .field-cloud {
-      margin-top: 20px;
-      padding: 20px;
-      background: rgba(92, 10, 40, 0.05);
-      border-radius: 8px;
+      margin-top: 24px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(92, 10, 40, 0.06) 0%, rgba(92, 10, 40, 0.02) 100%);
+      border: 1px solid rgba(92, 10, 40, 0.1);
+      border-radius: 10px;
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
       min-height: 100px;
       align-content: center;
+      animation: subtle-pulse 3s ease-in-out infinite;
     }
 
-    .field-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      background: rgba(92, 10, 40, 0.1);
-      border: 1px solid rgba(92, 10, 40, 0.2);
-      border-radius: 20px;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
-      white-space: nowrap;
-    }
-
-    .field-tag::before {
-      content: "⊙";
-      font-size: 8px;
-      color: #5C0A28;
+    .field-cloud .field-tag {
+      animation: field-fade-in 0.4s ease-out;
     }
 
     /* References Drawer */
@@ -896,202 +905,6 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════ */
-    /* PRINT STYLES - AUDIT-FRIENDLY EXPORT */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    @media print {
-      * {
-        background: transparent !important;
-        color: #000 !important;
-        box-shadow: none !important;
-        text-shadow: none !important;
-      }
-
-      body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 20px;
-        background: #fff;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      }
-
-      .pre-auth-wrapper,
-      .btn-control,
-      .login-controls,
-      .references-drawer,
-      .intelligence-ribbons-container {
-        display: none !important;
-      }
-
-      .post-auth-wrapper {
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        background: #fff;
-      }
-
-      .brand-reveal-header {
-        border-bottom: 2px solid #333;
-        background: transparent;
-        padding: 20px 0;
-        margin-bottom: 20px;
-      }
-
-      .brand-logo-reveal {
-        background: #f5f5f5;
-        color: #000;
-        margin-bottom: 16px;
-      }
-
-      .reveal-title {
-        color: #000;
-        font-size: 24px;
-      }
-
-      .reveal-subtitle,
-      .reveal-partner {
-        color: #333;
-      }
-
-      .t24-intelligence-block,
-      .stakeholder-section {
-        border: 1px solid #ccc;
-        background: #fafafa;
-        page-break-inside: avoid;
-        margin: 20px 0;
-        padding: 16px;
-      }
-
-      .t24-header,
-      .stakeholder-title {
-        color: #000;
-        font-size: 14px;
-        font-weight: bold;
-        margin-bottom: 12px;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 8px;
-      }
-
-      .field-cloud {
-        background: transparent;
-        border: 1px dashed #999;
-      }
-
-      .field-tag {
-        background: #e8e8e8;
-        border: 1px solid #bbb;
-        color: #000;
-        margin: 4px 2px;
-      }
-
-      .stakeholder-card {
-        border: 1px solid #999;
-        background: #f0f0f0;
-        page-break-inside: avoid;
-      }
-
-      .stakeholder-initials {
-        background: #d0d0d0;
-        color: #000;
-      }
-
-      .stakeholder-title-card,
-      .t24-stat {
-        color: #000;
-      }
-
-      .app-footer {
-        border-top: 2px solid #333;
-        color: #666;
-        margin-top: 20px;
-        padding-top: 16px;
-      }
-
-      .reference-badge {
-        display: inline-block;
-        border: 1px solid #999;
-        background: #f5f5f5;
-        color: #000;
-      }
-
-      a {
-        color: #0066cc;
-        text-decoration: underline;
-      }
-
-      h1, h2, h3 {
-        color: #000;
-        page-break-after: avoid;
-      }
-
-      ul, ol {
-        margin: 10px 0;
-        padding-left: 20px;
-      }
-
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin: 16px 0;
-      }
-
-      th, td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-      }
-
-      th {
-        background: #e8e8e8;
-        font-weight: bold;
-      }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* ACCESSIBILITY & FOCUS STATES */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    *:focus-visible {
-      outline: 2px solid #5C0A28;
-      outline-offset: 2px;
-    }
-
-    /* High contrast mode support */
-    @media (prefers-contrast: more) {
-      .form-input,
-      .role-button,
-      .otp-digit-input {
-        border-width: 2px;
-      }
-
-      .security-badge-item,
-      .reference-badge {
-        border-width: 2px;
-      }
-    }
-
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-
-      .ribbon-track {
-        animation: none;
-      }
-
-      .intelligence-ribbon:hover .ribbon-track {
-        animation-play-state: running;
-      }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
     /* UTILITIES & HELPERS */
     /* ═══════════════════════════════════════════════════════════════ */
 
@@ -1109,6 +922,228 @@
       color: #51cf66;
       font-size: 12px;
       margin-top: 6px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ACCESSIBILITY & FOCUS STATES */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    *:focus {
+      outline: 2px solid #5C0A28;
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .field-cloud { animation: none; }
+      .ribbon-track { animation: none; }
+    }
+
+    /* Enhanced keyboard navigation */
+    button:focus-visible, 
+    input:focus-visible, 
+    .role-button:focus-visible,
+    .reference-badge:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+      outline-offset: 3px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* PRINT STYLES */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .pre-auth-wrapper,
+      .references-drawer,
+      .login-controls {
+        display: none !important;
+      }
+
+      .post-auth-wrapper {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .brand-reveal-header,
+      .t24-intelligence-block,
+      .stakeholder-section {
+        border: 1px solid #cccccc;
+        page-break-inside: avoid;
+      }
+
+      .brand-logo-reveal {
+        background: #f0f0f0;
+        border: 1px solid #cccccc;
+      }
+
+      .reveal-title,
+      .reveal-partner,
+      .t24-header,
+      .stakeholder-title {
+        color: #000000;
+      }
+
+      .field-tag {
+        background: #f5f5f5;
+        border: 1px solid #cccccc;
+        color: #000000;
+      }
+
+      .stakeholder-card {
+        background: #f9f9f9;
+        border: 1px solid #cccccc;
+      }
+
+      .app-footer {
+        color: #666666;
+      }
+
+      @page {
+        margin: 1in;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ENHANCED RESPONSIVE DESIGN */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    @media (max-width: 1200px) {
+      .sovereign-gateway-hero {
+        padding: 48px 32px;
+      }
+
+      .hero-title {
+        font-size: 48px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 40px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
+
+      .sovereign-gateway-hero {
+        padding: 40px 24px;
+      }
+
+      .intelligence-ribbons-container {
+        padding: 28px 16px;
+      }
+
+      .login-progress-indicator {
+        gap: 12px;
+        margin-bottom: 32px;
+      }
+
+      .step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+      }
+
+      .role-selection-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .stakeholder-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .references-drawer {
+        width: 85%;
+        max-width: 380px;
+      }
+
+      .field-cloud {
+        gap: 10px;
+        padding: 16px;
+      }
+
+      .t24-intelligence-block {
+        margin: 24px;
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 32px;
+        letter-spacing: -0.5px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .sovereign-gateway-hero {
+        padding: 32px 16px;
+      }
+
+      .login-card {
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      .otp-input-group {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+
+      .otp-digit-input {
+        font-size: 18px;
+      }
+
+      .security-badges-inline {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .security-badge-item {
+        width: 100%;
+        padding: 12px;
+      }
+
+      .role-selection-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .stakeholder-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .vision-2030-strip {
+        padding: 16px;
+        font-size: 11px;
+      }
+
+      .references-drawer {
+        width: 100%;
+        max-width: 100%;
+      }
     }
 
   </style>
@@ -1251,17 +1286,17 @@
             <h3>Employee Verification</h3>
             <p>Enter your credentials</p>
           </div>
-          <form id="loginForm" class="login-steps-container" aria-label="Login form - Step 1 Employee Verification">
+          <form id="loginForm" class="login-steps-container">
             <div class="form-group">
-              <label class="form-label" for="employeeId">Employee ID</label>
-              <input type="text" id="employeeId" class="form-input" placeholder="emp@example.com" aria-label="Employee ID input" required>
+              <label class="form-label">Employee ID</label>
+              <input type="text" id="employeeId" class="form-input" placeholder="emp@example.com" required>
               <span class="form-hint">💡 Try: ahmed.thani, Demo-2030, admin, QIB2030</span>
             </div>
             <div class="form-group">
-              <label class="form-label" for="password">Password</label>
-              <input type="password" id="password" class="form-input" placeholder="••••••••" aria-label="Password input" required>
+              <label class="form-label">Password</label>
+              <input type="password" id="password" class="form-input" placeholder="••••••••" required>
             </div>
-            <button type="button" class="btn-primary" aria-label="Proceed to role selection" onclick="nextStep(1)">PROCEED TO ROLE SELECTION</button>
+            <button type="button" class="btn-primary" onclick="nextStep(1)">PROCEED TO ROLE SELECTION</button>
           </form>
         </div>
 
@@ -1271,17 +1306,15 @@
             <h3>Role Assignment</h3>
             <p>Select your operational role</p>
           </div>
-          <fieldset aria-label="Role selection options">
-            <div class="role-selection-grid">
-              <button type="button" class="role-button" aria-label="Analyst role" onclick="selectRole('Analyst')">Analyst</button>
-              <button type="button" class="role-button" aria-label="Manager role" onclick="selectRole('Manager')">Manager</button>
-              <button type="button" class="role-button" aria-label="Admin role" onclick="selectRole('Admin')">Admin</button>
-              <button type="button" class="role-button" aria-label="Auditor role" onclick="selectRole('Auditor')">Auditor</button>
-              <button type="button" class="role-button" aria-label="Officer role" onclick="selectRole('Officer')">Officer</button>
-              <button type="button" class="role-button" aria-label="Viewer role" onclick="selectRole('Viewer')">Viewer</button>
-            </div>
-          </fieldset>
-          <button type="button" class="btn-primary" aria-label="Proceed to OTP verification" onclick="nextStep(2)">PROCEED TO VERIFICATION</button>
+          <div class="role-selection-grid">
+            <button class="role-button" onclick="selectRole('Analyst')">Analyst</button>
+            <button class="role-button" onclick="selectRole('Manager')">Manager</button>
+            <button class="role-button" onclick="selectRole('Admin')">Admin</button>
+            <button class="role-button" onclick="selectRole('Auditor')">Auditor</button>
+            <button class="role-button" onclick="selectRole('Officer')">Officer</button>
+            <button class="role-button" onclick="selectRole('Viewer')">Viewer</button>
+          </div>
+          <button class="btn-primary" onclick="nextStep(2)">PROCEED TO VERIFICATION</button>
         </div>
 
         <!-- Step 3: OTP -->
@@ -1290,26 +1323,24 @@
             <h3>Multi-Factor Authentication</h3>
             <p>Enter your 6-digit verification code</p>
           </div>
-          <fieldset aria-label="OTP input fields">
-            <div class="otp-input-group" id="otpInputGroup" role="group" aria-label="One-time password digits">
-              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 1">
-              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 2">
-              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 3">
-              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 4">
-              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 5">
-              <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="OTP digit 6">
-            </div>
-          </fieldset>
+          <div class="otp-input-group" id="otpInputGroup">
+            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          </div>
           <div class="form-hint" style="text-align: center;">Demo OTP: 123456</div>
-          <button type="button" class="btn-primary" aria-label="Verify OTP and gain access" onclick="verifyOTP()">VERIFY & GAIN ACCESS</button>
+          <button class="btn-primary" onclick="verifyOTP()">VERIFY & GAIN ACCESS</button>
         </div>
 
         <!-- Control Buttons -->
         <div class="login-controls">
-          <button type="button" class="btn-control" id="btnFullscreen" aria-label="Toggle fullscreen presentation mode" onclick="toggleFullscreen()">
+          <button class="btn-control" id="btnFullscreen" onclick="toggleFullscreen()">
             <span>⛶</span> <span>Fullscreen</span>
           </button>
-          <button type="button" class="btn-control" id="btnPrint" aria-label="Print session summary and audit trail" onclick="printSession()" disabled>
+          <button class="btn-control" id="btnPrint" onclick="printSession()" disabled>
             <span>⎙</span> <span>Print</span>
           </button>
         </div>
@@ -1559,19 +1590,23 @@
       'INDUSTRY', 'CUSTOMER_STATUS', 'KYC_NEXT_DATE', 'OCCUPATION', 'EMPLOYER',
       'NATIONALITY', 'ID_EXPIRY', 'EMPLOYMENT_TYPE', 'ANNUAL_INCOME', 'RISK_PROFILE',
       'TRADING_MARKET', 'PAYMENT_MODE', 'ACCOUNT_CURRENCY', 'LINKED_ENTITIES', 'BENEFICIAL_OWNER',
-      'TAX_JURISDICTION', 'PEP_FLAG', 'SANCTION_FLAG', 'FATCA_STATUS', 'CRS_STATUS',
-      'CREDIT_RATING', 'ACCOUNT_OPENING_DATE', 'LAST_TRANSACTION_DATE', 'FACILITY_TYPE', 'COLLATERAL_VALUE',
-      'BRANCH_CODE', 'PRODUCT_FAMILY', 'RELATIONSHIP_MANAGER', 'CREDIT_LIMIT', 'BALANCE',
-      'INTEREST_RATE', 'MATURITY_DATE', 'COUNTERPARTY_TYPE', 'DMS_LINK', 'COMPLIANCE_STATUS',
-      'MONITORING_FLAG', 'REVIEW_FREQUENCY', 'INTERNAL_RATING', 'EXTERNAL_RATING', 'EXPOSURE_LIMIT'
+      'PEP_STATUS', 'SANCTIONS_SCREENING', 'ADVERSE_MEDIA', 'COMPLIANCE_FLAG', 'AML_SCORE',
+      'KYCED_DATE', 'DOCUMENT_EXPIRY', 'ADDRESS_VERIFIED', 'POI_VERIFIED', 'POA_VERIFIED',
+      'RELATIONSHIP_MANAGER', 'PRODUCT_EXPOSURE', 'TRANSACTION_VOLUME', 'ACCOUNT_AGE', 'REVIEW_FREQUENCY'
     ];
 
     function rotateFieldCloud() {
       const cloud = document.getElementById('fieldCloud');
-      const selectedFields = ALL_FIELD_TAGS.sort(() => Math.random() - 0.5).slice(0, 18);
+      // Fisher-Yates shuffle for better randomization
+      const shuffled = ALL_FIELD_TAGS.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      const selectedFields = shuffled.slice(0, 14);
       
       cloud.innerHTML = selectedFields.map(field => 
-        `<span class="field-tag" title="Example T24 field (demo)">${field}</span>`
+        `<span class="field-tag">${field}</span>`
       ).join('');
     }
 
