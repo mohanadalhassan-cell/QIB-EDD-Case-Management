@@ -115,12 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show loading
     btnLogin.disabled = true;
-    btnLogin.innerHTML = '<span class="spinner"></span>';
+    btnLogin.innerHTML = '<span class="btn-icon">⟳</span>';
 
     // Simulate authentication delay
     setTimeout(() => {
       btnLogin.disabled = false;
-      btnLogin.innerHTML = '<span class="btn-text">Authenticate & Access</span><span class="btn-shimmer"></span>';
+      btnLogin.innerHTML = '<span class="btn-label">Authenticate • Access Platform</span><span class="btn-icon">→</span><span class="btn-shimmer"></span>';
       
       showStep(stepOTP);
       startTimer();
