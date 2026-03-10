@@ -401,53 +401,65 @@
     const segmentThemes = {
       mass: {
         label: 'Mass Banking Active',
-        color: '#00D4FF',
-        btnBorder: 'rgba(0,150,220,0.4)',
-        btnBg: 'rgba(0,150,220,0.15)',
+        color: '#0096DC',
+        btnBorder: 'rgba(0,150,220,0.5)',
+        btnBg: 'rgba(0,150,220,0.2)',
         css: {
-          '--bg-deep': '#0a1c2e',
-          '--bg-mid': '#0f2a42',
+          '--bg-deep': '#e8f0f8',
+          '--bg-mid': '#f0f5fa',
           '--accent': '#0096DC',
           '--accent-primary': '#0096DC',
+          '--accent-secondary': '#0077B6',
           '--warning': '#D4AF37',
-          '--glass-bg': 'rgba(10,28,46,0.65)',
-          '--sidebar-bg': 'linear-gradient(180deg, #0a2540, #0d1f35)',
-          '--text-primary': '#e8ecf1',
-          '--text-secondary': 'rgba(220,230,240,0.7)'
+          '--glass-bg': 'rgba(255,255,255,0.85)',
+          '--glass-bg-solid': 'rgba(0,80,150,0.92)',
+          '--glass-border': 'rgba(0,150,220,0.2)',
+          '--sidebar-bg': 'linear-gradient(180deg, #003d6b, #005a8e)',
+          '--text-primary': '#1a2733',
+          '--text-secondary': 'rgba(30,50,70,0.75)',
+          '--text-muted': 'rgba(30,50,70,0.45)'
         }
       },
       tamayuz: {
         label: 'Tamayuz Banking Active',
-        color: '#90A4AE',
-        btnBorder: 'rgba(144,164,174,0.5)',
-        btnBg: 'rgba(144,164,174,0.15)',
+        color: '#C0C0C0',
+        btnBorder: 'rgba(192,192,192,0.6)',
+        btnBg: 'rgba(192,192,192,0.2)',
         css: {
-          '--bg-deep': '#111827',
-          '--bg-mid': '#1a2332',
-          '--accent': '#78909C',
-          '--accent-primary': '#546E7A',
-          '--warning': '#B0BEC5',
-          '--glass-bg': 'rgba(20,30,48,0.65)',
-          '--sidebar-bg': 'linear-gradient(180deg, #0d1b2a, #1b2838)',
-          '--text-primary': '#e0e6ed',
-          '--text-secondary': 'rgba(200,215,230,0.7)'
+          '--bg-deep': '#1a1f2e',
+          '--bg-mid': '#222838',
+          '--accent': '#C0C0C0',
+          '--accent-primary': '#A8B2BC',
+          '--accent-secondary': '#8899AA',
+          '--warning': '#C0C0C0',
+          '--glass-bg': 'rgba(28,35,55,0.8)',
+          '--glass-bg-solid': 'rgba(25,32,52,0.95)',
+          '--glass-border': 'rgba(192,192,192,0.15)',
+          '--sidebar-bg': 'linear-gradient(180deg, #151b2e, #1d2540)',
+          '--text-primary': '#d8dce6',
+          '--text-secondary': 'rgba(200,210,225,0.7)',
+          '--text-muted': 'rgba(180,195,215,0.45)'
         }
       },
       private: {
         label: 'Private Banking Active',
         color: '#D4AF37',
-        btnBorder: 'rgba(212,175,55,0.5)',
-        btnBg: 'rgba(212,175,55,0.15)',
+        btnBorder: 'rgba(212,175,55,0.6)',
+        btnBg: 'rgba(212,175,55,0.2)',
         css: {
-          '--bg-deep': '#0c0c0c',
-          '--bg-mid': '#161616',
+          '--bg-deep': '#0a0a0a',
+          '--bg-mid': '#111111',
           '--accent': '#D4AF37',
           '--accent-primary': '#D4AF37',
+          '--accent-secondary': '#b8962e',
           '--warning': '#D4AF37',
-          '--glass-bg': 'rgba(18,18,18,0.75)',
-          '--sidebar-bg': 'linear-gradient(180deg, #0a0a0a, #111111)',
+          '--glass-bg': 'rgba(15,15,15,0.85)',
+          '--glass-bg-solid': 'rgba(10,10,10,0.95)',
+          '--glass-border': 'rgba(212,175,55,0.15)',
+          '--sidebar-bg': 'linear-gradient(180deg, #050505, #0d0d0d)',
           '--text-primary': '#f0ece4',
-          '--text-secondary': 'rgba(240,236,228,0.65)'
+          '--text-secondary': 'rgba(240,236,228,0.65)',
+          '--text-muted': 'rgba(240,236,228,0.35)'
         }
       }
     };
@@ -456,13 +468,45 @@
       const theme = segmentThemes[seg];
       if (!theme) return;
 
-      // Apply CSS variables
+      // Apply CSS variables to :root
       const root = document.documentElement;
       Object.entries(theme.css).forEach(([prop, val]) => root.style.setProperty(prop, val));
       
       // Update sidebar background
       const sidebar = document.querySelector('.sidebar');
       if (sidebar) sidebar.style.background = theme.css['--sidebar-bg'];
+
+      // Update header background
+      const header = document.querySelector('.header');
+      if (header) header.style.background = theme.css['--glass-bg-solid'];
+
+      // Update body/ambient backgrounds for Mass Banking (light theme)
+      const ambientBg = document.querySelector('.ambient-bg');
+      const gradientMesh = document.querySelector('.gradient-mesh');
+      if (seg === 'mass') {
+        document.body.style.background = '#e8f0f8';
+        document.body.style.color = '#1a2733';
+        if (ambientBg) ambientBg.style.opacity = '0';
+        if (gradientMesh) gradientMesh.style.opacity = '0';
+        // Fix table/card text for light theme
+        document.querySelectorAll('.stat-card, .card, .data-table').forEach(el => {
+          el.style.color = '#1a2733';
+        });
+        document.querySelectorAll('.stat-value').forEach(el => el.style.color = '#0a1c2e');
+        document.querySelectorAll('.stat-label').forEach(el => el.style.color = 'rgba(30,50,70,0.7)');
+        document.querySelectorAll('.nav-item span').forEach(el => el.style.color = 'rgba(255,255,255,0.85)');
+      } else {
+        document.body.style.background = '';
+        document.body.style.color = '';
+        if (ambientBg) ambientBg.style.opacity = '';
+        if (gradientMesh) gradientMesh.style.opacity = '';
+        document.querySelectorAll('.stat-card, .card, .data-table').forEach(el => {
+          el.style.color = '';
+        });
+        document.querySelectorAll('.stat-value').forEach(el => el.style.color = '');
+        document.querySelectorAll('.stat-label').forEach(el => el.style.color = '');
+        document.querySelectorAll('.nav-item span').forEach(el => el.style.color = '');
+      }
 
       // Update segment indicator
       document.getElementById('segment-indicator').style.background = theme.color;
@@ -472,7 +516,7 @@
       document.querySelectorAll('.segment-btn').forEach(btn => {
         btn.style.border = '1.5px solid rgba(255,255,255,0.1)';
         btn.style.background = 'rgba(255,255,255,0.03)';
-        btn.style.color = 'var(--text-secondary)';
+        btn.style.color = seg === 'mass' ? 'rgba(30,50,70,0.6)' : 'var(--text-secondary)';
         btn.classList.remove('active');
       });
       const activeBtn = document.getElementById('seg-btn-' + seg);
