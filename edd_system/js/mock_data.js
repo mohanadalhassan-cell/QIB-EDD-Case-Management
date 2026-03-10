@@ -8,6 +8,88 @@ const EDDMockData = {
   // Current logged user (set on login)
   currentUser: null,
 
+  // Sector Analysis Fields Configuration
+  sectorAnalysisFields: {
+    'PB': {
+      code: 'PB',
+      name: 'Private Banking',
+      keyAnalysis: [
+        'Wealth Source Verification',
+        'Investment Activity & Trading Patterns',
+        'High Value Transfer Justification',
+        'PEP Status & Family Connections',
+        'Beneficial Ownership & Complex Structures',
+        'Cross-Border Holdings Analysis',
+        'Trust & Foundation Arrangements',
+        'Banking Relationship Overview'
+      ],
+      riskIndicators: [
+        'PEP Status',
+        'High Net Worth Threshold (>$1M)',
+        'Private Banking Product Utilization',
+        'Multiple Account Structures',
+        'Frequent High-Value Transfers',
+        'Complex Trust Arrangements',
+        'Non-Resident Accounts',
+        'Advisor/POA Arrangements'
+      ],
+      documents: ['Source of Wealth Statement', 'Beneficial Ownership Declaration', 'Trust Documents', 'Investment Account Statements'],
+      frequency: 'Annual'
+    },
+    'TZ': {
+      code: 'TZ',
+      name: 'Tamayuz Elite',
+      keyAnalysis: [
+        'Employment Verification & Confirmation',
+        'Salary Deposit Consistency Analysis',
+        'Income vs. Expense Ratio Assessment',
+        'Travel & International Activity Monitoring',
+        'Credit History & Financial Stability',
+        'Spending Behavior Trend Analysis',
+        'Account Activity Pattern Review',
+        'Professional Background Verification'
+      ],
+      riskIndicators: [
+        'Government Employee Status',
+        'Large Salary Variations',
+        'Multiple Account Activity',
+        'Employment-based Income Source',
+        'Periodic Large Transactions',
+        'Cross-Border Travel Activity',
+        'Third-Party Payment Activity',
+        'Investment Account Activity'
+      ],
+      documents: ['Employment Verification Letter', 'Salary Certificate (6 months)', 'Tax Return (Last Year)', 'Professional License/Registration'],
+      frequency: 'Semi-Annual'
+    },
+    'MS': {
+      code: 'MS',
+      name: 'Mass Banking',
+      keyAnalysis: [
+        'Card Transaction Frequency & Amount',
+        'Salary Deposit Pattern & Regularity',
+        'Cash Withdrawal Behavior Assessment',
+        'Domestic vs. Cross-Border Activity Ratio',
+        'Account Dormancy & Active Use Patterns',
+        'Biometric & KYC Data Verification',
+        'Transaction Purpose & Justification',
+        'Source of Large Deposits Analysis'
+      ],
+      riskIndicators: [
+        'Cash Intensive Business Operations',
+        'Non-Resident Account Status',
+        'High-Risk Country Exposure',
+        'Large Deposit Without Source Documentation',
+        'Unusual Transaction Frequency or Amount',
+        'Rapid Fund Movement',
+        'Third-Party Account Access',
+        'Prepaid Card Usage'
+      ],
+      documents: ['KYC Form (Updated)', 'ID Copy (Valid)', 'Address Proof (Recent)', 'Employment Verification'],
+      frequency: 'Quarterly'
+    }
+  },
+
   // Users Database
   users: {
     'EMP001': { id: 'EMP001', name: 'Ahmed Al-Thani', email: 'ahmed.althani@qib.com.qa', department: 'Mass Banking', role: 'business', segment: 'Mass' },

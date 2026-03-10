@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDD Case Management — Sector Selection Dashboard</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Digital Platform</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_cases_sectors.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+            <span class="nav-badge">8</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <div class="page-title flex-align-center" style="display: flex; align-items: center; gap: 12px;">
+            📊 EDD Case Management — Sector Selection
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="header-btn" title="Refresh">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 12a8 8 0 0 0 14.93 5.374m0-10.748a8 8 0 1 0-14.86.748"/></svg>
+          </button>
+          <button class="header-btn" title="Settings">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <!-- Welcome Section -->
+        <div style="margin-bottom: 32px;">
+          <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary);">
+            Sector-First Investigation Dashboard
+          </h1>
+          <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 4px;">
+            Select a sector to view and manage EDD cases within that customer segment
+          </p>
+          <p style="font-size: 12px; color: var(--text-muted);">
+            Last updated: <span id="last-updated">Just now</span>
+          </p>
+        </div>
+
+        <!-- Sectors Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 32px;" id="sectors-grid">
+          <!-- Sector cards will be rendered here by JavaScript -->
+        </div>
+
+        <!-- Usage Statistics Section -->
+        <div style="margin-top: 40px;">
+          <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            Sector Performance Overview
+          </h2>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <!-- Statistics cards -->
+            <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <h3 style="font-size: 14px; font-weight: 600; margin: 0;">Total Cases</h3>
+                <span style="font-size: 24px;">📋</span>
+              </div>
+              <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px;" id="total-cases">8</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Across all sectors</div>
+            </div>
+
+            <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <h3 style="font-size: 14px; font-weight: 600; margin: 0;">High Risk Cases</h3>
+                <span style="font-size: 24px;">🚨</span>
+              </div>
+              <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px; color: #EF4444;" id="high-risk-cases">4</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Requiring escalation</div>
+            </div>
+
+            <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <h3 style="font-size: 14px; font-weight: 600; margin: 0;">SLA Breaches</h3>
+                <span style="font-size: 24px;">⏰</span>
+              </div>
+              <div style="font-size: 32px; font-weight: 700; margin-bottom: 8px; color: #F59E0B;" id="sla-breaches">2</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Overdue review</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div style="margin-top: 40px;">
+          <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+            </svg>
+            Recent Case Activity
+          </h2>
+          
+          <div id="recent-activity" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden;">
+            <!-- Activity items will be rendered here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/mock_data.js"></script>
+  <script src="js/sectors.js"></script>
+  <script>
+    /**
+     * Sector Dashboard Initialization
+     */
+    
+    // Initialize dashboard
+    function initSectorDashboard() {
+      renderSectorCards();
+      updateStatistics();
+      renderRecentActivity();
+      setLastUpdated();
+    }
+
+    /**
+     * Render sector selection cards
+     */
+    function renderSectorCards() {
+      const grid = document.getElementById('sectors-grid');
+      grid.innerHTML = '';
+
+      const sectorCodes = ['PB', 'TZ', 'MS'];
+      
+      sectorCodes.forEach(code => {
+        const sector = getSectorConfig(code);
+        const cases = EDDMockData.cases.filter(c => {
+          const customer = EDDMockData.customers.find(cust => cust.rim === c.rim);
+          return customer && customer.riskScores.SECTOR === code;
+        });
+
+        const highRiskCount = cases.filter(c => c.priority === 'High' || c.priority === 'Critical').length;
+        const slaBreachers = cases.filter(c => c.slaBreach).length;
+
+        const card = document.createElement('div');
+        card.innerHTML = `
+          <div style="
+            background: var(--glass-bg);
+            border: 2px solid ${sector.lightBorder};
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+          " class="sector-card" onclick="navigateToSector('${code}')">
+            
+            <!-- Gradient background -->
+            <div style="
+              position: absolute;
+              top: -50%;
+              right: -50%;
+              width: 400px;
+              height: 400px;
+              background: ${sector.gradient};
+              opacity: 0.03;
+              border-radius: 50%;
+              transition: all 0.5s ease;
+            " class="sector-glow"></div>
+
+            <!-- Sector Icon & Name -->
+            <div style="position: relative; z-index: 1;">
+              <div style="
+                font-size: 48px;
+                margin-bottom: 12px;
+                display: inline-block;
+              ">${sector.iconEmoji}</div>
+              
+              <h3 style="
+                font-size: 18px;
+                font-weight: 700;
+                margin: 0 0 4px 0;
+                color: var(--text-primary);
+              ">${sector.name}</h3>
+              
+              <p style="
+                font-size: 12px;
+                color: var(--text-secondary);
+                margin: 0 0 8px 0;
+                line-height: 1.4;
+              ">${sector.description}</p>
+              
+              <div style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 16px;
+              ">
+                <span style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 4px;
+                  padding: 4px 10px;
+                  background: ${sector.badgeBackground};
+                  color: ${sector.textColor};
+                  border-radius: 6px;
+                  font-size: 11px;
+                  font-weight: 600;
+                  border: 1px solid ${sector.lightBorder};
+                ">
+                  📊 ${sector.riskProfile} Risk
+                </span>
+              </div>
+            </div>
+
+            <!-- Sector Statistics -->
+            <div style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 12px;
+              margin-bottom: 16px;
+              padding-bottom: 16px;
+              border-bottom: 1px solid var(--glass-border);
+              position: relative;
+              z-index: 2;
+            ">
+              <div>
+                <div style="
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: var(--text-primary);
+                ">${cases.length}</div>
+                <div style="
+                  font-size: 11px;
+                  color: var(--text-muted);
+                  margin-top: 4px;
+                ">Total Cases</div>
+              </div>
+              
+              <div>
+                <div style="
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: #EF4444;
+                ">${highRiskCount}</div>
+                <div style="
+                  font-size: 11px;
+                  color: var(--text-muted);
+                  margin-top: 4px;
+                ">High/Critical Risk</div>
+              </div>
+
+              <div>
+                <div style="
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: #F59E0B;
+                ">${slaBreachers}</div>
+                <div style="
+                  font-size: 11px;
+                  color: var(--text-muted);
+                  margin-top: 4px;
+                ">SLA Breaches</div>
+              </div>
+
+              <div>
+                <div style="
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: var(--accent);
+                ">${sector.sectorSize}</div>
+                <div style="
+                  font-size: 11px;
+                  color: var(--text-muted);
+                  margin-top: 4px;
+                ">Total Customers</div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button style="
+              width: 100%;
+              padding: 12px 16px;
+              background: ${sector.gradient};
+              color: white;
+              border: none;
+              border-radius: 10px;
+              font-size: 13px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              position: relative;
+              z-index: 3;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+              View Cases → ${cases.length}
+            </button>
+          </div>
+        `;
+
+        // Add hover effect
+        const sectorCard = card.querySelector('.sector-card');
+        sectorCard.addEventListener('mouseover', function() {
+          this.style.borderColor = sector.borderColor;
+          this.style.boxShadow = `0 12px 32px rgba(0,0,0,0.2), 0 0 20px ${sector.lightColor}`;
+          const glow = this.querySelector('.sector-glow');
+          if (glow) glow.style.opacity = '0.08';
+        });
+        sectorCard.addEventListener('mouseout', function() {
+          this.style.borderColor = sector.lightBorder;
+          this.style.boxShadow = 'none';
+          const glow = this.querySelector('.sector-glow');
+          if (glow) glow.style.opacity = '0.03';
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    /**
+     * Navigate to sector cases view
+     */
+    function navigateToSector(sectorCode) {
+      // Store selected sector in sessionStorage
+      sessionStorage.setItem('selectedSector', sectorCode);
+      // Redirect to cases view
+      window.location.href = 'edd_case.html?sector=' + sectorCode;
+    }
+
+    /**
+     * Update statistics
+     */
+    function updateStatistics() {
+      const totalCases = EDDMockData.cases.length;
+      const highRiskCases = EDDMockData.cases.filter(c => 
+        c.priority === 'High' || c.priority === 'Critical'
+      ).length;
+      const slaBreaches = EDDMockData.cases.filter(c => c.slaBreach).length;
+
+      document.getElementById('total-cases').textContent = totalCases;
+      document.getElementById('high-risk-cases').textContent = highRiskCases;
+      document.getElementById('sla-breaches').textContent = slaBreaches;
+    }
+
+    /**
+     * Render recent activity
+     */
+    function renderRecentActivity() {
+      const container = document.getElementById('recent-activity');
+      const recentCases = EDDMockData.cases
+        .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated))
+        .slice(0, 5);
+
+      let html = '<div style="max-height: 400px; overflow-y: auto;">';
+      
+      recentCases.forEach(caseItem => {
+        const customer = EDDMockData.customers.find(c => c.rim === caseItem.rim);
+        const sector = getSectorConfig(customer?.riskScores.SECTOR);
+        const statusStyle = CaseStatusStyle[caseItem.status] || {};
+        
+        const timeAgo = getTimeAgo(new Date(caseItem.lastUpdated));
+        html += `
+          <div style="
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+          " onmouseover="this.style.background='rgba(0,212,255,0.03)'" onmouseout="this.style.background='transparent'" onclick="viewCase('${caseItem.caseId}')">
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                <span style="font-size: 18px;">${sector?.iconEmoji || '📋'}</span>
+                <div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">
+                    ${caseItem.caseId} — ${customer?.name || 'Unknown'}
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                    ${sector?.name || 'Unknown'} • ${caseItem.priority} Priority
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="text-align: right;">
+                <div style="
+                  display: inline-block;
+                  padding: 4px 10px;
+                  background: ${statusStyle.background || 'rgba(156,163,175,0.1)'};
+                  color: ${statusStyle.text || 'var(--text-secondary)'};
+                  border-radius: 6px;
+                  font-size: 11px;
+                  font-weight: 600;
+                  border: 1px solid ${statusStyle.border || 'rgba(156,163,175,0.2)'};
+                ">
+                  ${statusStyle.badge || '📋'} ${caseItem.status}
+                </div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">
+                  ${timeAgo}
+                </div>
+              </div>
+              <svg viewBox="0 0 24 24" fill="var(--text-muted)" width="16" height="16">
+                <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+              </svg>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    /**
+     * Get time ago string
+     */
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      if (seconds < 60) return 'Just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
+
+    /**
+     * Set last updated time
+     */
+    function setLastUpdated() {
+      const now = new Date();
+      document.getElementById('last-updated').textContent = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    /**
+     * View case
+     */
+    function viewCase(caseId) {
+      window.location.href = `edd_case.html?caseId=${caseId}`;
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initSectorDashboard);
+
+    // Set mock user for demonstration
+    EDDMockData.currentUser = EDDMockData.users['EMP002'];
+  </script>
+</body>
+</html>

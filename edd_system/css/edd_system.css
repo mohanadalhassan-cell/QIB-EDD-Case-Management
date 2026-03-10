@@ -1588,3 +1588,276 @@ textarea.form-control {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
+/* ─── Sector Styling ─────────────────────────────── */
+.sector-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid;
+}
+
+.sector-badge.pb {
+  background: rgba(0, 102, 204, 0.12);
+  color: #0066CC;
+  border-color: rgba(0, 102, 204, 0.3);
+}
+
+.sector-badge.tz {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7C3AED;
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.sector-badge.ms {
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.3);
+}
+
+/* ─── Risk Badge Styling ────────────────────────── */
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.risk-badge.high {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.risk-badge.medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.risk-badge.low {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.risk-badge.critical {
+  background: rgba(220, 38, 38, 0.15);
+  color: #DC2626;
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+/* ─── Collapsible Sections ──────────────────────── */
+.collapsible-section {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.collapsible-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(0, 212, 255, 0.02));
+  border-bottom: 1px solid var(--glass-border);
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.collapsible-header:hover {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 212, 255, 0.06));
+  border-bottom-color: var(--accent);
+}
+
+.collapsible-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.collapsible-toggle {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease;
+}
+
+.collapsible-header.active .collapsible-toggle {
+  transform: rotate(180deg);
+}
+
+.collapsible-header.active {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 212, 255, 0.08));
+  border-bottom-color: var(--accent);
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 20px;
+}
+
+.collapsible-header.active ~ .collapsible-content,
+.collapsible-content.active {
+  max-height: 2000px;
+  padding: 20px;
+}
+
+.collapsible-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Analysis Grid ─────────────────────────────── */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.analysis-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+}
+
+.analysis-item-label {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.analysis-item-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ─── Risk Factor Cards ────────────────────────── */
+.risk-factor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.risk-factor-card:hover {
+  transform: translateY(-2px);
+  border-width: 2px;
+}
+
+.risk-factor-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+.risk-factor-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.risk-factor-category {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.risk-factor-description {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* ─── Breadcrumb Styling ─────────────────────── */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  margin-bottom: 24px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-item:hover {
+  color: var(--accent);
+}
+
+.breadcrumb-separator {
+  color: var(--text-muted);
+}
+
+.breadcrumb-item.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ─── No Data State ────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.empty-state-description {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+

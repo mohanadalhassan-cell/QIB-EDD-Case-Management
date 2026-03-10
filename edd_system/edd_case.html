@@ -2759,6 +2759,304 @@
       container.scrollTop = container.scrollHeight;
       input.value = '';
     }
+
+    /**
+     * Sector-Based Analysis Enhancement
+     * Adds collapsible sections for sector-specific analysis fields
+     */
+    function initializeSectorAnalysis() {
+      // Get current case
+      const caseId = getQueryParam('caseId') || 'EDD-2024-001234';
+      const currentCase = EDDMockData.cases.find(c => c.caseId === caseId);
+      if (!currentCase) return;
+
+      const customer = EDDMockData.customers.find(c => c.rim === currentCase.rim);
+      if (!customer) return;
+
+      const sectorCode = customer?.riskScores?.SECTOR;
+      const sector = getSectorConfig(sectorCode);
+      if (!sector) return;
+
+      // Update sector badge
+      const sectorHtml = `
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--glass-border);">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <span style="font-size: 28px;">${sector.iconEmoji}</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">${sector.name}</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">${sector.description}</div>
+              <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <span class="risk-badge ${sectorCode.toLowerCase()}" style="padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;">
+                  ${sector.riskProfile} Risk
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(0,212,255,0.1); color: var(--accent); border-radius: 6px; font-size: 11px; font-weight: 600;">
+                  📋 ${sector.analysisFields.length} Key Analysis Fields
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Insert sector info into risk panel
+      const riskPanel = document.getElementById('risk-analysis-panel');
+      if (riskPanel) {
+        const cardBody = riskPanel.querySelector('.card-body');
+        if (cardBody) {
+          cardBody.insertAdjacentHTML('beforeend', sectorHtml);
+        }
+      }
+
+      // Create collapsible sections for sector analysis
+      createSectorAnalysisSections(sector, customer, currentCase);
+    }
+
+    /**
+     * Create collapsible sections for sector-specific analysis
+     */
+    function createSectorAnalysisSections(sector, customer, caseItem) {
+      if (!document.getElementById('sector-analysis-sections')) {
+        // Insert after risk-analysis-panel
+        const riskPanel = document.getElementById('risk-analysis-panel');
+        if (riskPanel && riskPanel.parentNode) {
+          const sectionsContainer = document.createElement('div');
+          sectionsContainer.id = 'sector-analysis-sections';
+          sectionsContainer.style.marginBottom = '24px';
+          riskPanel.parentNode.insertBefore(sectionsContainer, riskPanel.nextSibling);
+        }
+      }
+
+      const container = document.getElementById('sector-analysis-sections');
+      if (!container) return;
+
+      container.innerHTML = `
+        <!-- Sector-Specific Analysis Sections -->
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 16px; font-weight: 700; margin: 0 0 16px 0; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            ${sector.name} — Sector-Specific Analysis
+          </h3>
+
+          <!-- Customer Profile Section -->
+          <div class="collapsible-section" style="margin-bottom: 12px;">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+              <h3>👤 Customer Profile Analysis</h3>
+              <div class="collapsible-toggle">▼</div>
+            </div>
+            <div class="collapsible-content">
+              <div style="padding: 20px; background: rgba(255,255,255,0.02); border-radius: 0 0 12px 12px;">
+                <div class="analysis-grid">
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Full Name</div>
+                    <div class="analysis-item-value">${customer.name}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Nationality</div>
+                    <div class="analysis-item-value">${customer.nationality}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Occupation</div>
+                    <div class="analysis-item-value">${customer.occupation}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">PEP Status</div>
+                    <div class="analysis-item-value" style="color: ${customer.isPEP ? '#EF4444' : '#10B981'};">
+                      ${customer.isPEP ? '⚠️ Yes' : '✓ No'}
+                    </div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Account Open Date</div>
+                    <div class="analysis-item-value">${formatDate(customer.accountOpenDate)}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Non-Resident</div>
+                    <div class="analysis-item-value">${customer.isNonResident ? 'Yes' : 'No'}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Profile Section -->
+          <div class="collapsible-section" style="margin-bottom: 12px;">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+              <h3>💳 Financial Profile & Income Analysis</h3>
+              <div class="collapsible-toggle">▼</div>
+            </div>
+            <div class="collapsible-content">
+              <div style="padding: 20px; background: rgba(255,255,255,0.02); border-radius: 0 0 12px 12px;">
+                <div class="analysis-grid">
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Monthly Income</div>
+                    <div class="analysis-item-value">QAR ${(customer.monthlyIncome || 0).toLocaleString()}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Employer</div>
+                    <div class="analysis-item-value">${customer.employer}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Segment</div>
+                    <div class="analysis-item-value">${customer.segment}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Last KYC Date</div>
+                    <div class="analysis-item-value">${formatDate(customer.lastKYCDate)}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">Next EDD Due</div>
+                    <div class="analysis-item-value">${formatDate(customer.nextEDDDueDate)}</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-item-label">QCB Consent</div>
+                    <div class="analysis-item-value" style="color: #10B981;">✓ Yes</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sector-Specific Key Analysis Fields -->
+          <div class="collapsible-section" style="margin-bottom: 12px;">
+            <div class="collapsible-header active" onclick="toggleCollapsible(this)">
+              <h3>🔍 ${sector.name} Key Analysis Fields</h3>
+              <div class="collapsible-toggle">▼</div>
+            </div>
+            <div class="collapsible-content active">
+              <div style="padding: 20px; background: rgba(255,255,255,0.02); border-radius: 0 0 12px 12px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;">
+                  ${sector.analysisFields.map((field, idx) => `
+                    <div style="
+                      background: linear-gradient(135deg, ${sector.lightColor}, rgba(255,255,255,0.02));
+                      border: 1px solid ${sector.lightBorder};
+                      border-radius: 8px;
+                      padding: 12px;
+                      cursor: pointer;
+                      transition: all 0.3s ease;
+                    " onmouseover="this.style.background='${sector.lightColor}'; this.style.borderColor='${sector.borderColor}'" onmouseout="this.style.background='linear-gradient(135deg, ${sector.lightColor}, rgba(255,255,255,0.02))'; this.style.borderColor='${sector.lightBorder}'">
+                      <div style="font-size: 11px; font-weight: 600; color: ${sector.textColor}; display: flex; align-items: center; gap: 6px;">
+                        <span style="font-size: 14px;">✓</span> ${field}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Indicators Section -->
+          <div class="collapsible-section" style="margin-bottom: 12px;">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+              <h3>⚠️ Risk Indicators for ${sector.name}</h3>
+              <div class="collapsible-toggle">▼</div>
+            </div>
+            <div class="collapsible-content">
+              <div style="padding: 20px; background: rgba(255,255,255,0.02); border-radius: 0 0 12px 12px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
+                  ${sector.riskFactors.map((factor, idx) => {
+                    const hasFactor = caseItem.triggers.some(t => factor.toLowerCase().includes(t.toLowerCase()) || t.toLowerCase().includes(factor.toLowerCase()));
+                    return `
+                      <div style="
+                        background: ${hasFactor ? 'rgba(244,67,54,0.15)' : 'rgba(76,175,80,0.1)'};
+                        border: 1px solid ${hasFactor ? 'rgba(244,67,54,0.3)' : 'rgba(76,175,80,0.2)'};
+                        border-radius: 8px;
+                        padding: 10px;
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: ${hasFactor ? '#F44336' : '#00B981'};
+                      ">
+                        <span>${hasFactor ? '🚨' : '✓'}</span> ${factor}
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Required Documents Section -->
+          <div class="collapsible-section">
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+              <h3>📄 Required Documents for ${sector.name}</h3>
+              <div class="collapsible-toggle">▼</div>
+            </div>
+            <div class="collapsible-content">
+              <div style="padding: 20px; background: rgba(255,255,255,0.02); border-radius: 0 0 12px 12px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                  ${sector.documents.map(doc => `
+                    <div style="
+                      background: linear-gradient(135deg, rgba(33,150,243,0.1), rgba(33,150,243,0.05));
+                      border: 1px solid rgba(33,150,243,0.2);
+                      border-radius: 8px;
+                      padding: 12px;
+                      font-size: 12px;
+                      font-weight: 600;
+                      color: #2196F3;
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                    ">
+                      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+                        <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/>
+                      </svg>
+                      ${doc}
+                    </div>
+                  `).join('')}
+                </div>
+                <div style="margin-top: 12px; padding: 12px; background: rgba(33,150,243,0.08); border-left: 3px solid #2196F3; border-radius: 6px; font-size: 12px; color: var(--text-secondary);">
+                  <strong style="color: #2196F3;">Review Frequency:</strong> ${sector.documents && sector.documents.length > 0 ? sector.analysisFields[0]?.includes('Salary') ? 'Semi-Annual' : 'Annual' : 'Annual'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Auto-expand first section
+      const firstHeader = container.querySelector('.collapsible-header');
+      if (firstHeader && !firstHeader.classList.contains('active')) {
+        firstHeader.classList.add('active');
+        const content = firstHeader.nextElementSibling;
+        if (content) content.classList.add('active');
+      }
+    }
+
+    /**
+     * Toggle collapsible section
+     */
+    function toggleCollapsible(header) {
+      header.classList.toggle('active');
+      const content = header.nextElementSibling;
+      if (content) {
+        content.classList.toggle('active');
+      }
+    }
+
+    /**
+     * Get query parameter
+     */
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    /**
+     * Format date
+     */
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      try {
+        return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    // Initialize sector analysis when page loads
+    window.addEventListener('load', function() {
+      setTimeout(initializeSectorAnalysis, 500);
+    });
   </script>
 </body>
 </html>
