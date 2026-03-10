@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — Alternative Channels</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Channels</div>
+          <a href="alternative_channels.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H5V5h14v14zM7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/></svg>
+            <span>Alt. Channels</span>
+            <span class="nav-badge">14</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Tools</div>
+          <a href="document_viewer.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+            <span>Documents</span>
+          </a>
+          <a href="notifications_center.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span>Notifications</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User</div>
+          <div class="user-role" id="user-role">Role</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Alternative Channels · القنوات البديلة</h1>
+          <div class="breadcrumb">
+            <a href="dashboard.html" style="color: var(--accent); text-decoration: none;">Dashboard</a>
+            <span style="margin: 0 6px; opacity: 0.5;">/</span>
+            <span>Alternative Channels</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn btn-success btn-sm" onclick="createChannelRequest()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            New Channel Request
+          </button>
+          <button class="header-btn" id="logout-btn" title="Logout">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+
+        <!-- Stats Row -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(0,212,255,0.15);">
+              <svg viewBox="0 0 24 24" fill="#00D4FF" width="24" height="24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+            </div>
+            <div class="stat-value">6</div>
+            <div class="stat-label">Mobile Banking</div>
+            <div class="stat-trend up">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 14l5-5 5 5H7z"/></svg>
+              +2 today
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(0,230,118,0.15);">
+              <svg viewBox="0 0 24 24" fill="#00E676" width="24" height="24"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1z"/></svg>
+            </div>
+            <div class="stat-value">4</div>
+            <div class="stat-label">Internet Banking</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(255,152,0,0.15);">
+              <svg viewBox="0 0 24 24" fill="#FF9800" width="24" height="24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+            </div>
+            <div class="stat-value">3</div>
+            <div class="stat-label">Call Center</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(136,0,255,0.15);">
+              <svg viewBox="0 0 24 24" fill="#8800FF" width="24" height="24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <div class="stat-value">1</div>
+            <div class="stat-label">Email / Portal</div>
+          </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+
+          <!-- Channel Requests Table -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H5V5h14v14z"/></svg>
+                Active Channel Requests
+              </h2>
+              <div style="display: flex; gap: 8px;">
+                <select style="padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 12px;">
+                  <option value="">All Channels</option>
+                  <option value="mobile">Mobile Banking</option>
+                  <option value="internet">Internet Banking</option>
+                  <option value="callcenter">Call Center</option>
+                  <option value="email">Email</option>
+                  <option value="portal">Digital Portal</option>
+                  <option value="remote">Remote Service</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Request ID</th>
+                    <th>Channel Source</th>
+                    <th>Customer (RIM)</th>
+                    <th>Request Type</th>
+                    <th>Status</th>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--accent);">CH-2026-0041</td>
+                    <td>
+                      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(0,212,255,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: #00D4FF;">
+                        📱 Mobile Banking
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-weight: 600;">Mohammed Al-Thani</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">RIM002345</div>
+                    </td>
+                    <td>Account Update Request</td>
+                    <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.15); color: #FFB300;">Pending Review</span></td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">Mar 10, 2026 09:15</td>
+                    <td><button class="btn btn-sm" style="padding: 4px 10px; font-size: 11px; background: var(--accent); color: #0a1f3d; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;" onclick="linkToEDD('CH-2026-0041')">Link to EDD</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--accent);">CH-2026-0040</td>
+                    <td>
+                      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(0,230,118,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: #00E676;">
+                        💻 Internet Banking
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-weight: 600;">Fatima Al-Kuwari</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">RIM003456</div>
+                    </td>
+                    <td>Document Upload</td>
+                    <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(0,212,255,0.15); color: #00D4FF;">In Progress</span></td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">Mar 10, 2026 08:42</td>
+                    <td><button class="btn btn-sm" style="padding: 4px 10px; font-size: 11px; background: rgba(0,230,118,0.15); color: #00E676; border: 1px solid rgba(0,230,118,0.3); border-radius: 6px; font-weight: 600; cursor: pointer;">Linked ✓</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--accent);">CH-2026-0039</td>
+                    <td>
+                      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(255,152,0,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: #FF9800;">
+                        📞 Call Center
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-weight: 600;">Ahmed Hassan</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">RIM004567</div>
+                    </td>
+                    <td>KYC Information Update</td>
+                    <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(244,67,54,0.15); color: #F44336;">EDD Required</span></td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">Mar 9, 2026 16:30</td>
+                    <td><button class="btn btn-sm" style="padding: 4px 10px; font-size: 11px; background: var(--accent); color: #0a1f3d; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;" onclick="linkToEDD('CH-2026-0039')">Create EDD</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--accent);">CH-2026-0038</td>
+                    <td>
+                      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(136,0,255,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: #B388FF;">
+                        📧 Email Request
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-weight: 600;">Nasser Al-Mansouri</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">RIM005678</div>
+                    </td>
+                    <td>Source of Funds Declaration</td>
+                    <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.15); color: #FFB300;">Pending Review</span></td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">Mar 9, 2026 14:20</td>
+                    <td><button class="btn btn-sm" style="padding: 4px 10px; font-size: 11px; background: var(--accent); color: #0a1f3d; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;" onclick="linkToEDD('CH-2026-0038')">Link to EDD</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--accent);">CH-2026-0037</td>
+                    <td>
+                      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(0,212,255,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: #00D4FF;">
+                        📱 Mobile Banking
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-weight: 600;">Sara Al-Jaber</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">RIM006789</div>
+                    </td>
+                    <td>Account Opening Request</td>
+                    <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(0,230,118,0.15); color: #00E676;">Completed</span></td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">Mar 9, 2026 11:05</td>
+                    <td><button class="btn btn-sm" style="padding: 4px 10px; font-size: 11px; background: rgba(0,230,118,0.15); color: #00E676; border: 1px solid rgba(0,230,118,0.3); border-radius: 6px; font-weight: 600; cursor: pointer;">Linked ✓</button></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600; color: var(--accent);">CH-2026-0036</td>
+                    <td>
+                      <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(233,30,99,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: #E91E63;">
+                        🌐 Digital Portal
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-weight: 600;">Khalid Al-Sulaiti</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">RIM007890</div>
+                    </td>
+                    <td>Document Upload</td>
+                    <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(0,212,255,0.15); color: #00D4FF;">In Progress</span></td>
+                    <td style="font-size: 12px; color: var(--text-secondary);">Mar 8, 2026 15:45</td>
+                    <td><button class="btn btn-sm" style="padding: 4px 10px; font-size: 11px; background: var(--accent); color: #0a1f3d; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;" onclick="linkToEDD('CH-2026-0036')">Link to EDD</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right Panel -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+
+            <!-- Channel Distribution -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>
+                  Channel Distribution
+                </h2>
+              </div>
+              <div class="card-body">
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; align-items: center;">
+                      <span style="font-size: 13px; display: flex; align-items: center; gap: 6px;">📱 Mobile Banking</span>
+                      <span style="font-size: 13px; color: #00D4FF; font-weight: 600;">6</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 43%; background: #00D4FF; border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; align-items: center;">
+                      <span style="font-size: 13px; display: flex; align-items: center; gap: 6px;">💻 Internet Banking</span>
+                      <span style="font-size: 13px; color: #00E676; font-weight: 600;">4</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 29%; background: #00E676; border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; align-items: center;">
+                      <span style="font-size: 13px; display: flex; align-items: center; gap: 6px;">📞 Call Center</span>
+                      <span style="font-size: 13px; color: #FF9800; font-weight: 600;">3</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 21%; background: #FF9800; border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px; align-items: center;">
+                      <span style="font-size: 13px; display: flex; align-items: center; gap: 6px;">📧 Email / Portal</span>
+                      <span style="font-size: 13px; color: #B388FF; font-weight: 600;">1</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div style="height: 100%; width: 7%; background: #B388FF; border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Workflow Routing -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Channel Workflow
+                </h2>
+              </div>
+              <div class="card-body" style="padding: 16px;">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; background: rgba(0,212,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #00D4FF; flex-shrink: 0;">1</div>
+                    <div>
+                      <div style="font-size: 13px; font-weight: 600;">Channel Intake</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">Receive & Log Request</div>
+                    </div>
+                  </div>
+                  <div style="width: 2px; height: 12px; background: var(--glass-border); margin-left: 15px;"></div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; background: rgba(255,152,0,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #FF9800; flex-shrink: 0;">2</div>
+                    <div>
+                      <div style="font-size: 13px; font-weight: 600;">Business Review</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">Relationship Manager</div>
+                    </div>
+                  </div>
+                  <div style="width: 2px; height: 12px; background: var(--glass-border); margin-left: 15px;"></div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; background: rgba(136,0,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #B388FF; flex-shrink: 0;">3</div>
+                    <div>
+                      <div style="font-size: 13px; font-weight: 600;">CDD Review</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">Due Diligence Check</div>
+                    </div>
+                  </div>
+                  <div style="width: 2px; height: 12px; background: var(--glass-border); margin-left: 15px;"></div>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; background: rgba(244,67,54,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #F44336; flex-shrink: 0;">4</div>
+                    <div>
+                      <div style="font-size: 13px; font-weight: 600;">Compliance Escalation</div>
+                      <div style="font-size: 11px; color: var(--text-muted);">If Risk Flagged</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Required Information -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+                  Captured Information
+                </h2>
+              </div>
+              <div class="card-body" style="padding: 16px;">
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Channel Source</div>
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Request Type</div>
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Customer ID (RIM)</div>
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Account Number</div>
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Customer Name</div>
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Request Timestamp</div>
+                  <div style="display: flex; align-items: center; gap: 8px;"><span style="color: #00E676;">✓</span> Supporting Documents</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- New Channel Request Modal -->
+  <div id="channelRequestModal" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center;">
+    <div style="background: linear-gradient(135deg, #0f2744, #1a3a5c); border: 1px solid var(--glass-border); border-radius: 16px; padding: 32px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2 style="font-size: 18px; font-weight: 700;">New Channel Request</h2>
+        <button onclick="document.getElementById('channelRequestModal').style.display='none'" style="background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">&times;</button>
+      </div>
+      <div style="display: grid; gap: 16px;">
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">Channel Source</label>
+          <select style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;">
+            <option>Mobile Banking</option>
+            <option>Internet Banking</option>
+            <option>Call Center</option>
+            <option>Digital Portal</option>
+            <option>Email Request</option>
+            <option>Document Upload Portal</option>
+            <option>Remote Service Channel</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">Request Type</label>
+          <select style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;">
+            <option>KYC Information Update</option>
+            <option>Account Opening Request</option>
+            <option>Account Update Request</option>
+            <option>Document Upload</option>
+            <option>Source of Funds Declaration</option>
+            <option>Address Change</option>
+            <option>Beneficial Ownership Update</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">Customer ID (RIM)</label>
+            <input type="text" placeholder="RIM number" style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">Account Number</label>
+            <input type="text" placeholder="Optional" style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;">
+          </div>
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">Customer Name</label>
+          <input type="text" placeholder="Full name" style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 13px;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px;">Supporting Documents</label>
+          <div style="border: 2px dashed var(--glass-border); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s;">
+            <div style="font-size: 24px; margin-bottom: 8px;">📁</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">Drop files here or click to upload</div>
+          </div>
+        </div>
+        <button style="width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent), #0097A7); border: none; border-radius: 10px; color: white; font-size: 14px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;" onclick="document.getElementById('channelRequestModal').style.display='none'; alert('Channel request created successfully');">
+          Submit Channel Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/enterprise_ui.js"></script>
+  <script>
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof EnterpriseUI !== 'undefined') {
+        EnterpriseUI.initSidebar();
+      }
+      // Logout
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+          sessionStorage.clear();
+          window.location.href = 'login.html';
+        });
+      }
+    });
+
+    function createChannelRequest() {
+      document.getElementById('channelRequestModal').style.display = 'flex';
+    }
+
+    function linkToEDD(requestId) {
+      alert('Linking ' + requestId + ' to EDD Case. Routing: Alternative Channel → Business Review → CDD Review → Compliance (if required)');
+    }
+  </script>
+</body>
+</html>
