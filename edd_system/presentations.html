@@ -1370,6 +1370,18 @@
             <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
           </button>
 
+          <!-- Fullscreen Toggle Button -->
+          <button class="pres-toggle-fullscreen" onclick="togglePresentationFullscreen()" title="Toggle Fullscreen (F)" style="position: absolute; top: 24px; right: 90px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+          </button>
+
+          <!-- Zoom Controls -->
+          <div class="pres-zoom-controls" style="position: absolute; top: 24px; right: 155px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; display: flex; gap: 8px; padding: 8px; z-index: 100;">
+            <button onclick="zoomPresentation(-0.1)" style="background: transparent; border: none; color: white; cursor: pointer; padding: 4px 8px; font-size: 16px; border-radius: 6px; transition: all 0.2s;" title="Zoom Out">−</button>
+            <span id="zoomPercentage" style="color: white; padding: 4px 8px; font-size: 12px; min-width: 40px; text-align: center;">100%</span>
+            <button onclick="zoomPresentation(0.1)" style="background: transparent; border: none; color: white; cursor: pointer; padding: 4px 8px; font-size: 16px; border-radius: 6px; transition: all 0.2s;" title="Zoom In">+</button>
+          </div>
+
           <!-- Header Bar -->
           <div class="pres-header" style="--accent-color: ${pres.color}">
             <div class="pres-header-icon">${pres.icon}</div>
@@ -1410,7 +1422,7 @@
               `).join('')}
             </div>
             <div class="pres-keyboard-hint">
-              <span>← →</span> Navigate &nbsp;|&nbsp; <span>Esc</span> Close
+              <span>← →</span> Navigate &nbsp;|&nbsp; <span>F</span> Fullscreen &nbsp;|&nbsp; <span>Esc</span> Close
             </div>
           </div>
         </div>
@@ -1521,6 +1533,8 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            min-height: 0;
+            padding: 20px 0;
           }
 
           .pres-nav-arrow {
@@ -1564,10 +1578,12 @@
             flex: 1;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 120px;
+            padding: 60px 120px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
+            max-height: 80vh;
           }
 
           .pres-slide {
@@ -1825,11 +1841,13 @@
             .pres-header { padding: 16px 20px; }
             .pres-header-icon { display: none; }
             .pres-header-progress { margin-right: 0; }
-            .pres-slide-container { padding: 20px 80px; }
+            .pres-slide-container { padding: 40px 40px; max-height: 75vh; }
             .pres-slide-title h2 { font-size: 28px; }
             .pres-nav-arrow { width: 50px; height: 50px; }
             .pres-nav-left { left: 10px; }
             .pres-nav-right { right: 10px; }
+            .pres-zoom-controls { right: 80px !important; }
+            .pres-toggle-fullscreen { right: 30px !important; }
           }
         </style>
       `;
@@ -1975,6 +1993,68 @@
       document.removeEventListener('keydown', handleKeyboard);
       currentPresentation = null;
       currentSlide = 0;
+      
+      // Exit fullscreen when closing
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(err => console.log('Exit fullscreen failed:', err));
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // FULLSCREEN & ZOOM CONTROLS
+    // ═══════════════════════════════════════════════════════════════
+    let presentationZoom = 1.0;
+
+    function togglePresentationFullscreen() {
+      const modal = document.getElementById('presentationModal');
+      if (!modal) return;
+
+      if (!document.fullscreenElement) {
+        // Enter fullscreen
+        modal.requestFullscreen().then(() => {
+          console.log('Presentation entered fullscreen mode');
+        }).catch(err => {
+          console.warn('Fullscreen request failed:', err);
+          // Fallback: just enlarge the modal
+          modal.style.maxWidth = '100vw';
+          modal.style.maxHeight = '100vh';
+        });
+      } else {
+        // Exit fullscreen
+        document.exitFullscreen().then(() => {
+          console.log('Presentation exited fullscreen mode');
+        }).catch(err => console.warn('Exit fullscreen failed:', err));
+      }
+    }
+
+    function zoomPresentation(delta) {
+      presentationZoom += delta;
+      presentationZoom = Math.max(0.8, Math.min(2, presentationZoom)); // Limit between 80% and 200%
+      
+      const slideContent = document.getElementById('slideContent');
+      if (slideContent) {
+        slideContent.style.transform = `scale(${presentationZoom})`;
+        slideContent.style.transformOrigin = 'center top';
+        slideContent.style.transition = 'transform 0.3s ease';
+      }
+      
+      // Update zoom display
+      const zoomPercentage = document.getElementById('zoomPercentage');
+      if (zoomPercentage) {
+        zoomPercentage.textContent = Math.round(presentationZoom * 100) + '%';
+      }
+    }
+
+    // Auto-request fullscreen when presentation opens
+    function requestPresentationFullscreen() {
+      setTimeout(() => {
+        const modal = document.getElementById('presentationModal');
+        if (modal && modal.parentNode) {
+          modal.requestFullscreen().catch(err => {
+            console.log('Fullscreen auto-request skipped (user interaction may be required):', err.message);
+          });
+        }
+      }, 300);
     }
 
     // Upload Modal Functions
