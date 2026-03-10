@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="QIB EDD Case Management System — Secure Executive Access">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#060e1a">
+  <title>QIB EDD System — Secure Login</title>
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+
+  <!-- PARACHUTE DIGITAL HEADER -->
+  <div class="system-header">
+    <div class="platform-title">EDD Case Management</div>
+    <div class="platform-subtitle">Enhanced Due Diligence Platform</div>
+    <div class="parachute-brand">Parachute Digital Intelligence</div>
+    <div class="global-banner">
+      <div class="banner-track">
+        JPMorgan Chase • HSBC • Bank of America • Citigroup • ICBC • Temenos Core Banking • Oracle Financial Services • Finacle • Finastra • Mambu • FATF • Basel III • ISO 27001 • BCBS 239 • QCB Compliance
+      </div>
+    </div>
+    <div class="field-stream">
+      <span class="field-tag">CUSTOMER_CODE</span>
+      <span class="field-tag">LM_CUST_TYPE</span>
+      <span class="field-tag">RESIDENCE</span>
+      <span class="field-tag">TARGET</span>
+      <span class="field-tag">SECTOR</span>
+      <span class="field-tag">INDUSTRY</span>
+      <span class="field-tag">ACCOUNT_PROFILE</span>
+      <span class="field-tag">RISK_CLASS</span>
+      <span class="field-tag">243+ T24 Fields</span>
+    </div>
+    <div class="vision-footer">
+      Operating within the framework of Qatar National Vision 2030 for digital financial governance.
+    </div>
+  </div>
+
+  <!-- Cinematic ambient background -->
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  <div class="light-reflection"></div>
+  <div class="light-reflection"></div>
+  <div class="light-reflection"></div>
+  <div class="light-reflection"></div>
+
+  <!-- Particle canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Login card -->
+  <div class="login-container">
+    <div class="glass-card">
+
+      <!-- Branding -->
+      <div class="brand-section">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+          </svg>
+          <div class="brand-logo-ring"></div>
+        </div>
+        <h1 class="brand-title">EDD Case Management</h1>
+        <p class="brand-subtitle">Enhanced Due Diligence Platform</p>
+        <p class="brand-subtitle bank-name" id="bank-name-reveal" style="display:none; margin-top:4px; color:#5C0A28; letter-spacing:2px;">Qatar Islamic Bank</p>
+      </div>
+
+      <!-- Trust indicators -->
+      <div class="trust-bar">
+        <span class="trust-item"><span class="trust-icon">🔐</span> MFA Secured</span>
+        <span class="trust-divider"></span>
+        <span class="trust-item"><span class="trust-icon">🛡️</span> Role-Based</span>
+        <span class="trust-divider"></span>
+        <span class="trust-item"><span class="trust-icon">📋</span> Audit Ready</span>
+      </div>
+
+      <!-- Status message -->
+      <div id="status-message" class="status-message"></div>
+
+      <!-- Step 1: Credentials -->
+      <div id="step-credentials" class="login-step active">
+        <form id="login-form" class="login-form" autocomplete="off">
+          <div class="form-group">
+            <label for="employee-id" style="color: #ffffff; font-weight: 700;">Employee ID</label>
+            <input type="text" id="employee-id" placeholder="Try: DEMO, EMP001, Qib@2030, RAAFAT" required>
+            <small style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-top: 4px; display: block;">💡 Hint: Use DEMO for quickest test</small>
+            <div class="input-glow"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" style="color: #ffffff; font-weight: 700;">Password</label>
+            <input type="password" id="password" placeholder="For DEMO use: demo" required>
+            <div class="input-glow"></div>
+          </div>
+          
+          <div class="form-group">
+            <label style="color: #ffffff; font-weight: 700;">Select Your Role</label>
+            <div class="role-grid">
+              <label class="role-option">
+                <input type="radio" name="role" value="business" checked>
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                  <span>Business</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="cdd">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                  <span>CDD</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="compliance">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                  <span>Compliance</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="management">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                  <span>Management</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="audit">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                  <span>Audit</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="it">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                  <span>IT</span>
+                </div>
+              </label>
+            </div>
+          </div>
+          
+          <button type="submit" id="btn-login" class="btn-primary">
+            <span class="btn-text">Authenticate & Access</span>
+            <span class="btn-shimmer"></span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 2: OTP -->
+      <div id="step-otp" class="login-step">
+        <form id="otp-form" class="login-form" autocomplete="off">
+          <div class="form-group">
+            <label style="color: #ffffff; font-weight: 700;">Enter Verification Code</label>
+            <div class="otp-grid">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            </div>
+          </div>
+          <div id="otp-timer" class="otp-timer">
+            Code expires in <span class="time">05:00</span>
+          </div>
+          <button type="submit" id="btn-verify-otp" class="btn-primary">
+            <span class="btn-text">Verify & Access Platform</span>
+            <span class="btn-shimmer"></span>
+          </button>
+          <div class="otp-actions">
+            <button type="button" id="btn-back" class="btn-link">← Back</button>
+            <button type="button" id="btn-resend" class="btn-link">Resend Code</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Step 3: Success -->
+      <div id="step-success" class="login-step">
+        <div class="success-panel">
+          <div class="success-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div class="success-ring"></div>
+          </div>
+          <h2 class="success-title">Authentication Verified</h2>
+          <p class="success-user">Welcome, <span id="user-display"></span></p>
+          <p class="success-role">Role: <span id="role-display"></span></p>
+          <div class="success-checklist">
+            <div class="check-item"><span class="check-dot done"></span>Identity Verified</div>
+            <div class="check-item"><span class="check-dot done"></span>Session Encrypted</div>
+            <div class="check-item"><span class="check-dot done"></span>Role Permissions Loaded</div>
+            <div class="check-item"><span class="check-dot loading"></span>Launching EDD Platform...</div>
+          </div>
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+      <!-- Security badge -->
+      <div class="security-badge">
+        <span class="dot"></span>
+        <span>AES-256-GCM · TLS 1.3 · QCB REGULATED</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance strip -->
+  <div class="compliance-strip">
+    <span>PCI-DSS Level 1</span>
+    <span class="sep">·</span>
+    <span>ISO 27001:2022</span>
+    <span class="sep">·</span>
+    <span>SOC 2 Type II</span>
+    <span class="sep">·</span>
+    <span>QCB Compliant</span>
+  </div>
+
+  <!-- Build tag -->
+  <div class="build-tag">QIB EDD v1.0.0 · BUILD 2026.03 · ENTERPRISE</div>
+
+  <script src="js/particles.js?v=1.1"></script>
+  <script src="js/login.js?v=1.1"></script>
+</body>
+</html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Qatar National Vision 2030 - Enterprise Digital Governance Platform">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#0a1f3d">
+  <title>Qatar Vision 2030 — Digital Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23D4AF37'/><stop offset='100%' style='stop-color:%2300D4FF'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23grad)'/><text x='16' y='22' font-size='14' font-weight='900' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      background: #0a1f3d;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* LOADING SCREEN */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      display: none;
+    }
+
+    .loading-container {
+      text-align: center;
+    }
+
+    .loading-spinner {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 40px;
+      border: 4px solid rgba(92, 10, 40, 0.2);
+      border-top: 4px solid #5C0A28;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 36px;
+      font-weight: 700;
+      color: #5C0A28;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+      animation: loadingPulse 1.5s ease-in-out infinite;
+    }
+
+    .loading-text-sub {
+      font-size: 14px;
+      color: rgba(92, 10, 40, 0.6);
+      letter-spacing: 2px;
+    }
+
+    @keyframes loadingPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* VISION 2030 SPLASH SCREEN */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 1;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .splash-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      display: none;
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: splashFadeIn 0.8s ease-out;
+    }
+
+    @keyframes splashFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 40px;
+      animation: splashLogoFloat 2s ease-in-out infinite;
+    }
+
+    @keyframes splashLogoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .splash-logo svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 30px rgba(92, 10, 40, 0.8));
+    }
+
+    .splash-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: #5C0A28;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+      animation: splashTitleSlide 1s ease-out;
+    }
+
+    @keyframes splashTitleSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-subtitle {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+      letter-spacing: 1px;
+      animation: splashSubtitleSlide 1s ease-out 0.2s both;
+    }
+
+    @keyframes splashSubtitleSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-bar {
+      width: 200px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #5C0A28, #00D4FF, transparent);
+      margin-top: 32px;
+      animation: splashBarGrow 1.5s ease-out 0.4s both;
+    }
+
+    @keyframes splashBarGrow {
+      from { width: 0; opacity: 0; }
+      to { width: 200px; opacity: 1; }
+    }
+
+    .splash-features {
+      margin-top: 48px;
+      display: flex;
+      gap: 40px;
+      animation: splashFeaturesSlide 1s ease-out 0.6s both;
+    }
+
+    @keyframes splashFeaturesSlide {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(92, 10, 40, 0.1);
+      border: 1px solid rgba(92, 10, 40, 0.3);
+      border-radius: 20px;
+      color: #5C0A28;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* MAIN LOGIN PORTAL */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .login-wrapper {
+      width: 100%;
+      height: 100%;
+      display: none;
+      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    .login-wrapper.visible {
+      display: flex;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Background effects */
+    .bg-effects {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .grid-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0, 212, 255, 0.05) 25%, rgba(0, 212, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 212, 255, 0.05) 75%, rgba(0, 212, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 212, 255, 0.05) 25%, rgba(0, 212, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 212, 255, 0.05) 75%, rgba(0, 212, 255, 0.05) 76%, transparent 77%, transparent);
+      background-size: 60px 60px;
+      animation: gridFlow 20s linear infinite;
+    }
+
+    @keyframes gridFlow {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(60px); }
+    }
+
+    .light-rays {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .ray {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(92, 10, 40, 0.3), transparent);
+      opacity: 0.5;
+      animation: rayMove 6s ease-in-out infinite;
+    }
+
+    .ray:nth-child(1) {
+      width: 1px;
+      height: 100%;
+      left: 20%;
+      animation-delay: 0s;
+    }
+
+    .ray:nth-child(2) {
+      width: 1px;
+      height: 100%;
+      left: 40%;
+      animation-delay: 1s;
+    }
+
+    .ray:nth-child(3) {
+      width: 1px;
+      height: 100%;
+      left: 60%;
+      animation-delay: 2s;
+    }
+
+    .ray:nth-child(4) {
+      width: 1px;
+      height: 100%;
+      left: 80%;
+      animation-delay: 3s;
+    }
+
+    @keyframes rayMove {
+      0% { opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
+
+    /* Portal container */
+    .portal-container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .portal-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+      background: linear-gradient(135deg, rgba(10, 31, 61, 0.8) 0%, rgba(15, 42, 77, 0.6) 100%);
+    }
+
+    .brand-section {
+      text-align: center;
+      animation: contentSlideIn 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes contentSlideIn {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .brand-logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 30px;
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0% { filter: drop-shadow(0 0 10px rgba(92, 10, 40, 0.5)); }
+      50% { filter: drop-shadow(0 0 30px rgba(92, 10, 40, 0.8)); }
+      100% { filter: drop-shadow(0 0 10px rgba(92, 10, 40, 0.5)); }
+    }
+
+    .brand-title {
+      font-size: 42px;
+      font-weight: 900;
+      color: #5C0A28;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .brand-subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 30px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #5C0A28, #00D4FF, transparent);
+      margin: 30px auto;
+    }
+
+    .brand-description {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.8;
+      max-width: 280px;
+      margin-bottom: 40px;
+      letter-spacing: 0.3px;
+    }
+
+    .trust-badges {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 16px;
+      background: rgba(92, 10, 40, 0.08);
+      border: 1px solid rgba(92, 10, 40, 0.2);
+      border-radius: 10px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+
+    .badge-icon {
+      font-size: 20px;
+    }
+
+    /* Portal right - Login form */
+    .portal-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      background: rgba(15, 42, 77, 0.4);
+    }
+
+    .login-panel {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(10, 31, 61, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(92, 10, 40, 0.2);
+      border-radius: 20px;
+      padding: 50px;
+      box-shadow: 0 20px 60px rgba(92, 10, 40, 0.2);
+      animation: panelSlideIn 0.8s ease-out 0.4s both;
+    }
+
+    @keyframes panelSlideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .panel-header {
+      margin-bottom: 40px;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #5C0A28;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(92, 10, 40, 0.7); }
+      50% { box-shadow: 0 0 0 6px rgba(92, 10, 40, 0); }
+    }
+
+    .status-text {
+      font-size: 12px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .panel-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-subtitle {
+      font-size: 13px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(92, 10, 40, 0.05);
+      border: 1px solid rgba(92, 10, 40, 0.3);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: rgba(92, 10, 40, 0.08);
+      border-color: rgba(92, 10, 40, 0.5);
+      box-shadow: 0 0 20px rgba(92, 10, 40, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .role-btn {
+      padding: 12px;
+      background: rgba(92, 10, 40, 0.08);
+      border: 1px solid rgba(92, 10, 40, 0.2);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .role-btn:hover {
+      border-color: rgba(92, 10, 40, 0.5);
+      color: #ffffff;
+    }
+
+    .role-btn.active {
+      background: rgba(92, 10, 40, 0.2);
+      border-color: #5C0A28;
+      color: #ffffff;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      margin-top: 20px;
+      background: #5C0A28;
+      border: none;
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(92, 10, 40, 0.2);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(92, 10, 40, 0.35);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .security-notice {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(92, 10, 40, 0.15);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      text-align: center;
+      line-height: 1.6;
+      letter-spacing: 0.3px;
+    }
+
+    /* Message styling */
+    .message {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      text-align: center;
+      border: 1px solid;
+    }
+
+    .message.error {
+      background: rgba(92, 10, 40, 0.05);
+      border-color: rgba(92, 10, 40, 0.3);
+      color: #ffffff;
+    }
+
+    .message.success {
+      background: rgba(92, 10, 40, 0.05);
+      border-color: rgba(92, 10, 40, 0.3);
+      color: #ffffff;
+    }
+
+    /* Transition animation */
+    .transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a1f3d 0%, #5C0A28 50%, #0a1f3d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .transition-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .qib-logo-animation {
+      width: 200px;
+      height: 200px;
+      animation: logoZoom 1s ease-out forwards;
+    }
+
+    @keyframes logoZoom {
+      from { 
+        transform: scale(0.5) rotate(0deg);
+        opacity: 0;
+      }
+      to { 
+        transform: scale(2) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* STEP-BY-STEP LOGIN STYLES */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .login-progress {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      justify-content: center;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active {
+      opacity: 1;
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(92, 10, 40,0.1);
+      border: 2px solid rgba(92, 10, 40,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active .step-number {
+      background: #5C0A28;
+      border-color: #5C0A28;
+      box-shadow: 0 0 16px rgba(92, 10, 40,0.4);
+      transform: scale(1.05);
+      color: #0a1f3d;
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .progress-step.active .step-label {
+      color: #ffffff;
+    }
+
+    /* Step containers */
+    .step-container {
+      transition: all 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 100%;
+    }
+
+    .step-container.active {
+      opacity: 1;
+      pointer-events: auto;
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: translate(0, 0) scale(1);
+    }
+
+    .step-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .step-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      background: none;
+      -webkit-background-clip: unset;
+      -webkit-text-fill-color: unset;
+      background-clip: unset;
+    }
+
+    .step-subtitle {
+      font-size: 14px;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    /* Large inputs */
+    .large-input {
+      font-size: 18px !important;
+      padding: 16px 18px !important;
+      height: auto !important;
+      letter-spacing: 2px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .large-input::placeholder {
+      letter-spacing: 2px;
+      opacity: 0.6;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Role option buttons */
+    .role-option-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 20px 24px;
+      background: rgba(92, 10, 40,0.05);
+      border: 2px solid rgba(92, 10, 40,0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #5C0A28;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      min-height: 100px;
+      justify-content: center;
+    }
+
+    .role-option-btn:hover {
+      background: rgba(92, 10, 40,0.1);
+      border-color: rgba(92, 10, 40,0.4);
+      transform: translateY(-2px);
+    }
+
+    .role-option-btn.selected {
+      background: rgba(92, 10, 40,0.15);
+      border-color: #5C0A28;
+      color: #5C0A28;
+      box-shadow: 0 0 20px rgba(92, 10, 40,0.2);
+    }
+
+    .role-icon {
+      font-size: 32px;
+      display: block;
+    }
+
+    .role-text {
+      font-weight: 600;
+      font-size: 15px;
+      display: block;
+    }
+
+    .role-desc {
+      font-size: 12px;
+      color: #5C0A28;
+      display: block;
+    }
+
+    /* OTP Styling */
+    .otp-header {
+      margin-bottom: 28px;
+    }
+
+    .otp-input-wrapper {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .otp-input-main {
+      width: 100%;
+      font-size: 48px !important;
+      padding: 32px 20px !important;
+      height: auto !important;
+      text-align: center;
+      letter-spacing: 12px;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+      background: rgba(92, 10, 40,0.05) !important;
+      border: 2px solid rgba(92, 10, 40,0.3) !important;
+      color: #ffffff;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .otp-input-main:focus {
+      border-color: #5C0A28 !important;
+      box-shadow: 0 0 24px rgba(92, 10, 40,0.4), inset 0 0 12px rgba(92, 10, 40,0.1) !important;
+      outline: none;
+    }
+
+    .otp-input-main::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 12px;
+    }
+
+    .otp-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      font-size: 48px;
+      letter-spacing: 12px;
+      color: rgba(92, 10, 40,0.1);
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    .otp-step .submit-btn {
+      font-size: 13px;
+      padding: 16px 24px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: #5C0A28 !important;
+      color: #0a1f3d;
+      border: none;
+    }
+
+    .otp-step .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(92, 10, 40,0.3) !important;
+    }
+
+    .otp-tips {
+      margin-top: 24px;
+    }
+
+    .employee-tag {
+      font-family: 'Courier New', monospace;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .portal-left { padding: 40px; }
+      .portal-right { padding: 40px; }
+      .login-panel { max-width: 380px; padding: 40px; }
+      .brand-title { font-size: 36px; }
+      .panel-title { font-size: 28px; }
+      .step-header h2 { font-size: 20px; }
+      .otp-input-main { font-size: 40px !important; letter-spacing: 10px; }
+    }
+
+    @media (max-width: 768px) {
+      .portal-container { flex-direction: column; }
+      .portal-left { 
+        min-height: 40%;
+        padding: 30px;
+        justify-content: flex-end;
+      }
+      .portal-right { 
+        min-height: 60%;
+        padding: 30px;
+        align-items: flex-start;
+      }
+      .brand-logo { width: 70px; height: 70px; }
+      .brand-title { font-size: 28px; }
+      .brand-description { max-width: 100%; }
+      .trust-badges { gap: 15px; }
+      .login-progress { gap: 8px; }
+      .step-number { width: 38px; height: 38px; font-size: 16px; }
+      .step-label { font-size: 10px; }
+      .large-input { font-size: 16px !important; padding: 14px 16px !important; }
+      .otp-input-main { font-size: 36px !important; letter-spacing: 8px; padding: 24px 16px !important; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* PARACHUTE DIGITAL BRANDING */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    .system-header {
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(135deg, rgba(10, 31, 61, 0.5) 0%, rgba(92, 10, 40, 0.2) 100%);
+      border-bottom: 1px solid rgba(92, 10, 40, 0.15);
+    }
+
+    .platform-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .platform-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .parachute-brand {
+      margin-top: 12px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: #5C0A28;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .global-banner {
+      margin-top: 15px;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid rgba(92, 10, 40, 0.1);
+      border-bottom: 1px solid rgba(92, 10, 40, 0.1);
+      padding: 6px 0;
+    }
+
+    .banner-track {
+      display: inline-block;
+      animation: scroll 30s linear infinite;
+      opacity: 0.7;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 1px;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .field-stream {
+      margin-top: 15px;
+      font-size: 11px;
+      opacity: 0.8;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .field-tag {
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: rgba(92, 10, 40, 0.05);
+      border: 1px solid rgba(92, 10, 40, 0.15);
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+
+    .vision-footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- LOADING SCREEN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">LOADING</div>
+      <div class="loading-text-sub">EDD SYSTEM</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- VISION 2030 SPLASH SCREEN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-content">
+      <svg class="splash-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#5C0A28"/>
+            <stop offset="100%" style="stop-color:#00D4FF"/>
+          </linearGradient>
+        </defs>
+        <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(92, 10, 40,0.3)" stroke-width="2"/>
+        <circle cx="120" cy="120" r="110" fill="none" stroke="url(#splashGrad)" stroke-width="3"/>
+        <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#splashGrad)" stroke-width="2.5"/>
+        <circle cx="120" cy="120" r="8" fill="#5C0A28"/>
+      </svg>
+      <h1 class="splash-title">QATAR VISION 2030</h1>
+      <p class="splash-subtitle">Digital Governance Platform</p>
+      <div class="splash-bar"></div>
+      <div class="splash-features">
+        <div class="feature-pill">🔐 Enterprise Security</div>
+        <div class="feature-pill">⚡ Mission Critical</div>
+        <div class="feature-pill">✓ Fully Audited</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- MAIN LOGIN PORTAL -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <div class="login-wrapper" id="loginWrapper">
+    
+    <!-- Background effects -->
+    <div class="bg-effects">
+      <div class="grid-bg"></div>
+      <div class="light-rays">
+        <div class="ray"></div>
+        <div class="ray"></div>
+        <div class="ray"></div>
+        <div class="ray"></div>
+      </div>
+    </div>
+
+    <!-- Main portal content -->
+    <div class="portal-container">
+      
+      <!-- Left side: Branding -->
+      <div class="portal-left">
+        <div class="brand-section">
+          <svg class="brand-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#5C0A28"/>
+                <stop offset="100%" style="stop-color:#00D4FF"/>
+              </linearGradient>
+            </defs>
+            <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(92, 10, 40,0.3)" stroke-width="2"/>
+            <circle cx="120" cy="120" r="110" fill="none" stroke="url(#brandGrad)" stroke-width="3"/>
+            <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#brandGrad)" stroke-width="2.5"/>
+            <circle cx="120" cy="120" r="8" fill="#5C0A28"/>
+          </svg>
+          <p class="brand-subtitle">Digital Governance Center</p>
+          <div class="brand-divider"></div>
+          <p class="brand-description">Operating within the framework of Qatar National Vision 2030 for sustainable financial governance and digital transformation.</p>
+          <div class="trust-badges">
+            <div class="badge-item">
+              <span class="badge-icon">🔐</span>
+              <span>ISO 27001</span>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">✓</span>
+              <span>SOC 2 Type II</span>
+            </div>
+            <div class="badge-item">
+              <span class="badge-icon">⚡</span>
+              <span>GDPR Ready</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: Login form -->
+      <div class="portal-right">
+        <div class="login-panel">
+          <div class="panel-header">
+            <div class="system-status">
+              <div class="status-dot"></div>
+              <span class="status-text">System Operational</span>
+            </div>
+            <h1 class="panel-title">Secure Portal</h1>
+            <p class="panel-subtitle">Multi-Factor Authentication</p>
+          </div>
+
+          <!-- Progress indicator -->
+          <div class="login-progress" id="loginProgress">
+            <div class="progress-step active" data-step="1">
+              <div class="step-number">1</div>
+              <div class="step-label">Identity</div>
+            </div>
+            <div class="progress-step" data-step="2">
+              <div class="step-number">2</div>
+              <div class="step-label">Verify</div>
+            </div>
+            <div class="progress-step" data-step="3">
+              <div class="step-number">3</div>
+              <div class="step-label">Role</div>
+            </div>
+            <div class="progress-step" data-step="4">
+              <div class="step-number">🔐</div>
+              <div class="step-label">OTP</div>
+            </div>
+          </div>
+
+          <div id="message" class="message" style="display: none;"></div>
+
+          <!-- Step 1: Employee ID -->
+          <div id="step1-container" class="step-container active">
+            <div class="step-header">
+              <h2>Step 1: Enter Employee ID</h2>
+              <p class="step-subtitle">Who are you?</p>
+            </div>
+            <form id="step1-form" class="login-form">
+              <div class="form-group">
+                <label class="form-label">Employee ID</label>
+                <input type="text" class="form-input large-input" id="employeeId" placeholder="Example: Demo-2030" required autofocus>
+              </div>
+              <button type="submit" class="submit-btn">Continue to Password</button>
+            </form>
+          </div>
+
+          <!-- Step 2: Password -->
+          <div id="step2-container" class="step-container" style="display: none;">
+            <div class="step-header">
+              <h2>Step 2: Enter Password</h2>
+              <p class="step-subtitle">Verify your identity</p>
+            </div>
+            <form id="step2-form" class="login-form">
+              <div style="margin-bottom: 16px; padding: 12px 14px; background: rgba(92, 10, 40,0.05); border-radius: 8px; border: 1px solid rgba(92, 10, 40,0.2);">
+                <span id="employee-display" class="employee-tag" style="display: inline-block; background: rgba(92, 10, 40,0.1); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">Demo-2030</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input large-input" id="password" placeholder="••••••••" required autofocus>
+              </div>
+              <button type="submit" class="submit-btn">Continue to Role Selection</button>
+            </form>
+          </div>
+
+          <!-- Step 3: Role Selection -->
+          <div id="step3-container" class="step-container" style="display: none;">
+            <div class="step-header">
+              <h2>Step 3: Select Your Role</h2>
+              <p class="step-subtitle">What is your department?</p>
+            </div>
+            <div id="step3-form" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="margin-bottom: 12px; padding: 12px 14px; background: rgba(92, 10, 40,0.05); border-radius: 8px; border: 1px solid rgba(92, 10, 40,0.2);">
+                <span id="employee-display-2" class="employee-tag" style="display: inline-block; background: rgba(92, 10, 40,0.1); color: #5C0A28; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">Demo-2030</span>
+              </div>
+
+              <button type="button" class="role-option-btn" data-role="business">
+                <span class="role-icon">👔</span>
+                <span class="role-text">Business Banking</span>
+                <span class="role-desc">Business relationship managers</span>
+              </button>
+
+              <button type="button" class="role-option-btn" data-role="cdd">
+                <span class="role-icon">📋</span>
+                <span class="role-text">CDD Operations</span>
+                <span class="role-desc">Customer Due Diligence analysts</span>
+              </button>
+
+              <button type="button" class="role-option-btn" data-role="compliance">
+                <span class="role-icon">⚖️</span>
+                <span class="role-text">Compliance</span>
+                <span class="role-desc">Compliance and risk officers</span>
+              </button>
+
+              <input type="hidden" id="selectedRole">
+            </div>
+          </div>
+
+          <!-- Step 4: OTP (PROMINENT) -->
+          <div id="step4-container" class="step-container otp-step" style="display: none;">
+            <div class="otp-header">
+              <div style="text-align: center; margin-bottom: 24px;">
+                <div style="font-size: 48px; margin-bottom: 12px;">🔐</div>
+                <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #5C0A28; margin-bottom: 8px;">Two-Factor Authentication</h2>
+                <p style="margin: 0; color: #5C0A28; font-size: 14px;">Enter the 6-digit code from your authenticator</p>
+              </div>
+
+              <div style="background: rgba(92, 10, 40,0.05); border: 2px solid rgba(92, 10, 40,0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
+                <div id="employee-display-3" class="employee-tag" style="display: inline-block; background: rgba(92, 10, 40,0.1); color: #5C0A28; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 14px;">Demo-2030</div>
+              </div>
+            </div>
+
+            <form id="step4-form" class="login-form">
+              <div class="otp-input-wrapper">
+                <input type="text" class="otp-input-main" id="otp" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*" required autofocus>
+                <div class="otp-placeholder">000000</div>
+              </div>
+
+              <div style="text-align: center; margin: 20px 0; font-size: 12px; color: #5C0A28;">
+                <span>Enter all 6 digits to proceed</span>
+              </div>
+
+              <button type="submit" class="submit-btn otp-submit-btn">AUTHENTICATE & ENTER SYSTEM</button>
+
+              <div class="otp-tips">
+                <div style="font-size: 11px; color: #5C0A28; background: rgba(92, 10, 40,0.05); padding: 10px 14px; border-radius: 8px; border-left: 3px solid rgba(92, 10, 40,0.3);">
+                  <strong>💡 Tip:</strong> Check your authenticator app (Google Authenticator, Authy, or Microsoft Authenticator)
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Transition overlay -->
+  <div class="transition-overlay" id="transitionOverlay">
+    <svg class="qib-logo-animation" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="transGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#5C0A28"/>
+          <stop offset="100%" style="stop-color:#00D4FF"/>
+        </linearGradient>
+      </defs>
+      <circle cx="120" cy="120" r="115" fill="none" stroke="white" stroke-width="2"/>
+      <circle cx="120" cy="120" r="110" fill="none" stroke="url(#transGrad)" stroke-width="3"/>
+      <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#transGrad)" stroke-width="2.5"/>
+      <circle cx="120" cy="120" r="8" fill="#5C0A28"/>
+    </svg>
+  </div>
+
+  <!-- Scripts -->
+  
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // CONFIGURATION
+    // ═══════════════════════════════════════════════════════════════
+
+    const messageDiv = document.getElementById('message');
+    let currentStep = 1;
+    let storeData = {
+      employeeId: '',
+      password: '',
+      role: ''
+    };
+
+    // Demo credentials
+    const VALID_CREDENTIALS = {
+      'ahmed.thani': 'password123',
+      'Demo-2030': 'Qib@2030',
+      'admin': 'admin123',
+      'QIB2030': 'QIB2030'
+    };
+
+    const VALID_OTP = '123456';
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP MANAGEMENT (Define early)
+    // ═══════════════════════════════════════════════════════════════
+
+    function showStep(stepNum) {
+      console.log(`[LOGIN] Moving to Step ${stepNum}`);
+      
+      // Hide all steps
+      document.querySelectorAll('.step-container').forEach(el => {
+        el.classList.remove('active');
+        el.style.display = 'none';
+      });
+
+      // Show target step
+      const targetStep = document.getElementById(`step${stepNum}-container`);
+      if (targetStep) {
+        targetStep.classList.add('active');
+        targetStep.style.display = 'block';
+      }
+
+      // Update progress indicator
+      document.querySelectorAll('.progress-step').forEach(step => {
+        step.classList.remove('active');
+        if (parseInt(step.dataset.step) === stepNum) {
+          step.classList.add('active');
+        }
+      });
+
+      // Auto focus input
+      setTimeout(() => {
+        const targetStep = document.getElementById(`step${stepNum}-container`);
+        if (targetStep) {
+          const inputs = targetStep.querySelectorAll('input[type="text"], input[type="password"]');
+          if (inputs.length > 0) inputs[0].focus();
+        }
+      }, 100);
+
+      currentStep = stepNum;
+    }
+
+    function advanceStep() {
+      if (currentStep < 4) {
+        showStep(currentStep + 1);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // LOADING AND SCREENS
+    // ═══════════════════════════════════════════════════════════════
+
+    const loadingScreen = document.getElementById('loadingScreen');
+    const splashScreen = document.getElementById('splashScreen');
+    const loginWrapper = document.getElementById('loginWrapper');
+    const transitionOverlay = document.getElementById('transitionOverlay');
+
+    // Hide loading screen immediately
+    if (loadingScreen) loadingScreen.classList.add('hidden');
+    
+    // Show login form and first step after 200ms
+    setTimeout(() => {
+      if (splashScreen) splashScreen.classList.add('hidden');
+      if (loginWrapper) loginWrapper.classList.add('visible');
+      // Show first step
+      showStep(1);
+    }, 200);
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP-BY-STEP LOGIN PROGRESSION
+    // ═══════════════════════════════════════════════════════════════
+
+    // Initialize forms
+    const step1Form = document.getElementById('step1-form');
+    const step2Form = document.getElementById('step2-form');
+    const step3Form = document.getElementById('step3-form');
+    const step4Form = document.getElementById('step4-form');
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 1: EMPLOYEE ID
+    // ═══════════════════════════════════════════════════════════════
+
+    step1Form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const employeeId = document.getElementById('employeeId').value.trim();
+
+      // Validation
+      if (!employeeId) {
+        showMessage('Please enter your employee ID', 'error');
+        return;
+      }
+
+      console.log(`[STEP 1] Employee ID validated: ${employeeId}`);
+      storeData.employeeId = employeeId;
+
+      // Update employee display in all steps
+      document.getElementById('employee-display').textContent = employeeId;
+      document.getElementById('employee-display-2').textContent = employeeId;
+      document.getElementById('employee-display-3').textContent = employeeId;
+
+      advanceStep();
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 2: PASSWORD VERIFICATION
+    // ═══════════════════════════════════════════════════════════════
+
+    step2Form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const password = document.getElementById('password').value;
+
+      // Validation
+      if (!password) {
+        showMessage('Please enter your password', 'error');
+        return;
+      }
+
+      // Check credentials - allow any registered user or valid demo login
+      if (VALID_CREDENTIALS[storeData.employeeId] && VALID_CREDENTIALS[storeData.employeeId] !== password) {
+        showMessage('Invalid password. Please try again.', 'error');
+        document.getElementById('password').value = '';
+        return;
+      }
+
+      console.log(`[STEP 2] Password verified for ${storeData.employeeId}`);
+      storeData.password = password;
+
+      advanceStep();
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 3: ROLE SELECTION
+    // ═══════════════════════════════════════════════════════════════
+
+    document.querySelectorAll('.role-option-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Remove previous selection
+        document.querySelectorAll('.role-option-btn').forEach(b => {
+          b.classList.remove('selected');
+        });
+
+        // Mark as selected
+        btn.classList.add('selected');
+
+        const role = btn.dataset.role;
+        console.log(`[STEP 3] Role selected: ${role}`);
+        storeData.role = role;
+
+        // Wait a moment for visual feedback, then advance
+        setTimeout(() => {
+          advanceStep();
+        }, 300);
+      });
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // STEP 4: OTP AUTHENTICATION (FINAL)
+    // ═══════════════════════════════════════════════════════════════
+
+    step4Form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const otp = document.getElementById('otp').value.trim();
+
+      // Validation
+      if (!otp) {
+        showMessage('Please enter the 6-digit OTP code', 'error');
+        return;
+      }
+
+      if (otp.length !== 6) {
+        showMessage('OTP must be exactly 6 digits', 'error');
+        return;
+      }
+
+      // Check OTP
+      if (otp !== VALID_OTP) {
+        showMessage('Invalid OTP code. Please check your authenticator app.', 'error');
+        document.getElementById('otp').value = '';
+        return;
+      }
+
+      // SUCCESS: All steps completed
+      console.log('[STEP 4] OTP verified - Authentication complete');
+      console.log('[LOGIN] All steps validated successfully');
+      
+      showMessage('✓ Authentication successful. Initializing Command Center...', 'success');
+
+      // Trigger transition
+      setTimeout(() => {
+        transitionOverlay.classList.add('active');
+        
+        // Redirect after animation
+        setTimeout(() => {
+          console.log('[SESSION] Creating session');
+          
+          // Create session object matching dashboard.js expectations
+          const sessionData = {
+            authenticated: true,
+            user: {
+              id: storeData.employeeId,
+              name: storeData.employeeId,
+              role: storeData.role,
+              loginTime: new Date().toISOString()
+            },
+            token: btoa(storeData.employeeId)
+          };
+          
+          console.log('[SESSION] Session data:', sessionData);
+          
+          // Store session with correct key name
+          sessionStorage.setItem('edd_session', JSON.stringify(sessionData));
+          sessionStorage.setItem('auth_token', btoa(storeData.employeeId));
+          sessionStorage.setItem('user_role', storeData.role);
+          
+          console.log('[SESSION] Token stored');
+          console.log('[SESSION] Redirecting to dashboard');
+          
+          // Redirect to dashboard
+          window.location.href = 'dashboard.html';
+        }, 600);
+      }, 300);
+    });
+
+    // ═══════════════════════════════════════════════════════════════
+    // MESSAGE DISPLAY
+    // ═══════════════════════════════════════════════════════════════
+
+    function showMessage(text, type) {
+      messageDiv.textContent = text;
+      messageDiv.className = `message ${type}`;
+      messageDiv.style.display = 'block';
+      
+      if (type === 'error') {
+        setTimeout(() => {
+          messageDiv.style.display = 'none';
+        }, 4000);
+      }
+    }
+
+    // Initialize Step 1
+    console.log('[LOGIN] System initialized - Showing Step 1');
+    showStep(1);
+  </script>
+
+</body>
+</html>
+
+
