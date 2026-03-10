@@ -147,26 +147,26 @@ class HighRiskImpactSystem {
     
     if (!caseData) return consequences;
 
-    // Group A: Review & Workload Impact
-    consequences.push('Increased compliance review workload and timeline');
-    consequences.push('Higher frequency of investigator touch points');
-    consequences.push('Delayed approval until evidence verification completed');
+    // Group A: Timeline & Governance Operational Impact
+    consequences.push('Timeline Impact: Review cycle extended from 14 to 21 days (Compliance Committee approval required)');
+    consequences.push('Governance: Decision authority escalates to Chief Risk Officer for final sign-off');
+    consequences.push('Workload: Additional investigator hours required for documentation and evidence gathering');
 
-    // Group B: Escalation Risk
+    // Group B: Escalation & Oversight Requirements
     if (caseData.pepStatus || caseData.countryRisk?.level === 'High') {
-      consequences.push('Higher probability of escalation to compliance committee');
-      consequences.push('Required sign-off from Head of Compliance');
+      consequences.push('Escalation Path: Case moves to Compliance Committee with mandatory executive review');
+      consequences.push('Regulatory Readiness: Prepare case file for potential regulator inspection within 30 days');
     }
 
-    // Group C: Account Operations
+    // Group C: Controls & Monitoring Enhancement
     if (caseData.activityFlags?.length > 0) {
-      consequences.push('Possible temporary restrictions pending verification');
-      consequences.push('Enhanced transaction monitoring (real-time instead of weekly)');
+      consequences.push('Account Controls: Enhanced monitoring activated (real-time alerts vs. weekly batch processing)');
+      consequences.push('Evidence Requirements: Additional documentation (Source of Wealth verification required)');
     }
 
-    // Group D: Regulatory & SLA
-    consequences.push('Elevated regulatory audit attention');
-    consequences.push('Extended SLA timelines (normal 14 days → 21 days)');
+    // Group D: Regulatory & Audit Focus
+    consequences.push('Audit Attention: Elevated risk profile triggers increased regulatory examination likelihood');
+    consequences.push('Data Confidence: Current documentation completeness at ' + (caseData.documentationScore || 0) + '% — target 80%+ required for completion');
 
     return consequences;
   }
