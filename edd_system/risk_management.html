@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB EDD System — Risk Lists Management</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Qatar Islamic Bank</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+            <span class="nav-badge">8</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Departments</div>
+          <a href="business_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12z"/></svg>
+            <span>Business View</span>
+          </a>
+          <a href="cdd_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg>
+            <span>CDD Operations</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Channels</div>
+          <a href="alternative_channels.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H5V5h14v14zM7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/></svg>
+            <span>Alt. Channels</span>
+          </a>
+          <a href="customer360.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+            <span>Customer 360</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Risk & Compliance</div>
+          <a href="risk_management.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>Risk Lists</span>
+            <span class="nav-badge danger">!</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Management</div>
+          <a href="management_dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            <span>Management</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Tools</div>
+          <a href="document_viewer.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>
+            <span>Documents</span>
+          </a>
+          <a href="notifications_center.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            <span>Notifications</span>
+          </a>
+          <a href="presentations.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+            <span>Presentations</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar" id="user-avatar">FK</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">Fatima Al-Khalifa</div>
+          <div class="user-role" id="user-role">Compliance Manager</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Risk Lists Management</h1>
+          <div class="breadcrumb">
+            <a href="dashboard.html" style="color: var(--accent-primary); text-decoration: none;">Dashboard</a> 
+            <span style="margin: 0 6px; opacity: 0.5;">/</span> 
+            <span>Risk & Compliance</span>
+            <span style="margin: 0 6px; opacity: 0.5;">/</span> 
+            <span>Risk Lists</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="header-btn" id="logout-btn" title="Logout">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <!-- Summary Stats -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(244,67,54,0.15);"><svg viewBox="0 0 24 24" fill="#F44336" width="24" height="24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+            <div class="stat-info"><div class="stat-value" style="color: #F44336;">18</div><div class="stat-label">High Risk Nationalities</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(255,152,0,0.15);"><svg viewBox="0 0 24 24" fill="#FF9800" width="24" height="24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+            <div class="stat-info"><div class="stat-value" style="color: #FF9800;">24</div><div class="stat-label">High Risk Occupations</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(156,39,176,0.15);"><svg viewBox="0 0 24 24" fill="#9C27B0" width="24" height="24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/></svg></div>
+            <div class="stat-info"><div class="stat-value" style="color: #9C27B0;">12</div><div class="stat-label">Classification Rules</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: rgba(0,212,255,0.15);"><svg viewBox="0 0 24 24" fill="#00D4FF" width="24" height="24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="stat-info"><div class="stat-value" style="color: #00D4FF;">3</div><div class="stat-label">Pending Approvals</div></div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs" style="margin-bottom: 24px;">
+          <button class="tab active" onclick="switchRiskTab('nationalities')">🌍 High Risk Nationalities</button>
+          <button class="tab" onclick="switchRiskTab('occupations')">👤 High Risk Occupations</button>
+          <button class="tab" onclick="switchRiskTab('classification')">⚙️ Classification Logic</button>
+          <button class="tab" onclick="switchRiskTab('pending')">📋 Pending Approvals</button>
+        </div>
+
+        <!-- Tab: High Risk Nationalities -->
+        <div id="risk-tab-nationalities" class="risk-tab-content">
+          <!-- Actions Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-primary btn-sm" onclick="showAddNationalityModal()">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                Add Nationality
+              </button>
+              <button class="btn btn-sm" style="background: rgba(76,175,80,0.15); color: #4CAF50; border: 1px solid rgba(76,175,80,0.3);" onclick="showBulkUploadModal('nationalities')">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Bulk Upload (CSV/Excel)
+              </button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="text" class="form-control" placeholder="Search nationalities..." style="font-size: 12px; padding: 8px 12px; max-width: 220px;" id="search-nationalities" onkeyup="filterTable('nationalities-table', this.value)">
+              <span style="font-size: 11px; color: var(--text-muted);">Last updated: Mar 08, 2026</span>
+            </div>
+          </div>
+
+          <!-- Nationalities Table -->
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <table class="data-table" id="nationalities-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;">#</th>
+                    <th>Country</th>
+                    <th>ISO Code</th>
+                    <th>Risk Level</th>
+                    <th>Risk Score</th>
+                    <th>Source</th>
+                    <th>Added By</th>
+                    <th>Date Added</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>🇮🇷 Iran</td>
+                    <td><code style="font-size: 10px; color: #F44336;">IR</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">100</td>
+                    <td>FATF / QCB</td>
+                    <td>System</td>
+                    <td>Jan 01, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>🇰🇵 North Korea</td>
+                    <td><code style="font-size: 10px; color: #F44336;">KP</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">100</td>
+                    <td>FATF / UN</td>
+                    <td>System</td>
+                    <td>Jan 01, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>🇸🇾 Syria</td>
+                    <td><code style="font-size: 10px; color: #F44336;">SY</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">95</td>
+                    <td>QCB / OFAC</td>
+                    <td>Compliance Admin</td>
+                    <td>Feb 15, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>🇲🇲 Myanmar</td>
+                    <td><code style="font-size: 10px; color: #FF9800;">MM</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.12); color: #F44336;">HIGH</span></td>
+                    <td style="font-weight: 700; color: #FF9800;">85</td>
+                    <td>FATF Grey List</td>
+                    <td>System</td>
+                    <td>Mar 01, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>🇾🇪 Yemen</td>
+                    <td><code style="font-size: 10px; color: #FF9800;">YE</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.12); color: #F44336;">HIGH</span></td>
+                    <td style="font-weight: 700; color: #FF9800;">82</td>
+                    <td>QCB / FATF</td>
+                    <td>Compliance Admin</td>
+                    <td>Jan 15, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>🇦🇫 Afghanistan</td>
+                    <td><code style="font-size: 10px; color: #FF9800;">AF</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.12); color: #F44336;">HIGH</span></td>
+                    <td style="font-weight: 700; color: #FF9800;">90</td>
+                    <td>UN / FATF</td>
+                    <td>System</td>
+                    <td>Jan 01, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>🇵🇰 Pakistan</td>
+                    <td><code style="font-size: 10px; color: #FF9800;">PK</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(255,152,0,0.15); color: #FF9800;">MEDIUM</span></td>
+                    <td style="font-weight: 700; color: #FFB300;">65</td>
+                    <td>FATF Grey List</td>
+                    <td>Compliance Admin</td>
+                    <td>Feb 01, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>🇳🇬 Nigeria</td>
+                    <td><code style="font-size: 10px; color: #FF9800;">NG</code></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(255,152,0,0.15); color: #FF9800;">MEDIUM</span></td>
+                    <td style="font-weight: 700; color: #FFB300;">60</td>
+                    <td>FATF Grey List</td>
+                    <td>System</td>
+                    <td>Mar 01, 2024</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Maker/Checker Governance Notice -->
+          <div style="margin-top: 16px; padding: 14px 20px; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; display: flex; align-items: center; gap: 12px;">
+            <svg viewBox="0 0 24 24" fill="#D4AF37" width="20" height="20"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: #D4AF37;">Maker / Checker Governance</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">All changes to High Risk Nationalities require Maker submission and Checker approval before taking effect in risk evaluation logic.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: High Risk Occupations -->
+        <div id="risk-tab-occupations" class="risk-tab-content" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-primary btn-sm" onclick="showAddOccupationModal()">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                Add Occupation
+              </button>
+              <button class="btn btn-sm" style="background: rgba(76,175,80,0.15); color: #4CAF50; border: 1px solid rgba(76,175,80,0.3);" onclick="showBulkUploadModal('occupations')">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Bulk Upload (CSV/Excel)
+              </button>
+            </div>
+            <input type="text" class="form-control" placeholder="Search occupations..." style="font-size: 12px; padding: 8px 12px; max-width: 220px;" onkeyup="filterTable('occupations-table', this.value)">
+          </div>
+
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <table class="data-table" id="occupations-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;">#</th>
+                    <th>Occupation</th>
+                    <th>Category</th>
+                    <th>Risk Level</th>
+                    <th>Risk Score</th>
+                    <th>Required Documents</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td style="font-weight: 600;">Head of State / Government</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(244,67,54,0.1); color: #F44336;">PEP</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">100</td>
+                    <td style="font-size: 11px;">Asset Declaration, SOW</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td style="font-weight: 600;">Government Minister</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(244,67,54,0.1); color: #F44336;">PEP</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">95</td>
+                    <td style="font-size: 11px;">Asset Declaration, SOF, SOW</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td style="font-weight: 600;">Military / Defense Officer</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(255,152,0,0.1); color: #FF9800;">Sensitive Gov.</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.12); color: #F44336;">HIGH</span></td>
+                    <td style="font-weight: 700; color: #FF9800;">85</td>
+                    <td style="font-size: 11px;">ID Verification, SOF</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td style="font-weight: 600;">Money Service Business Operator</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(156,39,176,0.1); color: #9C27B0;">High-Risk Finance</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.12); color: #F44336;">HIGH</span></td>
+                    <td style="font-weight: 700; color: #FF9800;">90</td>
+                    <td style="font-size: 11px;">CR, License, SOF, AML Policy</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td style="font-weight: 600;">Precious Metals / Gems Dealer</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(156,39,176,0.1); color: #9C27B0;">High-Risk Finance</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.12); color: #F44336;">HIGH</span></td>
+                    <td style="font-weight: 700; color: #FF9800;">85</td>
+                    <td style="font-size: 11px;">CR, Trade License, SOF</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td style="font-weight: 600;">Real Estate Agent / Developer</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(255,152,0,0.1); color: #FF9800;">Medium-Risk</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(255,152,0,0.15); color: #FF9800;">MEDIUM</span></td>
+                    <td style="font-weight: 700; color: #FFB300;">65</td>
+                    <td style="font-size: 11px;">CR, SOF</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td style="font-weight: 600;">Casino / Gambling Operator</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(156,39,176,0.1); color: #9C27B0;">High-Risk Finance</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">95</td>
+                    <td style="font-size: 11px;">License, SOF, SOW, AML Compliance</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td style="font-weight: 600;">Cryptocurrency Exchange Operator</td>
+                    <td><span style="padding: 2px 8px; border-radius: 6px; font-size: 10px; background: rgba(156,39,176,0.1); color: #9C27B0;">High-Risk Finance</span></td>
+                    <td><span style="padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">VERY HIGH</span></td>
+                    <td style="font-weight: 700; color: #F44336;">92</td>
+                    <td style="font-size: 11px;">License, SOF, AML Policy, Audit Report</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span></td>
+                    <td><button class="btn btn-sm" style="font-size: 10px; padding: 4px 8px; background: rgba(255,255,255,0.05); color: var(--text-secondary);">Edit</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Blocking Notice -->
+          <div style="margin-top: 16px; padding: 14px 20px; background: rgba(244,67,54,0.06); border: 1px solid rgba(244,67,54,0.2); border-radius: 12px; display: flex; align-items: center; gap: 12px;">
+            <svg viewBox="0 0 24 24" fill="#F44336" width="20" height="20"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: #F44336;">System Blocking Rule</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Customers with High-Risk Occupations cannot proceed through KYC unless mandatory supporting documentation is uploaded and verified.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Classification Logic -->
+        <div id="risk-tab-classification" class="risk-tab-content" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Compliance Risk Classification Rules</h3>
+            <button class="btn btn-primary btn-sm" onclick="alert('New classification rule form opened. Compliance must define criteria: conditions, scoring weights, and resulting risk category. Rule will require Maker/Checker approval.')">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              Add Classification Rule
+            </button>
+          </div>
+
+          <!-- Active Rules -->
+          <div class="card" style="margin-bottom: 16px;">
+            <div class="card-header">
+              <h2 class="card-title">Active Classification Rules</h2>
+              <span style="font-size: 11px; padding: 3px 10px; background: rgba(0,212,255,0.1); color: #00D4FF; border-radius: 8px;">No Code Configuration</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <!-- Rule 1 -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Rule CR-001: Auto High — PEP Classification</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Created by Compliance Dept. | Effective: Jan 01, 2024</div>
+                  </div>
+                  <span style="padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">AUTO HIGH</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
+                  <span style="color: #00D4FF;">IF</span> PEP_STATUS = <span style="color: #4CAF50;">"YES"</span> <span style="color: #FF9800;">THEN</span> FINAL_RISK_CATEG = <span style="color: #F44336;">"AUTO HIGH"</span><br>
+                  <span style="color: #00D4FF;">SET</span> COUNTRY_RISK_WEIGHT = <span style="color: #D4AF37;">1.5x</span><br>
+                  <span style="color: #00D4FF;">REQUIRE</span> EDD_FORM = <span style="color: #4CAF50;">TRUE</span>
+                </div>
+              </div>
+              <!-- Rule 2 -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Rule CR-002: Auto High — Private Banking Segment</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Created by Compliance Dept. | Effective: Jan 01, 2024</div>
+                  </div>
+                  <span style="padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">AUTO HIGH</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
+                  <span style="color: #00D4FF;">IF</span> SEGMENT = <span style="color: #4CAF50;">"PRIVATE_BANKING"</span> <span style="color: #FF9800;">THEN</span> FINAL_RISK_CATEG = <span style="color: #F44336;">"AUTO HIGH"</span><br>
+                  <span style="color: #00D4FF;">SET</span> ACT_RISK_WEIGHT = <span style="color: #D4AF37;">2.0x</span><br>
+                  <span style="color: #00D4FF;">REQUIRE</span> EDD_FORM = <span style="color: #4CAF50;">TRUE</span>, SOW_VERIFICATION = <span style="color: #4CAF50;">TRUE</span>
+                </div>
+              </div>
+              <!-- Rule 3 -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Rule CR-003: High Risk — High Risk Nationality</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Created by Compliance Dept. | Effective: Feb 01, 2024</div>
+                  </div>
+                  <span style="padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; background: rgba(255,152,0,0.15); color: #FF9800;">HIGH</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
+                  <span style="color: #00D4FF;">IF</span> NATIONALITY <span style="color: #FF9800;">IN</span> HIGH_RISK_NATIONALITY_LIST <span style="color: #FF9800;">THEN</span> COUNTRY_RISK_CATEG = <span style="color: #F44336;">"HIGH"</span><br>
+                  <span style="color: #00D4FF;">SET</span> COUNTRY_RISK_SCORE = <span style="color: #D4AF37;">MAX(COUNTRY_RISK_SCORE, 80)</span><br>
+                  <span style="color: #00D4FF;">IF</span> COUNTRY_RISK_SCORE >= <span style="color: #D4AF37;">80</span> <span style="color: #00D4FF;">AND</span> ACT_RISK_SCORE >= <span style="color: #D4AF37;">60</span> <span style="color: #FF9800;">THEN</span> FINAL_RISK_CATEG = <span style="color: #F44336;">"AUTO HIGH"</span>
+                </div>
+              </div>
+              <!-- Rule 4 -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Rule CR-004: Medium Risk — High Risk Occupation</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Created by Compliance Dept. | Effective: Feb 15, 2024</div>
+                  </div>
+                  <span style="padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; background: rgba(255,152,0,0.15); color: #FF9800;">MEDIUM+</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
+                  <span style="color: #00D4FF;">IF</span> OCCUPATION <span style="color: #FF9800;">IN</span> HIGH_RISK_OCCUPATION_LIST <span style="color: #FF9800;">THEN</span> OCCP_RISK_CATEG = <span style="color: #FF9800;">"MEDIUM"</span><br>
+                  <span style="color: #00D4FF;">BLOCK</span> KYC_COMPLETION <span style="color: #FF9800;">UNTIL</span> REQUIRED_DOCS_UPLOADED = <span style="color: #4CAF50;">TRUE</span><br>
+                  <span style="color: #00D4FF;">ALERT</span> COMPLIANCE_TEAM = <span style="color: #4CAF50;">TRUE</span>
+                </div>
+              </div>
+              <!-- Rule 5 -->
+              <div style="padding: 16px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Rule CR-005: EDD Required — Composite Score Threshold</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Created by Compliance Dept. | Effective: Mar 01, 2024</div>
+                  </div>
+                  <span style="padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; background: rgba(156,39,176,0.15); color: #9C27B0;">EDD REQUIRED</span>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
+                  <span style="color: #00D4FF;">IF</span> FINAL_RISK_SCORE >= <span style="color: #D4AF37;">250</span> <span style="color: #FF9800;">THEN</span> REQUIRE_EDD = <span style="color: #4CAF50;">TRUE</span><br>
+                  <span style="color: #00D4FF;">IF</span> FINAL_RISK_SCORE >= <span style="color: #D4AF37;">350</span> <span style="color: #FF9800;">THEN</span> FINAL_RISK_CATEG = <span style="color: #F44336;">"AUTO HIGH"</span><br>
+                  <span style="color: #00D4FF;">ROUTE</span> TO_COMPLIANCE_REVIEW = <span style="color: #4CAF50;">TRUE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Pending Approvals -->
+        <div id="risk-tab-pending" class="risk-tab-content" style="display: none;">
+          <div class="card" style="margin-bottom: 16px;">
+            <div class="card-header">
+              <h2 class="card-title">⏳ Pending Maker/Checker Approvals</h2>
+              <span style="font-size: 11px; padding: 3px 10px; background: rgba(255,152,0,0.1); color: #FF9800; border-radius: 8px;">3 Pending</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <!-- Pending 1 -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 600;">Add "🇱🇧 Lebanon" to High Risk Nationalities</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Submitted by: Ahmed Al-Mansouri (Maker) | Mar 07, 2026 | Risk Score: 70 | Source: QCB Advisory</div>
+                  </div>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-sm" style="background: rgba(76,175,80,0.15); color: #4CAF50; font-size: 11px; padding: 6px 16px;" onclick="alert('Approved: Lebanon added to High Risk Nationalities. Risk evaluation updated immediately.')">✓ Approve</button>
+                    <button class="btn btn-sm" style="background: rgba(244,67,54,0.15); color: #F44336; font-size: 11px; padding: 6px 16px;" onclick="alert('Rejected: Reason required. Please provide rejection justification.')">✗ Reject</button>
+                  </div>
+                </div>
+              </div>
+              <!-- Pending 2 -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 600;">Add "Virtual Asset Service Provider" to High Risk Occupations</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Submitted by: Sara Al-Thani (Maker) | Mar 06, 2026 | Risk Score: 88 | Category: High-Risk Finance</div>
+                  </div>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-sm" style="background: rgba(76,175,80,0.15); color: #4CAF50; font-size: 11px; padding: 6px 16px;" onclick="alert('Approved: VASP added to High Risk Occupations.')">✓ Approve</button>
+                    <button class="btn btn-sm" style="background: rgba(244,67,54,0.15); color: #F44336; font-size: 11px; padding: 6px 16px;" onclick="alert('Rejected.')">✗ Reject</button>
+                  </div>
+                </div>
+              </div>
+              <!-- Pending 3 -->
+              <div style="padding: 16px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 600;">Modify Rule CR-005: Lower EDD Threshold from 250 to 200</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Submitted by: Fatima Al-Khalifa (Maker) | Mar 05, 2026 | Impact: +15% more customers trigger EDD</div>
+                  </div>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-sm" style="background: rgba(76,175,80,0.15); color: #4CAF50; font-size: 11px; padding: 6px 16px;" onclick="alert('Approved: Rule CR-005 threshold updated to 200.')">✓ Approve</button>
+                    <button class="btn btn-sm" style="background: rgba(244,67,54,0.15); color: #F44336; font-size: 11px; padding: 6px 16px;" onclick="alert('Rejected.')">✗ Reject</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/mock_data.js"></script>
+  <script src="js/enterprise_features.js"></script>
+  <script src="js/enterprise_ui.js"></script>
+  <script>
+    // Tab switching
+    function switchRiskTab(tab) {
+      document.querySelectorAll('.risk-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('risk-tab-' + tab).style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    // Table filter
+    function filterTable(tableId, query) {
+      const table = document.getElementById(tableId);
+      const rows = table.querySelectorAll('tbody tr');
+      query = query.toLowerCase();
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+      });
+    }
+
+    // Add Nationality Modal
+    function showAddNationalityModal() {
+      const html = `<div id="addNatModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;">
+        <div style="background:linear-gradient(135deg,#0d1b3e,#1a2744);border:1px solid rgba(0,212,255,0.2);border-radius:16px;padding:32px;width:500px;max-width:90vw;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <h3 style="margin:0;font-size:18px;">🌍 Add High Risk Nationality</h3>
+            <span onclick="document.getElementById('addNatModal').remove()" style="cursor:pointer;font-size:20px;color:rgba(255,255,255,0.5);">&times;</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Country Name *</label><input class="form-control" placeholder="e.g. Lebanon"></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">ISO Code *</label><input class="form-control" placeholder="e.g. LB"></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Risk Level *</label><select class="form-control"><option>VERY HIGH</option><option>HIGH</option><option>MEDIUM</option></select></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Risk Score *</label><input type="number" class="form-control" placeholder="0-100"></div>
+            <div style="grid-column:1/-1;"><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Source / Justification *</label><input class="form-control" placeholder="e.g. FATF Grey List, QCB Advisory"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:20px;justify-content:flex-end;">
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.05);color:var(--text-secondary);" onclick="document.getElementById('addNatModal').remove()">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="alert('Nationality submitted for Checker approval (Maker/Checker governance).');document.getElementById('addNatModal').remove();">Submit for Approval</button>
+          </div>
+        </div>
+      </div>`;
+      document.body.insertAdjacentHTML('beforeend', html);
+    }
+
+    // Add Occupation Modal
+    function showAddOccupationModal() {
+      const html = `<div id="addOccModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;">
+        <div style="background:linear-gradient(135deg,#0d1b3e,#1a2744);border:1px solid rgba(0,212,255,0.2);border-radius:16px;padding:32px;width:500px;max-width:90vw;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <h3 style="margin:0;font-size:18px;">👤 Add High Risk Occupation</h3>
+            <span onclick="document.getElementById('addOccModal').remove()" style="cursor:pointer;font-size:20px;color:rgba(255,255,255,0.5);">&times;</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Occupation Title *</label><input class="form-control" placeholder="e.g. Virtual Asset Service Provider"></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Category *</label><select class="form-control"><option>PEP</option><option>Sensitive Gov.</option><option>High-Risk Finance</option><option>Medium-Risk</option></select></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Risk Level *</label><select class="form-control"><option>VERY HIGH</option><option>HIGH</option><option>MEDIUM</option></select></div>
+            <div><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Risk Score *</label><input type="number" class="form-control" placeholder="0-100"></div>
+            <div style="grid-column:1/-1;"><label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Required Documents *</label><input class="form-control" placeholder="e.g. License, SOF, AML Policy"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:20px;justify-content:flex-end;">
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.05);color:var(--text-secondary);" onclick="document.getElementById('addOccModal').remove()">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="alert('Occupation submitted for Checker approval (Maker/Checker governance).');document.getElementById('addOccModal').remove();">Submit for Approval</button>
+          </div>
+        </div>
+      </div>`;
+      document.body.insertAdjacentHTML('beforeend', html);
+    }
+
+    // Bulk Upload Modal
+    function showBulkUploadModal(type) {
+      const title = type === 'nationalities' ? 'High Risk Nationalities' : 'High Risk Occupations';
+      const html = `<div id="bulkModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;">
+        <div style="background:linear-gradient(135deg,#0d1b3e,#1a2744);border:1px solid rgba(0,212,255,0.2);border-radius:16px;padding:32px;width:500px;max-width:90vw;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+            <h3 style="margin:0;font-size:18px;">📤 Bulk Upload — ${title}</h3>
+            <span onclick="document.getElementById('bulkModal').remove()" style="cursor:pointer;font-size:20px;color:rgba(255,255,255,0.5);">&times;</span>
+          </div>
+          <div style="border:2px dashed rgba(0,212,255,0.3);border-radius:12px;padding:40px;text-align:center;cursor:pointer;background:rgba(0,212,255,0.03);" onclick="document.getElementById('bulkFileInput').click()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40" style="opacity:0.4;color:#00D4FF;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+            <p style="color:var(--text-secondary);margin-top:12px;font-size:13px;">Drop CSV or Excel file here</p>
+            <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">Supported: .csv, .xlsx — Max 5 MB</p>
+            <input type="file" id="bulkFileInput" accept=".csv,.xlsx" style="display:none">
+          </div>
+          <div style="margin-top:16px;padding:12px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.2);border-radius:8px;">
+            <p style="font-size:11px;color:#D4AF37;margin:0;">⚠️ Bulk uploads require Maker/Checker approval. All entries will be staged for review before activation.</p>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end;">
+            <button class="btn btn-sm" style="background:rgba(255,255,255,0.05);color:var(--text-secondary);" onclick="document.getElementById('bulkModal').remove()">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="alert('File uploaded. ${type === 'nationalities' ? '12 nationalities' : '8 occupations'} detected. Submitted for Checker approval.');document.getElementById('bulkModal').remove();">Upload & Submit</button>
+          </div>
+        </div>
+      </div>`;
+      document.body.insertAdjacentHTML('beforeend', html);
+    }
+
+    // Logout
+    document.getElementById('logout-btn')?.addEventListener('click', () => {
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

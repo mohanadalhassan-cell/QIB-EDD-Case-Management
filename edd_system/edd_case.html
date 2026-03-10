@@ -64,6 +64,18 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H5V5h14v14zM7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/></svg>
             <span>Alt. Channels</span>
           </a>
+          <a href="customer360.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+            <span>Customer 360</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Risk & Compliance</div>
+          <a href="risk_management.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>Risk Lists</span>
+          </a>
         </div>
         
         <div class="nav-section">
@@ -636,6 +648,9 @@
           <button class="tab" data-tab="communication">Communication</button>
           <button class="tab" data-tab="case-chat">Case Chat & History</button>
           <button class="tab" data-tab="approval">Approval</button>
+          <button class="tab" data-tab="risk-intelligence" style="background: rgba(244,67,54,0.08);">🎯 Risk Intelligence</button>
+          <button class="tab" data-tab="kyc-timeline" style="background: rgba(0,212,255,0.08);">📋 KYC Timeline</button>
+          <button class="tab" data-tab="t24-sync" style="background: rgba(76,175,80,0.08);">🔄 T24 Data Sync</button>
         </div>
 
         <!-- Tab Content: EDD Form -->
@@ -1801,6 +1816,86 @@
               </div>
             </div>
           </div>
+
+          <!-- Department Consultation Notes -->
+          <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+              <h2 class="card-title">🏢 Department Consultation Notes</h2>
+              <span style="font-size: 10px; padding: 3px 8px; background: rgba(212,175,55,0.1); color: #D4AF37; border-radius: 8px;">Cross-Department</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <!-- Consultation 1 -->
+              <div style="padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #4CAF50, #2E7D32); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white;">TR</div>
+                    <div>
+                      <span style="font-size: 12px; font-weight: 600;">Treasury Department</span>
+                      <span style="font-size: 10px; padding: 2px 6px; background: rgba(76,175,80,0.1); color: #4CAF50; border-radius: 4px; margin-left: 6px;">Consulted</span>
+                    </div>
+                  </div>
+                  <span style="font-size: 10px; color: var(--text-muted);">Mar 06, 2026</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; padding-left: 36px;">
+                  Customer's FX activity of $2.3M monthly is consistent with import/export trade patterns. No unusual currency pair concentrations detected. Treasury confirms normal commercial hedging behavior.
+                </div>
+                <div style="padding-left: 36px; margin-top: 6px;">
+                  <span style="font-size: 10px; color: var(--text-muted);">Responded by: Khalid Al-Rashid (Sr. Treasury Analyst)</span>
+                </div>
+              </div>
+              <!-- Consultation 2 -->
+              <div style="padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #FF9800, #E65100); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: white;">RM</div>
+                    <div>
+                      <span style="font-size: 12px; font-weight: 600;">Relationship Management</span>
+                      <span style="font-size: 10px; padding: 2px 6px; background: rgba(255,152,0,0.1); color: #FF9800; border-radius: 4px; margin-left: 6px;">Consulted</span>
+                    </div>
+                  </div>
+                  <span style="font-size: 10px; color: var(--text-muted);">Mar 05, 2026</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; padding-left: 36px;">
+                  Customer relationship since 2008. Active Tamayuz segment member with consistent engagement. Business interests include trading, real estate, and investment holdings. No adverse information from RM perspective.
+                </div>
+                <div style="padding-left: 36px; margin-top: 6px;">
+                  <span style="font-size: 10px; color: var(--text-muted);">Responded by: Mohammed Al-Sulaiti (Premium RM)</span>
+                </div>
+              </div>
+              <!-- Consultation 3 - Pending -->
+              <div style="padding: 14px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-muted);">LG</div>
+                    <div>
+                      <span style="font-size: 12px; font-weight: 600;">Legal Department</span>
+                      <span style="font-size: 10px; padding: 2px 6px; background: rgba(255,152,0,0.1); color: #FF9800; border-radius: 4px; margin-left: 6px;">⏳ Pending</span>
+                    </div>
+                  </div>
+                  <span style="font-size: 10px; color: var(--text-muted);">Requested Mar 07, 2026</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6; padding-left: 36px; font-style: italic;">
+                  Awaiting Legal review on customer's beneficial ownership structure and trust arrangements...
+                </div>
+              </div>
+            </div>
+            <!-- Request New Consultation -->
+            <div style="padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.05);">
+              <div style="display: flex; gap: 8px;">
+                <select class="form-control" style="font-size: 12px; flex: 0 0 180px;">
+                  <option>Select Department...</option>
+                  <option>Treasury</option>
+                  <option>Legal</option>
+                  <option>Relationship Management</option>
+                  <option>Risk Management</option>
+                  <option>Internal Audit</option>
+                  <option>Trade Finance</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Consultation question..." style="font-size: 12px; flex: 1;">
+                <button class="btn btn-primary btn-sm" onclick="alert('Department consultation request submitted. Target department will be notified via email and system alert.')">Request</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Tab Content: Approval -->
@@ -1832,9 +1927,474 @@
           </div>
         </div>
 
-      </div>
-    </main>
-  </div>
+        <!-- Tab Content: Risk Intelligence (Bonus 1 + 3: Risk Radar + Financial Behaviour) -->
+        <div id="tab-risk-intelligence" class="tab-content hidden">
+          <!-- Customer Risk Radar -->
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <h2 class="card-title">🎯 Customer Risk Radar</h2>
+              <span style="font-size: 10px; padding: 3px 8px; background: rgba(244,67,54,0.1); color: #F44336; border-radius: 8px;">COMPOSITE SCORE: 370</span>
+            </div>
+            <div class="card-body">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <!-- Radar Chart (CSS) -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="position: relative; width: 260px; height: 260px;">
+                    <!-- Radar Background -->
+                    <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                      <!-- Grid circles -->
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                      <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                      <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                      <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                      <!-- Axes -->
+                      <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                      <line x1="24" y1="56" x2="176" y2="144" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                      <line x1="24" y1="144" x2="176" y2="56" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                      <!-- Risk polygon (Product=56%, Activity=100%, Occupation=50%, Country=25%, PEP=75%, Source=62%) -->
+                      <polygon points="100,55 161,67 160,131 100,120 45,128 44,64" fill="rgba(244,67,54,0.15)" stroke="#F44336" stroke-width="2"/>
+                      <!-- Data points -->
+                      <circle cx="100" cy="55" r="4" fill="#F44336"/>
+                      <circle cx="161" cy="67" r="4" fill="#F44336"/>
+                      <circle cx="160" cy="131" r="4" fill="#F44336"/>
+                      <circle cx="100" cy="120" r="4" fill="#F44336"/>
+                      <circle cx="45" cy="128" r="4" fill="#F44336"/>
+                      <circle cx="44" cy="64" r="4" fill="#F44336"/>
+                      <!-- Labels -->
+                      <text x="100" y="12" text-anchor="middle" fill="var(--text-secondary)" font-size="9" font-weight="600">PRODUCT</text>
+                      <text x="190" y="58" text-anchor="start" fill="var(--text-secondary)" font-size="9" font-weight="600">ACTIVITY</text>
+                      <text x="190" y="148" text-anchor="start" fill="var(--text-secondary)" font-size="9" font-weight="600">OCCUPATION</text>
+                      <text x="100" y="198" text-anchor="middle" fill="var(--text-secondary)" font-size="9" font-weight="600">COUNTRY</text>
+                      <text x="10" y="148" text-anchor="start" fill="var(--text-secondary)" font-size="9" font-weight="600">PEP</text>
+                      <text x="10" y="58" text-anchor="start" fill="var(--text-secondary)" font-size="9" font-weight="600">SOURCE</text>
+                    </svg>
+                  </div>
+                  <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Multi-dimensional risk profile visualization</div>
+                </div>
+                <!-- Risk Dimension Details -->
+                <div>
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Product Risk</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #FF9800;">90 / MEDIUM</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px;"><div style="width: 56%; height: 100%; background: linear-gradient(90deg, #FFB300, #FF9800); border-radius: 3px;"></div></div>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Activity Risk</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #F44336;">160 / HIGH ⭐</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px;"><div style="width: 100%; height: 100%; background: linear-gradient(90deg, #FF5722, #F44336); border-radius: 3px;"></div></div>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Occupation Risk</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #FF9800;">80 / MEDIUM</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px;"><div style="width: 50%; height: 100%; background: linear-gradient(90deg, #FFB300, #FF9800); border-radius: 3px;"></div></div>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Country Risk</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #4CAF50;">40 / LOW</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px;"><div style="width: 25%; height: 100%; background: linear-gradient(90deg, #66BB6A, #4CAF50); border-radius: 3px;"></div></div>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">PEP Exposure</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #F44336;">Level 2 / HIGH</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px;"><div style="width: 75%; height: 100%; background: linear-gradient(90deg, #FF5722, #F44336); border-radius: 3px;"></div></div>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                      <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Source of Wealth</span>
+                      <span style="font-size: 12px; font-weight: 700; color: #FF9800;">Partially Verified</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px;"><div style="width: 62%; height: 100%; background: linear-gradient(90deg, #FFB300, #FF9800); border-radius: 3px;"></div></div>
+                  </div>
+                  <div style="margin-top: 16px; padding: 10px; background: rgba(244,67,54,0.06); border: 1px solid rgba(244,67,54,0.15); border-radius: 8px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #F44336;">⭐ Primary Risk Driver: ACTIVITY RISK</div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Monthly transaction volume of QAR 4.2M exceeds expected range by 285%. Recommend enhanced monitoring.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Behaviour Comparison Engine -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">📊 Financial Behaviour Comparison Engine</h2>
+              <span style="font-size: 10px; padding: 3px 8px; background: rgba(255,152,0,0.1); color: #FF9800; border-radius: 8px;">⚠️ DEVIATION DETECTED</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Expected (EDD Form)</th>
+                    <th>Actual (T24 12M)</th>
+                    <th>Deviation</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight: 600;">Monthly Income</td>
+                    <td>QAR 450,000</td>
+                    <td>QAR 485,000</td>
+                    <td style="color: #4CAF50;">+7.8% ↑</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Normal</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Monthly Credits</td>
+                    <td>QAR 500,000</td>
+                    <td>QAR 1,850,000</td>
+                    <td style="color: #F44336; font-weight: 700;">+270% ↑</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(244,67,54,0.15); color: #F44336;">🔴 Alert</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Monthly Debits</td>
+                    <td>QAR 400,000</td>
+                    <td>QAR 1,720,000</td>
+                    <td style="color: #F44336; font-weight: 700;">+330% ↑</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(244,67,54,0.15); color: #F44336;">🔴 Alert</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Cash Deposits</td>
+                    <td>QAR 0</td>
+                    <td>QAR 125,000</td>
+                    <td style="color: #FF9800; font-weight: 700;">Unexpected</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(255,152,0,0.15); color: #FF9800;">⚠️ Review</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">International Transfers</td>
+                    <td>QAR 200,000</td>
+                    <td>QAR 680,000</td>
+                    <td style="color: #F44336; font-weight: 700;">+240% ↑</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(244,67,54,0.15); color: #F44336;">🔴 Alert</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Avg Balance</td>
+                    <td>QAR 2,500,000</td>
+                    <td>QAR 3,200,000</td>
+                    <td style="color: #4CAF50;">+28% ↑</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Normal</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Counter-Parties</td>
+                    <td>5-10 regular</td>
+                    <td>27 unique (12M)</td>
+                    <td style="color: #FF9800; font-weight: 700;">+170% ↑</td>
+                    <td><span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(255,152,0,0.15); color: #FF9800;">⚠️ Review</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="padding: 16px 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                  <div style="padding: 12px; background: rgba(244,67,54,0.06); border: 1px solid rgba(244,67,54,0.15); border-radius: 10px; text-align: center;">
+                    <div style="font-size: 20px; font-weight: 800; color: #F44336;">3</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Red Flag Alerts</div>
+                  </div>
+                  <div style="padding: 12px; background: rgba(255,152,0,0.06); border: 1px solid rgba(255,152,0,0.15); border-radius: 10px; text-align: center;">
+                    <div style="font-size: 20px; font-weight: 800; color: #FF9800;">2</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Yellow Reviews</div>
+                  </div>
+                  <div style="padding: 12px; background: rgba(76,175,80,0.06); border: 1px solid rgba(76,175,80,0.15); border-radius: 10px; text-align: center;">
+                    <div style="font-size: 20px; font-weight: 800; color: #4CAF50;">2</div>
+                    <div style="font-size: 10px; color: var(--text-muted);">Normal Metrics</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: KYC Timeline (Bonus 2: KYC Data Change History) -->
+        <div id="tab-kyc-timeline" class="tab-content hidden">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">📋 KYC Data Change History Timeline</h2>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <span style="font-size: 10px; padding: 3px 8px; background: rgba(0,212,255,0.1); color: #00D4FF; border-radius: 8px;">Since Onboarding (2008)</span>
+                <select style="font-size: 11px; padding: 4px 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--text-secondary);">
+                  <option>All Changes</option>
+                  <option>Risk Rating Changes</option>
+                  <option>Personal Data Changes</option>
+                  <option>Document Updates</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <!-- Timeline Entry 1 -->
+              <div style="padding: 16px 20px; border-left: 3px solid #F44336; margin-left: 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div style="position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: #F44336; border: 2px solid #0d1b3e;"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Risk Rating Changed: MEDIUM → HIGH</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Mar 01, 2026 | Triggered by: Composite Score Threshold (Rule CR-005)</div>
+                  </div>
+                  <span style="padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; background: rgba(244,67,54,0.15); color: #F44336;">Critical Change</span>
+                </div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                  <div style="font-size: 11px; color: var(--text-secondary);">Previous Score: 220 → New Score: 370 | Reason: Transaction volume exceeded threshold by 285%. Auto-escalated to EDD.</div>
+                </div>
+              </div>
+              <!-- Timeline Entry 2 -->
+              <div style="padding: 16px 20px; border-left: 3px solid #FF9800; margin-left: 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div style="position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: #FF9800; border: 2px solid #0d1b3e;"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Occupation Updated: Consultant → Senior Business Consultant</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Jan 15, 2026 | Updated by: Customer via Branch Visit</div>
+                  </div>
+                  <span style="padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; background: rgba(255,152,0,0.15); color: #FF9800;">Data Change</span>
+                </div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                  <div style="font-size: 11px; color: var(--text-secondary);">T24 Field: OCCUPATION | CDD verified supporting documents (employment letter). OCCP risk score recalculated: 75 → 80.</div>
+                </div>
+              </div>
+              <!-- Timeline Entry 3 -->
+              <div style="padding: 16px 20px; border-left: 3px solid #4CAF50; margin-left: 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div style="position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: #4CAF50; border: 2px solid #0d1b3e;"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">KYC Periodic Review Completed</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Sep 20, 2025 | Reviewed by: Sara Al-Thani (CDD Officer)</div>
+                  </div>
+                  <span style="padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; background: rgba(76,175,80,0.15); color: #4CAF50;">Review</span>
+                </div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                  <div style="font-size: 11px; color: var(--text-secondary);">Annual KYC review completed. All documents valid. Risk assessment: MEDIUM (score 220). No adverse findings. Next review: Sep 2026.</div>
+                </div>
+              </div>
+              <!-- Timeline Entry 4 -->
+              <div style="padding: 16px 20px; border-left: 3px solid #00D4FF; margin-left: 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div style="position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: #00D4FF; border: 2px solid #0d1b3e;"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">PEP Status Flagged: Level 2</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Jun 10, 2024 | Detected by: QCB KYC API (Auto Screen)</div>
+                  </div>
+                  <span style="padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; background: rgba(0,212,255,0.15); color: #00D4FF;">System Alert</span>
+                </div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                  <div style="font-size: 11px; color: var(--text-secondary);">Customer identified as Related PEP (father is former Cabinet member). EDD trigger activated. COUNTRY_RISK_WEIGHT adjusted to 1.5x. Classification Rule CR-001 applied.</div>
+                </div>
+              </div>
+              <!-- Timeline Entry 5 -->
+              <div style="padding: 16px 20px; border-left: 3px solid #9C27B0; margin-left: 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div style="position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: #9C27B0; border: 2px solid #0d1b3e;"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Address Updated</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Mar 05, 2024 | Updated by: RM (Mohammed Al-Sulaiti) via T24</div>
+                  </div>
+                  <span style="padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; background: rgba(156,39,176,0.15); color: #9C27B0;">Data Change</span>
+                </div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                  <div style="font-size: 11px; color: var(--text-secondary);">Previous: Al Sadd Area, Doha → New: West Bay, Tower 45, Floor 22, Doha, Qatar. Supporting: Utility bill (QF-2024-0234). Verified by CDD.</div>
+                </div>
+              </div>
+              <!-- Timeline Entry 6: Onboarding -->
+              <div style="padding: 16px 20px; border-left: 3px solid #D4AF37; margin-left: 20px; position: relative;">
+                <div style="position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; border-radius: 50%; background: #D4AF37; border: 2px solid #0d1b3e;"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Customer Onboarded</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Nov 12, 2008 | Channel: Branch (Pearl Branch, Doha)</div>
+                  </div>
+                  <span style="padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; background: rgba(212,175,55,0.15); color: #D4AF37;">Onboarding</span>
+                </div>
+                <div style="margin-top: 8px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                  <div style="font-size: 11px; color: var(--text-secondary);">Initial KYC completed. Segment: Mass Banking. Risk Rating: LOW (Score: 85). Products: Current Account, Savings Account. ID: QID 27465839284 verified.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content: T24 Data Sync -->
+        <div id="tab-t24-sync" class="tab-content hidden">
+          <!-- Post-EDD T24 Sync Scenarios -->
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <h2 class="card-title">🔄 Post-EDD T24 Data Synchronization</h2>
+              <span style="font-size: 10px; padding: 3px 8px; background: rgba(76,175,80,0.1); color: #4CAF50; border-radius: 8px;">3 Sync Scenarios</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <!-- Scenario 1: No Change -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                  <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(76,175,80,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px;">✅</div>
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Scenario 1: No Data Change</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">EDD confirms existing T24 data is accurate</div>
+                  </div>
+                  <span style="margin-left: auto; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(76,175,80,0.15); color: #4CAF50;">Auto-Sync</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-left: 48px;">
+                  <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">ACTION</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Risk score + review date updated in T24. No customer notification required.</div>
+                  </div>
+                  <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">T24 FIELDS UPDATED</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">RISK.SCORE, LAST.REVIEW.DATE, NEXT.REVIEW.DATE, EDD.STATUS</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scenario 2: Data Modified -->
+              <div style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                  <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(255,152,0,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px;">📝</div>
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Scenario 2: Customer Data Modified</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">EDD reveals updated customer information</div>
+                  </div>
+                  <span style="margin-left: auto; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(255,152,0,0.15); color: #FF9800;">Requires Confirmation</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-left: 48px;">
+                  <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">ACTION</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Generate customer confirmation form showing previous vs new data. Customer must acknowledge changes.</div>
+                  </div>
+                  <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">T24 FIELDS UPDATED</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">OCCUPATION, EMPLOYER, INCOME.RANGE, SOURCE.OF.WEALTH + Scenario 1 fields</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Scenario 3: Additional Data -->
+              <div style="padding: 16px 20px;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                  <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(0,212,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 18px;">➕</div>
+                  <div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Scenario 3: Additional Data Obtained</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">EDD obtains new customer information not in T24</div>
+                  </div>
+                  <span style="margin-left: auto; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; background: rgba(0,212,255,0.15); color: #00D4FF;">New Data Entry</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-left: 48px;">
+                  <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">ACTION</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">New fields populated in T24 customer record. May trigger re-evaluation of risk score and product eligibility.</div>
+                  </div>
+                  <div style="padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">T24 FIELDS UPDATED</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Any new fields + customer_confirmation_required flag + full Scenario 1 & 2 fields</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Confirmation Panel -->
+          <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+              <h2 class="card-title">✅ Customer Confirmation — Data Changes</h2>
+              <span style="font-size: 10px; padding: 3px 8px; background: rgba(255,152,0,0.1); color: #FF9800; border-radius: 8px;">⏳ Pending Confirmation</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <div style="padding: 14px 20px; font-size: 11px; color: var(--text-muted); background: rgba(255,152,0,0.04); border-bottom: 1px solid rgba(255,255,255,0.05);">
+                The following data changes require customer acknowledgment before T24 sync. Customer will receive a confirmation form via the selected communication channel.
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Previous Value (T24)</th>
+                    <th>New Value (EDD)</th>
+                    <th>Confirmed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight: 600;">Occupation</td>
+                    <td style="color: #FF9800;">Consultant</td>
+                    <td style="color: #00D4FF;">Senior Business Consultant</td>
+                    <td><span style="padding: 2px 6px; border-radius: 6px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">✓ Confirmed</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Employer</td>
+                    <td style="color: #FF9800;">Al-Kuwari Holdings</td>
+                    <td style="color: #00D4FF;">Al-Kuwari Trading Group</td>
+                    <td><span style="padding: 2px 6px; border-radius: 6px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">✓ Confirmed</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Monthly Income</td>
+                    <td style="color: #FF9800;">QAR 350,000</td>
+                    <td style="color: #00D4FF;">QAR 450,000</td>
+                    <td><span style="padding: 2px 6px; border-radius: 6px; font-size: 10px; background: rgba(255,152,0,0.15); color: #FF9800;">⏳ Pending</span></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight: 600;">Source of Wealth (New)</td>
+                    <td style="color: var(--text-muted);">Not recorded</td>
+                    <td style="color: #00D4FF;">Employment + Real Estate Investments</td>
+                    <td><span style="padding: 2px 6px; border-radius: 6px; font-size: 10px; background: rgba(255,152,0,0.15); color: #FF9800;">⏳ Pending</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="padding: 14px 20px; display: flex; gap: 8px; justify-content: flex-end;">
+                <button class="btn btn-sm" style="background: rgba(0,212,255,0.1); color: #00D4FF;" onclick="alert('Customer confirmation form generated. Sending via registered email + SMS.')">📧 Send Confirmation Form</button>
+                <button class="btn btn-primary btn-sm" onclick="alert('All confirmed fields synced to T24. Pending fields awaiting customer response.')">🔄 Sync Confirmed to T24</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto Case Reopening -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">🔄 Auto Case Reopening Rules</h2>
+              <span style="font-size: 10px; padding: 3px 8px; background: rgba(156,39,176,0.1); color: #9C27B0; border-radius: 8px;">Smart Triggers</span>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <div style="padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #4CAF50;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Risk Score Increase > 20%</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Auto-reopen case if post-review risk score increases by more than 20% within 90 days</div>
+                </div>
+                <span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span>
+              </div>
+              <div style="padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #4CAF50;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">PEP Status Change</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Auto-reopen if customer's PEP status changes (detected via QCB KYC API screening)</div>
+                </div>
+                <span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span>
+              </div>
+              <div style="padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #4CAF50;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Nationality Added to High-Risk List</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Auto-reopen if customer's nationality appears on updated High Risk Nationalities List</div>
+                </div>
+                <span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span>
+              </div>
+              <div style="padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #4CAF50;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Transaction Anomaly Detection</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Auto-reopen if post-EDD transaction patterns deviate >200% from declared expected activity</div>
+                </div>
+                <span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(76,175,80,0.15); color: #4CAF50;">Active</span>
+              </div>
+              <div style="padding: 14px 20px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #FF9800;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Periodic Review Cycle</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Auto-trigger EDD review based on risk level: HIGH=6 months, MEDIUM=12 months, LOW=24 months</div>
+                </div>
+                <span style="padding: 3px 8px; border-radius: 8px; font-size: 10px; background: rgba(255,152,0,0.15); color: #FF9800;">Scheduled</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
   <!-- Change Management Feedback Button -->
   <div id="cmFeedbackBtn" onclick="document.getElementById('cmFeedbackModal').style.display='flex'" style="position:fixed;bottom:24px;right:24px;width:54px;height:54px;background:linear-gradient(135deg,#D4AF37,#b8962e);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(212,175,55,0.4);z-index:9999;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
