@@ -6,7 +6,9 @@
   <meta name="description" content="Secure Governance Gateway — Digital Compliance Investigation Workspace">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="theme-color" content="#0a1f3d">
-  <title>Secure Governance Gateway</title>
+  <meta name="accessibility" content="wcag2.1-aa">
+  <meta name="lang" content="en-GB,ar-QA">
+  <title>Secure Governance Gateway - EDD Platform</title>
   
   <style>
     /* ═══════════════════════════════════════════════════════════════ */
@@ -1349,6 +1351,200 @@
       .ribbon-track { animation: none; }
     }
 
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ACCESSIBILITY SUPPORT - WCAG 2.1 AA COMPLIANCE */
+    /* ═══════════════════════════════════════════════════════════════ */
+
+    /* High Contrast Mode */
+    @media (prefers-contrast: more) {
+      :root {
+        --maroon: #3D0619;
+        --cyan: #0088CC;
+      }
+      button, input, select, textarea {
+        border-width: 2px;
+      }
+      .hero-title {
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      }
+    }
+
+    /* Large Text Mode */
+    @media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+      html.font-large { font-size: 18px; }
+      html.font-large .hero-title { font-size: 72px; }
+      html.font-large .form-label { font-size: 14px; }
+      html.font-large .btn-primary { padding: 20px 32px; font-size: 15px; }
+    }
+
+    /* Focus visibility for keyboard navigation */
+    *:focus {
+      outline: 3px solid #00D4FF;
+      outline-offset: 2px;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    .role-button:focus-visible {
+      outline: 3px solid #00D4FF;
+      outline-offset: 2px;      
+    }
+
+    /* Skip to main content link */
+    .skip-to-main {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #5C0A28;
+      color: white;
+      padding: 8px 16px;
+      text-decoration: none;
+      z-index: 100;
+      border-radius: 0 0 4px 0;
+    }
+
+    .skip-to-main:focus {
+      top: 0;
+    }
+
+    /* Vision 2030 Badge */
+    .vision-2030-badge {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #5C0A28 0%, #8B1538 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 9px;
+      color: #00D4FF;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(92, 10, 40, 0.4);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      z-index: 50;
+      cursor: help;
+      transition: all 0.3s ease;
+    }
+
+    .vision-2030-badge:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 32px rgba(92, 10, 40, 0.6);
+    }
+
+    .vision-2030-badge-ar {
+      font-size: 10px;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .vision-2030-badge-en {
+      font-size: 7px;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+
+    .vision-2030-badge-tooltip {
+      position: absolute;
+      bottom: 110px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: #00D4FF;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 51;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .vision-2030-badge:hover .vision-2030-badge-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Accessibility Controls Toggle */
+    .accessibility-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 40;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: rgba(10, 31, 61, 0.9);
+      backdrop-filter: blur(20px);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .accessibility-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      background: rgba(0, 212, 255, 0.08);
+      color: #00D4FF;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      title: "Accessibility Control";
+    }
+
+    .accessibility-btn:hover,
+    .accessibility-btn.active {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: #00D4FF;
+    }
+
+    .accessibility-btn:focus {
+      outline: 2px solid #00D4FF;
+      outline-offset: 2px;
+    }
+
+    /* Dyslexia-friendly font */
+    html.dyslexia-font {
+      font-family: 'OpenDyslexic', 'Trebuchet MS', Arial, sans-serif;
+    }
+
+    /* Reduced color palette for color-blind users */
+    html.colorblind-mode {
+      --maroon: #0072B2;
+      --cyan: #E69F00;
+    }
+
+    @media (max-width: 480px) {
+      .accessibility-controls {
+        top: 12px;
+        right: 12px;
+        padding: 8px;
+      }
+      .accessibility-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+      }
+      .vision-2030-badge {
+        width: 80px;
+        height: 80px;
+        bottom: 12px;
+        right: 12px;
+      }
+    }
+
     /* Enhanced keyboard navigation */
     button:focus-visible, 
     input:focus-visible, 
@@ -1555,6 +1751,30 @@
   </style>
 </head>
 <body>
+  <!-- Skip to main content link (for keyboard users) -->
+  <a href="#preAuthWrapper" class="skip-to-main">Skip to main content</a>
+
+  <!-- Accessibility Controls -->
+  <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
+    <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size" aria-label="Increase text size for better readability">
+      A+
+    </button>
+    <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode" aria-label="Enable high contrast mode">
+      ◐
+    </button>
+    <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font" aria-label="Enable dyslexia-friendly font">
+      d
+    </button>
+    <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode" aria-label="Enable color-blind friendly mode">
+      ◉
+    </button>
+  </div>
+
+  <!-- Vision 2030 Badge -->
+  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030 - QIB Financial Crime Investigation Platform">
+    <div class="vision-2030-badge-ar">رؤية قطر<br>الوطنية<br>2030</div>
+    <div class="vision-2030-badge-tooltip">Qatar Vision 2030 - QIB Financial Crime Investigation Platform</div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- PARTICLES.JS CONTAINER - INTERACTIVE NETWORK BACKGROUND -->
@@ -2266,6 +2486,169 @@
         }
       },
       retina_detect: true
+    });
+  </script>
+
+  <!-- Accessibility Controls Script -->
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // ACCESSIBILITY CONTROLS - WCAG 2.1 AA COMPLIANCE
+    // ═══════════════════════════════════════════════════════════════
+
+    const accessibilityControls = {
+      // Load saved preferences from localStorage
+      init() {
+        const savedPreferences = JSON.parse(localStorage.getItem('a11yPreferences') || '{}');
+        
+        if (savedPreferences.fontSize) this.setFontSize(savedPreferences.fontSize);
+        if (savedPreferences.highContrast) this.setHighContrast(true);
+        if (savedPreferences.dyslexiaFont) this.setDyslexiaFont(true);
+        if (savedPreferences.colorblindMode) this.setColorblindMode(true);
+
+        this.attachEventListeners();
+      },
+
+      // Increase/Decrease font size
+      setFontSize(size = 'large') {
+        const html = document.documentElement;
+        html.classList.remove('font-large');
+        
+        if (size === 'large') {
+          html.classList.add('font-large');
+          document.getElementById('btn-text-size').classList.add('active');
+        } else {
+          document.getElementById('btn-text-size').classList.remove('active');
+        }
+
+        localStorage.setItem('a11yPreferences', JSON.stringify({
+          ...JSON.parse(localStorage.getItem('a11yPreferences') || '{}'),
+          fontSize: size === 'large' ? 'large' : 'normal'
+        }));
+      },
+
+      // High contrast mode
+      setHighContrast(enable = true) {
+        const html = document.documentElement;
+        const btn = document.getElementById('btn-contrast');
+
+        if (enable) {
+          html.style.setProperty('--prefers-contrast', 'more');
+          // Force high contrast by injecting media query effect
+          const style = document.createElement('style');
+          style.textContent = '@media (prefers-contrast: more) { :root { --maroon: #3D0619; --cyan: #0088CC; } }';
+          document.head.appendChild(style);
+          btn.classList.add('active');
+        } else {
+          html.style.removeProperty('--prefers-contrast');
+          btn.classList.remove('active');
+        }
+
+        localStorage.setItem('a11yPreferences', JSON.stringify({
+          ...JSON.parse(localStorage.getItem('a11yPreferences') || '{}'),
+          highContrast: enable
+        }));
+      },
+
+      // Dyslexia-friendly font
+      setDyslexiaFont(enable = true) {
+        const html = document.documentElement;
+        const btn = document.getElementById('btn-dyslexia');
+
+        if (enable) {
+          html.classList.add('dyslexia-font');
+          btn.classList.add('active');
+          // Load OpenDyslexic font
+          if (!document.querySelector('link[href*="OpenDyslexic"]')) {
+            const link = document.createElement('link');
+            link.href = 'https://fonts.googleapis.com/css2?family=Open+Dyslexic:wght@400;700&display=swap';
+            link.rel = 'stylesheet';
+            document.head.appendChild(link);
+          }
+        } else {
+          html.classList.remove('dyslexia-font');
+          btn.classList.remove('active');
+        }
+
+        localStorage.setItem('a11yPreferences', JSON.stringify({
+          ...JSON.parse(localStorage.getItem('a11yPreferences') || '{}'),
+          dyslexiaFont: enable
+        }));
+      },
+
+      // Color-blind friendly mode
+      setColorblindMode(enable = true) {
+        const html = document.documentElement;
+        const btn = document.getElementById('btn-colorblind');
+
+        if (enable) {
+          html.classList.add('colorblind-mode');
+          btn.classList.add('active');
+        } else {
+          html.classList.remove('colorblind-mode');
+          btn.classList.remove('active');
+        }
+
+        localStorage.setItem('a11yPreferences', JSON.stringify({
+          ...JSON.parse(localStorage.getItem('a11yPreferences') || '{}'),
+          colorblindMode: enable
+        }));
+      },
+
+      // Attach event listeners
+      attachEventListeners() {
+        const btnTextSize = document.getElementById('btn-text-size');
+        const btnContrast = document.getElementById('btn-contrast');
+        const btnDyslexia = document.getElementById('btn-dyslexia');
+        const btnColorblind = document.getElementById('btn-colorblind');
+
+        if (btnTextSize) {
+          btnTextSize.addEventListener('click', () => {
+            const isActive = btnTextSize.classList.contains('active');
+            this.setFontSize(isActive ? 'normal' : 'large');
+          });
+        }
+
+        if (btnContrast) {
+          btnContrast.addEventListener('click', () => {
+            const isActive = btnContrast.classList.contains('active');
+            this.setHighContrast(!isActive);
+          });
+        }
+
+        if (btnDyslexia) {
+          btnDyslexia.addEventListener('click', () => {
+            const isActive = btnDyslexia.classList.contains('active');
+            this.setDyslexiaFont(!isActive);
+          });
+        }
+
+        if (btnColorblind) {
+          btnColorblind.addEventListener('click', () => {
+            const isActive = btnColorblind.classList.contains('active');
+            this.setColorblindMode(!isActive);
+          });
+        }
+      }
+    };
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      accessibilityControls.init();
+    });
+
+    // Keyboard navigation enhancements
+    document.addEventListener('keydown', (e) => {
+      // Alt + A: Show accessibility options
+      if (e.altKey && e.key === 'a') {
+        e.preventDefault();
+        document.getElementById('btn-text-size')?.focus();
+      }
+      
+      // Alt + H: Help / Voice guide (future feature)
+      if (e.altKey && e.key === 'h') {
+        e.preventDefault();
+        console.log('Help requested - Voice guide would start here');
+      }
     });
   </script>
 
