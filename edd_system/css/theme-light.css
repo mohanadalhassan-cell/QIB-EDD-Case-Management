@@ -1,0 +1,518 @@
+/* ═══════════════════════════════════════════════════════════════
+   Light Mode Theme — White Base with Navy Blue & Gold Accents
+   ═══════════════════════════════════════════════════════════════ */
+
+body.light-mode {
+  --bg-deep: #ffffff;
+  --bg-mid: #f5f7fa;
+  --bg-dark: #eff2f7;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f9fafb;
+  
+  /* Primary & Accent */
+  --primary: #1F3A5F;
+  --accent: #1F3A5F;
+  --accent-dim: rgba(31, 58, 95, 0.12);
+  --accent-glow: rgba(31, 58, 95, 0.25);
+  
+  /* Glass Effect */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-bg-solid: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(31, 58, 95, 0.12);
+  --glass-border-hover: rgba(212, 175, 55, 0.25);
+  
+  /* Text */
+  --text: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-secondary: rgba(0, 0, 0, 0.7);
+  --text-muted: rgba(0, 0, 0, 0.45);
+  
+  /* Status Colors */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --info: #1F3A5F;
+  --pending: #f97316;
+  
+  /* Risk Colors */
+  --risk-high: #ef4444;
+  --risk-medium: #f97316;
+  --risk-low: #10b981;
+}
+
+body.light-mode .ambient-bg {
+  background:
+    radial-gradient(ellipse 120% 80% at 30% 20%, rgba(31, 58, 95, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 60% at 70% 80%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 100% at 50% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f5f7fa 40%, #eff2f7 70%, #ffffff 100%);
+}
+
+body.light-mode .gradient-mesh {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(31, 58, 95, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 40%);
+}
+
+body.light-mode .sidebar {
+  background: var(--glass-bg-solid);
+  border-right: 1px solid rgba(31, 58, 95, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .sidebar-brand {
+  border-bottom: 1px solid rgba(31, 58, 95, 0.15);
+}
+
+body.light-mode .sidebar-logo {
+  background: linear-gradient(135deg, #1F3A5F, #D4AF37);
+  box-shadow: 0 4px 20px rgba(31, 58, 95, 0.2);
+}
+
+body.light-mode .sidebar-title h1 {
+  background: linear-gradient(135deg, #1F3A5F, #D4AF37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.light-mode .nav-item:hover {
+  background: rgba(31, 58, 95, 0.08);
+  color: #1F3A5F;
+}
+
+body.light-mode .nav-item.active {
+  background: rgba(212, 175, 55, 0.15);
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+body.light-mode .sidebar-user {
+  border-top: 1px solid rgba(31, 58, 95, 0.15);
+}
+
+body.light-mode .user-avatar {
+  background: linear-gradient(135deg, #1F3A5F, #D4AF37);
+  box-shadow: 0 2px 8px rgba(31, 58, 95, 0.15);
+}
+
+/* Header */
+body.light-mode .header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(31, 58, 95, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+body.light-mode .page-title {
+  color: #1F3A5F;
+}
+
+body.light-mode .breadcrumb {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+body.light-mode .header-btn {
+  color: #1F3A5F;
+}
+
+body.light-mode .header-btn:hover {
+  background: rgba(31, 58, 95, 0.08);
+}
+
+/* Cards & Content */
+body.light-mode .metric-card,
+body.light-mode .card {
+  background: #ffffff;
+  border: 1px solid rgba(31, 58, 95, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .metric-card:hover,
+body.light-mode .card:hover {
+  box-shadow: 0 4px 16px rgba(31, 58, 95, 0.1);
+}
+
+/* Buttons */
+body.light-mode .btn {
+  border: 1px solid rgba(31, 58, 95, 0.15);
+  color: #1F3A5F;
+}
+
+body.light-mode .btn:hover {
+  background: rgba(31, 58, 95, 0.08);
+  border-color: rgba(31, 58, 95, 0.25);
+}
+
+body.light-mode .btn-primary {
+  background: #1F3A5F;
+  color: white;
+  border-color: #1F3A5F;
+}
+
+body.light-mode .btn-primary:hover {
+  background: #2d5080;
+  border-color: #2d5080;
+}
+
+body.light-mode .btn-accent {
+  background: rgba(212, 175, 55, 0.15);
+  color: #D4AF37;
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+body.light-mode .btn-accent:hover {
+  background: rgba(212, 175, 55, 0.25);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+body.light-mode .btn-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+body.light-mode .btn-info {
+  background: rgba(31, 58, 95, 0.15);
+  color: #1F3A5F;
+  border-color: rgba(31, 58, 95, 0.3);
+}
+
+/* Input Fields */
+body.light-mode input,
+body.light-mode textarea,
+body.light-mode select {
+  background: #ffffff;
+  color: #1a1a1a;
+  border: 1px solid rgba(31, 58, 95, 0.15);
+}
+
+body.light-mode input:focus,
+body.light-mode textarea:focus,
+body.light-mode select:focus {
+  border-color: #1F3A5F;
+  background: rgba(31, 58, 95, 0.02);
+}
+
+/* Tables */
+body.light-mode table {
+  background: #ffffff;
+  border: 1px solid rgba(31, 58, 95, 0.1);
+}
+
+body.light-mode tbody tr:hover {
+  background: rgba(31, 58, 95, 0.04);
+}
+
+body.light-mode thead {
+  background: rgba(31, 58, 95, 0.08);
+  border-bottom: 2px solid rgba(31, 58, 95, 0.15);
+}
+
+body.light-mode th {
+  color: #1F3A5F;
+  font-weight: 600;
+}
+
+/* Modals */
+body.light-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+body.light-mode .modal-content {
+  background: #ffffff;
+  border: 1px solid rgba(31, 58, 95, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--glass-border-hover);
+}
+
+/* Light Mode Specific Badge Colors */
+body.light-mode .nav-badge {
+  background: #D4AF37;
+  color: #1F3A5F;
+}
+
+body.light-mode .nav-badge.warning {
+  background: #f59e0b;
+  color: white;
+}
+
+body.light-mode .nav-badge.danger {
+  background: #ef4444;
+  color: white;
+}
+
+/* Risk Impact Cards in Light Mode */
+body.light-mode .high-risk-card {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+body.light-mode .medium-risk-card {
+  background: rgba(249, 115, 22, 0.05);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+body.light-mode .low-risk-card {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Dropdown & Menus */
+body.light-mode .dropdown-menu,
+body.light-mode .context-menu {
+  background: #ffffff;
+  border: 1px solid rgba(31, 58, 95, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .dropdown-item:hover {
+  background: rgba(31, 58, 95, 0.08);
+}
+
+/* Navigation Highlights */
+body.light-mode a:hover {
+  color: #D4AF37;
+}
+
+/* Scrollbar Style */
+body.light-mode::-webkit-scrollbar {
+  width: 8px;
+  background: #f5f7fa;
+}
+
+body.light-mode::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.light-mode::-webkit-scrollbar-thumb {
+  background: rgba(31, 58, 95, 0.3);
+  border-radius: 4px;
+}
+
+body.light-mode::-webkit-scrollbar-thumb:hover {
+  background: rgba(31, 58, 95, 0.5);
+}
+
+/* Sidebar Scrollbar */
+body.light-mode .sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+body.light-mode .sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.light-mode .sidebar::-webkit-scrollbar-thumb {
+  background: rgba(31, 58, 95, 0.2);
+  border-radius: 3px;
+}
+
+body.light-mode .sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(31, 58, 95, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STRICT TEXT CONTRAST RULES FOR LIGHT MODE
+   Forces dark text on light backgrounds for WCAG AAA compliance
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Force dark text on all elements in light mode */
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode h5,
+body.light-mode h6,
+body.light-mode p,
+body.light-mode span,
+body.light-mode div,
+body.light-mode a,
+body.light-mode li,
+body.light-mode td,
+body.light-mode th {
+  color: #1a1a1a !important;
+}
+
+/* Override light rgba whites */
+body.light-mode [style*="color: rgba(255,255,255"] {
+  color: #2d3748 !important;
+}
+
+body.light-mode [style*="color: #fff"] {
+  color: #1a1a1a !important;
+}
+
+body.light-mode [style*="color: white"] {
+  color: #1a1a1a !important;
+}
+
+/* Strong override for rgba light grays */
+body.light-mode {
+  --text-light: #2d3748 !important;
+  --text-lighter: #4a5568 !important;
+  --text-lightest: #718096 !important;
+}
+
+/* Override inline styles with light text */
+body.light-mode *[style*="rgba(255,255,255,"] {
+  color: #2d3748 !important;
+}
+
+body.light-mode *[style*="rgba(255,255,255,0.7"] {
+  color: #2d3748 !important;
+}
+
+body.light-mode *[style*="rgba(255,255,255,0.6"] {
+  color: #2d3748 !important;
+}
+
+body.light-mode *[style*="rgba(255,255,255,0.5"] {
+  color: #4a5568 !important;
+}
+
+body.light-mode *[style*="rgba(255,255,255,0.4"] {
+  color: #718096 !important;
+}
+
+/* Dashboard header text */
+body.light-mode .page-content h1 {
+  color: #1F3A5F !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .page-content h2 {
+  color: #1F3A5F !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode .page-content h3 {
+  color: #1F3A5F !important;
+  font-weight: 600 !important;
+}
+
+/* Paragraph text */
+body.light-mode .page-content p {
+  color: #2d3748 !important;
+  font-weight: 400 !important;
+}
+
+/* Card titles and descriptions */
+body.light-mode .card h1,
+body.light-mode .card h2,
+body.light-mode .card h3 {
+  color: #1F3A5F !important;
+}
+
+body.light-mode .card p {
+  color: #2d3748 !important;
+}
+
+/* Table text */
+body.light-mode table th {
+  color: #1F3A5F !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode table td {
+  color: #2d3748 !important;
+}
+
+/* Links in light mode */
+body.light-mode a {
+  color: #1F3A5F !important;
+}
+
+body.light-mode a:hover {
+  color: #D4AF37 !important;
+}
+
+/* Metric card text */
+body.light-mode [style*="display: flex"][style*="grid"] {
+  color: #1a1a1a !important;
+}
+
+/* Statistics and numbers */
+body.light-mode [style*="font-size: 28px"],
+body.light-mode [style*="font-size: 24px"],
+body.light-mode [style*="font-size: 20px"] {
+  color: #1F3A5F !important;
+  font-weight: 700 !important;
+}
+
+/* All text nodes with light backgrounds must have dark text */
+body.light-mode [style*="background: #fff"],
+body.light-mode [style*="background: white"],
+body.light-mode [style*="background: rgba(255, 255, 255"] {
+  color: #1a1a1a !important;
+}
+
+/* Ensure visibility of text on semi-transparent backgrounds */
+body.light-mode [style*="background: rgba"] {
+  color: #1a1a1a !important;
+}
+
+/* Lists */
+body.light-mode ul,
+body.light-mode ol {
+  color: #2d3748 !important;
+}
+
+body.light-mode li {
+  color: #2d3748 !important;
+}
+
+/* Emphasized text */
+body.light-mode strong,
+body.light-mode b {
+  color: #1F3A5F !important;
+  font-weight: 700 !important;
+}
+
+body.light-mode em,
+body.light-mode i {
+  color: #2d3748 !important;
+}
+
+/* Code blocks */
+body.light-mode code,
+body.light-mode pre {
+  background: #f5f7fa !important;
+  color: #1F3A5F !important;
+  border: 1px solid rgba(31, 58, 95, 0.2) !important;
+}
+
+/* Labels and form text */
+body.light-mode label {
+  color: #1F3A5F !important;
+  font-weight: 600 !important;
+}
+
+body.light-mode .form-text {
+  color: #2d3748 !important;
+}
+
+/* Hover states */
+body.light-mode *:hover {
+  color: inherit !important;
+}
