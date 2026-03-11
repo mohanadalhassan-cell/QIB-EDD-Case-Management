@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'EMP005': { name: 'Khalid Al-Dosari', password: 'demo123', department: 'Audit', allowedRoles: ['audit'] },
     'EMP006': { name: 'Admin User', password: 'demo123', department: 'IT', allowedRoles: ['it', 'audit', 'management'] },
     'RAAFAT': { name: 'Raafat Alrantisi', password: 'raafat2030', department: 'GCEO Office', allowedRoles: ['management', 'business', 'audit'] },
-    'ARSLAN': { name: 'Mr. Arslan', password: 'Arslan@2030', department: 'Head - Senior Management', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] },
+    'ARSLAN': { name: 'Operations Manager', password: 'Arslan@2030', department: 'WPS & Digital Back Office', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] },
     'DEMO': { name: 'Demo User', password: 'demo', department: 'All Access', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] }
   };
 

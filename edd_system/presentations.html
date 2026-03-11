@@ -782,8 +782,8 @@
       <div class="sidebar-user">
         <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
-          <div class="user-name" id="user-name">Mr. Arslan</div>
-          <div class="user-role" id="user-role">Head - Senior Management</div>
+          <div class="user-name" id="user-name">WPS & Digital Back Office</div>
+          <div class="user-role" id="user-role">Operations Management</div>
         </div>
       </div>
     </aside>
@@ -1340,6 +1340,121 @@
   <script src="js/enterprise_ui.js"></script>
   
   <script>
+    // Initialize presentations data if EnterpriseFeatures.presentations is not defined
+    if (typeof EnterpriseFeatures === 'undefined') {
+      window.EnterpriseFeatures = {};
+    }
+    
+    if (!EnterpriseFeatures.presentations) {
+      EnterpriseFeatures.presentations = {
+        comprehensive: {
+          title: 'Complete System Overview',
+          titleAr: 'نظرة عامة شاملة على النظام',
+          icon: '🏛️',
+          color: '#00D4FF',
+          duration: '25 min',
+          audience: 'All Staff',
+          slides: [
+            {
+              title: 'Complete System Overview',
+              titleAr: 'نظرة عامة شاملة على النظام',
+              subtitle: 'Simplify Governance Platform',
+              content: 'Comprehensive walkthrough of the EDD Case Management System including all departments, workflows, integrations, and governance requirements.'
+            },
+            { title: 'Dashboard & Navigation', titleAr: 'لوحة التحكم والملاحة', subtitle: 'System Entry Point', content: 'Master dashboard providing quick access to all modules, real-time case metrics, and governance overview.' },
+            { title: 'EDD Case Management', titleAr: 'إدارة حالات EDD', subtitle: 'Core Workflow', content: 'Complete case lifecycle from creation through approval, including document management and risk assessment.' },
+            { title: 'Business Team Workflow', titleAr: 'سير عمل فريق الأعمال', subtitle: 'Customer Onboarding', content: 'Business Makers and Checkers process for customer due diligence, document collection, and verification.' },
+            { title: 'CDD Operations', titleAr: 'عمليات CDD', subtitle: 'Enhanced Due Diligence', content: 'CDD Makers and Checkers process for additional risk assessment, beneficial ownership verification, and compliance checks.' },
+            { title: 'Compliance Oversight', titleAr: 'الإشراف على الامتثال', subtitle: 'Regulatory Management', content: 'Compliance Officer tools for escalation management, PEP review, sanctions screening, and regulatory reporting.' },
+            { title: 'Customer 360 View', titleAr: 'عرض العميل بزاوية 360', subtitle: 'Unified Customer Profile', content: 'Integrated customer information view combining core banking data, risk profiles, transaction monitoring, and regulatory status.' },
+            { title: 'Risk Management', titleAr: 'إدارة المخاطر', subtitle: 'Risk Analytics', content: 'Comprehensive risk assessment including CRP scores, transaction monitoring flags, behavioral analytics, and regulatory alerts.' },
+            { title: 'Reports & Analytics', titleAr: 'التقارير والتحليلات', subtitle: 'Data Intelligence', content: 'Executive dashboards, governance metrics, compliance reports, and performance analytics.' },
+            { title: 'Thank You', titleAr: 'شكراً لك', subtitle: 'Questions & Discussion', content: 'Thank you for reviewing the Simplify Governance Platform. We welcome your feedback and questions.' }
+          ]
+        },
+        business: {
+          title: 'Business Team Workflow',
+          titleAr: 'سير عمل فريق الأعمال',
+          icon: '🏦',
+          color: '#4CAF50',
+          duration: '20 min',
+          audience: 'Mass / Tamayuz / Private',
+          slides: [
+            { title: 'Business Team Workflow', titleAr: 'سير عمل فريق الأعمال', subtitle: 'Customer Onboarding Process', content: 'Complete workflow for Business Makers and Checkers in customer due diligence and verification.' },
+            { title: 'Case Creation', titleAr: 'إنشاء الحالة', subtitle: 'Initial Submission', content: 'Business Maker creates EDD case with customer information, documentation requirements, and initial risk assessment.' },
+            { title: 'Customer Contact', titleAr: 'الاتصال بالعميل', subtitle: 'Information Gathering', content: 'Structured customer interviews and document requests to verify identity, source of funds, and beneficial ownership.' },
+            { title: 'Document Collection', titleAr: 'جمع المستندات', subtitle: 'Evidence Gathering', content: 'Collection and upload of supporting documents: IDs, bank statements, business registration, beneficial ownership documentation.' },
+            { title: 'Initial Assessment', titleAr: 'التقييم الأولي', subtitle: 'Risk Profiling', content: 'Initial risk classification based on customer profile, transaction patterns, and document verification results.' },
+            { title: 'Checklist Validation', titleAr: 'التحقق من قائمة التحقق', subtitle: 'Quality Control', content: 'Business Checker reviews completeness, accuracy, and compliance with regulatory requirements before CDD escalation.' },
+            { title: 'Case Submission', titleAr: 'تقديم الحالة', subtitle: 'CDD Escalation', content: 'Approved case forwarded to CDD team for enhanced due diligence review and additional verification steps.' },
+            { title: 'Approval Workflow', titleAr: 'سير عمل الموافقات', subtitle: 'Sign-Off Process', content: 'Multi-level approvals ensuring governance compliance and management oversight at each stage.' },
+            { title: 'Documentation', titleAr: 'التوثيق', subtitle: 'Case Records', content: 'Complete audit trail recording all actions, approvals, decisions, and regulatory justifications.' },
+            { title: 'Thank You', titleAr: 'شكراً لك', subtitle: 'Questions & Discussion', content: 'Thank you for reviewing the Business Team Workflow. Contact your supervisor with any questions.' }
+          ]
+        },
+        cdd: {
+          title: 'CDD Operations Workflow',
+          titleAr: 'سير عمل عمليات CDD',
+          icon: '📋',
+          color: '#9C27B0',
+          duration: '20 min',
+          audience: 'CDD Team',
+          slides: [
+            { title: 'CDD Operations Workflow', titleAr: 'سير عمل عمليات CDD', subtitle: 'Enhanced Due Diligence Process', content: 'Comprehensive workflow for CDD Makers and Checkers in enhanced customer verification and compliance assessment.' },
+            { title: 'Case Reception', titleAr: 'استقبال الحالة', subtitle: 'CDD Queue', content: 'New EDD cases from Business team enter CDD queue for enhanced due diligence assessment and risk validation.' },
+            { title: 'Enhanced Assessment', titleAr: 'التقييم المحسّن', subtitle: 'Deep Dive Analysis', content: 'CDD Maker performs enhanced due diligence including beneficial ownership verification, source of funds validation, and PEP/sanctions screening.' },
+            { title: 'Additional Verification', titleAr: 'التحقق الإضافي', subtitle: 'Regulatory Checks', content: 'External system queries: sanctions lists, PEP databases, regulatory agencies, and transaction monitoring systems.' },
+            { title: 'Issue Resolution', titleAr: 'حل المشاكل', subtitle: 'Gap Management', content: 'Document gaps and compliance issues identified and resolved through customer contact and additional evidence gathering.' },
+            { title: 'Risk Assessment', titleAr: 'تقييم المخاطر', subtitle: 'Final Risk Rating', content: 'Final risk determination based on comprehensive data analysis, regulatory status, and behavioral assessment.' },
+            { title: 'Checker Review', titleAr: 'مراجعة المدقق', subtitle: 'Quality Assurance', content: 'CDD Checker validates completeness, accuracy, regulatory compliance, and appropriateness of risk classification.' },
+            { title: 'Compliance Decision', titleAr: 'قرار الامتثال', subtitle: 'Approval or Escalation', content: 'Case approved, referred to Compliance for escalation, or rejected based on risk assessment findings.' },
+            { title: 'T24 Integration', titleAr: 'تكامل T24', subtitle: 'Core Banking Update', content: 'Approved customer information synced to T24 core banking system with compliance flags and monitoring triggers.' },
+            { title: 'Thank You', titleAr: 'شكراً لك', subtitle: 'Questions & Discussion', content: 'Thank you for reviewing the CDD Operations Workflow. Questions can be directed to the CDD manager.' }
+          ]
+        },
+        compliance: {
+          title: 'Compliance Team Workflow',
+          titleAr: 'سير عمل فريق الامتثال',
+          icon: '⚖️',
+          color: '#FF9800',
+          duration: '20 min',
+          audience: 'Compliance',
+          slides: [
+            { title: 'Compliance Team Workflow', titleAr: 'سير عمل فريق الامتثال', subtitle: 'Regulatory Oversight Process', content: 'Complete workflow for Compliance Officers in escalation management, regulatory controls, and compliance enforcement.' },
+            { title: 'Escalation Cases', titleAr: 'حالات المراجعة', subtitle: 'Risk Escalations', content: 'High-risk, complex, or non-compliant cases escalated from Business or CDD teams for senior Compliance review.' },
+            { title: 'PEP Screening', titleAr: 'فحص الأشخاص الموضوعين تحت الملاحظة', subtitle: 'Sanctions & PEP Check', content: 'Verification against international and regulatory sanctions lists, PEP/VIP databases, and adverse media sources.' },
+            { title: 'Sanctions Review', titleAr: 'مراجعة العقوبات', subtitle: 'Regulatory Compliance', content: 'Screening against OFAC, UN, EU, and local sanctions lists for customer, beneficial owners, and related parties.' },
+            { title: 'Documentation Review', titleAr: 'مراجعة التوثيق', subtitle: 'Evidence Validation', content: 'Final review of all documentation, evidence, and justifications for compliance with regulatory requirements.' },
+            { title: 'Compliance Decision', titleAr: 'قرار الامتثال', subtitle: 'Approval or Rejection', content: 'Final compliance determination: approve for onboarding, restrict account, or escalate to regulatory authorities.' },
+            { title: 'Regulatory Reporting', titleAr: 'الإبلاغ التنظيمي', subtitle: 'Suspicious Activity Reports', content: 'Required reporting to regulatory authorities for high-risk cases, suspicious transactions, and non-compliant customers.' },
+            { title: 'Audit Trail', titleAr: 'سجل التدقيق', subtitle: 'Documentation & Justification', content: 'Complete audit trail documenting all compliance reviews, decisions, and regulatory justifications for examination.' },
+            { title: 'Ongoing Monitoring', titleAr: 'المراقبة المستمرة', subtitle: 'Customer Lifecycle', content: 'Continuous monitoring of customer accounts, transactions, and regulatory status throughout relationship lifecycle.' },
+            { title: 'Thank You', titleAr: 'شكراً لك', subtitle: 'Questions & Discussion', content: 'Thank you for reviewing the Compliance Team Workflow. Contact Compliance Management with any questions.' }
+          ]
+        },
+        operations: {
+          title: 'Operations Team Workflow',
+          titleAr: 'سير عمل فريق العمليات',
+          icon: '⚙️',
+          color: '#607D8B',
+          duration: '15 min',
+          audience: 'Operations',
+          slides: [
+            { title: 'Operations Team Workflow', titleAr: 'سير عمل فريق العمليات', subtitle: 'Execution & Support Process', content: 'Complete workflow for Operations staff supporting case execution, documentation handling, and system maintenance.' },
+            { title: 'Case Processing', titleAr: 'معالجة الحالات', subtitle: 'Case Administration', content: 'Case setup, routing, team assignment, deadline management, and workflow coordination across departments.' },
+            { title: 'Document Management', titleAr: 'إدارة المستندات', subtitle: 'File Handling & Storage', content: 'Document upload, organization, versioning, secure storage, and retrieval for regulatory compliance and audit.' },
+            { title: 'Account Actions', titleAr: 'إجراءات الحساب', subtitle: 'System Tasks', content: 'Account setup, restriction placement, flag configuration, and T24 integration actions upon case approval.' },
+            { title: 'Notification Management', titleAr: 'إدارة الإخطارات', subtitle: 'Communication Routing', content: 'Sending approvals, escalations, deadline alerts, and status updates to relevant team members and stakeholders.' },
+            { title: 'Data Entry', titleAr: 'إدخال البيانات', subtitle: 'Information Management', content: 'Accurate data entry, validation, and updates maintaining data integrity and system accuracy.' },
+            { title: 'Report Generation', titleAr: 'توليد التقارير', subtitle: 'Executive Reporting', content: 'Compilation of case statistics, compliance metrics, performance indicators, and regulatory reporting.' },
+            { title: 'System Support', titleAr: 'دعم النظام', subtitle: 'User Assistance', content: 'Technical support, user training, troubleshooting, and system maintenance to ensure operational continuity.' },
+            { title: 'Service Excellence', titleAr: 'تفوق الخدمة', subtitle: 'Quality & Efficiency', content: 'Commitment to accuracy, timeliness, compliance, and customer service excellence in all operational tasks.' },
+            { title: 'Thank You', titleAr: 'شكراً لك', subtitle: 'Questions & Discussion', content: 'Thank you for reviewing the Operations Team Workflow. Contact Operations Management with any questions.' }
+          ]
+        }
+      };
+    }
+    
     // Initialize page when DOM is ready
     window.addEventListener('load', function() {
       // Verify EnterpriseFeatures is loaded
