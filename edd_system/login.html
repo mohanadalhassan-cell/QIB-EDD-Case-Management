@@ -480,6 +480,94 @@
           <!-- Login Button -->
           <button type="submit" class="btn-login">Sign In Securely</button>
         </form>
+
+        <!-- Demo & Accessibility Controls -->
+        <div style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+          margin-top: 24px;
+          padding-top: 24px;
+          border-top: 1px solid rgba(92, 10, 40, 0.3);
+        ">
+          <button onclick="VOICE_ASSISTANT.speak('أهلاً بك في منصة التحقيق في الجرائم المالية')" style="
+            padding: 8px;
+            background: rgba(92, 10, 40, 0.2);
+            border: 1px solid rgba(92, 10, 40, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
+            🔊 Voice Guide
+          </button>
+
+          <button onclick="BRDReference.show('login')" style="
+            padding: 8px;
+            background: rgba(92, 10, 40, 0.2);
+            border: 1px solid rgba(92, 10, 40, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
+            📄 BRD Reference
+          </button>
+
+          <button onclick="DemoWalkthrough.start()" style="
+            padding: 8px;
+            background: rgba(92, 10, 40, 0.2);
+            border: 1px solid rgba(92, 10, 40, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
+            🎬 System Walkthrough
+          </button>
+
+          <button onclick="PrintSystem.print()" style="
+            padding: 8px;
+            background: rgba(92, 10, 40, 0.2);
+            border: 1px solid rgba(92, 10, 40, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
+            🖨️ Print Report
+          </button>
+
+          <button onclick="VOICE_ASSISTANT.startListening()" style="
+            padding: 8px;
+            background: rgba(92, 10, 40, 0.2);
+            border: 1px solid rgba(92, 10, 40, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
+            🎤 Voice Command
+          </button>
+
+          <button onclick="EmployeePin.approve('Test')" style="
+            padding: 8px;
+            background: rgba(92, 10, 40, 0.2);
+            border: 1px solid rgba(92, 10, 40, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
+            ✓ Approval PIN
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -633,6 +721,11 @@
       }
     });
   </script>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- MASTER SYSTEM ENHANCEMENT - Arabic, Accessibility, Voice, PIN -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <script src="js/master-system-enhancement.js"></script>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- DEMO GUIDANCE SYSTEM -->
