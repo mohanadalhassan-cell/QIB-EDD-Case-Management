@@ -159,6 +159,65 @@
           </div>
         </div>
 
+        <!-- DATA SOURCE & FRESHNESS INDICATORS -->
+        <div style="background: linear-gradient(135deg, rgba(244,67,54,0.08) 0%, rgba(244,67,54,0.03) 100%); border: 1px solid rgba(244,67,54,0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+          <h3 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Risk List Data Sources &amp; Freshness Status
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+            <!-- FATF/OFAC -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(244,67,54,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #F44336; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🔴</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">FATF/OFAC</div>
+                  <div style="color: #888; font-size: 11px;">Financial Action Task Force</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 14:20</div>
+              </div>
+            </div>
+            
+            <!-- QCB Internal -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #4CAF50; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px;">🟢</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">QCB Internal</div>
+                  <div style="color: #888; font-size: 11px;">Regulatory Designation Lists</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 14:15</div>
+              </div>
+            </div>
+            
+            <!-- PEP/Sanctions -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,193,7,0.2); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #FFC107; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #333;">🟡</div>
+                <div>
+                  <div style="font-weight: 600; color: #fff;">PEP Database</div>
+                  <div style="color: #888; font-size: 11px;">Politically Exposed Persons</div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 600; color: #4CAF50; margin-bottom: 4px;">✓ VERIFIED</div>
+                <div style="color: #888; font-size: 11px;">Last: 13:45</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Data Source Governance Notice -->
+          <div style="margin-top: 12px; padding: 10px 12px; background: rgba(33,150,243,0.05); border-left: 3px solid #2196F3; border-radius: 4px; font-size: 11px; color: #888; line-height: 1.5;">
+            <strong style="color: #2196F3;">ℹ️ Data Source Notice:</strong> All risk classification lists originate from authoritative external sources (FATF, QCB, International Sanctions Bodies). This platform retrieves and manages these designations for compliance purposes. Risk determinations are made by source authorities, not by this system.
+          </div>
+        </div>
+
         <!-- Tabs -->
         <div class="tabs" style="margin-bottom: 24px;">
           <button class="tab active" onclick="switchRiskTab('nationalities')">🌍 High Risk Nationalities</button>
@@ -594,6 +653,18 @@
     </main>
   </div>
 
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  
+  <!-- 🔐 GOVERNANCE & TRANSPARENCY LAYER -->
+  <script src="js/data_source_transparency.js"></script>
+  
+  <!-- Legacy Support -->
   <script src="js/mock_data.js"></script>
   <script src="js/enterprise_features.js"></script>
   <script src="js/enterprise_ui.js"></script>

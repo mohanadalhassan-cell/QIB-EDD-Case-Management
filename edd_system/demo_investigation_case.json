@@ -1,0 +1,275 @@
+{
+  "caseId": "EDD-2026-001234",
+  "rimNumber": "RIM001234",
+  "createdAt": "2026-03-10T13:45:00Z",
+  "status": "PENDING_MANAGER_REVIEW",
+  
+  "customerProfile": {
+    "fullName": "Abdullah Mohammed Al-Kuwari",
+    "dateOfBirth": "1975-03-15",
+    "age": 50,
+    "nationality": "Qatari",
+    "nationalId": "600011234567",
+    "occupation": "Government Official",
+    "employmentStatus": "Employed (Government)",
+    "relationshipManager": "Ahmed Al-Dosari",
+    "relationshipStartDate": "2016-01-20",
+    "relationshipDuration": "8+ years"
+  },
+
+  "contactInformation": {
+    "phone": "+974 4411-0234",
+    "email": "a.alkuwari@qib.qa",
+    "address": "Doha, Qatar"
+  },
+
+  "section1_risk_classification": {
+    "overallRiskCategory": "HIGH RISK",
+    "riskScore": 78,
+    "riskScoreMax": 100,
+    "primaryRiskDriver": "Activity Risk (Transaction Patterns)",
+    "riskFactors": {
+      "productRisk": {
+        "score": 90,
+        "category": "MEDIUM",
+        "description": "Multiple account types"
+      },
+      "activityRisk": {
+        "score": 160,
+        "category": "MEDIUM-HIGH",
+        "description": "Transaction patterns suggest higher-than-average activity"
+      },
+      "occupationRisk": {
+        "score": 80,
+        "category": "MEDIUM",
+        "description": "Government official classification triggers enhanced review"
+      },
+      "countryRisk": {
+        "score": 40,
+        "category": "LOW",
+        "description": "Qatari location with low ML/FT risk"
+      }
+    },
+    "source": "CRP (Customer Risk Profiling Engine)",
+    "authority": "QCB Approved Enterprise Risk Calculator",
+    "lastSyncTimestamp": "2026-03-10T14:35:00Z",
+    "dataQualityStatus": "VERIFIED"
+  },
+
+  "section2_customer_information": {
+    "fullName": "Abdullah Mohammed Al-Kuwari",
+    "dateOfBirth": "1975-03-15",
+    "age": 50,
+    "nationality": "Qatari",
+    "occupation": "Government Official",
+    "employmentCompany": "Qatar Ministry of Interior",
+    "contactPhone": "+974 4411-0234",
+    "emailAddress": "a.alkuwari@qib.qa",
+    "relationshipManager": "Ahmed Al-Dosari",
+    "relationshipStartDate": "2016-01-20",
+    "source": "T24 Core Banking System",
+    "lastSyncTimestamp": "2026-03-10T14:32:00Z",
+    "dataQualityStatus": "VERIFIED"
+  },
+
+  "section3_account_purpose": {
+    "accountPurpose": "Professional salary management and investment portfolio administration. Customer maintains multiple accounts for segregation of personal and investment funds.",
+    "businessRelationship": "Long-standing government official with stable employment at Ministry of Interior. Account used primarily for government salary deposits and personal wealth management through QIB investment products.",
+    "expectedFrequency": "monthly",
+    "filledAt": "2026-03-10T14:25:00Z",
+    "investigator": "Compliance Officer - Demo"
+  },
+
+  "section4_source_of_income": {
+    "externalData": {
+      "employmentStatus": "Employed (Government)",
+      "employerName": "Qatar Ministry of Interior",
+      "yearsOfEmployment": 22,
+      "estimatedAnnualIncome": "QAR 450,000 - QAR 500,000",
+      "source": "T24 Customer Profile"
+    },
+    "investigatorAssessment": "Government salary from Ministry of Interior verified through employment documentation. Annual income estimates align with account activity patterns. Source is credible and stable. No concerns regarding income sufficiency for documented account activity.",
+    "incomeVerified": true,
+    "incomeVerificationMethod": "Employment verification + salary account analysis",
+    "filledAt": "2026-03-10T14:28:00Z",
+    "investigator": "Compliance Officer - Demo"
+  },
+
+  "section5_initial_deposit": {
+    "depositAmount": 250000,
+    "depositCurrency": "QAR",
+    "depositDate": "2026-02-15",
+    "depositMethod": "Cheque Transfer",
+    "sourceAccount": "QIB-PB-001234",
+    "referenceNumber": "CHQ-20260215-001",
+    "verificationStatus": "VERIFIED",
+    "source": "T24 Transaction History",
+    "lastSyncTimestamp": "2026-03-10T14:33:00Z"
+  },
+
+  "section6_expected_transactions": {
+    "expectedMonthlyIncome": 40000,
+    "expectedMonthlyExpense": 28000,
+    "expectedNetCashFlow": 12000,
+    "transactionDescription": "Regular government salary deposits (monthly, ~QAR 40K) with investment transactions quarterly. Expected expenses include personal consumption, investment fees, and family transfers. Net positive cash flow expected with periodic large transfers to investment account.",
+    "frequencyProfile": "Consistent monthly salary deposits with variable investment activity",
+    "antiMoneyLaunderingIndicators": "None identified",
+    "filledAt": "2026-03-10T14:30:00Z",
+    "investigator": "Compliance Officer - Demo"
+  },
+
+  "section7_existing_relationships": {
+    "accountCount": 3,
+    "totalAggregateBalance": 5250000,
+    "accounts": [
+      {
+        "accountNumber": "QIB-PB-001234",
+        "accountType": "Savings Account",
+        "currentBalance": 1250000,
+        "status": "Active",
+        "openedDate": "2016-01-20",
+        "lastActivity": "2026-03-10"
+      },
+      {
+        "accountNumber": "QIB-INV-001234",
+        "accountType": "Investment Account",
+        "currentBalance": 3500000,
+        "status": "Active",
+        "openedDate": "2018-06-15",
+        "lastActivity": "2026-03-09"
+      },
+      {
+        "accountNumber": "QIB-CF-001234",
+        "accountType": "Credit Facility",
+        "currentBalance": 500000,
+        "status": "Active",
+        "openedDate": "2020-03-01",
+        "lastActivity": "2026-03-05"
+      }
+    ],
+    "relationshipDuration": "8+ years",
+    "relationshipQuality": "Excellent - No negative indicators",
+    "source": "T24 Account Portfolio",
+    "lastSyncTimestamp": "2026-03-10T14:31:00Z"
+  },
+
+  "section8_other_banks": {
+    "hasOtherBanks": false,
+    "details": "Customer confirmed no other banking relationships outside QIB. Relationship focus is exclusively with Qatar Islamic Bank.",
+    "verificationMethod": "Bank confirmation statement",
+    "filledAt": "2026-03-10T14:34:00Z",
+    "investigator": "Compliance Officer - Demo"
+  },
+
+  "section9_related_parties": {
+    "hasRelatedParties": false,
+    "relatedPartiesList": "Single signatory with no spouse, business partners, or family members listed on accounts. No beneficial ownership changes identified.",
+    "filledAt": "2026-03-10T14:35:00Z",
+    "investigator": "Compliance Officer - Demo"
+  },
+
+  "section10_pep_information": {
+    "isPEP": false,
+    "pepStatus": "NOT A PEP",
+    "screeningResults": {
+      "ofacStatus": "CLEAR",
+      "euSanctionsStatus": "CLEAR",
+      "unSecurityCouncilStatus": "CLEAR",
+      "localWatchlistStatus": "CLEAR"
+    },
+    "adverseMediaFindings": "None identified",
+    "pepAssessment": "Not applicable - Customer is not PEP",
+    "source": "Regulatory Database (OFAC, EU, UN, Local QCB)",
+    "lastSyncTimestamp": "2026-03-10T14:36:00Z",
+    "dataQualityStatus": "VERIFIED"
+  },
+
+  "section11_decision": {
+    "investigatorAssessment": {
+      "summary": "Customer profile demonstrates consistent low-risk behavior over 8+ years of relationship. Government employment provides stable income source verified through official channels. Account activity aligns with documented employment income. Multiple account types indicate sophisticated customer but pose no enhanced risk given employment status. No PEP concerns, no adverse media findings. Recommended for approval to proceed with normal banking operations.",
+      "timestamp": "2026-03-10T14:37:00Z",
+      "investigator": "Ahmed Al-Dosari (Compliance Officer)",
+      "investigatorId": "INV-001"
+    },
+    "investigatorDecision": {
+      "recommendation": "APPROVE",
+      "rationale": "All EDD sections completed with no adverse indicators identified. Risk profile aligns with government employment. Long-standing customer relationship (8+ years) demonstrates acceptable behavior.",
+      "signature": "Ahmed Al-Dosari",
+      "timestamp": "2026-03-10T14:37:30Z"
+    },
+    "managerApproval": {
+      "decision": "APPROVED",
+      "comments": "All sections properly completed and verified. Investigator assessment is thorough and well-documented. Risk governance confirms READ-ONLY status on all external data blocks. Recommend case closure and normal banking operations authorization.",
+      "signature": "Senior Compliance Manager",
+      "timestamp": "2026-03-10T15:00:00Z",
+      "reviewDuration": "23 minutes"
+    },
+    "finalStatus": "APPROVED",
+    "closureDate": "2026-03-10T15:00:00Z"
+  },
+
+  "auditTrail": [
+    {
+      "action": "CASE_CREATED",
+      "timestamp": "2026-03-10T13:45:00Z",
+      "user": "System",
+      "details": "Case created for RIM001234"
+    },
+    {
+      "action": "SECTIONS_LOADED",
+      "timestamp": "2026-03-10T13:46:00Z",
+      "user": "System",
+      "details": "External data auto-populated from T24, CRP, Regulatory"
+    },
+    {
+      "action": "SECTION_3_COMPLETED",
+      "timestamp": "2026-03-10T14:25:00Z",
+      "user": "Ahmed Al-Dosari",
+      "details": "Account purpose documented"
+    },
+    {
+      "action": "SECTION_4_COMPLETED",
+      "timestamp": "2026-03-10T14:28:00Z",
+      "user": "Ahmed Al-Dosari",
+      "details": "Source of income assessed"
+    },
+    {
+      "action": "SECTION_6_COMPLETED",
+      "timestamp": "2026-03-10T14:30:00Z",
+      "user": "Ahmed Al-Dosari",
+      "details": "Expected transactions documented"
+    },
+    {
+      "action": "SECTION_8_COMPLETED",
+      "timestamp": "2026-03-10T14:34:00Z",
+      "user": "Ahmed Al-Dosari",
+      "details": "Other banks confirmation - none identified"
+    },
+    {
+      "action": "SECTION_9_COMPLETED",
+      "timestamp": "2026-03-10T14:35:00Z",
+      "user": "Ahmed Al-Dosari",
+      "details": "Related parties assessment - none identified"
+    },
+    {
+      "action": "INVESTIGATOR_DECISION_SUBMITTED",
+      "timestamp": "2026-03-10T14:37:30Z",
+      "user": "Ahmed Al-Dosari",
+      "details": "Case submitted for manager review with APPROVE recommendation"
+    },
+    {
+      "action": "MANAGER_DECISION_SUBMITTED",
+      "timestamp": "2026-03-10T15:00:00Z",
+      "user": "Senior Compliance Manager",
+      "details": "Manager approved case - final status APPROVED"
+    }
+  ],
+
+  "metadata": {
+    "totalSectionsCompleted": 11,
+    "investigationDuration": "52 minutes",
+    "managerReviewDuration": "23 minutes",
+    "dataSourcesUsed": ["T24", "CRP", "Regulatory DB"],
+    "completionPercentage": 100
+  }
+}

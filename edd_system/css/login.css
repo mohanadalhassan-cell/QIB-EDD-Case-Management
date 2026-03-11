@@ -10,16 +10,16 @@
   --bg-mid: #0b1f3a;
   --bg-dark: #061428;
   --primary: #1F3A5F;
-  --accent: #00D4FF;
-  --accent-dim: rgba(0, 212, 255, 0.12);
-  --accent-glow: rgba(0, 212, 255, 0.25);
+  --accent: #D4AF37;
+  --accent-dim: rgba(212, 175, 55, 0.12);
+  --accent-glow: rgba(212, 175, 55, 0.25);
   --glass-bg: rgba(12, 28, 56, 0.45);
-  --glass-border: rgba(0, 212, 255, 0.12);
-  --glass-border-hover: rgba(0, 212, 255, 0.25);
-  --text: #ffffff;
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255,255,255,0.65);
-  --text-muted: rgba(255,255,255,0.35);
+  --glass-border: rgba(212, 175, 55, 0.12);
+  --glass-border-hover: rgba(212, 175, 55, 0.25);
+  --text: #D4AF37;
+  --text-primary: #D4AF37;
+  --text-secondary: rgba(212, 175, 55, 0.85);
+  --text-muted: rgba(212, 175, 55, 0.55);
   --success: #00E676;
   --error: #FF5252;
   --warning: #FFD740;
@@ -54,8 +54,8 @@ html, body {
 .ambient-bg {
   position: fixed; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse 120% 80% at 30% 20%, rgba(0, 212, 255, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 100% 60% at 70% 80%, rgba(30, 144, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse 120% 80% at 30% 20%, rgba(212, 175, 55, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 60% at 70% 80%, rgba(184, 134, 11, 0.03) 0%, transparent 50%),
     radial-gradient(ellipse 80% 100% at 50% 50%, rgba(10, 25, 50, 0.8) 0%, transparent 70%),
     linear-gradient(180deg, #060e1a 0%, #0b1f3a 40%, #0d2847 70%, #061428 100%);
 }
@@ -84,7 +84,7 @@ html, body {
 .light-reflection:nth-child(2) {
   width: 500px; height: 500px;
   top: -15%; left: -10%;
-  background: radial-gradient(circle, rgba(0,212,255,0.06), transparent 70%);
+  background: radial-gradient(circle, rgba(212,175,55,0.06), transparent 70%);
   animation-delay: 0s;
   animation-duration: 12s;
 }
@@ -197,7 +197,7 @@ html, body {
   justify-content: center;
   position: relative;
   animation: logoPulse 3s ease-in-out infinite;
-  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.25);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
 }
 
 .brand-logo svg {

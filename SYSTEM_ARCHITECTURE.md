@@ -93,6 +93,138 @@ The QIB EDD (Enterprise Due Diligence) System is an integrated platform designed
 
 ---
 
+## 2.A Risk Scoring Integration Architecture
+
+### 2.A.1 External Risk Source Architecture — GOVERNANCE PRINCIPLE
+
+**The QIB EDD Platform is a Risk Intelligence and Compliance Investigation System, NOT a Risk Scoring Engine.**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     ENTERPRISE RISK ECOSYSTEM                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │ EXTERNAL RISK SYSTEMS (Calculate Risk Scores)                        │  │
+│  │ ┌─────────────────┬──────────────────┬───────────────────────────┐   │  │
+│  │ │ 🔵 CRP          │ 🟢 Core Banking  │ 🟡 TM (Transaction Mgmt) │   │  │
+│  │ │ Risk Profiling  │ (T24)            │ Activity Monitoring      │   │  │
+│  │ │ Engine          │ Customer Data    │ Anomaly Detection        │   │  │
+│  │ ├─────────────────┼──────────────────┼───────────────────────────┤   │  │
+│  │ │ 🟣 DMS          │ 🔴 Regulatory    │ 🟠 Enterprise Risk       │   │  │
+│  │ │ Document Mgmt   │ Sanctions/PEPs   │ Platform                 │   │  │
+│  │ │ KYC Files       │ External Datasets│ Aggregate Risk Views     │   │  │
+│  │ └─────────────────┴──────────────────┴───────────────────────────┘   │  │
+│  └──┬───────────────────────────────────────────────────────────────┬───┘  │
+│     │                                                               │       │
+│     │ Risk Score Data Feed (Read-Only)                             │       │
+│     ↓                                                               ↓       │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │ QIB EDD PLATFORM - Risk Intelligence & Compliance Investigation      │  │
+│  │ ┌────────────────────────────────────────────────────────────────┐   │  │
+│  │ │ Data Source Transparency Layer                                │   │  │
+│  │ │ • Retrieves external risk scores                              │   │  │
+│  │ │ • Displays source system attribution (CRP/TM/etc.)            │   │  │
+│  │ │ • Records data lineage and audit trail                        │   │  │
+│  │ │ • Shows last updated timestamp and authority level            │   │  │
+│  │ └────────────────────────────────────────────────────────────────┘   │  │
+│  │                                                                       │  │
+│  │ ┌────────────────────────────────────────────────────────────────┐   │  │
+│  │ │ Compliance Investigation Tools                                 │   │  │
+│  │ │ • Contextualizes risk data with financial behavior            │   │  │
+│  │ │ • Identifies behavioral indicators                            │   │  │
+│  │ │ • Highlights anomalies and deviations                         │   │  │
+│  │ │ • Supports human decision-making (NOT automated decisions)    │   │  │
+│  │ └────────────────────────────────────────────────────────────────┘   │  │
+│  │                                                                       │  │
+│  │ ┌────────────────────────────────────────────────────────────────┐   │  │
+│  │ │ Output: Employee Assessment & Decision Documentation           │   │  │
+│  │ │ • Human-reviewed risk assessment                              │   │  │
+│  │ │ • Documented business decision                                │   │  │
+│  │ │ • Regulatory-compliant audit trail                            │   │  │
+│  │ └────────────────────────────────────────────────────────────────┘   │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 2.A.2 Risk Score Data Flow
+
+| System | Responsibility | Method |
+|--------|-----------------|--------|
+| **CRP** | Calculate customer risk score based on profile | Scheduled API Feed + Manual API Calls |
+| **Core Banking** | Provide customer segment, account data, PEP status | T24 Integration / Core Banking APIs |
+| **TM (Transaction Monitoring)** | Monitor transaction patterns, flag anomalies | Real-time Activity Feeds |
+| **DMS** | Store and retrieve KYC/AML documentation | Document API Integration |
+| **Regulatory** | Provide sanctions lists, PEP databases | Daily/Weekly External Data Feeds |
+| **QIB EDD Platform** | **READ** and **DISPLAY** all risk data | Data Aggregation + Transparency Layer |
+
+### 2.A.3 Data Source Transparency Requirements
+
+**Every risk score displayed in the system MUST show:**
+
+```
+┌─────────────────────────────────────────────┐
+│ Customer Risk Score - Data Source Indicator │
+├─────────────────────────────────────────────┤
+│ Score:           370 / 670                  │
+│ Category:        HIGH                       │
+│ Source System:   🔵 CRP                     │
+│ Last Updated:    2026-03-10 14:35 UTC       │
+│ Authority:       AUTHORITATIVE              │
+│ Confidence:      ✓ VERIFIED                 │
+│ Audit Trail:     [View Full Lineage]        │
+│                                             │
+│ Note: Risk score originated from CRP       │
+│ This platform displays score for           │
+│ compliance investigation purposes only.    │
+└─────────────────────────────────────────────┘
+```
+
+### 2.A.4 System Role Definition
+
+**The QIB EDD Platform SHALL:**
+- ✅ Retrieve risk scores from external systems
+- ✅ Display risk data with source attribution  
+- ✅ Contextualize risk within financial patterns
+- ✅ Highlight behavioral indicators for investigation
+- ✅ Support employee decision-making
+- ✅ Document audit trail and decisions
+- ✅ Maintain data lineage for compliance
+
+**The QIB EDD Platform SHALL NOT:**
+- ❌ Calculate or generate risk scores internally
+- ❌ Modify external risk classifications  
+- ❌ Create alternative risk rankings
+- ❌ Make automated risk decisions
+- ❌ Override source system assessments
+- ❌ Alter data without source approval
+- ❌ Replace external risk engines
+
+---
+
+## 3. Technical Stack
+
+### Frontend
+- **HTML5** - Semantic markup
+- **CSS3** - Premium gradients, animations, responsive design
+- **JavaScript (Vanilla)** - No frameworks, lightweight performance
+- **Responsive Design** - Mobile-first, works on all devices
+
+### Backend (Future Implementation)
+- **Node.js/Express** or **Python/FastAPI** - RESTful APIs
+- **Database** - PostgreSQL or MongoDB
+- **Authentication** - OAuth 2.0 / AD Integration
+- **Message Queue** - RabbitMQ for async operations
+
+### Deployment
+- **Docker** - Containerized deployment
+- **Kubernetes** - Orchestration (optional)
+- **Load Balancer** - Nginx/HAProxy
+- **CDN** - Static file delivery
+
+---
+
 ## 4. Module Architecture
 
 ### 4.1 Core Modules

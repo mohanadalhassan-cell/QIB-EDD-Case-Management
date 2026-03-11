@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QIB EDD System — Presentations</title>
+  <meta name="accessibility" content="wcag2.1-aa">
+  <meta name="lang" content="en-GB,ar-QA">
   <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/accessibility_vision2030.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
   <style>
     /* Presentations Page Specific Styles */
@@ -1324,6 +1327,15 @@
     </div>
   </div>
 
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  
+  <!-- Legacy Support -->
   <script src="js/enterprise_features.js"></script>
   <script src="js/enterprise_ui.js"></script>
   <script>
@@ -2161,5 +2173,22 @@
       window.location.href = 'login.html';
     });
   </script>
+
+  <!-- Accessibility Features: Skip-to-Main, Controls, Vision 2030 Badge -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+  
+  <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
+    <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+A)">A+</button>
+    <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)">◐</button>
+    <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)">d</button>
+    <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)">◉</button>
+  </div>
+  
+  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030">
+    <div class="vision-2030-badge-ar">رؤية قطر<br>الوطنية<br>2030</div>
+    <div class="vision-2030-badge-tooltip">Qatar Vision 2030 - QIB Financial Crime Investigation Platform</div>
+  </div>
+
+  <script src="js/accessibility.js"></script>
 </body>
 </html>

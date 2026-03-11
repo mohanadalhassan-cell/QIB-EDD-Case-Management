@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة قيادة المخاطر - EDD_QIB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            background: white;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #45a049;
+        }
+        
+        .btn-warning {
+            background: #FF9800;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e68900;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 لوحة قيادة المخاطر - EDD_QIB</h1>
+            <p>منصة متكاملة لإدارة وتقييم مخاطر العملاء والعمليات</p>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('risk-score')">
+                📊 نقاط المخاطر
+            </button>
+            <button class="tab-button" onclick="switchTab('sector-filter')">
+                🔍 مرشح القطاع
+            </button>
+            <button class="tab-button" onclick="switchTab('risk-chart')">
+                📈 الرسم البياني
+            </button>
+            <button class="tab-button" onclick="switchTab('reports')">
+                📋 التقارير
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            
+            <!-- TAB 1: Risk Score -->
+            <div id="risk-score" class="tab-content active">
+                <h2 style="margin-bottom: 20px; color: #333;">📊 عرض نقاط المخاطر</h2>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="loadSampleCase()">عرض حالة عينة</button>
+                    <button class="btn-primary" onclick="loadRandomCase()">حالة عشوائية</button>
+                </div>
+                <div id="case-risk-display"></div>
+            </div>
+            
+            <!-- TAB 2: Sector Filter -->
+            <div id="sector-filter" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #333;">🔍 تصفية حسب القطاع</h2>
+                <div id="sector-filter-container"></div>
+                <div id="filtered-cases-list" style="margin-top: 20px;"></div>
+            </div>
+            
+            <!-- TAB 3: Risk Chart -->
+            <div id="risk-chart" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #333;">📈 رسوم بيانية المخاطر</h2>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="showPortfolioChart()">فحص الحافظة</button>
+                    <button class="btn-primary" onclick="showSectorCharts()">فحص القطاعات</button>
+                </div>
+                <div id="charts-container"></div>
+            </div>
+            
+            <!-- TAB 4: Reports -->
+            <div id="reports" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #333;">📋 التقارير والتصدير</h2>
+                <div class="button-group">
+                    <button class="btn-success" onclick="generateCaseReport()">تقرير الحالة</button>
+                    <button class="btn-success" onclick="generatePortfolioReport()">تقرير الحافظة</button>
+                    <button class="btn-warning" onclick="exportToCSV()">تصدير CSV</button>
+                </div>
+                <div id="reports-container" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>نظام إدارة المخاطر - EDD_QIB v2.0.0 | Professional AML/CDD Platform</p>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/path_manager.js"></script>
+    <script src="js/risk_datasets.js"></script>
+    <script src="js/risk_engine.js"></script>
+    <script src="js/sample_data_generator.js"></script>
+    <script src="js/edd_data_model.js"></script>
+    <script src="js/data_bridge.js"></script>
+    <script src="js/risk_ui_components.js"></script>
+    <script src="js/sector_filter.js"></script>
+    <script src="js/risk_reports.js"></script>
+    
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        // TAB SWITCHING
+        // ═══════════════════════════════════════════════════════════════
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Initialize tab content
+            if (tabName === 'sector-filter') {
+                initSectorFilter();
+            } else if (tabName === 'risk-chart') {
+                initCharts();
+            }
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
+        // TAB 1: RISK SCORE
+        // ═══════════════════════════════════════════════════════════════
+        
+        function loadSampleCase() {
+            const cases = window.eddDataModel.getAllCases();
+            const sampleCase = cases.length > 0 ? cases[0] : null;
+            
+            if (!sampleCase) {
+                alert('لا توجد حالات');
+                return;
+            }
+            
+            displayCaseRisk(sampleCase);
+        }
+        
+        function loadRandomCase() {
+            const cases = window.eddDataModel.getAllCases();
+            const randomCase = cases[Math.floor(Math.random() * cases.length)];
+            displayCaseRisk(randomCase);
+        }
+        
+        function displayCaseRisk(caseData) {
+            const display = document.getElementById('case-risk-display');
+            
+            if (!caseData.riskScores) {
+                display.innerHTML = '<div style="color: #999; text-align: center; padding: 40px;">لا توجد بيانات مخاطر</div>';
+                return;
+            }
+            
+            const html = `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #333; margin-bottom: 15px;">معلومات الحالة</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 12px; color: #666; font-weight: 600;">رقم الحالة</div>
+                            <div style="font-size: 16px; color: #333; font-weight: bold;">${caseData.id}</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 12px; color: #666; font-weight: 600;">اسم العميل</div>
+                            <div style="font-size: 16px; color: #333; font-weight: bold;">${caseData.customer_name}</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 12px; color: #666; font-weight: 600;">القطاع</div>
+                            <div style="font-size: 16px; color: #333; font-weight: bold;">${caseData.sector}</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
+                            <div style="font-size: 12px; color: #666; font-weight: 600;">الحالة</div>
+                            <div style="font-size: 16px; color: #333; font-weight: bold;">${caseData.status}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${RISK_UI.createRiskScoreCard(caseData.riskScores)}
+                ${RISK_UI.createRiskProfile(caseData)}
+            `;
+            
+            display.innerHTML = html;
+            
+            // Create chart
+            setTimeout(() => {
+                RISK_UI.createRiskChart(caseData.riskScores, 'case-risk-chart');
+            }, 100);
+            
+            display.innerHTML += '<div id="case-risk-chart" style="margin-top: 30px;"></div>';
+            RISK_UI.createRiskChart(caseData.riskScores, 'case-risk-chart');
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
+        // TAB 2: SECTOR FILTER
+        // ═══════════════════════════════════════════════════════════════
+        
+        function initSectorFilter() {
+            SECTOR_FILTER.createFilterUI('sector-filter-container');
+            SECTOR_FILTER.filterCases();
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
+        // TAB 3: CHARTS
+        // ═══════════════════════════════════════════════════════════════
+        
+        function initCharts() {
+            showPortfolioChart();
+        }
+        
+        function showPortfolioChart() {
+            const container = document.getElementById('charts-container');
+            container.innerHTML = '<div style="text-align: center; padding: 40px;">⏳ جاري تحميل البيانات...</div>';
+            
+            const cases = window.eddDataModel.getAllCases();
+            
+            // Aggregate risk scores
+            const aggregated = {
+                COUNTRY_RISK_SCORE: 0,
+                ACT_RISK_SCORE: 0,
+                PROD_RISK_SCORE: 0,
+                OCCP_RISK_SCORE: 0
+            };
+            
+            cases.forEach(c => {
+                if (c.riskScores) {
+                    aggregated.COUNTRY_RISK_SCORE += c.riskScores.COUNTRY_RISK_SCORE;
+                    aggregated.ACT_RISK_SCORE += c.riskScores.ACT_RISK_SCORE;
+                    aggregated.PROD_RISK_SCORE += c.riskScores.PROD_RISK_SCORE;
+                    aggregated.OCCP_RISK_SCORE += c.riskScores.OCCP_RISK_SCORE;
+                }
+            });
+            
+            // Create mock scores for portfolio
+            const portfolioRiskScores = {
+                COUNTRY_RISK_SCORE: Math.round(aggregated.COUNTRY_RISK_SCORE / cases.length),
+                ACT_RISK_SCORE: Math.round(aggregated.ACT_RISK_SCORE / cases.length),
+                PROD_RISK_SCORE: Math.round(aggregated.PROD_RISK_SCORE / cases.length),
+                OCCP_RISK_SCORE: Math.round(aggregated.OCCP_RISK_SCORE / cases.length)
+            };
+            
+            container.innerHTML = '<div id="portfolio-chart"></div>';
+            RISK_UI.createRiskChart(portfolioRiskScores, 'portfolio-chart');
+        }
+        
+        function showSectorCharts() {
+            document.getElementById('charts-container').innerHTML = '<div style="text-align: center; padding: 40px; color: #999;">تم عرض متوسط المخاطر للحافظة الكاملة</div>';
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
+        // TAB 4: REPORTS
+        // ═══════════════════════════════════════════════════════════════
+        
+        function generateCaseReport() {
+            const cases = window.eddDataModel.getAllCases();
+            const firstCase = cases[0];
+            
+            if (!firstCase) {
+                alert('لا توجد حالات');
+                return;
+            }
+            
+            const report = RISK_REPORTS.generateCaseReport(firstCase);
+            const html = RISK_REPORTS.exportToHTML(report, 'case');
+            
+            RISK_REPORTS.downloadReport(
+                `Case_Report_${firstCase.id}_${new Date().getTime()}.html`,
+                html,
+                'text/html;charset=utf-8'
+            );
+            
+            alert('✅ تم تنزيل تقرير الحالة بنجاح!');
+        }
+        
+        function generatePortfolioReport() {
+            const report = RISK_REPORTS.generatePortfolioReport('ALL');
+            const html = RISK_REPORTS.exportToHTML(report, 'portfolio');
+            
+            RISK_REPORTS.downloadReport(
+                `Portfolio_Report_${new Date().getTime()}.html`,
+                html,
+                'text/html;charset=utf-8'
+            );
+            
+            alert('✅ تم تنزيل تقرير الحافظة بنجاح!');
+        }
+        
+        function exportToCSV() {
+            const csv = RISK_REPORTS.exportToCSV();
+            const filename = `Risk_Cases_${new Date().getTime()}.csv`;
+            
+            RISK_REPORTS.downloadReport(filename, csv, 'text/csv;charset=utf-8');
+            alert('✅ تم تصدير البيانات بصيغة CSV بنجاح!');
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
+        // INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════
+        
+        console.log('✅ Risk Dashboard Loaded');
+        loadSampleCase();
+    </script>
+</body>
+</html>

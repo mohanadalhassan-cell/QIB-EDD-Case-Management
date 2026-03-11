@@ -427,6 +427,65 @@
         </div>
       </div>
 
+      <!-- ENTERPRISE DATA SOURCES DASHBOARD -->
+      <div style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%); border: 2px solid rgba(212, 175, 55, 0.2); border-radius: 12px; padding: 20px; margin-bottom: 40px;">
+        <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #FFD700; display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          Enterprise Risk Data Integration Status
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <!-- CRP System -->
+          <div style="background: rgba(33,150,243,0.08); border: 1px solid rgba(33,150,243,0.3); border-radius: 8px; padding: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: #2196F3; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;">🔵</div>
+                <div>
+                  <div style="font-weight: 700; color: #FFD700;">CRP</div>
+                  <div style="color: #a0a0a0; font-size: 11px;">Customer Risk Profiling</div>
+                </div>
+              </div>
+              <div style="text-align: right; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px;">
+                <div style="font-weight: 700; color: #27AE60; margin-bottom: 4px;">✓ LIVE</div>
+                <div style="color: #a0a0a0; font-size: 11px;">Sync: 14:35</div>
+              </div>
+            </div>
+            
+            <!-- T24 System -->
+            <div style="background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.3); border-radius: 8px; padding: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: #4CAF50; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;">🟢</div>
+                <div>
+                  <div style="font-weight: 700; color: #FFD700;">Core Banking</div>
+                  <div style="color: #a0a0a0; font-size: 11px;">T24 Integration</div>
+                </div>
+              </div>
+              <div style="text-align: right; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px;">
+                <div style="font-weight: 700; color: #27AE60; margin-bottom: 4px;">✓ LIVE</div>
+                <div style="color: #a0a0a0; font-size: 11px;">Sync: 14:30</div>
+              </div>
+            </div>
+            
+            <!-- TM System -->
+            <div style="background: rgba(255,193,7,0.08); border: 1px solid rgba(255,193,7,0.3); border-radius: 8px; padding: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: #FFC107; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;">🟡</div>
+                <div>
+                  <div style="font-weight: 700; color: #FFD700;">Transaction Monitoring</div>
+                  <div style="color: #a0a0a0; font-size: 11px;">Real-Time Activity Risk</div>
+                </div>
+              </div>
+              <div style="text-align: right; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px;">
+                <div style="font-weight: 700; color: #27AE60; margin-bottom: 4px;">✓ LIVE</div>
+                <div style="color: #a0a0a0; font-size: 11px;">Sync: 14:25</div>
+              </div>
+            </div>
+        </div>
+        
+        <!-- Governance Notice -->
+        <div style="margin-top: 14px; padding: 12px 14px; background: rgba(212, 175, 55, 0.05); border-left: 3px solid #D4AF37; border-radius: 4px; font-size: 11px; color: #a0a0a0; line-height: 1.6;">
+          <strong style="color: #D4AF37;">⚠️ Data Governance Notice:</strong> All risk scores and compliance data originate from authoritative external systems (CRP, Core Banking, Transaction Monitoring). The EDD Platform reads and contextualizes this data for investigation and compliance purposes. Risk determinations are made by source systems, not by this platform.
+        </div>
+      </div>
+
       <!-- KPI CARDS -->
       <div class="dashboard-grid">
         <div class="kpi-card">
@@ -618,6 +677,17 @@
       </div>
     </div>
   </div>
+
+  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <script src="js/path_manager.js"></script>
+  <script src="js/risk_datasets.js"></script>
+  <script src="js/risk_engine.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+
+  <!-- 🔐 GOVERNANCE & TRANSPARENCY LAYER -->
+  <script src="js/data_source_transparency.js"></script>
 
   <script>
     // Update current date
