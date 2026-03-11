@@ -460,36 +460,22 @@ const PrintSystem = {
 // ═══════════════════════════════════════════════════════════════════════════
 // PHASE 8: OPTIONAL FACE LOGIN
 // ═══════════════════════════════════════════════════════════════════════════
+// 🔜 COMING SOON: Face recognition feature
 
 const FaceLogin = {
   enabled: false,
   
   requestPermission() {
-    if (!('mediaDevices' in navigator)) {
-      console.warn('Camera not available');
-      return;
-    }
-
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        this.enabled = true;
-        console.log('Face authentication ready');
-        stream.getTracks().forEach(track => track.stop());
-      })
-      .catch(err => {
-        console.log('Camera permission denied');
-        this.enabled = false;
-      });
+    // 🔜 COMING SOON - No camera access attempted
+    console.warn('🔜 Face Login: Coming Soon');
+    this.enabled = false;
+    return false;
   },
 
   authenticate() {
-    if (!this.enabled) {
-      alert('لم يتم منح إذن الكاميرا');
-      return;
-    }
-
-    alert('تحقق بصمة الوجه: جاهز (منطقيا فقط - لا توجد معالجة فعلية)');
-    // In real implementation, would process face recognition
+    // 🔜 COMING SOON
+    alert('🔜 Coming Soon - Face Login feature will be available in next release');
+    return false;
   }
 };
 

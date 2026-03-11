@@ -104,10 +104,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
-          <div class="user-name" id="user-name">User</div>
-          <div class="user-role" id="user-role">Role</div>
+          <div class="user-name" id="user-name">Mr. Arslan</div>
+          <div class="user-role" id="user-role">Head - Senior Management</div>
         </div>
       </div>
     </aside>
@@ -536,8 +536,38 @@
       document.getElementById('channelRequestModal').style.display = 'flex';
     }
 
+    // Channel Request Data
+    const channelRequestsData = {
+      'CH-2026-0041': { rim: 'RIM002345', customer: 'Mohammed Al-Thani', channel: 'Mobile Banking', type: 'Account Update Request' },
+      'CH-2026-0040': { rim: 'RIM003456', customer: 'Fatima Al-Kuwari', channel: 'Internet Banking', type: 'Document Upload' },
+      'CH-2026-0039': { rim: 'RIM004567', customer: 'Ahmed Hassan', channel: 'Call Center', type: 'KYC Information Update' },
+      'CH-2026-0038': { rim: 'RIM005678', customer: 'Nasser Al-Mansouri', channel: 'Email Request', type: 'Source of Funds Declaration' },
+      'CH-2026-0037': { rim: 'RIM006789', customer: 'Sara Al-Jaber', channel: 'Mobile Banking', type: 'Account Opening Request' },
+      'CH-2026-0036': { rim: 'RIM007890', customer: 'Khalid Al-Sulaiti', channel: 'Digital Portal', type: 'Document Upload' }
+    };
+
     function linkToEDD(requestId) {
-      alert('Linking ' + requestId + ' to EDD Case. Routing: Alternative Channel → Business Review → CDD Review → Compliance (if required)');
+      const requestData = channelRequestsData[requestId];
+      if (!requestData) {
+        alert('Error: Request data not found for ' + requestId);
+        console.error('Request not found:', requestId);
+        return;
+      }
+
+      console.log('🔗 Linking to EDD:', {
+        requestId: requestId,
+        rim: requestData.rim,
+        customer: requestData.customer,
+        source: requestData.channel
+      });
+
+      // Navigate to EDD case page with channel source parameter
+      const caseUrl = 'edd_case.html?rim=' + encodeURIComponent(requestData.rim) + 
+                      '&customer=' + encodeURIComponent(requestData.customer) + 
+                      '&channel=' + encodeURIComponent(requestData.channel) + 
+                      '&channelRequestId=' + encodeURIComponent(requestId);
+      
+      window.location.href = caseUrl;
     }
   </script>
 </body>

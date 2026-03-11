@@ -3,733 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Financial Crime Investigation Platform - Secure Access">
+  <meta name="description" content="Simplify Governance — Executive Governance Platform">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#0a1f3d">
-  <title>Financial Crime Investigation Platform - QIB</title>
-  
-  <style>
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* CLEAN ENTERPRISE LOGIN DESIGN - MINIMAL & ELEGANT */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0a1f3d;
-      color: #ffffff;
-      overflow: hidden;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* MAIN CONTAINER - TWO COLUMN LAYOUT */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .login-container {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-    }
-
-    /* LEFT SIDE: ANIMATED BACKGROUND */
-    .login-background {
-      flex: 1;
-      position: relative;
-      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
-      overflow: hidden;
-    }
-
-    /* RIGHT SIDE: LOGIN FORM */
-    .login-form-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 40px;
-      background: linear-gradient(135deg, #0f2a4d 0%, #0a1f3d 100%);
-      position: relative;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* NETWORK INTELLIGENCE BACKGROUND ANIMATION */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    #particles-js {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-    }
-
-    .network-canvas {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* LOGIN HEADER (System Identity) */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .login-header {
-      text-align: center;
-      margin-bottom: 50px;
-      animation: fadeInDown 0.8s ease;
-    }
-
-    .header-title {
-      font-size: 32px;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-    }
-
-    .header-subtitle {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.7);
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* IDENTITY BADGES (Bank + Vision) */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .identity-badges {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 50px;
-      animation: fadeInUp 0.8s 0.1s ease backwards;
-    }
-
-    .badge {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
-      background: linear-gradient(135deg, rgba(92, 10, 40, 0.15), rgba(92, 10, 40, 0.08));
-      border: 1px solid rgba(92, 10, 40, 0.4);
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
-      letter-spacing: 0.3px;
-      transition: all 0.3s ease;
-    }
-
-    .badge:hover {
-      background: linear-gradient(135deg, rgba(92, 10, 40, 0.25), rgba(92, 10, 40, 0.12));
-      border-color: rgba(92, 10, 40, 0.6);
-    }
-
-    .badge-icon {
-      font-size: 14px;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* LOGIN FORM BOX */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .login-box {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(10, 31, 61, 0.8);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(92, 10, 40, 0.3);
-      border-radius: 16px;
-      padding: 40px;
-      box-shadow: 0 20px 60px rgba(92, 10, 40, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-      animation: fadeInUp 0.8s 0.2s ease backwards;
-    }
-
-    .login-box h3 {
-      font-size: 18px;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 28px;
-      text-align: center;
-      letter-spacing: -0.2px;
-    }
-
-    /* ───────────────────────────────────────────────────────────── */
-    /* FORM GROUPS */
-    /* ───────────────────────────────────────────────────────────── */
-
-    .form-group {
-      margin-bottom: 18px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.8);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .form-input {
-      padding: 12px 14px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(92, 10, 40, 0.3);
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 13px;
-      font-family: inherit;
-      transition: all 0.3s ease;
-      outline: none;
-    }
-
-    .form-input::placeholder {
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .form-input:focus {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(92, 10, 40, 0.6);
-      box-shadow: 0 0 0 3px rgba(92, 10, 40, 0.1);
-    }
-
-    /* ───────────────────────────────────────────────────────────── */
-    /* ROLE SELECTION GRID */
-    /* ───────────────────────────────────────────────────────────── */
-
-    .role-selection {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .role-button {
-      padding: 12px;
-      background: transparent;
-      border: 1px solid rgba(92, 10, 40, 0.3);
-      border-radius: 8px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-
-    .role-button:hover {
-      background: rgba(92, 10, 40, 0.2);
-      border-color: rgba(92, 10, 40, 0.5);
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .role-button.selected {
-      background: linear-gradient(135deg, #5C0A28, #8B1538);
-      border-color: #5C0A28;
-      color: #ffffff;
-      box-shadow: 0 0 15px rgba(92, 10, 40, 0.4);
-    }
-
-    /* ───────────────────────────────────────────────────────────── */
-    /* LOGIN BUTTON */
-    /* ───────────────────────────────────────────────────────────── */
-
-    .btn-login {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #5C0A28, #8B1538);
-      border: none;
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 8px 24px rgba(92, 10, 40, 0.3);
-    }
-
-    .btn-login:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(92, 10, 40, 0.4);
-    }
-
-    .btn-login:active {
-      transform: translateY(0);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* SECURITY FOOTER */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .security-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50px;
-      background: linear-gradient(180deg, transparent, rgba(92, 10, 40, 0.1));
-      border-top: 1px solid rgba(92, 10, 40, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
-      letter-spacing: 0.3px;
-      gap: 16px;
-    }
-
-    .security-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .security-badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: rgba(92, 10, 40, 0.8);
-      border-radius: 50%;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* ANIMATIONS */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* ACCESSIBILITY & RESPONSIVENESS */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    @media (max-width: 1024px) {
-      .login-container {
-        flex-direction: column;
-      }
-
-      .login-background {
-        display: none;
-      }
-
-      .login-form-container {
-        min-height: 100vh;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .login-form-container {
-        padding: 40px 20px;
-      }
-
-      .login-box {
-        max-width: 100%;
-      }
-
-      .header-title {
-        font-size: 24px;
-      }
-
-      .login-header {
-        margin-bottom: 30px;
-      }
-
-      .identity-badges {
-        margin-bottom: 30px;
-      }
-
-      .security-footer {
-        flex-wrap: wrap;
-        gap: 8px;
-        font-size: 11px;
-        padding: 0 10px;
-        height: auto;
-        min-height: 50px;
-      }
-    }
-
-    /* High Contrast Mode */
-    @media (prefers-contrast: more) {
-      .form-input {
-        background: #000000;
-        border-color: rgba(255, 255, 255, 0.7);
-      }
-
-      .login-box {
-        border-color: rgba(255, 255, 255, 0.6);
-      }
-    }
-
-    /* Font Size Adjustment */
-    html.font-large .header-title { font-size: 36px; }
-    html.font-large .header-subtitle { font-size: 14px; }
-    html.font-large .form-label { font-size: 12px; }
-    html.font-large .form-input { font-size: 14px; padding: 14px 16px; }
-    html.font-large .btn-login { font-size: 13px; padding: 14px; }
-  </style>
+  <meta name="theme-color" content="#060e1a">
+  <title>Simplify Governance — Secure Portal</title>
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
 </head>
 <body>
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- LOGIN CONTAINER - TWO COLUMN LAYOUT -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Cinematic ambient background -->
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  <div class="light-reflection"></div>
+  <div class="light-reflection"></div>
+  <div class="light-reflection"></div>
+  <div class="light-reflection"></div>
+
+  <!-- Particle canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Login card -->
   <div class="login-container">
-    
-    <!-- LEFT: ANIMATED NETWORK BACKGROUND -->
-    <div class="login-background">
-      <div id="particles-js"></div>
-    </div>
+    <div class="glass-card">
 
-    <!-- RIGHT: LOGIN FORM -->
-    <div class="login-form-container">
-      
-      <!-- Header: System Identity -->
-      <div class="login-header">
-        <h1 class="header-title">Financial Crime Investigation Platform</h1>
-        <p class="header-subtitle">Enterprise Edition</p>
-      </div>
-
-      <!-- Identity Badges: Bank + Vision -->
-      <div class="identity-badges">
-        <div class="badge">
-          <span class="badge-icon">🏦</span>
-          <span>Qatar Islamic Bank</span>
-        </div>
-        <div class="badge">
-          <span class="badge-icon">🎯</span>
-          <span>Qatar National Vision 2030</span>
+      <!-- LAYER 1: Legal/Demo Notice -->
+      <div style="background: linear-gradient(135deg, rgba(255,68,68,0.15), rgba(255,193,7,0.15)); border: 1px solid rgba(255,68,68,0.3); border-radius: 8px; padding: 14px; margin-bottom: 20px; text-align: center;">
+        <h4 style="color: #FF4444; font-size: 12px; font-weight: 700; margin: 0 0 6px 0; letter-spacing: 0.5px; text-transform: uppercase;">Restricted Concept Demo</h4>
+        <p style="color: rgba(255,255,255,0.75); font-size: 11px; margin: 0 0 8px 0; line-height: 1.5;">This demonstration is provided for presentation, evaluation, and discussion purposes only. It is not a live production environment and does not contain real customer data.</p>
+        <div style="direction: rtl; text-align: center;">
+          <p style="color: #FFB74D; font-size: 11px; margin: 0 0 6px 0; font-weight: 700;">عرض توضيحي مقيّد</p>
+          <p style="color: rgba(255,255,255,0.75); font-size: 10px; margin: 0; line-height: 1.5;">هذا العرض مقدم لأغراض العرض والتقييم والمناقشة فقط، ولا يمثل بيئة تشغيلية فعلية ولا يتضمن بيانات عملاء حقيقية.</p>
         </div>
       </div>
 
-      <!-- Login Form -->
-      <div class="login-box">
-        <h3>Secure Access</h3>
-
-        <form id="loginForm">
-          <!-- Employee ID -->
-          <div class="form-group">
-            <label class="form-label">Employee ID</label>
-            <input 
-              type="text" 
-              id="employeeId" 
-              class="form-input" 
-              placeholder="Enter your employee ID"
-              required
-            >
+      <!-- Branding -->
+      <div class="brand-section">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+          </svg>
+          <div class="brand-logo-ring"></div>
+        </div>
+        <h1 class="brand-title" style="font-size: 28px; margin-bottom: 4px;">تبسيط الحوكمة</h1>
+        <h2 class="brand-title" style="font-size: 24px; font-weight: 600; margin-bottom: 12px;">Simplify Governance</h2>
+        <p class="brand-subtitle" style="font-size: 13px; color: rgba(212,175,55,0.85); font-weight: 500; margin: 0 0 8px 0; line-height: 1.6;">Technology supports. Humans decide.</p>
+        <p class="brand-subtitle" style="font-size: 13px; color: rgba(212,175,55,0.85); font-weight: 500; margin: 0 0 20px 0; direction: rtl; text-align: right; line-height: 1.6;">التقنية تدعم، والإنسان يقرر.</p>
+        
+        <div style="margin: 16px 0; padding: 16px; border-top: 1px solid rgba(0, 212, 255, 0.2); border-bottom: 1px solid rgba(0, 212, 255, 0.2); background: rgba(6, 20, 40, 0.3); border-radius: 8px;">
+          <h3 style="color: #D4AF37; font-size: 13px; margin: 0 0 10px 0; font-weight: 700; letter-spacing: 0.5px;">Qatar National Vision 2030</h3>
+          <p style="color: rgba(212, 175, 55, 0.85); font-size: 12px; margin: 0 0 10px 0; line-height: 1.6;">Supporting sustainable development, trusted governance, secure digital transformation, and inclusive access for people with disabilities.</p>
+          <div style="direction: rtl; text-align: right;">
+            <p style="color: rgba(212, 175, 55, 0.85); font-size: 12px; margin: 0 0 8px 0; font-weight: 700; letter-spacing: 0.3px;">رؤية قطر الوطنية 2030</p>
+            <p style="color: rgba(212, 175, 55, 0.85); font-size: 12px; margin: 0; line-height: 1.6;">دعم التنمية المستدامة، والحوكمة الموثوقة، والتحول الرقمي الآمن، وتعزيز الوصول الشامل لذوي الاحتياجات الخاصة.</p>
           </div>
+        </div>
+      </div>
 
-          <!-- Password -->
+      <!-- Governance Indicators -->
+      <div class="trust-bar">
+        <span class="trust-item"><span class="trust-icon">🔐</span> Secure Channel</span>
+        <span class="trust-divider"></span>
+        <span class="trust-item"><span class="trust-icon">🛡️</span> Governed Access</span>
+        <span class="trust-divider"></span>
+        <span class="trust-item"><span class="trust-icon">📋</span> Audit Compliant</span>
+      </div>
+
+      <!-- LAYER 6: Visual Content Notice -->
+      <div style="background: rgba(58, 130, 246, 0.1); border: 1px solid rgba(58, 130, 246, 0.3); border-radius: 6px; padding: 10px 12px; margin-bottom: 14px; font-size: 10px; line-height: 1.5;">
+        <p style="color: #3B82F6; margin: 0 0 6px 0; font-weight: 600;">📊 Visual Content Notice</p>
+        <p style="color: rgba(255,255,255,0.7); margin: 0 0 6px 0;">Certain profile-style visuals in this demonstration are illustrative and may be sourced from publicly available references for presentation purposes only.</p>
+        <div style="direction: rtl; text-align: right;">
+          <p style="color: #3B82F6; margin: 0 0 4px 0; font-weight: 600; font-size: 9px;">ملاحظة حول المحتوى البصري</p>
+          <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 9px;">بعض الصور التعريفية المستخدمة في هذا العرض توضيحية، وقد تكون مستندة إلى مصادر متاحة للعامة لأغراض العرض فقط.</p>
+        </div>
+      </div>
+
+      <!-- LAYER 7: EDD Demo Description -->
+      <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; font-size: 10px; line-height: 1.5;">
+        <p style="color: #10B981; margin: 0 0 6px 0; font-weight: 600;">🎯 EDD Governance Demonstration</p>
+        <p style="color: rgba(255,255,255,0.7); margin: 0 0 6px 0;">A concept demonstration of EDD governance procedures, designed to present workflow discipline, controlled approvals, case visibility, and regulated review in a secure digital format.</p>
+        <div style="direction: rtl; text-align: right;">
+          <p style="color: #10B981; margin: 0 0 4px 0; font-weight: 600; font-size: 9px;">عرض حوكمة العناية الواجبة المعززة</p>
+          <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 9px;">عرض توضيحي تصوري لإجراءات حوكمة العناية الواجبة المعززة (EDD)، صُمم لإبراز مسارات العمل المنظمة، والاعتمادات المنضبطة، ووضوح الحالات، والمراجعة الرقابية ضمن صيغة رقمية آمنة.</p>
+        </div>
+      </div>
+
+      <!-- Status message -->
+      <div id="status-message" class="status-message"></div>
+
+      <!-- Step 1: Credentials -->
+      <div id="step-credentials" class="login-step active">
+        <form id="login-form" class="login-form" autocomplete="off">
           <div class="form-group">
-            <label class="form-label">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              class="form-input" 
-              placeholder="Enter your password"
-              required
-            >
+            <label for="employee-id">Employee ID</label>
+            <input type="text" id="employee-id" placeholder="Enter your Employee ID" required>
+            <div class="input-glow"></div>
           </div>
-
-          <!-- Role Selection -->
+          
           <div class="form-group">
-            <label class="form-label">Role</label>
-            <div class="role-selection">
-              <button type="button" class="role-button" onclick="selectRole('Analyst')">Analyst</button>
-              <button type="button" class="role-button" onclick="selectRole('Investigator')">Investigator</button>
-              <button type="button" class="role-button" onclick="selectRole('Manager')">Manager</button>
-              <button type="button" class="role-button" onclick="selectRole('Compliance')">Compliance</button>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <div class="input-glow"></div>
+          </div>
+          
+          <div class="form-group">
+            <label>Select Your Role</label>
+            <div class="role-grid">
+              <label class="role-option">
+                <input type="radio" name="role" value="business" checked>
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                  <span>Business</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="cdd">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                  <span>Operations</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="compliance">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                  <span>Compliance</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="management">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                  <span>Management</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="audit">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                  <span>Audit</span>
+                </div>
+              </label>
+              <label class="role-option">
+                <input type="radio" name="role" value="it">
+                <div class="role-card">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                  <span>IT</span>
+                </div>
+              </label>
             </div>
           </div>
-
-          <!-- OTP -->
-          <div class="form-group">
-            <label class="form-label">OTP Verification</label>
-            <input 
-              type="text" 
-              id="otp" 
-              class="form-input" 
-              placeholder="Enter 6-digit code"
-              maxlength="6"
-              required
-            >
-          </div>
-
-          <!-- Login Button -->
-          <button type="submit" class="btn-login">Sign In Securely</button>
+          
+          <button type="submit" id="btn-login" class="btn-primary">
+            <span class="btn-text">Authenticate & Access</span>
+            <span class="btn-shimmer"></span>
+          </button>
         </form>
+      </div>
 
-        <!-- Demo & Accessibility Controls -->
-        <div style="
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
-          margin-top: 24px;
-          padding-top: 24px;
-          border-top: 1px solid rgba(92, 10, 40, 0.3);
-        ">
-          <button onclick="VOICE_ASSISTANT.speak('أهلاً بك في منصة التحقيق في الجرائم المالية')" style="
-            padding: 8px;
-            background: rgba(92, 10, 40, 0.2);
-            border: 1px solid rgba(92, 10, 40, 0.4);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
-            🔊 Voice Guide
+      <!-- Step 2: OTP -->
+      <div id="step-otp" class="login-step">
+        <form id="otp-form" class="login-form" autocomplete="off">
+          <div class="form-group">
+            <label>Enter Verification Code</label>
+            <div class="otp-grid">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+              <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            </div>
+          </div>
+          <div id="otp-timer" class="otp-timer">
+            Code expires in <span class="time">05:00</span>
+          </div>
+          <button type="submit" id="btn-verify-otp" class="btn-primary">
+            <span class="btn-text">Verify & Access Platform</span>
+            <span class="btn-shimmer"></span>
           </button>
+          <div class="otp-actions">
+            <button type="button" id="btn-back" class="btn-link">← Back</button>
+            <button type="button" id="btn-resend" class="btn-link">Resend Code</button>
+          </div>
+        </form>
+      </div>
 
-          <button onclick="BRDReference.show('login')" style="
-            padding: 8px;
-            background: rgba(92, 10, 40, 0.2);
-            border: 1px solid rgba(92, 10, 40, 0.4);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
-            📄 BRD Reference
-          </button>
-
-          <button onclick="DemoWalkthrough.start()" style="
-            padding: 8px;
-            background: rgba(92, 10, 40, 0.2);
-            border: 1px solid rgba(92, 10, 40, 0.4);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
-            🎬 System Walkthrough
-          </button>
-
-          <button onclick="PrintSystem.print()" style="
-            padding: 8px;
-            background: rgba(92, 10, 40, 0.2);
-            border: 1px solid rgba(92, 10, 40, 0.4);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
-            🖨️ Print Report
-          </button>
-
-          <button onclick="VOICE_ASSISTANT.startListening()" style="
-            padding: 8px;
-            background: rgba(92, 10, 40, 0.2);
-            border: 1px solid rgba(92, 10, 40, 0.4);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
-            🎤 Voice Command
-          </button>
-
-          <button onclick="EmployeePin.approve('Test')" style="
-            padding: 8px;
-            background: rgba(92, 10, 40, 0.2);
-            border: 1px solid rgba(92, 10, 40, 0.4);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 11px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          " onmouseover="this.style.background='rgba(92, 10, 40, 0.3)'" onmouseout="this.style.background='rgba(92, 10, 40, 0.2)'">
-            ✓ Approval PIN
-          </button>
+      <!-- Step 2.5: Platform Launch Animation -->
+      <div id="step-qib-animation" class="login-step">
+        <div style="text-align: center; padding: 40px;">
+          <div class="spinner" style="width: 60px; height: 60px; margin: 0 auto; border: 4px solid #f3f3f3; border-top: 4px solid #00D4FF; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+          <p style="margin-top: 20px; color: #00D4FF; font-size: 14px;">Launching EDD Platform...</p>
         </div>
       </div>
+
+      <!-- Step 3: Success -->
+      <div id="step-success" class="login-step">
+        <div class="success-panel">
+          <div class="success-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div class="success-ring"></div>
+          </div>
+          <h2 class="success-title">Authentication Verified</h2>
+          <p class="success-user">Welcome, <span id="user-display"></span></p>
+          <p class="success-role">Role: <span id="role-display"></span></p>
+          <div class="success-checklist">
+            <div class="check-item"><span class="check-dot done"></span>Identity Verified</div>
+            <div class="check-item"><span class="check-dot done"></span>Session Encrypted</div>
+            <div class="check-item"><span class="check-dot done"></span>Role Permissions Loaded</div>
+            <div class="check-item"><span class="check-dot loading"></span>Launching EDD Platform...</div>
+          </div>
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+  <!-- Qatar Vision 2030 Footer -->
+  <div style="text-align: center; padding: 15px 20px; border-top: 1px solid rgba(0,212,255,0.1);">
+    <p style="margin: 0; font-size: 11px; color: rgba(0,212,255,0.7); line-height: 1.6;">
+      <strong>Qatar National Vision 2030</strong><br>
+      <span style="font-size: 10px; color: rgba(255,255,255,0.5);">Supporting sustainable development, trusted governance, secure digital transformation, and inclusive access for people with disabilities.</span><br><br>
+      <strong style="color: #D4AF37;">رؤية قطر الوطنية 2030</strong><br>
+      <span style="font-size: 10px; color: rgba(255,255,255,0.5);">دعم التنمية المستدامة، والحوكمة الموثوقة، والتحول الرقمي الآمن، وتعزيز الوصول الشامل لذوي الاحتياجات الخاصة.</span>
+    </p>
+  </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- SECURITY FOOTER -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="security-footer">
-    <div class="security-badge">Secure Access</div>
-    <div class="security-badge">MFA Protected</div>
-    <div class="security-badge">All Sessions Logged</div>
+  <!-- Platform Footer -->
+  <div style="text-align: center; padding: 12px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(0,212,255,0.1);">
+    <p style="margin: 0; font-size: 9px; color: rgba(0,212,255,0.6); letter-spacing: 0.5px;">
+      SIMPLIFY GOVERNANCE · CONCEPT DEMONSTRATION · 2026
+    </p>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- PARTICLES.JS - NETWORK INTELLIGENCE BACKGROUND -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    // Initialize Particles.js for Network Intelligence Animation
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 60, density: { enable: true, value_area: 800 } },
-        color: { value: "#5C0A28" },
-        shape: { type: "circle" },
-        opacity: { 
-          value: 0.5, 
-          random: true, 
-          anim: { enable: true, speed: 0.3, opacity_min: 0.1, sync: false } 
-        },
-        size: { 
-          value: 3, 
-          random: true, 
-          anim: { enable: false, speed: 40, size_min: 0.1, sync: false } 
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#5C0A28",
-          opacity: 0.3,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1.5,
-          direction: "none",
-          random: false,
-          straight: false,
-          out_mode: "out",
-          bounce: false,
-          attract: { enable: true, rotateX: 600, rotateY: 1200 }
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: false, mode: "push" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 200, line_linked: { opacity: 0.6 } },
-          bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
-          repulse: { distance: 200, duration: 0.4 },
-          push: { particles_nb: 4 },
-          remove: { particles_nb: 2 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
+  <!-- Build tag -->
+  <div class="build-tag">Simplify Governance v1.0.0 · BUILD 2026.03 · CONCEPT DEMO</div>
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- LOGIN LOGIC -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <script>
-    // Demo Credentials
-    const VALID_CREDENTIALS = {
-      'ahmed.thani': 'password123',
-      'Demo-2030': 'Qib@2030',
-      'admin': 'admin123',
-      'QIB2030': 'QIB2030'
-    };
-
-    let selectedRole = null;
-
-    function selectRole(role) {
-      selectedRole = role;
-      document.querySelectorAll('.role-button').forEach(btn => {
-        btn.classList.remove('selected');
-      });
-      event.target.classList.add('selected');
-    }
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const empId = document.getElementById('employeeId').value.trim();
-      const pwd = document.getElementById('password').value;
-      const otp = document.getElementById('otp').value;
-      const role = selectedRole;
-
-      // Validate
-      if (!empId || !pwd) {
-        alert('Please enter Employee ID and Password');
-        return;
-      }
-
-      if (!VALID_CREDENTIALS[empId] || VALID_CREDENTIALS[empId] !== pwd) {
-        alert('Invalid credentials.\n\nDemo accounts:\nahmend.thani / password123\nDemo-2030 / Qib@2030\nadmin / admin123\nQIB2030 / QIB2030');
-        return;
-      }
-
-      if (!role) {
-        alert('Please select a role');
-        return;
-      }
-
-      if (otp.length !== 6 || isNaN(otp)) {
-        alert('Invalid OTP. For demo, enter: 123456');
-        return;
-      }
-
-      // Success - Redirect to Dashboard
-      alert(`✅ Welcome ${empId}\nRole: ${role}\n\nRedirecting to dashboard...`);
-      // In production, redirect to: window.location.href = 'dashboard.html';
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-      // Alt + T: Text Size
-      if (e.altKey && e.key === 't') {
-        e.preventDefault();
-        const html = document.documentElement;
-        html.classList.toggle('font-large');
-      }
-
-      // Alt + C: Contrast
-      if (e.altKey && e.key === 'c') {
-        e.preventDefault();
-        document.body.style.filter = document.body.style.filter === 'contrast(1.5)' 
-          ? 'contrast(1)' 
-          : 'contrast(1.5)';
-      }
-    });
-
-    // Accessibility: Load saved preferences
-    window.addEventListener('load', function() {
-      const prefs = JSON.parse(localStorage.getItem('a11yPreferences') || '{}');
-      if (prefs.fontSize === 'large') {
-        document.documentElement.classList.add('font-large');
-      }
-    });
-  </script>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- MASTER SYSTEM ENHANCEMENT - Arabic, Accessibility, Voice, PIN -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <script src="js/master-system-enhancement.js"></script>
-
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- DEMO GUIDANCE SYSTEM -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <script src="js/demo-guidance.js"></script>
+  <script src="js/particles.js?v=1.1"></script>
+  <script src="js/login.js?v=1.1"></script>
 </body>
 </html>

@@ -29,21 +29,29 @@ class AccessibilityManager {
   }
 
   /**
-   * Increase/Decrease font size
+   * Increase/Decrease font size with support for both directions
    */
   setFontSize(size = 'normal', update = true) {
     const html = document.documentElement;
-    const btn = document.getElementById('btn-text-size');
+    const btnIncrease = document.getElementById('btn-text-size');
+    const btnDecrease = document.getElementById('btn-text-size-decrease');
 
-    html.classList.remove('font-large');
+    html.classList.remove('font-large', 'font-xlarge');
 
-    if (size === 'large') {
+    if (size === 'xlarge') {
+      html.classList.add('font-xlarge');
+      if (btnIncrease) btnIncrease.classList.add('active');
+      if (btnDecrease) btnDecrease.classList.remove('active');
+      this.announce('Extra large text mode enabled');
+    } else if (size === 'large') {
       html.classList.add('font-large');
-      if (btn) btn.classList.add('active');
+      if (btnIncrease) btnIncrease.classList.add('active');
+      if (btnDecrease) btnDecrease.classList.remove('active');
       this.announce('Large text mode enabled');
     } else {
-      if (btn) btn.classList.remove('active');
-      this.announce('Small text mode enabled');
+      if (btnIncrease) btnIncrease.classList.remove('active');
+      if (btnDecrease) btnDecrease.classList.add('active');
+      this.announce('Normal text mode enabled');
     }
 
     if (update) {
@@ -143,14 +151,24 @@ class AccessibilityManager {
    */
   attachEventListeners() {
     const btnTextSize = document.getElementById('btn-text-size');
+    const btnTextSizeDecrease = document.getElementById('btn-text-size-decrease');
     const btnContrast = document.getElementById('btn-contrast');
     const btnDyslexia = document.getElementById('btn-dyslexia');
     const btnColorblind = document.getElementById('btn-colorblind');
 
     if (btnTextSize) {
       btnTextSize.addEventListener('click', () => {
-        const isActive = btnTextSize.classList.contains('active');
-        this.setFontSize(isActive ? 'normal' : 'large');
+        const currentSize = this.preferences.fontSize || 'normal';
+        const nextSize = currentSize === 'normal' ? 'large' : currentSize === 'large' ? 'xlarge' : 'normal';
+        this.setFontSize(nextSize);
+      });
+    }
+
+    if (btnTextSizeDecrease) {
+      btnTextSizeDecrease.addEventListener('click', () => {
+        const currentSize = this.preferences.fontSize || 'normal';
+        const prevSize = currentSize === 'xlarge' ? 'large' : currentSize === 'large' ? 'normal' : 'normal';
+        this.setFontSize(prevSize);
       });
     }
 

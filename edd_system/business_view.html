@@ -400,10 +400,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
-          <div class="user-name" id="user-name">User</div>
-          <div class="user-role" id="user-role">Role</div>
+          <div class="user-name" id="user-name">Mr. Arslan</div>
+          <div class="user-role" id="user-role">Head - Senior Management</div>
         </div>
       </div>
     </aside>
@@ -653,8 +653,9 @@
 
     let currentSegment = 'mass';
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
+    // Initialize when page fully loads
+    window.addEventListener('load', () => {
+      console.log('✓ Business View loaded');
       loadUserInfo();
       updateCounts();
       renderCases();
@@ -671,18 +672,30 @@
     }
 
     function switchSegment(segment) {
+      console.log('🔄 Switching to:', segment);
       currentSegment = segment;
       
-      // Update tabs
-      document.querySelectorAll('.segment-tab').forEach(tab => tab.classList.remove('active'));
-      document.getElementById('tab-' + segment).classList.add('active');
+      // Update tabs - Add active class to selected, remove from others
+      document.querySelectorAll('.segment-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      const activeTab = document.getElementById('tab-' + segment);
+      if (activeTab) {
+        activeTab.classList.add('active');
+        console.log('✓ Tab activated:', segment);
+      }
       
       // Update queue title
       document.getElementById('queue-title').textContent = segmentNames[segment] + ' Queue';
       document.getElementById('queue-badge').textContent = segmentCases[segment].length + ' Pending';
       
+      // Update statistics for the selected segment
+      updateCounts();
+      
       // Render cases
       renderCases();
+      
+      console.log('✓ Segment switched to:', segment, 'with', segmentCases[segment].length, 'cases');
     }
 
     function updateCounts() {
@@ -740,15 +753,33 @@
     }
 
     function requestDocs() {
-      alert('Document Request feature - Select a case first');
+      const cases = segmentCases[currentSegment];
+      if (cases.length === 0) {
+        alert('No cases available in this segment');
+        return;
+      }
+      const caseId = cases[0].id;
+      alert(`📄 Document Request Initiated\n\nCase: ${caseId}\nCustomer: ${cases[0].customer}\nRIM: ${cases[0].rim}\n\nDocuments will be requested from the customer.`);
     }
 
     function contactCustomer() {
-      alert('Customer Contact feature - Select a case first');
+      const cases = segmentCases[currentSegment];
+      if (cases.length === 0) {
+        alert('No cases available in this segment');
+        return;
+      }
+      const caseId = cases[0].id;
+      alert(`📞 Customer Contact\n\nCase: ${caseId}\nCustomer: ${cases[0].customer}\n\nInitiating customer communication channel.`);
     }
 
     function escalateCase() {
-      alert('Escalation feature - Select a case first');
+      const cases = segmentCases[currentSegment];
+      if (cases.length === 0) {
+        alert('No cases available in this segment');
+        return;
+      }
+      const caseId = cases[0].id;
+      alert(`⚠️ Case Escalation\n\nCase: ${caseId}\nCustomer: ${cases[0].customer}\n\nEscalating to Compliance/CDD Team for higher-level review.`);
     }
 
     function setupLogout() {
@@ -763,16 +794,20 @@
   <a href="#main-content" class="skip-to-main">Skip to main content</a>
   
   <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
-    <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+A)">A+</button>
-    <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)">◐</button>
-    <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)">d</button>
-    <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)">◉</button>
+    <div class="accessibility-control-group">
+      <span class="accessibility-label">Text</span>
+      <button class="accessibility-btn" id="btn-text-size-decrease" title="Decrease Text Size (Alt+Minus)" aria-label="Decrease text size">A−</button>
+      <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+Plus)" aria-label="Increase text size">A+</button>
+    </div>
+    <div class="accessibility-control-group">
+      <span class="accessibility-label">Display</span>
+      <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)" aria-label="Toggle high contrast">◐</button>
+      <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)" aria-label="Toggle dyslexia font">d</button>
+      <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)" aria-label="Toggle color blind mode">◉</button>
+    </div>
   </div>
   
-  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030">
-    <div class="vision-2030-badge-ar">رؤية قطر<br>الوطنية<br>2030</div>
-    <div class="vision-2030-badge-tooltip">Qatar Vision 2030 - QIB Financial Crime Investigation Platform</div>
-  </div>
+  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر 2030">🏛️</div>
 
   <script src="js/accessibility.js"></script>
 </body>

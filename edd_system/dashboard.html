@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digital Governance System — Dashboard</title>
+  <title>Simplify Governance — Dashboard</title>
   <meta name="accessibility" content="wcag2.1-aa">
   <meta name="lang" content="en-GB,ar-QA">
+  <meta name="description" content="Simplify Governance Platform — Executive Dashboard">
   <link rel="stylesheet" href="css/edd_system.css">
   <link rel="stylesheet" href="css/accessibility_vision2030.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
@@ -22,8 +23,8 @@
           <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
         </div>
         <div class="sidebar-title">
-          <h1>EDD System</h1>
-          <span>Digital Platform</span>
+          <h1>Simplify Governance</h1>
+          <span>Executive Platform</span>
         </div>
       </div>
       
@@ -97,6 +98,10 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
             <span>Audit Console</span>
           </a>
+          <a href="brd_module.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>BRD Document</span>
+          </a>
         </div>
         
         <div class="nav-section">
@@ -113,10 +118,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
-          <div class="user-name" id="user-name">Admin User</div>
-          <div class="user-role" id="user-role">IT Administration</div>
+          <div class="user-name" id="user-name">Mr. Arslan</div>
+          <div class="user-role" id="user-role">Head - Senior Management</div>
         </div>
       </div>
     </aside>
@@ -168,7 +173,7 @@
             </div>
             <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end;">
               <button onclick="BRDReference.show('dashboard')" style="padding: 10px 18px; background: rgba(0,212,255,0.15); border: 1.5px solid rgba(0,212,255,0.3); border-radius: 10px; font-size: 12px; font-weight: 600; color: #00D4FF; cursor: pointer; transition: all 0.3s;" title="View BRD References">📄 BRD Reference</button>
-              <button onclick="VOICE_ASSISTANT.speak('This dashboard provides an overview of investigation activities and high-risk customer monitoring for the EDD department.')" style="padding: 10px 18px; background: rgba(76,175,80,0.15); border: 1.5px solid rgba(76,175,80,0.3); border-radius: 10px; font-size: 12px; font-weight: 600; color: #4CAF50; cursor: pointer; transition: all 0.3s;" title="Listen to Page Explanation">🔊 Explain Page</button>
+              <button onclick="VOICE_ASSISTANT.speak('This dashboard provides an overview of EDD investigation activities. You can monitor high-risk customers, track case status, and review approvals.')" style="padding: 10px 18px; background: rgba(76,175,80,0.15); border: 1.5px solid rgba(76,175,80,0.3); border-radius: 10px; font-size: 12px; font-weight: 600; color: #4CAF50; cursor: pointer; transition: all 0.3s;" title="Listen to Page Explanation">🔊 Explain Page</button>
               <button onclick="DemoWalkthrough.start()" style="padding: 10px 18px; background: rgba(255,167,38,0.15); border: 1.5px solid rgba(255,167,38,0.3); border-radius: 10px; font-size: 12px; font-weight: 600; color: #FFA726; cursor: pointer; transition: all 0.3s;" title="System Walkthrough Tour">🎬 System Walkthrough</button>
               <button onclick="PrintSystem.print()" style="padding: 10px 18px; background: rgba(156,39,176,0.15); border: 1.5px solid rgba(156,39,176,0.3); border-radius: 10px; font-size: 12px; font-weight: 600; color: #CE93D8; cursor: pointer; transition: all 0.3s;" title="Print System Summary">🖨️ Print Report</button>
             </div>
@@ -606,6 +611,9 @@
   <!-- 🎯 MASTER SYSTEM ENHANCEMENT (Arabic, Voice, Demo, Print, BRD) -->
   <script src="js/master-system-enhancement.js"></script>
   
+  <!-- 📄 BRD Reference, Voice Assistant, Demo Walkthrough -->
+  <script src="js/brd_and_features.js"></script>
+  
   <!-- Legacy (Fallback Support) -->
   <script src="js/mock_data.js"></script>
   <script src="js/enterprise_features.js"></script>
@@ -817,18 +825,86 @@
   <!-- Accessibility Features: Skip-to-Main, Controls, Vision 2030 Badge -->
   <a href="#main-content" class="skip-to-main">Skip to main content</a>
   
-  <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
-    <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+A)">A+</button>
-    <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)">◐</button>
-    <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)">d</button>
-    <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)">◉</button>
+  <div class="accessibility-controls-container">
+    <!-- Toggle Button -->
+    <button class="accessibility-toggle-btn" id="accessibility-toggle" title="Toggle Accessibility Controls" aria-label="Toggle accessibility panel" aria-expanded="true">⚙️ A</button>
+    
+    <!-- Accessibility Controls Panel -->
+    <div class="accessibility-controls" id="accessibility-panel" role="toolbar" aria-label="Accessibility Controls">
+      <div class="accessibility-control-group">
+        <span class="accessibility-label">Text</span>
+        <button class="accessibility-btn" id="btn-text-size-decrease" title="Decrease Text Size (Alt+Minus)" aria-label="Decrease text size">A−</button>
+        <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+Plus)" aria-label="Increase text size">A+</button>
+      </div>
+      <div class="accessibility-control-group">
+        <span class="accessibility-label">Display</span>
+        <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)" aria-label="Toggle high contrast">◐</button>
+        <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)" aria-label="Toggle dyslexia font">d</button>
+        <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)" aria-label="Toggle color blind mode">◉</button>
+      </div>
+      <div class="accessibility-control-group">
+        <button class="accessibility-btn" id="btn-seal-toggle" title="Toggle System Seal" aria-label="Toggle system seal">🏷️</button>
+      </div>
+    </div>
   </div>
   
-  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030">
-    <div class="vision-2030-badge-ar">رؤية قطر<br>الوطنية<br>2030</div>
-    <div class="vision-2030-badge-tooltip">Qatar Vision 2030 - QIB Financial Crime Investigation Platform</div>
+  <div class="vision-2030-badge" id="system-seal" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر الوطنية 2030">
+    🏛️
+    <div class="vision-2030-badge-tooltip" style="bottom: 110px; right: 0; width: 320px; white-space: normal;">
+      <div style="margin-bottom: 8px; font-weight: 600; color: #00D4FF;">Qatar National Vision 2030</div>
+      <div style="font-size: 11px; color: rgba(255,255,255,0.9); margin-bottom: 8px;">
+        Supporting sustainable development, trusted governance, secure digital transformation, and inclusive access for people with disabilities.
+      </div>
+      <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0, 212, 255, 0.3);">
+        <div style="margin-bottom: 8px; font-weight: 600; color: #00D4FF; direction: rtl;">رؤية قطر الوطنية 2030</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.9); direction: rtl; text-align: right;">
+          دعم التنمية المستدامة، والحوكمة الموثوقة، والتحول الرقمي الآمن، وتعزيز الوصول الشامل لذوي الاحتياجات الخاصة.
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="js/accessibility.js"></script>
+  <script>
+    // ═══ Accessibility Controls Toggle ═══
+    const accessibilityToggle = document.getElementById('accessibility-toggle');
+    const accessibilityPanel = document.getElementById('accessibility-panel');
+    
+    // Load visibility preference
+    const panelHidden = localStorage.getItem('accessibilityPanelHidden') === 'true';
+    if (panelHidden) {
+      accessibilityPanel.classList.add('collapsed');
+      accessibilityToggle.setAttribute('aria-expanded', 'false');
+    }
+    
+    // Toggle functionality
+    accessibilityToggle.addEventListener('click', function() {
+      accessibilityPanel.classList.toggle('collapsed');
+      const isExpanded = !accessibilityPanel.classList.contains('collapsed');
+      accessibilityToggle.setAttribute('aria-expanded', isExpanded);
+      localStorage.setItem('accessibilityPanelHidden', !isExpanded);
+    });
+
+    // Toggle System Seal Functionality
+    const sealToggleBtn = document.getElementById('btn-seal-toggle');
+    const systemSeal = document.getElementById('system-seal');
+    
+    // Load seal visibility preference
+    const sealHidden = localStorage.getItem('systemSealHidden') === 'true';
+    if (sealHidden) {
+      systemSeal.style.display = 'none';
+      sealToggleBtn.textContent = '🏷️ Show';
+      sealToggleBtn.title = 'Show System Seal';
+    }
+    
+    // Toggle seal on button click
+    sealToggleBtn.addEventListener('click', function() {
+      const isHidden = systemSeal.style.display === 'none';
+      systemSeal.style.display = isHidden ? 'flex' : 'none';
+      sealToggleBtn.textContent = isHidden ? '🏷️ Hide' : '🏷️ Show';
+      sealToggleBtn.title = isHidden ? 'Hide System Seal' : 'Show System Seal';
+      localStorage.setItem('systemSealHidden', !isHidden);
+    });
+  </script>
 </body>
 </html>

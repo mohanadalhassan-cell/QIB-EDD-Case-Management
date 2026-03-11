@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Requirements Document | Simplify Governance</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    :root {
+      --primary: #00D4FF;
+      --primary-dark: #0099CC;
+      --accent: #FFA726;
+      --cyan: #00D4FF;
+      --gold: #FFA726;
+      --gold-dark: #FF9500;
+      --bg-dark: #0F172A;
+      --bg-card: #1E293B;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --border-color: #1E293B;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --success: #10B981;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg-dark); color: var(--text-primary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; }
+
+    .page-container { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: var(--bg-dark); border-right: 1px solid var(--border-color); overflow-y: auto; }
+    .main-content { flex: 1; display: flex; flex-direction: column; }
+
+    .sidebar-nav { list-style: none; padding: 20px 0; }
+    .nav-section { padding: 0; margin-bottom: 8px; }
+    .nav-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); padding: 12px 20px 8px; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; border-left: 2px solid transparent; }
+    .nav-item:hover { color: var(--cyan); background: rgba(0, 212, 255, 0.05); }
+    .nav-item.active { color: var(--cyan); background: rgba(0, 212, 255, 0.1); border-left-color: var(--cyan); }
+    .nav-item svg { width: 20px; height: 20px; }
+
+    .top-bar { background: var(--bg-card); border-bottom: 1px solid var(--border-color); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .top-bar-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .top-bar-actions { display: flex; gap: 12px; }
+
+    .brd-container { flex: 1; overflow-y: auto; padding: 24px; }
+    .brd-wrapper { max-width: 900px; margin: 0 auto; }
+
+    .brd-header { background: linear-gradient(135deg, var(--bg-card) 0%, rgba(0,212,255,0.05) 100%); border: 1px solid var(--border-color); border-radius: 12px; padding: 40px; margin-bottom: 24px; text-align: center; }
+    .brd-header h1 { font-size: 32px; margin-bottom: 8px; color: var(--cyan); }
+    .brd-header p { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+    .brd-header .draft-badge { display: inline-block; margin-top: 16px; padding: 8px 16px; background: linear-gradient(135deg, #F59E0B, #FF9800); border-radius: 6px; font-size: 12px; font-weight: 700; color: #000; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .brd-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+    .brd-section-title { font-size: 18px; font-weight: 700; color: var(--cyan); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
+    .brd-section-content { color: var(--text-secondary); line-height: 1.8; }
+    .brd-section-content p { margin-bottom: 12px; }
+
+    .brd-item { margin-bottom: 16px; }
+    .brd-item-title { font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    .brd-item-desc { font-size: 13px; color: var(--text-secondary); }
+
+    .edit-mode .brd-section-content { display: none; }
+    .edit-mode .brd-editor { display: block; }
+    .edit-mode { border: 2px solid var(--cyan); }
+
+    textarea.brd-editor { width: 100%; min-height: 200px; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: 'Monaco', 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; }
+
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; padding: 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; }
+    .btn { padding: 10px 16px; background: linear-gradient(135deg, var(--cyan), var(--primary-dark)); border: none; border-radius: 8px; color: #000; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3); }
+    .btn.secondary { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--cyan); }
+    .btn.secondary:hover { background: rgba(0, 212, 255, 0.1); }
+    .btn.danger { background: var(--danger); color: white; }
+    .btn.danger:hover { background: #DC2626; }
+
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; align-items: center; justify-content: center; }
+    .modal.open { display: flex; }
+    .modal-content { background: var(--bg-card); border-radius: 12px; padding: 28px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; border: 1px solid var(--border-color); }
+    .modal-header { font-size: 18px; font-weight: 700; color: var(--cyan); margin-bottom: 16px; }
+    .modal-body { color: var(--text-secondary); margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    .form-input { width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); font-size: 13px; }
+    .form-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1); }
+
+    .version-info { display: flex; flex-wrap: wrap; gap: 20px; padding: 16px; background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; margin-bottom: 20px; }
+    .version-item { flex: 1; min-width: 200px; }
+    .version-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+    .version-value { font-size: 14px; font-weight: 600; color: var(--cyan); }
+
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
+      .page-container { flex-direction: column; }
+      .nav-section-title { padding: 8px 16px 6px; }
+      .nav-item { padding: 10px 16px; font-size: 13px; }
+      .brd-header { padding: 24px; }
+      .brd-header h1 { font-size: 24px; }
+    }
+
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .status-draft { background: var(--warning); color: #000; }
+    .status-approved { background: var(--success); color: white; }
+    .status-archived { background: var(--text-secondary); color: white; }
+
+    .metadata-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; }
+    .metadata-label { color: var(--text-secondary); font-weight: 500; }
+    .metadata-value { color: var(--text-primary); }
+
+    .approval-section { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 16px; margin-top: 16px; }
+    .approval-title { font-weight: 600; color: var(--success); margin-bottom: 12px; }
+    .approval-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+
+    .toc { background: rgba(0, 212, 255, 0.05); border-left: 3px solid var(--cyan); padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+    .toc-title { font-weight: 600; color: var(--cyan); margin-bottom: 12px; }
+    .toc-item { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: all 0.2s; }
+    .toc-item:hover { background: rgba(0, 212, 255, 0.1); color: var(--cyan); }
+  </style>
+</head>
+<body>
+  <!-- Skip to main -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+  <!-- Page Layout -->
+  <div class="page-container">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Navigation</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="brd_module.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>BRD Document</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="top-bar-title">Business Requirements Document</div>
+        <div class="top-bar-actions">
+          <button class="btn secondary" onclick="toggleEditMode()" title="Edit document" id="edit-btn">✏️ Edit</button>
+          <button class="btn secondary" onclick="saveBRD()" title="Save document" id="save-btn" style="display:none;">💾 Save</button>
+          <button class="btn secondary" onclick="printBRD()" title="Print document">🖨️ Print</button>
+          <button class="btn secondary" onclick="exportBRD()" title="Export as PDF">📥 Export</button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="brd-container" id="main-content">
+        <div class="brd-wrapper">
+          <!-- Version & Metadata -->
+          <div class="version-info">
+            <div class="version-item">
+              <div class="version-label">Document Status</div>
+              <div><span class="status-badge status-draft">Draft: EDD</span></div>
+            </div>
+            <div class="version-item">
+              <div class="version-label">Version</div>
+              <div class="version-value">1.0</div>
+            </div>
+            <div class="version-item">
+              <div class="version-label">Last Modified</div>
+              <div class="version-value" id="last-modified">2026-03-10</div>
+            </div>
+            <div class="version-item">
+              <div class="version-label">Document ID</div>
+              <div class="version-value">BRD-EDD-2026-001</div>
+            </div>
+          </div>
+
+          <!-- Document Header -->
+          <div class="brd-header">
+            <h1>Business Requirements Document</h1>
+            <p>Enhanced Due Diligence Governance Platform</p>
+            <p style="font-size:12px;color:#64748b;margin-top:12px;">وثيقة متطلبات العمل - منصة حوكمة التدقيق المعزز</p>
+            <div class="draft-badge">Draft: EDD Concept Demonstration</div>
+          </div>
+
+          <!-- Table of Contents -->
+          <div class="toc">
+            <div class="toc-title">📋 Contents</div>
+            <div class="toc-item" onclick="scrollToSection('overview')">1. Executive Overview</div>
+            <div class="toc-item" onclick="scrollToSection('scope')">2. Project Scope & Objectives</div>
+            <div class="toc-item" onclick="scrollToSection('requirements')">3. Functional Requirements</div>
+            <div class="toc-item" onclick="scrollToSection('architecture')">4. Technical Architecture</div>
+            <div class="toc-item" onclick="scrollToSection('governance')">5. Governance Framework</div>
+            <div class="toc-item" onclick="scrollToSection('approvals')">6. Approvals & Sign-Off</div>
+          </div>
+
+          <!-- Section 1: Executive Overview -->
+          <div class="brd-section" id="section-overview">
+            <div class="brd-section-title">1. Executive Overview</div>
+            <div class="brd-section-content">
+              <p>This Business Requirements Document defines the comprehensive specifications for the <strong>Enhanced Due Diligence (EDD) Governance Platform</strong>, a modern system designed to digitize and streamline governance workflows for financial institutions.</p>
+              <p>The platform enables organizations to:</p>
+              <ul style="margin-left: 20px; margin-bottom: 12px;">
+                <li>Centralize EDD case management and investigations</li>
+                <li>Establish governance controls and compliance oversight</li>
+                <li>Maintain full audit trails and regulatory traceability</li>
+                <li>Provide role-based access and secure workflows</li>
+                <li>Enable real-time monitoring and reporting capabilities</li>
+              </ul>
+            </div>
+            <textarea class="brd-editor" id="editor-overview" style="display:none;"></textarea>
+          </div>
+
+          <!-- Section 2: Project Scope -->
+          <div class="brd-section" id="section-scope">
+            <div class="brd-section-title">2. Project Scope & Objectives</div>
+            <div class="brd-section-content">
+              <div class="brd-item">
+                <div class="brd-item-title">Primary Objectives</div>
+                <div class="brd-item-desc">
+                  <ul style="margin-left: 20px;">
+                    <li>Automate EDD investigation workflows</li>
+                    <li>Implement governance checkpoints and approvals</li>
+                    <li>Enable role-based case management</li>
+                    <li>Provide comprehensive audit logging</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="brd-item" style="margin-top: 16px;">
+                <div class="brd-item-title">Key Features</div>
+                <div class="brd-item-desc">
+                  <ul style="margin-left: 20px;">
+                    <li><strong>Case Management:</strong> Create, assign, track EDD investigations</li>
+                    <li><strong>Governance Engine:</strong> Workflow approvals, escalation rules</li>
+                    <li><strong>Document Management:</strong> Store, version, and manage requirements</li>
+                    <li><strong>Reporting & Analytics:</strong> Real-time dashboards and compliance metrics</li>
+                    <li><strong>Accessibility:</strong> WCAG 2.1 AA compliant interface</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <textarea class="brd-editor" id="editor-scope" style="display:none;"></textarea>
+          </div>
+
+          <!-- Section 3: Functional Requirements -->
+          <div class="brd-section" id="section-requirements">
+            <div class="brd-section-title">3. Functional Requirements</div>
+            <div class="brd-section-content">
+              <p><strong>User Management:</strong> Multi-role access control with department-based permissions</p>
+              <p><strong>Case Workflow:</strong> EDD cases with status tracking, assignment, and escalation</p>
+              <p><strong>Investigation Tools:</strong> Document verification, customer profiling, risk assessment</p>
+              <p><strong>Compliance Monitoring:</strong> Real-time alerts, policy enforcement, regulatory reporting</p>
+              <p><strong>Communication:</strong> Notifications, approvals, audit trails for all actions</p>
+              <p><strong>Analytics:</strong> Dashboards, metrics, performance indicators, trend analysis</p>
+            </div>
+            <textarea class="brd-editor" id="editor-requirements" style="display:none;"></textarea>
+          </div>
+
+          <!-- Section 4: Technical Architecture -->
+          <div class="brd-section" id="section-architecture">
+            <div class="brd-section-title">4. Technical Architecture</div>
+            <div class="brd-section-content">
+              <p><strong>Frontend:</strong> Modern HTML5/CSS3/JavaScript framework with responsive design</p>
+              <p><strong>Backend:</strong> RESTful APIs with Node.js/Express server architecture</p>
+              <p><strong>Database:</strong> Secure data storage with transaction logging and backup</p>
+              <p><strong>Security:</strong> End-to-end encryption, role-based access control (RBAC), SSL/TLS</p>
+              <p><strong>Integration:</strong> APIs for third-party system connectivity</p>
+              <p><strong>Accessibility:</strong> WCAG 2.1 AA compliance, keyboard navigation, screen reader support</p>
+            </div>
+            <textarea class="brd-editor" id="editor-architecture" style="display:none;"></textarea>
+          </div>
+
+          <!-- Section 5: Governance Framework -->
+          <div class="brd-section" id="section-governance">
+            <div class="brd-section-title">5. Governance Framework</div>
+            <div class="brd-section-content">
+              <p><strong>Oversight Structure:</strong> Multi-level approval hierarchies with clear escalation paths</p>
+              <p><strong>Compliance Controls:</strong> Policy enforcement, audit logging, regulatory alignment</p>
+              <p><strong>Risk Management:</strong> Risk categorization, mitigation tracking, remediation workflows</p>
+              <p><strong>Performance Metrics:</strong> SLA tracking, turnaround times, case metrics</p>
+              <p><strong>Audit Trail:</strong> Complete action logging with timestamps and user attribution</p>
+              <p><strong>Data Protection:</strong> Privacy by design, GDPR compliance, secure data handling</p>
+            </div>
+            <textarea class="brd-editor" id="editor-governance" style="display:none;"></textarea>
+          </div>
+
+          <!-- Approvals Section -->
+          <div class="brd-section" id="section-approvals">
+            <div class="brd-section-title">6. Approvals & Sign-Off</div>
+            <div class="approval-section">
+              <div class="approval-title">✓ Document Approvals</div>
+              <div class="approval-item">
+                <span class="approval-label">Project Sponsor</span>
+                <span class="approval-status" style="color:#10B981;">✓ Approved</span>
+              </div>
+              <div class="approval-item">
+                <span class="approval-label">Business Owner</span>
+                <span class="approval-status" style="color:#10B981;">✓ Approved</span>
+              </div>
+              <div class="approval-item">
+                <span class="approval-label">Technical Lead</span>
+                <span class="approval-status" style="color:#10B981;">✓ Approved</span>
+              </div>
+              <div class="approval-item">
+                <span class="approval-label">Compliance Officer</span>
+                <span class="approval-status" style="color:#10B981;">✓ Approved</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document Footer -->
+          <div style="text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 40px; color: var(--text-secondary); font-size: 12px;">
+            <p><strong>Simplify Governance</strong></p>
+            <p>Concept Demonstration Platform · 2026</p>
+            <p style="margin-top: 12px;">This document is a concept demonstration intended for evaluation and strategic discussion purposes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility Features -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+  <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
+    <div class="accessibility-control-group">
+      <span class="accessibility-label">Text</span>
+      <button class="accessibility-btn" id="btn-text-size-decrease" title="Decrease Text Size (Alt+Minus)" aria-label="Decrease text size">A−</button>
+      <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+Plus)" aria-label="Increase text size">A+</button>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════
+    // BRD Document Management System
+    // ═══════════════════════════════════════════════════════════
+
+    let editMode = false;
+    const sectionIds = ['overview', 'scope', 'requirements', 'architecture', 'governance', 'approvals'];
+
+    function toggleEditMode() {
+      editMode = !editMode;
+      const editBtn = document.getElementById('edit-btn');
+      const saveBtn = document.getElementById('save-btn');
+      const sections = document.querySelectorAll('.brd-section');
+      const editors = document.querySelectorAll('textarea.brd-editor');
+
+      sections.forEach((section, idx) => {
+        if (editMode) {
+          section.classList.add('edit-mode');
+          const editor = document.querySelectorAll('textarea.brd-editor')[idx];
+          if (editor) {
+            const content = section.querySelector('.brd-section-content');
+            editor.value = content.innerText;
+            editor.style.display = 'block';
+          }
+        } else {
+          section.classList.remove('edit-mode');
+          editors.forEach(e => e.style.display = 'none');
+        }
+      });
+
+      editBtn.style.display = editMode ? 'none' : 'flex';
+      saveBtn.style.display = editMode ? 'flex' : 'none';
+    }
+
+    function saveBRD() {
+      const sections = document.querySelectorAll('.brd-section');
+      const editors = document.querySelectorAll('textarea.brd-editor');
+
+      editors.forEach((editor, idx) => {
+        const section = sections[idx];
+        const content = section.querySelector('.brd-section-content');
+        if (editor.value.trim()) {
+          content.innerHTML = `<p>${editor.value.replace(/\n/g, '</p><p>')}</p>`;
+        }
+      });
+
+      // Update last modified date
+      const today = new Date();
+      const dateStr = today.toISOString().split('T')[0];
+      document.getElementById('last-modified').textContent = dateStr;
+
+      // Save to localStorage
+      const brdData = {
+        sections: {},
+        lastModified: dateStr,
+        version: '1.0'
+      };
+
+      sections.forEach((section, idx) => {
+        const sectionId = sectionIds[idx];
+        brdData.sections[sectionId] = section.querySelector('.brd-section-content').innerHTML;
+      });
+
+      localStorage.setItem('brd-document', JSON.stringify(brdData));
+
+      // Exit edit mode and show confirmation
+      toggleEditMode();
+      alert('✓ Document saved successfully');
+    }
+
+    function printBRD() {
+      const printContent = document.querySelector('.brd-wrapper').innerHTML;
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Business Requirements Document - Simplify Governance</title>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 40px; }
+            h1 { color: #003366; text-align: center; }
+            .section { page-break-inside: avoid; margin-bottom: 30px; }
+            .section-title { color: #003366; font-size: 18px; font-weight: bold; border-bottom: 2px solid #00D4FF; padding-bottom: 10px; }
+            .draft-badge { background: #FFA726; color: black; padding: 8px 16px; text-align: center; font-weight: bold; margin: 20px 0; }
+            ul { margin-left: 20px; }
+            .metadata { color: #666; font-size: 12px; text-align: center; margin-bottom: 40px; }
+            .footer { text-align: center; color: #999; font-size: 11px; margin-top: 60px; border-top: 1px solid #ddd; padding-top: 20px; }
+          </style>
+        </head>
+        <body>
+          ${printContent}
+          <div class="footer">
+            <p><strong>Simplify Governance</strong></p>
+            <p>Concept Demonstration Platform · 2026</p>
+            <p>This document is a concept demonstration intended for evaluation and strategic discussion purposes.</p>
+          </div>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      setTimeout(() => printWindow.print(), 250);
+    }
+
+    function exportBRD() {
+      const content = document.querySelector('.brd-wrapper').innerHTML;
+      const html = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>Business Requirements Document</title>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 900px; margin: 0 auto; padding: 40px; background: white; color: #333; }
+            h1 { color: #003366; text-align: center; font-size: 28px; }
+            h2 { color: #003366; border-bottom: 2px solid #00D4FF; padding-bottom: 10px; }
+            .metadata { color: #666; font-size: 12px; text-align: center; margin-bottom: 40px; }
+            .badge { background: #FFA726; color: black; padding: 8px 16px; display: inline-block; font-weight: bold; }
+            .footer { text-align: center; color: #999; font-size: 11px; margin-top: 60px; border-top: 1px solid #ddd; padding-top: 20px; }
+            ul { margin-left: 20px; }
+          </style>
+        </head>
+        <body>
+          ${content}
+          <div class="footer">
+            <p><strong>Simplify Governance</strong></p>
+            <p>Concept Demonstration Platform · 2026</p>
+          </div>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'BRD-EDD-2026-001.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function scrollToSection(sectionId) {
+      const element = document.getElementById(`section-${sectionId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Load saved BRD data from localStorage if available
+    function loadBRDData() {
+      const savedData = localStorage.getItem('brd-document');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          Object.keys(data.sections).forEach(sectionId => {
+            const section = document.querySelector(`#section-${sectionId}`);
+            if (section) {
+              const content = section.querySelector('.brd-section-content');
+              if (content) {
+                content.innerHTML = data.sections[sectionId];
+              }
+            }
+          });
+          if (data.lastModified) {
+            document.getElementById('last-modified').textContent = data.lastModified;
+          }
+        } catch (e) {
+          console.log('Could not load saved BRD data');
+        }
+      }
+    }
+
+    // Accessibility Features
+    function initAccessibility() {
+      const decreaseBtn = document.getElementById('btn-text-size-decrease');
+      const increaseBtn = document.getElementById('btn-text-size');
+
+      let textSize = localStorage.getItem('textSize') || '16';
+      document.documentElement.style.fontSize = textSize + 'px';
+
+      if (decreaseBtn) decreaseBtn.addEventListener('click', () => {
+        textSize = Math.max(12, parseInt(textSize) - 2);
+        document.documentElement.style.fontSize = textSize + 'px';
+        localStorage.setItem('textSize', textSize);
+      });
+
+      if (increaseBtn) increaseBtn.addEventListener('click', () => {
+        textSize = Math.min(28, parseInt(textSize) + 2);
+        document.documentElement.style.fontSize = textSize + 'px';
+        localStorage.setItem('textSize', textSize);
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.altKey && e.key === '-') decreaseBtn?.click();
+        if (e.altKey && e.key === '+') increaseBtn?.click();
+        if (e.altKey && e.key === 'e') toggleEditMode();
+        if (e.altKey && e.key === 's') saveBRD();
+      });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBRDData();
+      initAccessibility();
+    });
+  </script>
+</body>
+</html>

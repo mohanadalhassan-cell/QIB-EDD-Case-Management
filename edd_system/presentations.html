@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QIB EDD System — Presentations</title>
+  <title>Simplify Governance — Presentations</title>
   <meta name="accessibility" content="wcag2.1-aa">
   <meta name="lang" content="en-GB,ar-QA">
   <link rel="stylesheet" href="css/edd_system.css">
@@ -780,10 +780,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar">AD</div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
-          <div class="user-name" id="user-name">Admin User</div>
-          <div class="user-role" id="user-role">IT Administration</div>
+          <div class="user-name" id="user-name">Mr. Arslan</div>
+          <div class="user-role" id="user-role">Head - Senior Management</div>
         </div>
       </div>
     </aside>
@@ -882,7 +882,7 @@
 
         <div class="presentations-grid">
           <!-- EXECUTIVE BOARD PRESENTATION — TOP PRIORITY -->
-          <div class="presentation-card comprehensive" onclick="window.location.href='executive_presentation.html'" style="--card-accent: #D4AF37; --card-glow: rgba(212,175,55,0.25); border: 1px solid rgba(212,175,55,0.3); background: linear-gradient(135deg, rgba(212,175,55,0.06) 0%, rgba(255,255,255,0.02) 100%);">
+          <div class="presentation-card comprehensive" onclick="launchPresentation('comprehensive')" style="--card-accent: #D4AF37; --card-glow: rgba(212,175,55,0.25); border: 1px solid rgba(212,175,55,0.3); background: linear-gradient(135deg, rgba(212,175,55,0.06) 0%, rgba(255,255,255,0.02) 100%);">
             <div class="presentation-badge" style="background: linear-gradient(135deg, #D4AF37, #c49b2c); color: #0a1628;">⭐ BOARD LEVEL</div>
             <div class="presentation-icon" style="background: linear-gradient(135deg, #D4AF37 0%, rgba(212,175,55,0.3) 100%);">🏛️</div>
             <div class="presentation-title">Executive Strategic Briefing</div>
@@ -894,7 +894,7 @@
               <span>⏱️ 7 min</span>
               <span>👥 Board / EXCO / AGM</span>
             </div>
-            <button class="play-button" style="background: linear-gradient(135deg, #D4AF37, #c49b2c); color: #0a1628;">
+            <button class="play-button" style="background: linear-gradient(135deg, #D4AF37, #c49b2c); color: #0a1628;" onclick="event.stopPropagation(); launchPresentation('comprehensive')">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
               Launch Executive Briefing
             </button>
@@ -913,7 +913,7 @@
               <span>⏱️ 25 min</span>
               <span>👥 All Staff</span>
             </div>
-            <button class="play-button">
+            <button class="play-button" onclick="event.stopPropagation(); launchPresentation('comprehensive')">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
               Start Presentation
             </button>
@@ -931,7 +931,7 @@
               <span>⏱️ 20 min</span>
               <span>👥 Mass / Tamayuz / Private</span>
             </div>
-            <button class="play-button">
+            <button class="play-button" onclick="event.stopPropagation(); launchPresentation('business')">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
               Start Presentation
             </button>
@@ -949,7 +949,7 @@
               <span>⏱️ 20 min</span>
               <span>👥 CDD Team</span>
             </div>
-            <button class="play-button">
+            <button class="play-button" onclick="event.stopPropagation(); launchPresentation('cdd')">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
               Start Presentation
             </button>
@@ -967,7 +967,7 @@
               <span>⏱️ 20 min</span>
               <span>👥 Compliance</span>
             </div>
-            <button class="play-button">
+            <button class="play-button" onclick="event.stopPropagation(); launchPresentation('compliance')">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
               Start Presentation
             </button>
@@ -985,7 +985,7 @@
               <span>⏱️ 15 min</span>
               <span>👥 Operations</span>
             </div>
-            <button class="play-button">
+            <button class="play-button" onclick="event.stopPropagation(); launchPresentation('operations')">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M8 5v14l11-7z"/></svg>
               Start Presentation
             </button>
@@ -1335,12 +1335,21 @@
   <script src="js/edd_data_model.js"></script>
   <script src="js/data_bridge.js"></script>
   
-  <!-- Legacy Support -->
+  <!-- Legacy Support - MUST LOAD BEFORE USAGE -->
   <script src="js/enterprise_features.js"></script>
   <script src="js/enterprise_ui.js"></script>
+  
   <script>
-    // Initialize user info
-    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize page when DOM is ready
+    window.addEventListener('load', function() {
+      // Verify EnterpriseFeatures is loaded
+      if (typeof EnterpriseFeatures === 'undefined') {
+        console.error('❌ EnterpriseFeatures not loaded');
+        return;
+      }
+      console.log('✓ EnterpriseFeatures loaded successfully');
+      
+      // Initialize user info
       const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
       if (currentUser) {
         document.getElementById('user-name').textContent = currentUser.nameEn || currentUser.name;
@@ -2178,16 +2187,20 @@
   <a href="#main-content" class="skip-to-main">Skip to main content</a>
   
   <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
-    <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+A)">A+</button>
-    <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)">◐</button>
-    <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)">d</button>
-    <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)">◉</button>
+    <div class="accessibility-control-group">
+      <span class="accessibility-label">Text</span>
+      <button class="accessibility-btn" id="btn-text-size-decrease" title="Decrease Text Size (Alt+Minus)" aria-label="Decrease text size">A−</button>
+      <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+Plus)" aria-label="Increase text size">A+</button>
+    </div>
+    <div class="accessibility-control-group">
+      <span class="accessibility-label">Display</span>
+      <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)" aria-label="Toggle high contrast">◐</button>
+      <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)" aria-label="Toggle dyslexia font">d</button>
+      <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)" aria-label="Toggle color blind mode">◉</button>
+    </div>
   </div>
   
-  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030">
-    <div class="vision-2030-badge-ar">رؤية قطر<br>الوطنية<br>2030</div>
-    <div class="vision-2030-badge-tooltip">Qatar Vision 2030 - QIB Financial Crime Investigation Platform</div>
-  </div>
+<div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر 2030">🏛️</div>
 
   <script src="js/accessibility.js"></script>
 </body>
