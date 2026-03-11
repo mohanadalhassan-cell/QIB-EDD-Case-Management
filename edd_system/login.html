@@ -3,1428 +3,999 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Qatar National Vision 2030 - Enterprise Digital Governance Platform">
+  <meta name="description" content="QIB Financial Crime Investigation Platform — Secure Access">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#0a1f3d">
-  <title>Qatar Vision 2030 — Digital Command Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23D4AF37'/><stop offset='100%' style='stop-color:%2300D4FF'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23grad)'/><text x='16' y='22' font-size='14' font-weight='900' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
-  
+  <title>QIB — Financial Crime Investigation Platform</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23D4AF37'/><stop offset='100%25' stop-color='%2300D4FF'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><text x='16' y='22' font-size='14' font-weight='900' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
-      width: 100%;
-      height: 100%;
-      font-family: 'Inter', sans-serif;
+      width: 100%; height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #050d1a;
+      color: #fff;
       overflow: hidden;
-      background: #0a1f3d;
     }
 
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* LOADING SCREEN */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
+    /* ── Two-panel layout ─────────────────────────────────────────── */
+    .layout {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10001;
-      opacity: 1;
-      transition: opacity 1s ease-out;
+      width: 100%; height: 100vh;
     }
 
-    .loading-screen.hidden {
-      opacity: 0;
+    /* ── LEFT PANEL ────────────────────────────────────────────────── */
+    .panel-left {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #050d1a;
+      min-width: 0;
+    }
+
+    #network-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    .panel-left-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top,
+        rgba(5, 13, 26, 0.92) 0%,
+        rgba(5, 13, 26, 0.4) 40%,
+        transparent 70%);
       pointer-events: none;
     }
 
-    .loading-container {
-      text-align: center;
+    .panel-left-content {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 48px 52px;
     }
 
-    .loading-spinner {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 40px;
-      border: 4px solid rgba(212, 175, 55, 0.2);
-      border-top: 4px solid #D4AF37;
-      border-radius: 50%;
-      animation: spin 1.5s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-text {
-      font-size: 36px;
-      font-weight: 700;
-      color: #D4AF37;
-      letter-spacing: 3px;
-      margin-bottom: 16px;
-      animation: loadingPulse 1.5s ease-in-out infinite;
-    }
-
-    .loading-text-sub {
-      font-size: 14px;
-      color: rgba(212, 175, 55, 0.6);
-      letter-spacing: 2px;
-    }
-
-    @keyframes loadingPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* VISION 2030 SPLASH SCREEN */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .splash-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      opacity: 1;
-      transition: opacity 0.8s ease-out;
-    }
-
-    .splash-screen.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .splash-content {
-      text-align: center;
-      animation: splashFadeIn 0.8s ease-out;
-    }
-
-    @keyframes splashFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .splash-logo {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 40px;
-      animation: splashLogoFloat 2s ease-in-out infinite;
-    }
-
-    @keyframes splashLogoFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-    }
-
-    .splash-logo svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.8));
-    }
-
-    .splash-title {
-      font-size: 48px;
-      font-weight: 900;
-      color: #D4AF37;
-      margin-bottom: 16px;
-      letter-spacing: 2px;
-      animation: splashTitleSlide 1s ease-out;
-    }
-
-    @keyframes splashTitleSlide {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .splash-subtitle {
-      font-size: 20px;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 400;
-      letter-spacing: 1px;
-      animation: splashSubtitleSlide 1s ease-out 0.2s both;
-    }
-
-    @keyframes splashSubtitleSlide {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .splash-bar {
-      width: 200px;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #D4AF37, #00D4FF, transparent);
-      margin-top: 32px;
-      animation: splashBarGrow 1.5s ease-out 0.4s both;
-    }
-
-    @keyframes splashBarGrow {
-      from { width: 0; opacity: 0; }
-      to { width: 200px; opacity: 1; }
-    }
-
-    .splash-features {
-      margin-top: 48px;
-      display: flex;
-      gap: 40px;
-      animation: splashFeaturesSlide 1s ease-out 0.6s both;
-    }
-
-    @keyframes splashFeaturesSlide {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .feature-pill {
-      display: flex;
+    .live-badge {
+      display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
-      background: rgba(212, 175, 55, 0.1);
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 6px 14px;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.22);
       border-radius: 20px;
-      color: #D4AF37;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      color: #00D4FF;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
     }
 
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* MAIN LOGIN PORTAL */
-    /* ═══════════════════════════════════════════════════════════════ */
+    .live-dot {
+      width: 6px; height: 6px;
+      background: #00D4FF;
+      border-radius: 50%;
+      animation: livePulse 2s ease-in-out infinite;
+    }
 
-    .login-wrapper {
-      width: 100%;
-      height: 100%;
+    @keyframes livePulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,212,255,0.6); }
+      50%       { opacity: 0.5; box-shadow: 0 0 0 5px rgba(0,212,255,0); }
+    }
+
+    .panel-left-title {
+      font-size: 34px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .panel-left-title .highlight {
+      background: linear-gradient(135deg, #D4AF37 0%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .panel-left-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.75;
+      max-width: 360px;
+    }
+
+    /* ── RIGHT PANEL ───────────────────────────────────────────────── */
+    .panel-right {
+      width: 460px;
+      min-width: 460px;
+      background: #060f1c;
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
       display: flex;
-      background: linear-gradient(135deg, #0a1f3d 0%, #0f2a4d 50%, #051429 100%);
-      position: relative;
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity 0.8s ease-out;
-    }
-
-    .login-wrapper.visible {
-      opacity: 1;
-    }
-
-    /* Background effects */
-    .bg-effects {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .grid-bg {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-image:
-        linear-gradient(0deg, transparent 24%, rgba(0, 212, 255, 0.05) 25%, rgba(0, 212, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 212, 255, 0.05) 75%, rgba(0, 212, 255, 0.05) 76%, transparent 77%, transparent),
-        linear-gradient(90deg, transparent 24%, rgba(0, 212, 255, 0.05) 25%, rgba(0, 212, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 212, 255, 0.05) 75%, rgba(0, 212, 255, 0.05) 76%, transparent 77%, transparent);
-      background-size: 60px 60px;
-      animation: gridFlow 20s linear infinite;
-    }
-
-    @keyframes gridFlow {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(60px); }
-    }
-
-    .light-rays {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    .ray {
-      position: absolute;
-      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-      opacity: 0.5;
-      animation: rayMove 6s ease-in-out infinite;
-    }
-
-    .ray:nth-child(1) {
-      width: 1px;
-      height: 100%;
-      left: 20%;
-      animation-delay: 0s;
-    }
-
-    .ray:nth-child(2) {
-      width: 1px;
-      height: 100%;
-      left: 40%;
-      animation-delay: 1s;
-    }
-
-    .ray:nth-child(3) {
-      width: 1px;
-      height: 100%;
-      left: 60%;
-      animation-delay: 2s;
-    }
-
-    .ray:nth-child(4) {
-      width: 1px;
-      height: 100%;
-      left: 80%;
-      animation-delay: 3s;
-    }
-
-    @keyframes rayMove {
-      0% { opacity: 0; }
-      50% { opacity: 0.5; }
-      100% { opacity: 0; }
-    }
-
-    /* Portal container */
-    .portal-container {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      width: 100%;
-      height: 100%;
-    }
-
-    .portal-left {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 60px;
-      background: linear-gradient(135deg, rgba(10, 31, 61, 0.8) 0%, rgba(15, 42, 77, 0.6) 100%);
+      justify-content: center;
+      padding: 48px 40px;
+      overflow-y: auto;
     }
 
-    .brand-section {
+    .login-box {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    /* ── Brand header ──────────────────────────────────────────────── */
+    .brand-header {
       text-align: center;
-      animation: contentSlideIn 0.8s ease-out 0.4s both;
+      margin-bottom: 36px;
     }
 
-    @keyframes contentSlideIn {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
+    .brand-logo-wrap {
+      width: 62px; height: 62px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(0,212,255,0.08));
+      border: 1px solid rgba(212, 175, 55, 0.28);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
     }
 
-    .brand-logo {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 30px;
-      animation: logoPulse 3s ease-in-out infinite;
+    .brand-logo-wrap svg {
+      width: 34px; height: 34px;
     }
 
-    @keyframes logoPulse {
-      0% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
-      50% { filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.8)); }
-      100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); }
-    }
-
-    .brand-title {
-      font-size: 42px;
-      font-weight: 900;
+    .brand-bank {
+      font-size: 12px;
+      font-weight: 700;
       color: #D4AF37;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
     }
 
-    .brand-subtitle {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 30px;
-      font-weight: 400;
+    .brand-system {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 5px;
+    }
+
+    .brand-vision {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.35);
       letter-spacing: 0.5px;
     }
 
     .brand-divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #D4AF37, #00D4FF, transparent);
-      margin: 30px auto;
+      width: 36px; height: 2px;
+      background: linear-gradient(90deg, #D4AF37, #00D4FF);
+      margin: 14px auto;
+      border-radius: 2px;
     }
 
-    .brand-description {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.5);
-      line-height: 1.8;
-      max-width: 280px;
-      margin-bottom: 40px;
-      letter-spacing: 0.3px;
-    }
-
-    .trust-badges {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .badge-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 12px 16px;
-      background: rgba(212, 175, 55, 0.08);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-      border-radius: 10px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
-      font-weight: 500;
-    }
-
-    .badge-icon {
-      font-size: 20px;
-    }
-
-    /* Portal right - Login form */
-    .portal-right {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      background: rgba(15, 42, 77, 0.4);
-    }
-
-    .login-panel {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(10, 31, 61, 0.7);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-      border-radius: 20px;
-      padding: 50px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      animation: panelSlideIn 0.8s ease-out 0.4s both;
-    }
-
-    @keyframes panelSlideIn {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .panel-header {
-      margin-bottom: 40px;
-    }
-
-    .system-status {
-      display: flex;
+    /* ── Status message ────────────────────────────────────────────── */
+    #status-msg {
+      display: none;
       align-items: center;
       gap: 8px;
+      padding: 10px 14px;
+      border-radius: 9px;
+      font-size: 13px;
       margin-bottom: 16px;
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #000000;
-      border-radius: 50%;
-      animation: statusPulse 2s ease-in-out infinite;
-    }
+    #status-msg.visible { display: flex; }
+    #status-msg.error   { background: rgba(255,82,82,0.09);  border: 1px solid rgba(255,82,82,0.22);  color: #FF8A80; }
+    #status-msg.info    { background: rgba(0,212,255,0.07);  border: 1px solid rgba(0,212,255,0.2);   color: #7ED8F7; }
+    #status-msg.success { background: rgba(0,230,118,0.07);  border: 1px solid rgba(0,230,118,0.2);   color: #69F0AE; }
 
-    @keyframes statusPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
-      50% { box-shadow: 0 0 0 6px rgba(0, 0, 0, 0); }
-    }
+    /* ── Form steps ─────────────────────────────────────────────────── */
+    .form-step { display: none; }
+    .form-step.active { display: block; }
 
-    .status-text {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
+    /* ── Field ──────────────────────────────────────────────────────── */
+    .field-group { margin-bottom: 14px; }
 
-    .panel-title {
-      font-size: 32px;
-      font-weight: 900;
-      color: white;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
-    }
-
-    .panel-subtitle {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.5);
-      letter-spacing: 0.5px;
-    }
-
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-label {
-      font-size: 12px;
+    .field-label {
+      display: block;
+      font-size: 11px;
       font-weight: 600;
-      color: #000000;
-      letter-spacing: 0.5px;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 1px;
       text-transform: uppercase;
+      margin-bottom: 7px;
     }
 
-    .form-input {
+    .field-input {
       width: 100%;
-      padding: 14px 16px;
-      background: rgba(0, 0, 0, 0.05);
-      border: 1px solid rgba(0, 0, 0, 0.3);
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
       border-radius: 10px;
-      color: #000000;
+      color: #fff;
       font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.3s ease;
-    }
-
-    .form-input:focus {
+      font-family: inherit;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
       outline: none;
-      background: rgba(0, 0, 0, 0.08);
-      border-color: rgba(0, 0, 0, 0.5);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    .form-input::placeholder {
-      color: rgba(0, 0, 0, 0.3);
+    .field-input:focus {
+      border-color: rgba(0, 212, 255, 0.45);
+      background: rgba(0, 212, 255, 0.04);
+      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.07);
     }
 
-    .role-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin: 20px 0;
+    .field-input::placeholder { color: rgba(255,255,255,0.22); }
+
+    .field-input option {
+      background: #0d1f3a;
+      color: #fff;
     }
 
-    .role-btn {
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      color: #000000;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .role-btn:hover {
-      border-color: rgba(0, 0, 0, 0.5);
-      color: #000000;
-    }
-
-    .role-btn.active {
-      background: rgba(0, 0, 0, 0.2);
-      border-color: #000000;
-      color: #000000;
-    }
-
-    .submit-btn {
+    /* ── Buttons ────────────────────────────────────────────────────── */
+    .btn-primary {
       width: 100%;
-      padding: 16px;
-      margin-top: 20px;
-      background: #000000;
+      padding: 13px 20px;
+      margin-top: 6px;
+      background: linear-gradient(135deg, #D4AF37 0%, #bfa030 100%);
       border: none;
       border-radius: 10px;
-      color: #ffffff;
+      color: #050d1a;
       font-size: 14px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.4px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.35);
-    }
-
-    .submit-btn:active {
-      transform: translateY(0);
-    }
-
-    .security-notice {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(212, 175, 55, 0.15);
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
-      text-align: center;
-      line-height: 1.6;
-      letter-spacing: 0.3px;
-    }
-
-    /* Message styling */
-    .message {
-      padding: 12px 16px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-      font-size: 13px;
-      text-align: center;
-      border: 1px solid;
-    }
-
-    .message.error {
-      background: rgba(0, 0, 0, 0.05);
-      border-color: rgba(0, 0, 0, 0.3);
-      color: #000000;
-    }
-
-    .message.success {
-      background: rgba(0, 0, 0, 0.05);
-      border-color: rgba(0, 0, 0, 0.3);
-      color: #000000;
-    }
-
-    /* Transition animation */
-    .transition-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a1f3d 0%, #D4AF37 50%, #0a1f3d 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.6s ease;
-    }
-
-    .transition-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .qib-logo-animation {
-      width: 200px;
-      height: 200px;
-      animation: logoZoom 1s ease-out forwards;
-    }
-
-    @keyframes logoZoom {
-      from { 
-        transform: scale(0.5) rotate(0deg);
-        opacity: 0;
-      }
-      to { 
-        transform: scale(2) rotate(360deg);
-        opacity: 1;
-      }
-    }
-
-    /* ═══════════════════════════════════════════════════════════════ */
-    /* STEP-BY-STEP LOGIN STYLES */
-    /* ═══════════════════════════════════════════════════════════════ */
-
-    .login-progress {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 32px;
-      justify-content: center;
-    }
-
-    .progress-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 8px;
-      opacity: 0.4;
-      transition: all 0.3s ease;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .progress-step.active {
-      opacity: 1;
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.32);
     }
 
-    .step-number {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.1);
-      border: 2px solid rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn-ghost {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: rgba(0, 212, 255, 0.6);
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .btn-text:hover { color: rgba(0, 212, 255, 0.9); }
+
+    /* ── OTP Step ───────────────────────────────────────────────────── */
+    .otp-header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .otp-icon { font-size: 38px; margin-bottom: 10px; }
+
+    .otp-title {
       font-size: 18px;
       font-weight: 700;
-      color: #000000;
-      transition: all 0.3s ease;
+      color: #fff;
+      margin-bottom: 5px;
     }
 
-    .progress-step.active .step-number {
-      background: #000000;
-      border-color: #000000;
-      box-shadow: 0 0 16px rgba(0,0,0,0.4);
-      transform: scale(1.05);
-      color: #ffffff;
-    }
-
-    .step-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #000000;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: color 0.3s ease;
-    }
-
-    .progress-step.active .step-label {
-      color: #000000;
-    }
-
-    /* Step containers */
-    .step-container {
-      transition: all 0.4s ease;
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.95);
-      width: 100%;
-    }
-
-    .step-container.active {
-      opacity: 1;
-      pointer-events: auto;
-      position: relative;
-      top: auto;
-      left: auto;
-      transform: translate(0, 0) scale(1);
-    }
-
-    .step-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .step-header h2 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #000000;
-      margin-bottom: 8px;
-      background: none;
-      -webkit-background-clip: unset;
-      -webkit-text-fill-color: unset;
-      background-clip: unset;
-    }
-
-    .step-subtitle {
-      font-size: 14px;
-      color: #000000;
-      margin: 0;
-    }
-
-    /* Large inputs */
-    .large-input {
-      font-size: 18px !important;
-      padding: 16px 18px !important;
-      height: auto !important;
-      letter-spacing: 2px;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .large-input::placeholder {
-      letter-spacing: 2px;
-      opacity: 0.4;
-    }
-
-    /* Role option buttons */
-    .role-option-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 20px 24px;
-      background: rgba(0,0,0,0.05);
-      border: 2px solid rgba(0,0,0,0.2);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: #000000;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      min-height: 100px;
-      justify-content: center;
-    }
-
-    .role-option-btn:hover {
-      background: rgba(0,0,0,0.1);
-      border-color: rgba(0,0,0,0.4);
-      transform: translateY(-2px);
-    }
-
-    .role-option-btn.selected {
-      background: rgba(0,0,0,0.15);
-      border-color: #000000;
-      color: #000000;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    }
-
-    .role-icon {
-      font-size: 32px;
-      display: block;
-    }
-
-    .role-text {
-      font-weight: 600;
-      font-size: 15px;
-      display: block;
-    }
-
-    .role-desc {
-      font-size: 12px;
-      color: #000000;
-      display: block;
-    }
-
-    /* OTP Styling */
-    .otp-header {
-      margin-bottom: 28px;
-    }
-
-    .otp-input-wrapper {
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    .otp-input-main {
-      width: 100%;
-      font-size: 48px !important;
-      padding: 32px 20px !important;
-      height: auto !important;
-      text-align: center;
-      letter-spacing: 12px;
-      font-weight: 700;
-      font-family: 'Courier New', monospace;
-      background: rgba(0,0,0,0.05) !important;
-      border: 2px solid rgba(0,0,0,0.3) !important;
-      color: #000000;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .otp-input-main:focus {
-      border-color: #000000 !important;
-      box-shadow: 0 0 24px rgba(0,0,0,0.4), inset 0 0 12px rgba(0,0,0,0.1) !important;
-      outline: none;
-    }
-
-    .otp-input-main::placeholder {
-      color: rgba(0,0,0,0.3);
-      letter-spacing: 12px;
-    }
-
-    .otp-placeholder {
-      position: absolute;
-      top: 50%;
-      left: 20px;
-      transform: translateY(-50%);
-      font-size: 48px;
-      letter-spacing: 12px;
-      color: rgba(0,0,0,0.1);
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-      pointer-events: none;
-    }
-
-    .otp-step .submit-btn {
+    .otp-desc {
       font-size: 13px;
-      padding: 16px 24px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      line-height: 1.5;
+    }
+
+    .otp-user-tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 12px;
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.18);
+      border-radius: 20px;
+      font-size: 12px;
+      color: #00D4FF;
+      font-weight: 600;
+    }
+
+    .otp-row {
+      display: flex;
+      gap: 9px;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .otp-digit {
+      width: 46px; height: 54px;
+      text-align: center;
+      font-size: 22px;
       font-weight: 700;
-      background: #000000 !important;
-      color: #ffffff;
-      border: none;
-    }
-
-    .otp-step .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
-    }
-
-    .otp-tips {
-      margin-top: 24px;
-    }
-
-    .employee-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
       font-family: 'Courier New', monospace;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      outline: none;
+      caret-color: #00D4FF;
     }
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .portal-left { padding: 40px; }
-      .portal-right { padding: 40px; }
-      .login-panel { max-width: 380px; padding: 40px; }
-      .brand-title { font-size: 36px; }
-      .panel-title { font-size: 28px; }
-      .step-header h2 { font-size: 20px; }
-      .otp-input-main { font-size: 40px !important; letter-spacing: 10px; }
+    .otp-digit:focus {
+      border-color: rgba(0, 212, 255, 0.5);
+      background: rgba(0, 212, 255, 0.05);
+      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
     }
 
-    @media (max-width: 768px) {
-      .portal-container { flex-direction: column; }
-      .portal-left { 
-        min-height: 40%;
-        padding: 30px;
-        justify-content: flex-end;
-      }
-      .portal-right { 
-        min-height: 60%;
-        padding: 30px;
-        align-items: flex-start;
-      }
-      .brand-logo { width: 70px; height: 70px; }
-      .brand-title { font-size: 28px; }
-      .brand-description { max-width: 100%; }
-      .trust-badges { gap: 15px; }
-      .login-progress { gap: 8px; }
-      .step-number { width: 38px; height: 38px; font-size: 16px; }
-      .step-label { font-size: 10px; }
-      .large-input { font-size: 16px !important; padding: 14px 16px !important; }
-      .otp-input-main { font-size: 36px !important; letter-spacing: 8px; padding: 24px 16px !important; }
+    .otp-digit.filled { border-color: rgba(0, 212, 255, 0.4); color: #00D4FF; }
+    .otp-digit.error  { border-color: rgba(255,82,82,0.55); background: rgba(255,82,82,0.05); }
+
+    .otp-timer {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 10px;
+    }
+
+    .otp-timer.expiring { color: #FF8A80; }
+
+    .otp-resend-row {
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* ── Success Step ───────────────────────────────────────────────── */
+    .success-wrap {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .success-ring {
+      width: 70px; height: 70px;
+      background: linear-gradient(135deg, rgba(0,230,118,0.12), rgba(0,212,255,0.08));
+      border: 2px solid rgba(0, 230, 118, 0.38);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 18px;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .success-title  { font-size: 20px; font-weight: 700; color: #69F0AE; margin-bottom: 6px; }
+    .success-desc   { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+    .success-card {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(0,230,118,0.05);
+      border: 1px solid rgba(0,230,118,0.14);
+      border-radius: 12px;
+    }
+
+    .success-card-name { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .success-card-role { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+    /* ── Loading spinner ────────────────────────────────────────────── */
+    .spin {
+      width: 17px; height: 17px;
+      border: 2px solid rgba(5,13,26,0.35);
+      border-top-color: #050d1a;
+      border-radius: 50%;
+      animation: spinning 0.65s linear infinite;
+    }
+
+    @keyframes spinning { to { transform: rotate(360deg); } }
+
+    /* ── Security footer ────────────────────────────────────────────── */
+    .security-footer {
+      text-align: center;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .security-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .sec-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sec-sep {
+      width: 3px; height: 3px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 50%;
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 880px) {
+      .panel-left { display: none; }
+      .panel-right { width: 100%; min-width: unset; border-left: none; }
+    }
+
+    @media (max-width: 480px) {
+      .panel-right { padding: 32px 22px; }
+      .otp-digit { width: 40px; height: 48px; font-size: 20px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- LOADING SCREEN -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="loading-screen" id="loadingScreen">
-    <div class="loading-container">
-      <div class="loading-spinner"></div>
-      <div class="loading-text">LOADING</div>
-      <div class="loading-text-sub">EDD SYSTEM</div>
+<div class="layout">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- LEFT PANEL — Network Intelligence Animation               -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="panel-left">
+    <canvas id="network-canvas"></canvas>
+    <div class="panel-left-overlay"></div>
+    <div class="panel-left-content">
+      <div class="live-badge"><div class="live-dot"></div>Live Intelligence Network</div>
+      <h2 class="panel-left-title">Financial Crime<br><span class="highlight">Investigation Platform</span></h2>
+      <p class="panel-left-desc">Advanced EDD case management for real-time financial crime detection, transaction monitoring, and regulatory compliance.</p>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- VISION 2030 SPLASH SCREEN -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="splash-screen" id="splashScreen">
-    <div class="splash-content">
-      <svg class="splash-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="splashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#D4AF37"/>
-            <stop offset="100%" style="stop-color:#00D4FF"/>
-          </linearGradient>
-        </defs>
-        <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="2"/>
-        <circle cx="120" cy="120" r="110" fill="none" stroke="url(#splashGrad)" stroke-width="3"/>
-        <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#splashGrad)" stroke-width="2.5"/>
-        <circle cx="120" cy="120" r="8" fill="#D4AF37"/>
-      </svg>
-      <h1 class="splash-title">QATAR VISION 2030</h1>
-      <p class="splash-subtitle">Digital Governance Platform</p>
-      <div class="splash-bar"></div>
-      <div class="splash-features">
-        <div class="feature-pill">🔐 Enterprise Security</div>
-        <div class="feature-pill">⚡ Mission Critical</div>
-        <div class="feature-pill">✓ Fully Audited</div>
-      </div>
-    </div>
-  </div>
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- RIGHT PANEL — Login Form                                   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="panel-right">
+    <div class="login-box">
 
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <!-- MAIN LOGIN PORTAL -->
-  <!-- ═══════════════════════════════════════════════════════════════ -->
-  <div class="login-wrapper" id="loginWrapper">
-    
-    <!-- Background effects -->
-    <div class="bg-effects">
-      <div class="grid-bg"></div>
-      <div class="light-rays">
-        <div class="ray"></div>
-        <div class="ray"></div>
-        <div class="ray"></div>
-        <div class="ray"></div>
-      </div>
-    </div>
-
-    <!-- Main portal content -->
-    <div class="portal-container">
-      
-      <!-- Left side: Branding -->
-      <div class="portal-left">
-        <div class="brand-section">
-          <svg class="brand-logo" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#D4AF37"/>
-                <stop offset="100%" style="stop-color:#00D4FF"/>
-              </linearGradient>
-            </defs>
-            <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(212,175,55,0.3)" stroke-width="2"/>
-            <circle cx="120" cy="120" r="110" fill="none" stroke="url(#brandGrad)" stroke-width="3"/>
-            <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#brandGrad)" stroke-width="2.5"/>
-            <circle cx="120" cy="120" r="8" fill="#D4AF37"/>
+      <!-- Brand Header -->
+      <div class="brand-header">
+        <div class="brand-logo-wrap">
+          <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 3 L29 10 L29 24 L17 31 L5 24 L5 10 Z"
+                  stroke="#D4AF37" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+            <circle cx="17" cy="17" r="3.5" fill="#D4AF37"/>
+            <line x1="17" y1="7"  x2="17" y2="13.5" stroke="rgba(0,212,255,0.6)" stroke-width="1"/>
+            <line x1="17" y1="20.5" x2="17" y2="27" stroke="rgba(0,212,255,0.6)" stroke-width="1"/>
+            <line x1="7"  y1="17" x2="13.5" y2="17" stroke="rgba(0,212,255,0.6)" stroke-width="1"/>
+            <line x1="20.5" y1="17" x2="27" y2="17" stroke="rgba(0,212,255,0.6)" stroke-width="1"/>
           </svg>
-          <p class="brand-subtitle">Digital Governance Center</p>
-          <div class="brand-divider"></div>
-          <p class="brand-description">Operating within the framework of Qatar National Vision 2030 for sustainable financial governance and digital transformation.</p>
-          <div class="trust-badges">
-            <div class="badge-item">
-              <span class="badge-icon">🔐</span>
-              <span>ISO 27001</span>
-            </div>
-            <div class="badge-item">
-              <span class="badge-icon">✓</span>
-              <span>SOC 2 Type II</span>
-            </div>
-            <div class="badge-item">
-              <span class="badge-icon">⚡</span>
-              <span>GDPR Ready</span>
-            </div>
+        </div>
+        <div class="brand-bank">Qatar Islamic Bank</div>
+        <div class="brand-system">Financial Crime Investigation</div>
+        <div class="brand-vision">Qatar National Vision 2030</div>
+        <div class="brand-divider"></div>
+      </div>
+
+      <!-- Status message -->
+      <div id="status-msg"></div>
+
+      <!-- ─── STEP 1: Credentials & Role ───────────────────────────── -->
+      <div id="step-credentials" class="form-step active">
+        <form id="login-form" autocomplete="off" novalidate>
+          <div class="field-group">
+            <label class="field-label" for="employee-id">Employee ID</label>
+            <input type="text" id="employee-id" class="field-input"
+                   placeholder="e.g. EMP001 or Demo-2030"
+                   autocomplete="off" spellcheck="false" autocapitalize="off">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="password">Password</label>
+            <input type="password" id="password" class="field-input"
+                   placeholder="••••••••" autocomplete="off">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="role-select">Access Role</label>
+            <select id="role-select" class="field-input">
+              <option value="business">Business Banking</option>
+              <option value="cdd">CDD Operations</option>
+              <option value="compliance">Compliance</option>
+              <option value="management">Management</option>
+              <option value="audit">Audit</option>
+              <option value="it">IT Administration</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary" id="btn-login">
+            <span>Sign In Securely</span><span>→</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- ─── STEP 2: OTP Verification ─────────────────────────────── -->
+      <div id="step-otp" class="form-step">
+        <div class="otp-header">
+          <div class="otp-icon">🔐</div>
+          <div class="otp-title">Two-Factor Authentication</div>
+          <div class="otp-desc">Enter the 6-digit verification code</div>
+          <div id="otp-user-tag" class="otp-user-tag"></div>
+        </div>
+        <form id="otp-form" novalidate>
+          <div class="otp-row">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          </div>
+          <div id="otp-timer" class="otp-timer">Code expires in <span class="time">05:00</span></div>
+          <button type="submit" class="btn-primary" id="btn-verify" style="margin-top: 18px;">
+            <span>Verify &amp; Enter Platform</span><span>→</span>
+          </button>
+          <button type="button" class="btn-ghost" id="btn-back">← Back to Login</button>
+        </form>
+        <div class="otp-resend-row">
+          <button type="button" class="btn-text" id="btn-resend">Resend Code</button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 3: Success ───────────────────────────────────────── -->
+      <div id="step-success" class="form-step">
+        <div class="success-wrap">
+          <div class="success-ring">✓</div>
+          <div class="success-title">Access Granted</div>
+          <div class="success-desc">Redirecting to your dashboard…</div>
+          <div class="success-card">
+            <div class="success-card-name" id="success-name">—</div>
+            <div class="success-card-role" id="success-role">—</div>
           </div>
         </div>
       </div>
 
-      <!-- Right side: Login form -->
-      <div class="portal-right">
-        <div class="login-panel">
-          <div class="panel-header">
-            <div class="system-status">
-              <div class="status-dot"></div>
-              <span class="status-text">System Operational</span>
-            </div>
-            <h1 class="panel-title">Secure Portal</h1>
-            <p class="panel-subtitle">Multi-Factor Authentication</p>
-          </div>
-
-          <!-- Progress indicator -->
-          <div class="login-progress" id="loginProgress">
-            <div class="progress-step active" data-step="1">
-              <div class="step-number">1</div>
-              <div class="step-label">Identity</div>
-            </div>
-            <div class="progress-step" data-step="2">
-              <div class="step-number">2</div>
-              <div class="step-label">Verify</div>
-            </div>
-            <div class="progress-step" data-step="3">
-              <div class="step-number">3</div>
-              <div class="step-label">Role</div>
-            </div>
-            <div class="progress-step" data-step="4">
-              <div class="step-number">🔐</div>
-              <div class="step-label">OTP</div>
-            </div>
-          </div>
-
-          <div id="message" class="message" style="display: none;"></div>
-
-          <!-- Step 1: Employee ID -->
-          <div id="step1-container" class="step-container active">
-            <div class="step-header">
-              <h2>Step 1: Enter Employee ID</h2>
-              <p class="step-subtitle">Who are you?</p>
-            </div>
-            <form id="step1-form" class="login-form">
-              <div class="form-group">
-                <label class="form-label">Employee ID</label>
-                <input type="text" class="form-input large-input" id="employeeId" placeholder="Example: Demo-2030" required autofocus>
-              </div>
-              <button type="submit" class="submit-btn">Continue to Password</button>
-            </form>
-          </div>
-
-          <!-- Step 2: Password -->
-          <div id="step2-container" class="step-container" style="display: none;">
-            <div class="step-header">
-              <h2>Step 2: Enter Password</h2>
-              <p class="step-subtitle">Verify your identity</p>
-            </div>
-            <form id="step2-form" class="login-form">
-              <div style="margin-bottom: 16px; padding: 12px 14px; background: rgba(0,0,0,0.05); border-radius: 8px; border: 1px solid rgba(0,0,0,0.2);">
-                <span id="employee-display" class="employee-tag" style="display: inline-block; background: rgba(0,0,0,0.1); color: #000000; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">Demo-2030</span>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-input large-input" id="password" placeholder="••••••••" required autofocus>
-              </div>
-              <button type="submit" class="submit-btn">Continue to Role Selection</button>
-            </form>
-          </div>
-
-          <!-- Step 3: Role Selection -->
-          <div id="step3-container" class="step-container" style="display: none;">
-            <div class="step-header">
-              <h2>Step 3: Select Your Role</h2>
-              <p class="step-subtitle">What is your department?</p>
-            </div>
-            <div id="step3-form" style="display: flex; flex-direction: column; gap: 12px;">
-              <div style="margin-bottom: 12px; padding: 12px 14px; background: rgba(0,0,0,0.05); border-radius: 8px; border: 1px solid rgba(0,0,0,0.2);">
-                <span id="employee-display-2" class="employee-tag" style="display: inline-block; background: rgba(0,0,0,0.1); color: #000000; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px;">Demo-2030</span>
-              </div>
-
-              <button type="button" class="role-option-btn" data-role="business">
-                <span class="role-icon">👔</span>
-                <span class="role-text">Business Banking</span>
-                <span class="role-desc">Business relationship managers</span>
-              </button>
-
-              <button type="button" class="role-option-btn" data-role="cdd">
-                <span class="role-icon">📋</span>
-                <span class="role-text">CDD Operations</span>
-                <span class="role-desc">Customer Due Diligence analysts</span>
-              </button>
-
-              <button type="button" class="role-option-btn" data-role="compliance">
-                <span class="role-icon">⚖️</span>
-                <span class="role-text">Compliance</span>
-                <span class="role-desc">Compliance and risk officers</span>
-              </button>
-
-              <input type="hidden" id="selectedRole">
-            </div>
-          </div>
-
-          <!-- Step 4: OTP (PROMINENT) -->
-          <div id="step4-container" class="step-container otp-step" style="display: none;">
-            <div class="otp-header">
-              <div style="text-align: center; margin-bottom: 24px;">
-                <div style="font-size: 48px; margin-bottom: 12px;">🔐</div>
-                <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #000000; margin-bottom: 8px;">Two-Factor Authentication</h2>
-                <p style="margin: 0; color: #000000; font-size: 14px;">Enter the 6-digit code from your authenticator</p>
-              </div>
-
-              <div style="background: rgba(0,0,0,0.05); border: 2px solid rgba(0,0,0,0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px; text-align: center;">
-                <div id="employee-display-3" class="employee-tag" style="display: inline-block; background: rgba(0,0,0,0.1); color: #000000; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 14px;">Demo-2030</div>
-              </div>
-            </div>
-
-            <form id="step4-form" class="login-form">
-              <div class="otp-input-wrapper">
-                <input type="text" class="otp-input-main" id="otp" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]*" required autofocus>
-                <div class="otp-placeholder">000000</div>
-              </div>
-
-              <div style="text-align: center; margin: 20px 0; font-size: 12px; color: #000000;">
-                <span>Enter all 6 digits to proceed</span>
-              </div>
-
-              <button type="submit" class="submit-btn otp-submit-btn">AUTHENTICATE & ENTER SYSTEM</button>
-
-              <div class="otp-tips">
-                <div style="font-size: 11px; color: #000000; background: rgba(0,0,0,0.05); padding: 10px 14px; border-radius: 8px; border-left: 3px solid rgba(0,0,0,0.3);">
-                  <strong>💡 Tip:</strong> Check your authenticator app (Google Authenticator, Authy, or Microsoft Authenticator)
-                </div>
-              </div>
-            </form>
-          </div>
-
+      <!-- Security Footer -->
+      <div class="security-footer">
+        <div class="security-row">
+          <span class="sec-item">🔒 Secure Access</span>
+          <span class="sec-sep"></span>
+          <span class="sec-item">MFA Protected</span>
+          <span class="sec-sep"></span>
+          <span class="sec-item">All Sessions Logged</span>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Transition overlay -->
-  <div class="transition-overlay" id="transitionOverlay">
-    <svg class="qib-logo-animation" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="transGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#D4AF37"/>
-          <stop offset="100%" style="stop-color:#00D4FF"/>
-        </linearGradient>
-      </defs>
-      <circle cx="120" cy="120" r="115" fill="none" stroke="white" stroke-width="2"/>
-      <circle cx="120" cy="120" r="110" fill="none" stroke="url(#transGrad)" stroke-width="3"/>
-      <path d="M 120 40 L 180 90 L 180 170 L 120 190 L 60 170 L 60 90 Z" fill="none" stroke="url(#transGrad)" stroke-width="2.5"/>
-      <circle cx="120" cy="120" r="8" fill="#D4AF37"/>
-    </svg>
-  </div>
+</div>
 
-  <!-- Scripts -->
-  <script>
-    // Loading and splash screen manager
-    const loadingScreen = document.getElementById('loadingScreen');
-    const splashScreen = document.getElementById('splashScreen');
-    const loginWrapper = document.getElementById('loginWrapper');
-    const transitionOverlay = document.getElementById('transitionOverlay');
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- Network Intelligence Animation                               -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  var canvas = document.getElementById('network-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var mouse = { x: -2000, y: -2000 };
+  var raf;
 
-    // Hide loading screen after 1.5 seconds
-    setTimeout(() => {
-      loadingScreen.classList.add('hidden');
-    }, 1500);
+  var config = {
+    count: 85,
+    minRadius: 1,
+    maxRadius: 2.5,
+    speed: 0.28,
+    connectDist: 145,
+    mouseRadius: 185,
+    color: { r: 0, g: 212, b: 255 }
+  };
 
-    // Show splash screen for 2.5 seconds total
-    setTimeout(() => {
-      splashScreen.classList.add('hidden');
-      loginWrapper.classList.add('visible');
-    }, 4000);
+  function resize() {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
 
-    // ═══════════════════════════════════════════════════════════════
-    // STEP-BY-STEP LOGIN PROGRESSION
-    // ═══════════════════════════════════════════════════════════════
-
-    const messageDiv = document.getElementById('message');
-    let currentStep = 1;
-    let storeData = {
-      employeeId: '',
-      password: '',
-      role: ''
+  function createParticle() {
+    return {
+      x:  Math.random() * canvas.width,
+      y:  Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * config.speed * 2,
+      vy: (Math.random() - 0.5) * config.speed * 2,
+      r:  Math.random() * (config.maxRadius - config.minRadius) + config.minRadius,
+      a:  Math.random() * 0.45 + 0.2
     };
+  }
 
-    // Demo credentials
-    const VALID_CREDENTIALS = {
-      'Demo-2030': 'Qib@2030'
-    };
+  function init() {
+    resize();
+    particles = [];
+    for (var i = 0; i < config.count; i++) particles.push(createParticle());
+  }
 
-    const VALID_OTP = '123456';
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var r = config.color.r, g = config.color.g, b = config.color.b;
+    var len = particles.length;
 
-    // Initialize forms
-    const step1Form = document.getElementById('step1-form');
-    const step2Form = document.getElementById('step2-form');
-    const step3Form = document.getElementById('step3-form');
-    const step4Form = document.getElementById('step4-form');
+    for (var i = 0; i < len; i++) {
+      var p = particles[i];
 
-    // ═══════════════════════════════════════════════════════════════
-    // STEP MANAGEMENT
-    // ═══════════════════════════════════════════════════════════════
+      // Move
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      p.x = Math.max(0, Math.min(canvas.width,  p.x));
+      p.y = Math.max(0, Math.min(canvas.height, p.y));
 
-    function showStep(stepNum) {
-      console.log(`[LOGIN] Moving to Step ${stepNum}`);
-      
-      // Hide all steps
-      document.querySelectorAll('.step-container').forEach(el => {
-        el.classList.remove('active');
-        el.style.display = 'none';
-      });
-
-      // Show target step
-      const targetStep = document.getElementById(`step${stepNum}-container`);
-      if (targetStep) {
-        targetStep.classList.add('active');
-        targetStep.style.display = 'block';
+      // Mouse attraction
+      var mdx = mouse.x - p.x, mdy = mouse.y - p.y;
+      var md  = Math.sqrt(mdx * mdx + mdy * mdy);
+      if (md < config.mouseRadius && md > 0) {
+        var f = (config.mouseRadius - md) / config.mouseRadius * 0.007;
+        p.vx += (mdx / md) * f;
+        p.vy += (mdy / md) * f;
       }
 
-      // Update progress indicator
-      document.querySelectorAll('.progress-step').forEach(step => {
-        step.classList.remove('active');
-        if (parseInt(step.dataset.step) === stepNum) {
-          step.classList.add('active');
+      // Speed cap
+      var spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      var max = config.speed * 2.6;
+      if (spd > max) { p.vx = (p.vx / spd) * max; p.vy = (p.vy / spd) * max; }
+
+      // Draw dot
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + p.a + ')';
+      ctx.fill();
+
+      // Particle-to-particle connections
+      for (var j = i + 1; j < len; j++) {
+        var q = particles[j];
+        var dx = p.x - q.x, dy = p.y - q.y;
+        var d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < config.connectDist) {
+          var o = (1 - d / config.connectDist) * 0.1;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + o + ')';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
         }
+      }
+
+      // Mouse connections
+      if (md < config.mouseRadius) {
+        var mo = (1 - md / config.mouseRadius) * 0.26;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + mo + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+
+    raf = requestAnimationFrame(frame);
+  }
+
+  window.addEventListener('resize', init);
+
+  canvas.addEventListener('mousemove', function (e) {
+    var rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  canvas.addEventListener('mouseleave', function () {
+    mouse.x = -2000;
+    mouse.y = -2000;
+  });
+
+  init();
+  frame();
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- Login Logic                                                   -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /*
+   * DEMO CREDENTIALS — for demonstration purposes only.
+   * In production these would be validated server-side via a secure API.
+   */
+  var USERS = {
+    'QIB@2030':  { name: 'QIB Admin',           pw: 'Qib@2030',   roles: ['business','cdd','compliance','management','audit','it'] },
+    'DEMO-2030': { name: 'Demo User',            pw: 'Qib@2030',   roles: ['business','cdd','compliance','management','audit','it'] },
+    'EMP001':    { name: 'Ahmed Al-Thani',       pw: 'demo123',    roles: ['business','management'] },
+    'EMP002':    { name: 'Fatima Al-Mansoor',    pw: 'demo123',    roles: ['cdd','compliance'] },
+    'EMP003':    { name: 'Mohammed Al-Suwaidi',  pw: 'demo123',    roles: ['compliance','management'] },
+    'EMP004':    { name: 'Sara Al-Khalifa',      pw: 'demo123',    roles: ['business'] },
+    'EMP005':    { name: 'Khalid Al-Dosari',     pw: 'demo123',    roles: ['audit'] },
+    'EMP006':    { name: 'Admin User',           pw: 'demo123',    roles: ['it','audit','management'] },
+    'RAAFAT':    { name: 'Raafat Alrantisi',     pw: 'raafat2030', roles: ['management','business','audit'] },
+    'DEMO':      { name: 'Demo User',            pw: 'demo',       roles: ['business','cdd','compliance','management','audit','it'] }
+  };
+
+  var ROLE_LABELS = {
+    business:   'Business Banking',
+    cdd:        'CDD Operations',
+    compliance: 'Compliance',
+    management: 'Management',
+    audit:      'Audit',
+    it:         'IT Administration'
+  };
+
+  var DASHBOARDS = {
+    business:   'business_view.html',
+    cdd:        'cdd_view.html',
+    compliance: 'compliance_view.html',
+    management: 'management_dashboard.html',
+    audit:      'audit_console.html',
+    it:         'dashboard.html'
+  };
+
+  /* ── State ────────────────────────────────────────────────────── */
+  var currentUser   = null;
+  /* Demo OTP — in production this would be a server-generated TOTP/SMS code. */
+  var demoOTP       = '123456';
+  var timerInterval = null;
+
+  /* ── DOM references ───────────────────────────────────────────── */
+  var stepCreds   = document.getElementById('step-credentials');
+  var stepOTP     = document.getElementById('step-otp');
+  var stepSuccess = document.getElementById('step-success');
+  var loginForm   = document.getElementById('login-form');
+  var otpForm     = document.getElementById('otp-form');
+  var empIdEl     = document.getElementById('employee-id');
+  var pwEl        = document.getElementById('password');
+  var roleEl      = document.getElementById('role-select');
+  var otpDigits   = document.querySelectorAll('.otp-digit');
+  var statusEl    = document.getElementById('status-msg');
+  var btnLogin    = document.getElementById('btn-login');
+  var btnVerify   = document.getElementById('btn-verify');
+  var btnBack     = document.getElementById('btn-back');
+  var btnResend   = document.getElementById('btn-resend');
+  var timerEl     = document.getElementById('otp-timer');
+
+  /* ── Helpers ──────────────────────────────────────────────────── */
+  function setStatus(type, msg) {
+    statusEl.className = 'status-msg visible ' + type;
+    statusEl.textContent = msg;
+  }
+
+  function clearStatus() {
+    statusEl.className = 'status-msg';
+    statusEl.textContent = '';
+  }
+
+  function showStep(step) {
+    [stepCreds, stepOTP, stepSuccess].forEach(function (s) {
+      s.classList.remove('active');
+    });
+    step.classList.add('active');
+    clearStatus();
+  }
+
+  /* ── Check existing session ───────────────────────────────────── */
+  try {
+    var raw = sessionStorage.getItem('edd_session');
+    if (raw) {
+      var sess = JSON.parse(raw);
+      if (sess && sess.authenticated && sess.user && sess.user.role) {
+        window.location.replace(DASHBOARDS[sess.user.role] || 'dashboard.html');
+      } else {
+        sessionStorage.clear();
+      }
+    }
+  } catch (e) { sessionStorage.clear(); }
+
+  /* ── Login form submit ────────────────────────────────────────── */
+  loginForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var id   = empIdEl.value.trim().toUpperCase();
+    var pw   = pwEl.value;
+    var role = roleEl.value;
+
+    if (!id) { setStatus('error', 'Please enter your Employee ID'); empIdEl.focus(); return; }
+    if (!pw) { setStatus('error', 'Please enter your Password');    pwEl.focus();    return; }
+
+    var user = USERS[id];
+    if (!user || user.pw !== pw) {
+      setStatus('error', 'Invalid Employee ID or Password');
+      return;
+    }
+    if (user.roles.indexOf(role) === -1) {
+      setStatus('error', 'Your account does not have ' + ROLE_LABELS[role] + ' access');
+      return;
+    }
+
+    currentUser = { id: id, name: user.name, role: role };
+    btnLogin.disabled = true;
+    btnLogin.innerHTML = '<div class="spin"></div>';
+
+    setTimeout(function () {
+      btnLogin.disabled = false;
+      btnLogin.innerHTML = '<span>Sign In Securely</span><span>\u2192</span>';
+
+      document.getElementById('otp-user-tag').textContent =
+        currentUser.name + ' \u2022 ' + ROLE_LABELS[role];
+
+      showStep(stepOTP);
+      startTimer();
+      setStatus('info', '\uD83D\uDD11 Demo OTP: ' + demoOTP);
+      otpDigits[0].focus();
+    }, 1200);
+  });
+
+  /* ── OTP digit behaviour ──────────────────────────────────────── */
+  otpDigits.forEach(function (inp, i) {
+    inp.addEventListener('input', function (e) {
+      var v = e.target.value.replace(/\D/g, '').slice(-1);
+      inp.value = v;
+      inp.classList.toggle('filled', v.length > 0);
+      if (v && i < otpDigits.length - 1) otpDigits[i + 1].focus();
+      if (i === otpDigits.length - 1 && v) {
+        var full = Array.from(otpDigits).map(function (d) { return d.value; }).join('');
+        if (full.length === 6) otpForm.dispatchEvent(new Event('submit'));
+      }
+    });
+
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !inp.value && i > 0) {
+        otpDigits[i - 1].focus();
+        otpDigits[i - 1].value = '';
+        otpDigits[i - 1].classList.remove('filled');
+      }
+    });
+
+    inp.addEventListener('focus', function () { inp.select(); });
+
+    inp.addEventListener('paste', function (e) {
+      e.preventDefault();
+      var paste = (e.clipboardData || window.clipboardData).getData('text').trim();
+      if (/^\d{6}$/.test(paste)) {
+        otpDigits.forEach(function (d, j) { d.value = paste[j]; d.classList.add('filled'); });
+        otpDigits[5].focus();
+        setTimeout(function () { otpForm.dispatchEvent(new Event('submit')); }, 100);
+      }
+    });
+  });
+
+  /* ── OTP form submit ──────────────────────────────────────────── */
+  otpForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var otp = Array.from(otpDigits).map(function (d) { return d.value; }).join('');
+
+    if (otp.length !== 6) { setStatus('error', 'Enter all 6 digits'); return; }
+    if (otp !== demoOTP) {
+      setStatus('error', 'Invalid verification code');
+      otpDigits.forEach(function (d) {
+        d.value = '';
+        d.classList.remove('filled');
+        d.classList.add('error');
       });
-
-      // Auto focus input
-      setTimeout(() => {
-        const inputs = targetStep.querySelectorAll('input[type="text"], input[type="password"]');
-        if (inputs.length > 0) inputs[0].focus();
-      }, 100);
-
-      currentStep = stepNum;
+      otpDigits[0].focus();
+      setTimeout(function () {
+        otpDigits.forEach(function (d) { d.classList.remove('error'); });
+      }, 2000);
+      return;
     }
 
-    function advanceStep() {
-      if (currentStep < 4) {
-        showStep(currentStep + 1);
+    btnVerify.disabled = true;
+    btnVerify.innerHTML = '<div class="spin"></div>';
+    clearTimer();
+
+    setTimeout(function () {
+      /* Store session */
+      var sessionData = {
+        authenticated: true,
+        user: {
+          id:        currentUser.id,
+          name:      currentUser.name,
+          role:      currentUser.role,
+          loginTime: new Date().toISOString()
+        },
+        loginTime: new Date().toISOString()
+      };
+      sessionStorage.setItem('edd_session',  JSON.stringify(sessionData));
+      sessionStorage.setItem('edd_user',     JSON.stringify(currentUser));
+      sessionStorage.setItem('user_role',    currentUser.role);
+      /* NOTE: btoa is used here only for demo session token storage.
+       * Production systems should use a secure JWT or server-managed session. */
+      sessionStorage.setItem('auth_token',   btoa(currentUser.id));
+
+      document.getElementById('success-name').textContent = currentUser.name;
+      document.getElementById('success-role').textContent = ROLE_LABELS[currentUser.role];
+
+      showStep(stepSuccess);
+
+      setTimeout(function () {
+        window.location.href = DASHBOARDS[currentUser.role] || 'dashboard.html';
+      }, 2500);
+    }, 900);
+  });
+
+  /* ── Back button ──────────────────────────────────────────────── */
+  btnBack.addEventListener('click', function () {
+    clearTimer();
+    otpDigits.forEach(function (d) { d.value = ''; d.classList.remove('filled'); });
+    showStep(stepCreds);
+  });
+
+  /* ── Resend ───────────────────────────────────────────────────── */
+  btnResend.addEventListener('click', function () {
+    demoOTP = String(Math.floor(100000 + Math.random() * 900000));
+    setStatus('info', 'New Demo OTP: ' + demoOTP);
+    startTimer();
+  });
+
+  /* ── Timer ────────────────────────────────────────────────────── */
+  function startTimer() {
+    var secs = 300;
+    clearTimer();
+    updateTimer(secs);
+    timerInterval = setInterval(function () {
+      secs--;
+      updateTimer(secs);
+      if (secs <= 0) {
+        clearTimer();
+        setStatus('error', 'Code expired. Request a new one.');
       }
-    }
+    }, 1000);
+  }
 
-    // ═══════════════════════════════════════════════════════════════
-    // STEP 1: EMPLOYEE ID
-    // ═══════════════════════════════════════════════════════════════
+  function updateTimer(secs) {
+    var m = String(Math.floor(secs / 60)).padStart(2, '0');
+    var s = String(secs % 60).padStart(2, '0');
+    timerEl.querySelector('.time').textContent = m + ':' + s;
+    timerEl.classList.toggle('expiring', secs <= 60);
+  }
 
-    step1Form.addEventListener('submit', (e) => {
-      e.preventDefault();
+  function clearTimer() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    timerEl.classList.remove('expiring');
+  }
 
-      const employeeId = document.getElementById('employeeId').value.trim();
-
-      // Validation
-      if (!employeeId) {
-        showMessage('Please enter your employee ID', 'error');
-        return;
-      }
-
-      console.log(`[STEP 1] Employee ID validated: ${employeeId}`);
-      storeData.employeeId = employeeId;
-
-      // Update employee display in all steps
-      document.getElementById('employee-display').textContent = employeeId;
-      document.getElementById('employee-display-2').textContent = employeeId;
-      document.getElementById('employee-display-3').textContent = employeeId;
-
-      advanceStep();
-    });
-
-    // ═══════════════════════════════════════════════════════════════
-    // STEP 2: PASSWORD VERIFICATION
-    // ═══════════════════════════════════════════════════════════════
-
-    step2Form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const password = document.getElementById('password').value;
-
-      // Validation
-      if (!password) {
-        showMessage('Please enter your password', 'error');
-        return;
-      }
-
-      // Check credentials
-      if (VALID_CREDENTIALS[storeData.employeeId] !== password) {
-        showMessage('Invalid password. Please try again.', 'error');
-        document.getElementById('password').value = '';
-        return;
-      }
-
-      console.log(`[STEP 2] Password verified for ${storeData.employeeId}`);
-      storeData.password = password;
-
-      advanceStep();
-    });
-
-    // ═══════════════════════════════════════════════════════════════
-    // STEP 3: ROLE SELECTION
-    // ═══════════════════════════════════════════════════════════════
-
-    document.querySelectorAll('.role-option-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        // Remove previous selection
-        document.querySelectorAll('.role-option-btn').forEach(b => {
-          b.classList.remove('selected');
-        });
-
-        // Mark as selected
-        btn.classList.add('selected');
-
-        const role = btn.dataset.role;
-        console.log(`[STEP 3] Role selected: ${role}`);
-        storeData.role = role;
-
-        // Wait a moment for visual feedback, then advance
-        setTimeout(() => {
-          advanceStep();
-        }, 300);
-      });
-    });
-
-    // ═══════════════════════════════════════════════════════════════
-    // STEP 4: OTP AUTHENTICATION (FINAL)
-    // ═══════════════════════════════════════════════════════════════
-
-    step4Form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const otp = document.getElementById('otp').value.trim();
-
-      // Validation
-      if (!otp) {
-        showMessage('Please enter the 6-digit OTP code', 'error');
-        return;
-      }
-
-      if (otp.length !== 6) {
-        showMessage('OTP must be exactly 6 digits', 'error');
-        return;
-      }
-
-      // Check OTP
-      if (otp !== VALID_OTP) {
-        showMessage('Invalid OTP code. Please check your authenticator app.', 'error');
-        document.getElementById('otp').value = '';
-        return;
-      }
-
-      // SUCCESS: All steps completed
-      console.log('[STEP 4] OTP verified - Authentication complete');
-      console.log('[LOGIN] All steps validated successfully');
-      
-      showMessage('✓ Authentication successful. Initializing Command Center...', 'success');
-
-      // Trigger transition
-      setTimeout(() => {
-        transitionOverlay.classList.add('active');
-        
-        // Redirect after animation
-        setTimeout(() => {
-          console.log('[SESSION] Creating session');
-          
-          // Create session object matching dashboard.js expectations
-          const sessionData = {
-            authenticated: true,
-            user: {
-              id: storeData.employeeId,
-              name: storeData.employeeId,
-              role: storeData.role,
-              loginTime: new Date().toISOString()
-            },
-            token: btoa(storeData.employeeId)
-          };
-          
-          console.log('[SESSION] Session data:', sessionData);
-          
-          // Store session with correct key name
-          sessionStorage.setItem('edd_session', JSON.stringify(sessionData));
-          sessionStorage.setItem('auth_token', btoa(storeData.employeeId));
-          sessionStorage.setItem('user_role', storeData.role);
-          
-          console.log('[SESSION] Token stored');
-          console.log('[SESSION] Redirecting to dashboard');
-          
-          // Redirect to dashboard
-          window.location.href = 'dashboard.html';
-        }, 1800);
-      }, 500);
-    });
-
-    // ═══════════════════════════════════════════════════════════════
-    // MESSAGE DISPLAY
-    // ═══════════════════════════════════════════════════════════════
-
-    function showMessage(text, type) {
-      messageDiv.textContent = text;
-      messageDiv.className = `message ${type}`;
-      messageDiv.style.display = 'block';
-      
-      if (type === 'error') {
-        setTimeout(() => {
-          messageDiv.style.display = 'none';
-        }, 4000);
-      }
-    }
-
-    // Initialize Step 1
-    console.log('[LOGIN] System initialized - Showing Step 1');
-    showStep(1);
-  </script>
+})();
+</script>
 
 </body>
 </html>
