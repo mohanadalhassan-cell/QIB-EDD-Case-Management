@@ -1,0 +1,525 @@
+/*
+ * QIB EDD System — Accessibility, Arabic Language & Voice Assistant Styles
+ * =========================================================================
+ * Styles for:
+ *  - Floating accessibility toolbar
+ *  - High contrast mode
+ *  - Large text mode
+ *  - RTL / Arabic layout
+ *  - BRD reference panel
+ *  - System walkthrough panel
+ *  - Skip-to-content link
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SKIP TO CONTENT
+   ─────────────────────────────────────────────────────────────────────────*/
+.qib-skip-link {
+  position: absolute;
+  top: -9999px;
+  left: 0;
+  background: #D4AF37;
+  color: #000;
+  padding: 8px 16px;
+  font-weight: 700;
+  z-index: 99999;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+  font-size: 14px;
+}
+.qib-skip-link:focus {
+  top: 0;
+  outline: 3px solid #00D4FF;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FLOATING TOOLBAR
+   ─────────────────────────────────────────────────────────────────────────*/
+#qib-toolbar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+/* RTL: move toolbar to the left */
+:root[dir="rtl"] #qib-toolbar,
+html.qib-rtl #qib-toolbar {
+  right: auto;
+  left: 20px;
+}
+
+.qib-tb-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  background: rgba(10, 31, 61, 0.92);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  font-size: 12px;
+  gap: 2px;
+  padding: 6px 4px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.qib-tb-btn:hover,
+.qib-tb-btn:focus {
+  background: rgba(0, 212, 255, 0.18);
+  border-color: rgba(0, 212, 255, 0.8);
+  color: #00D4FF;
+  transform: scale(1.08);
+  outline: 2px solid rgba(0, 212, 255, 0.6);
+  outline-offset: 2px;
+}
+
+.qib-tb-btn:focus-visible {
+  outline: 3px solid #D4AF37;
+  outline-offset: 3px;
+}
+
+.qib-tb-btn.active {
+  background: rgba(0, 212, 255, 0.25);
+  border-color: #00D4FF;
+  color: #00D4FF;
+}
+
+.qib-tb-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.qib-tb-label {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+}
+
+/* Speaking animation */
+.qib-tb-btn.speaking .qib-tb-icon {
+  animation: qib-pulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes qib-pulse {
+  from { transform: scale(1); opacity: 0.7; }
+  to   { transform: scale(1.3); opacity: 1; }
+}
+
+/* Listening animation */
+.qib-tb-btn.listening {
+  background: rgba(212, 175, 55, 0.25);
+  border-color: #D4AF37;
+  color: #D4AF37;
+  animation: qib-listening-ring 1s ease-in-out infinite;
+}
+@keyframes qib-listening-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BRD REFERENCE PANEL
+   ─────────────────────────────────────────────────────────────────────────*/
+#qib-brd-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 90vw);
+  height: 100%;
+  background: linear-gradient(180deg, #0d1f3c 0%, #0a1728 100%);
+  border-left: 2px solid rgba(212, 175, 55, 0.5);
+  z-index: 9995;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.5);
+}
+#qib-brd-panel.visible {
+  transform: translateX(0);
+}
+
+:root[dir="rtl"] #qib-brd-panel,
+html.qib-rtl #qib-brd-panel {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 2px solid rgba(212, 175, 55, 0.5);
+  transform: translateX(-100%);
+  box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
+}
+:root[dir="rtl"] #qib-brd-panel.visible,
+html.qib-rtl #qib-brd-panel.visible {
+  transform: translateX(0);
+}
+
+.qib-brd-inner {
+  padding: 28px 24px 40px;
+}
+
+.qib-brd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.qib-brd-ref {
+  display: inline-block;
+  background: linear-gradient(135deg, #D4AF37, #B8860B);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.qib-brd-close {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.qib-brd-close:hover,
+.qib-brd-close:focus {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: #F44336;
+  color: #F44336;
+  outline: 2px solid #F44336;
+}
+
+.qib-brd-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #00D4FF;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.qib-brd-section {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.qib-brd-section strong {
+  display: block;
+  font-size: 12px;
+  color: #D4AF37;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+.qib-brd-section p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.qib-brd-footer {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SYSTEM WALKTHROUGH PANEL
+   ─────────────────────────────────────────────────────────────────────────*/
+#qib-walkthrough-panel {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  width: min(560px, 92vw);
+  z-index: 9994;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+#qib-walkthrough-panel.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.qib-wt-inner {
+  background: linear-gradient(135deg, #0d1f3c, #101b30);
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+
+.qib-wt-step {
+  font-size: 11px;
+  color: #D4AF37;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.qib-wt-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00D4FF;
+  margin-bottom: 12px;
+}
+
+.qib-wt-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+.qib-wt-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.qib-wt-btn-primary {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #00D4FF, #0288D1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.qib-wt-btn-primary:hover,
+.qib-wt-btn-primary:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+  outline: 2px solid #00D4FF;
+}
+
+.qib-wt-btn-secondary {
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.qib-wt-btn-secondary:hover,
+.qib-wt-btn-secondary:focus {
+  background: rgba(255, 255, 255, 0.12);
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.qib-wt-btn-voice {
+  padding: 10px 14px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  color: #D4AF37;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: auto;
+  transition: all 0.2s;
+}
+.qib-wt-btn-voice:hover,
+.qib-wt-btn-voice:focus {
+  background: rgba(212, 175, 55, 0.25);
+  outline: 2px solid #D4AF37;
+}
+
+.qib-wt-nav-hint {
+  margin-top: 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.qib-wt-page-link {
+  color: rgba(0, 212, 255, 0.7);
+  text-decoration: none;
+}
+.qib-wt-page-link:hover {
+  color: #00D4FF;
+  text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   HIGH CONTRAST MODE
+   ─────────────────────────────────────────────────────────────────────────*/
+html.qib-high-contrast,
+html.qib-high-contrast body {
+  background: #000 !important;
+  color: #fff !important;
+}
+html.qib-high-contrast .sidebar,
+html.qib-high-contrast .login-panel,
+html.qib-high-contrast .card,
+html.qib-high-contrast .stat-card,
+html.qib-high-contrast .nav-item {
+  background: #111 !important;
+  border-color: #fff !important;
+  color: #fff !important;
+}
+html.qib-high-contrast a,
+html.qib-high-contrast .nav-item span {
+  color: #ff0 !important;
+}
+html.qib-high-contrast button,
+html.qib-high-contrast .submit-btn,
+html.qib-high-contrast .role-option-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.qib-high-contrast input,
+html.qib-high-contrast select,
+html.qib-high-contrast textarea {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.qib-high-contrast .ambient-bg,
+html.qib-high-contrast .gradient-mesh {
+  display: none !important;
+}
+html.qib-high-contrast *:focus {
+  outline: 3px solid #ff0 !important;
+  outline-offset: 2px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   LARGE TEXT MODE
+   ─────────────────────────────────────────────────────────────────────────*/
+html.qib-large-text {
+  font-size: 118% !important;
+}
+html.qib-large-text body,
+html.qib-large-text p,
+html.qib-large-text span,
+html.qib-large-text label,
+html.qib-large-text td,
+html.qib-large-text th,
+html.qib-large-text li {
+  font-size: 1em !important;
+  line-height: 1.7 !important;
+}
+html.qib-large-text .form-input,
+html.qib-large-text .large-input,
+html.qib-large-text input,
+html.qib-large-text button {
+  font-size: 1em !important;
+  padding: 14px 18px !important;
+  min-height: 48px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   RTL / ARABIC LAYOUT
+   ─────────────────────────────────────────────────────────────────────────*/
+html.qib-rtl,
+html[dir="rtl"] {
+  font-family: 'Segoe UI', Tahoma, 'Arial Unicode MS', 'Noto Naskh Arabic', sans-serif;
+}
+
+html.qib-rtl .sidebar,
+html[dir="rtl"] .sidebar {
+  right: 0;
+  left: auto;
+  border-right: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+html.qib-rtl .main-content,
+html[dir="rtl"] .main-content {
+  margin-left: 0;
+  margin-right: 260px;
+}
+
+html.qib-rtl .nav-badge,
+html[dir="rtl"] .nav-badge {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+html.qib-rtl .brand-section,
+html[dir="rtl"] .brand-section {
+  text-align: right;
+}
+
+html.qib-rtl .login-panel,
+html[dir="rtl"] .login-panel {
+  text-align: right;
+}
+
+html.qib-rtl .form-label,
+html[dir="rtl"] .form-label {
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   FOCUS VISIBILITY (keyboard navigation)
+   ─────────────────────────────────────────────────────────────────────────*/
+:focus-visible {
+  outline: 2px solid #00D4FF;
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   RESPONSIVE — hide label text on small screens
+   ─────────────────────────────────────────────────────────────────────────*/
+@media (max-width: 480px) {
+  #qib-toolbar {
+    bottom: 12px;
+    right: 12px;
+    gap: 4px;
+  }
+  .qib-tb-btn {
+    width: 48px;
+    height: 48px;
+  }
+  .qib-tb-label {
+    display: none;
+  }
+  .qib-tb-icon {
+    font-size: 20px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PRINT STYLES — hide toolbar and overlays during printing
+   ─────────────────────────────────────────────────────────────────────────*/
+@media print {
+  #qib-toolbar,
+  #qib-brd-panel,
+  #qib-walkthrough-panel,
+  .qib-skip-link {
+    display: none !important;
+  }
+}
