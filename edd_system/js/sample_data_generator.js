@@ -143,7 +143,7 @@ const SAMPLE_DATA_GENERATOR = (() => {
       lastUpdated: generateDate(30),
       updatedBy: randomItem(['ahmed.thani@qib.qa', 'fatima.altiwari@qib.qa', 'system@qib.qa']),
       department: randomItem(['CDD', 'KYC', 'COMPLIANCE', 'OPERATIONS']),
-      assignedTo: randomItem(['Ahmed Al-Thani', 'Fatima Al-Tiwari', 'Mohammed Al-Kaabi']),
+      assignedTo: randomItem(['Mohanad Al Hassan', 'Fatima Al-Tiwari', 'Mohammed Al-Kaabi']),
       documentRef: `DOC-${generateId('REF')}`,
       notes: generateNotes(),
       complianceChecks: {
@@ -221,7 +221,7 @@ const SAMPLE_DATA_GENERATOR = (() => {
         id: 'USER-001',
         username: 'ahmed.thani',
         password: 'hash_abc123', // Hash in production
-        fullName: 'Ahmed Al-Thani',
+        fullName: 'Mohanad Al Hassan',
         email: 'ahmed.thani@qib.qa',
         role: 'KYC_OFFICER',
         department: 'KYC',

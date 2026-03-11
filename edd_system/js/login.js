@@ -33,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Demo Users Database
   const demoUsers = {
     'Qib@2030': { name: 'QIB Admin', password: 'Qib@2030', department: 'All Access', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] },
-    'EMP001': { name: 'Ahmed Al-Thani', password: 'demo123', department: 'Mass Banking', allowedRoles: ['business', 'management'] },
+    'EMP001': { name: 'Mohanad Al Hassan', password: 'demo123', department: 'Operations', allowedRoles: ['business', 'management'] },
     'EMP002': { name: 'Fatima Al-Mansoor', password: 'demo123', department: 'CDD Operations', allowedRoles: ['cdd', 'compliance'] },
     'EMP003': { name: 'Mohammed Al-Suwaidi', password: 'demo123', department: 'Compliance', allowedRoles: ['compliance', 'management'] },
     'EMP004': { name: 'Sara Al-Khalifa', password: 'demo123', department: 'Private Banking', allowedRoles: ['business'] },
     'EMP005': { name: 'Khalid Al-Dosari', password: 'demo123', department: 'Audit', allowedRoles: ['audit'] },
     'EMP006': { name: 'Admin User', password: 'demo123', department: 'IT', allowedRoles: ['it', 'audit', 'management'] },
-    'RAAFAT': { name: 'Raafat Alrantisi', password: 'raafat2030', department: 'GCEO Office', allowedRoles: ['management', 'business', 'audit'] },
+    'RAAFAT': { name: 'Mohanad Al Hassan', password: 'raafat2030', department: 'Operations', allowedRoles: ['management', 'business', 'audit'] },
     'ARSLAN': { name: 'Operations Manager', password: 'Arslan@2030', department: 'WPS & Digital Back Office', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] },
     'DEMO': { name: 'Demo User', password: 'demo', department: 'All Access', allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] }
   };

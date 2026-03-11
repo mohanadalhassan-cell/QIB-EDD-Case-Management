@@ -92,7 +92,7 @@ const EDDMockData = {
 
   // Users Database
   users: {
-    'EMP001': { id: 'EMP001', name: 'Ahmed Al-Thani', email: 'ahmed.althani@qib.com.qa', department: 'Mass Banking', role: 'business', segment: 'Mass' },
+    'EMP001': { id: 'EMP001', name: 'Mohanad Al Hassan', email: 'mohanad.hassan@qib.com.qa', department: 'Operations', role: 'business', segment: 'Mass' },
     'EMP002': { id: 'EMP002', name: 'Fatima Al-Mansoor', email: 'fatima.almansoor@qib.com.qa', department: 'CDD Operations', role: 'cdd', segment: null },
     'EMP003': { id: 'EMP003', name: 'Mohammed Al-Suwaidi', email: 'mohammed.alsuwaidi@qib.com.qa', department: 'Compliance', role: 'compliance', segment: null },
     'EMP004': { id: 'EMP004', name: 'Sara Al-Khalifa', email: 'sara.alkhalifa@qib.com.qa', department: 'Private Banking', role: 'business', segment: 'Private' },
