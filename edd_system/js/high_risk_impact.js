@@ -430,6 +430,74 @@ class HighRiskImpactSystem {
     // In production, get from session/auth system
     return localStorage.getItem('userId') || 'unknown';
   }
+
+  /**
+   * Integrate Financial Consistency Engine analysis
+   * Analyzes declared income vs. actual transaction activity
+   * @param {Object} caseData - EDD case object with customer info
+   * @param {Array} transactionHistory - Array of transaction objects
+   * @param {string} containerId - HTML element ID to render financial analysis into
+   */
+  renderFinancialConsistencyAnalysis(caseData, transactionHistory, containerId = 'financial-consistency-container') {
+    // Check if Financial Consistency Engine is loaded
+    if (typeof FinancialConsistencyEngine === 'undefined') {
+      console.warn('⚠️ Financial Consistency Engine not loaded. Skipping financial analysis.');
+      return null;
+    }
+
+    const container = document.getElementById(containerId);
+    if (!container) return null;
+
+    // Initialize Financial Consistency Engine
+    const fcEngine = new FinancialConsistencyEngine();
+
+    // Run analysis
+    const analysis = fcEngine.analyzeFinancialBehavior(caseData, transactionHistory);
+
+    // Generate HTML card
+    const cardHTML = fcEngine.generateAnalysisCard(analysis);
+
+    // Render into container
+    container.innerHTML = cardHTML;
+
+    // Attach interactive event listeners
+    this.attachFinancialConsistencyListeners(analysis);
+
+    // Log audit event
+    this.logAuditEvent('FINANCIAL_CONSISTENCY_ANALYZED', caseData, {
+      riskScore: analysis.riskAssessment.riskScore,
+      riskLevel: analysis.riskAssessment.riskLevel,
+      variancePercent: analysis.consistencyMetrics.variancePercent,
+      analysisTimestamp: analysis.timestamp
+    });
+
+    return analysis;
+  }
+
+  /**
+   * Attach event listeners for Financial Consistency Analysis card
+   * @param {Object} analysis - Financial consistency analysis result
+   */
+  attachFinancialConsistencyListeners(analysis) {
+    // Recommendation action buttons
+    const recommendationItems = document.querySelectorAll('.recommendation-item');
+    recommendationItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        item.classList.toggle('expanded');
+        this.logAuditEvent('RECOMMENDATION_VIEWED', {caseId: analysis.customerCode}, {
+          recommendationIndex: Array.from(recommendationItems).indexOf(item)
+        });
+      });
+    });
+
+    // Risk factors expansion
+    const riskFactors = document.querySelector('.risk-factors');
+    if (riskFactors) {
+      riskFactors.addEventListener('click', (e) => {
+        riskFactors.classList.toggle('expanded');
+      });
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
