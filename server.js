@@ -97,12 +97,12 @@ function initializeDataStore() {
   const users = [
     {
       id: uuidv4(),
-      username: 'ahmed.thani',
-      email: 'ahmed.thani@qib.com.qa',
+      username: 'mohanad.hassan',
+      email: 'mohanad.hassan@qib.com.qa',
       password: 'hashed_edd2024',
-      fullName: 'Ahmed Al Thani',
-      role: 'CDD_MAKER',
-      department: 'Compliance',
+      fullName: 'Mohanad Al Hassan',
+      role: 'OPERATIONS_MANAGER',
+      department: 'Operations',
       active: true,
       createdAt: new Date()
     },

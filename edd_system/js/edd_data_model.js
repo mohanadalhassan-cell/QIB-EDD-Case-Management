@@ -433,11 +433,11 @@ class EDDDataModel {
       users = [
         {
           id: 'USER_001',
-          username: 'ahmed.thani',
-          email: 'ahmed.thani@qib.com.qa',
-          fullName: 'Ahmed Al Thani',
-          role: 'CDD_MAKER',
-          department: 'Compliance',
+          username: 'mohanad.hassan',
+          email: 'mohanad.hassan@qib.com.qa',
+          fullName: 'Mohanad Al Hassan',
+          role: 'OPERATIONS_MANAGER',
+          department: 'Operations',
           active: true,
           lastLogin: new Date(Date.now() - 5 * 60000).toISOString()
         },

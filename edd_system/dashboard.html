@@ -9,6 +9,8 @@
   <meta name="description" content="Simplify Governance Platform — Executive Dashboard">
   <link rel="stylesheet" href="css/edd_system.css">
   <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/settings-drawer.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
 </head>
 <body>
@@ -118,10 +120,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
-          <div class="user-name" id="user-name">WPS & Digital Back Office</div>
-          <div class="user-role" id="user-role">Operations Management</div>
+          <div class="user-name" id="user-name">Mohanad Al Hassan</div>
+          <div class="user-role" id="user-role">Operations</div>
         </div>
       </div>
     </aside>
@@ -155,6 +157,10 @@
           <button class="header-btn" title="Notifications">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
             <span class="badge">3</span>
+          </button>
+          <button class="theme-toggle-btn" id="theme-toggle-btn" title="Switch to Light Mode">☀️</button>
+          <button class="settings-toggle-btn" id="settings-toggle-btn" title="Settings" onclick="SettingsDrawer.toggle()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.09-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.11.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.11.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.09.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.11-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
           </button>
           <button class="header-btn" id="logout-btn" title="Logout">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
@@ -906,5 +912,7 @@
       localStorage.setItem('systemSealHidden', !isHidden);
     });
   </script>
+  <script src="js/theme-manager.js"></script>
+  <script src="js/settings-drawer.js"></script>
 </body>
 </html>

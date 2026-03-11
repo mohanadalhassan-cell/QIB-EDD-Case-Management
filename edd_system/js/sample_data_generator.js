@@ -219,12 +219,12 @@ const SAMPLE_DATA_GENERATOR = (() => {
     return [
       {
         id: 'USER-001',
-        username: 'ahmed.thani',
+        username: 'mohanad.hassan',
         password: 'hash_abc123', // Hash in production
         fullName: 'Mohanad Al Hassan',
-        email: 'ahmed.thani@qib.qa',
-        role: 'KYC_OFFICER',
-        department: 'KYC',
+        email: 'mohanad.hassan@qib.qa',
+        role: 'OPERATIONS_MANAGER',
+        department: 'Operations',
         status: 'ACTIVE',
         createdDate: '2025-01-01'
       },
