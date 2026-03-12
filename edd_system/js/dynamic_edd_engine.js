@@ -380,7 +380,7 @@ function computeBaseScore(customerData, config) {
    ───────────────────────────────────────────────────────────── */
 
 function resolveDecision(finalScore, thresholds) {
-  for (const [key, t] of Object.entries(thresholds).sort((a, b) => b[1].min - a[1].min)) {
+  for (const [key, t] of Object.entries(thresholds).filter(([,t]) => t.min !== undefined).sort((a, b) => b[1].min - a[1].min)) {
     if (finalScore >= t.min) {
       return { category: key, ...t };
     }

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Ingestion & Portfolio Analysis — QIB Risk Intelligence</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2300D4FF'/><text x='16' y='22' font-size='14' font-weight='900' fill='%23050810' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+<style>
+  :root {
+    --bg: #050810; --card: rgba(8,15,35,0.88); --border: rgba(0,212,255,0.12);
+    --blue: #00D4FF; --purple: #8B5CF6; --green: #00E676;
+    --amber: #FFB800; --red: #FF4757; --text: #e8eaf6; --text-dim: rgba(232,234,246,0.55);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .header {
+    background: rgba(5,8,20,0.97); border-bottom: 1px solid var(--border);
+    padding: 20px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; color: #050810; }
+  .title { font-size: 15px; font-weight: 700; }
+  .title span { color: var(--blue); }
+  .header-sep { width: 1px; height: 30px; background: var(--border); margin: 0 8px; }
+  .tag { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; }
+  .nav { margin-left: auto; display: flex; gap: 8px; }
+  .nav a { padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); background: transparent; color: var(--text-dim); text-decoration: none; transition: all .2s; }
+  .nav a:hover { border-color: var(--blue); color: var(--blue); background: rgba(0,212,255,0.06); }
+
+  /* ── PAGE ── */
+  .page { max-width: 1400px; margin: 0 auto; padding: 28px 24px; }
+  .section-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .section-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 20px; }
+
+  /* ── CARD ── */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; transition: all .2s; }
+  .card:hover { border-color: rgba(0,212,255,0.25); }
+  .card h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .card p { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+  /* ── GRID ── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── UPLOAD ZONE ── */
+  .upload-zone {
+    border: 2px dashed var(--border); border-radius: 10px; padding: 40px;
+    text-align: center; cursor: pointer; transition: all .2s;
+    background: rgba(0,212,255,0.02);
+  }
+  .upload-zone:hover { border-color: var(--blue); background: rgba(0,212,255,0.05); }
+  .upload-zone-icon { font-size: 40px; margin-bottom: 10px; }
+  .upload-zone h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .upload-zone p { font-size: 12px; color: var(--text-dim); }
+  .upload-input { display: none; }
+
+  /* ── BUTTON ── */
+  .btn {
+    padding: 10px 20px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    border: 1px solid; cursor: pointer; transition: all .2s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: rgba(0,212,255,0.15); border-color: var(--blue); color: var(--blue); }
+  .btn-primary:hover { background: rgba(0,212,255,0.25); }
+  .btn-success { background: rgba(0,230,118,0.15); border-color: var(--green); color: var(--green); }
+  .btn-danger { background: rgba(255,71,87,0.15); border-color: var(--red); color: var(--red); }
+
+  /* ── STEP INDICATOR ── */
+  .steps { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .step { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-dim); }
+  .step.active .step-num { border-color: var(--blue); color: var(--blue); background: rgba(0,212,255,0.1); }
+  .step.done .step-num { border-color: var(--green); color: var(--green); background: rgba(0,230,118,0.1); }
+  .step-arrow { color: var(--border); font-size: 16px; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 10px; text-align: left; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text-dim); }
+  td { border: 1px solid var(--border); padding: 10px; }
+  tr:hover { background: rgba(0,212,255,0.02); }
+
+  /* ── STATUS BADGE ── */
+  .badge { padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; display: inline-block; }
+  .badge-ready { background: rgba(0,230,118,0.15); color: var(--green); }
+  .badge-review { background: rgba(255,184,0,0.15); color: var(--amber); }
+  .badge-error { background: rgba(255,71,87,0.15); color: var(--red); }
+
+  /* ── INSIGHT BOX ── */
+  .insight-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .insight-row:last-child { border-bottom: none; }
+  .insight-label { font-size: 12px; color: var(--text-dim); }
+  .insight-value { font-size: 14px; font-weight: 700; color: var(--blue); }
+
+  /* ── STRATEGIC MESSAGE ── */
+  .strategic { background: rgba(139,92,246,0.08); border-left: 3px solid var(--purple); padding: 16px; border-radius: 6px; margin: 16px 0; }
+  .strategic h4 { font-size: 12px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .strategic p { font-size: 12px; line-height: 1.6; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Q</div>
+  <div class="title">QIB <span>Data Ingestion & Portfolio Analysis</span></div>
+  <div class="header-sep"></div>
+  <div class="tag">Customer Risk Intelligence Platform</div>
+  <div class="nav">
+    <a href="edd-automation-platform.html">EDD Operations</a>
+    <a href="dashboard.html">Dashboard</a>
+  </div>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="page">
+
+  <!-- SECTION 1: OVERVIEW -->
+  <div class="card">
+    <h3>📊 Data Ingestion & Portfolio-Level Analysis</h3>
+    <p>
+      Upload customer datasets (CSV, Excel, API) and automatically map to QIB's standardized EDD model.
+      Analyze entire customer portfolios in minutes. Identify high-risk segments without per-transaction system integration.
+    </p>
+    <div class="strategic">
+      <h4>Strategic Capability</h4>
+      <p>
+        Rather than analyzing customers individually, QIB can now assess its entire customer base using bulk data processing.
+        This capability enables proactive risk identification, historical analysis, and portfolio-level compliance reporting.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: WORKFLOW -->
+  <div>
+    <h2 class="section-title">Bulk Analysis Workflow</h2>
+    <p class="section-sub">5-step process from data upload to case generation</p>
+
+    <div class="steps">
+      <div class="step active">
+        <div class="step-num">1</div>
+        <span>Upload Dataset</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <span>Detect Source</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <span>Map Fields</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <span>Validate Data</span>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <span>Generate Cases</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: UPLOAD -->
+  <div class="card">
+    <h3>🔼 Step 1: Select Data Source</h3>
+    <p>Upload customer data extract from any system.</p>
+    <div class="grid-2" style="margin-top: 16px;">
+      <button class="btn btn-primary" onclick="simulateUpload('T24')">
+        <span style="font-size:16px">📁</span> Upload T24 Extract
+      </button>
+      <button class="btn btn-primary" onclick="simulateUpload('CRM')">
+        <span style="font-size:16px">📁</span> Upload CRM Export
+      </button>
+      <button class="btn btn-primary" onclick="simulateUpload('DMS')">
+        <span style="font-size:16px">📁</span> Upload Document Audit
+      </button>
+      <button class="btn btn-primary" onclick="simulateUpload('Custom')">
+        <span style="font-size:16px">📁</span> Upload CSV Custom
+      </button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SOURCE DETECTION -->
+  <div class="card" id="sourceDetectionSection" style="display:none;">
+    <h3>✓ Step 2: Source System Detected</h3>
+    <div id="detectedSource"></div>
+  </div>
+
+  <!-- SECTION 5: FIELD MAPPING -->
+  <div class="card" id="mappingSection" style="display:none;">
+    <h3>🔗 Step 3: Field Mapping Configuration</h3>
+    <p style="margin-bottom: 16px;">Review and adjust how uploaded fields map to QIB standard model.</p>
+    <div id="mappingTable"></div>
+    <button class="btn btn-success" onclick="proceedToValidation()" style="margin-top: 16px;">
+      ✓ Mapping Complete — Proceed
+    </button>
+  </div>
+
+  <!-- SECTION 6: DATA VALIDATION -->
+  <div class="card" id="validationSection" style="display:none;">
+    <h3>✓ Step 4: Data Quality Validation</h3>
+    <div id="validationResults"></div>
+    <button class="btn btn-success" onclick="proceedToAnalysis()" style="margin-top: 16px;" id="proceedAnalysisBtn">
+      ✓ Data Valid — Analyze Portfolio
+    </button>
+  </div>
+
+  <!-- SECTION 7: ANALYSIS RESULTS -->
+  <div class="card" id="analysisSection" style="display:none;">
+    <h3>✓ Step 5: Portfolio Analysis Results</h3>
+    <div id="analysisResults"></div>
+  </div>
+
+  <!-- SECTION 8: INSIGHTS -->
+  <div id="insightsSection" style="display:none;">
+    <h2 class="section-title">Portfolio-Level Insights</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>📈 Risk Distribution</h3>
+        <div id="riskInsights"></div>
+      </div>
+      <div class="card">
+        <h3>⚠ Top Flags</h3>
+        <div id="topFlags"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🎯 Recommended Actions</h3>
+      <div id="recommendedActions"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: TEMPLATES -->
+  <div class="card" style="margin-top: 24px;">
+    <h3>💾 Field Mapping Templates</h3>
+    <p style="margin-bottom: 16px;">Save and reuse field mappings for future uploads.</p>
+    <div id="templatesList" style="display:flex; gap: 8px; flex-wrap: wrap;">
+      <span style="font-size:12px; color:var(--text-dim); padding: 8px 12px; background:rgba(0,0,0,0.3); border-radius: 4px;">
+        No templates saved yet
+      </span>
+    </div>
+    <button class="btn btn-primary" onclick="saveCurrentTemplate()" style="margin-top: 16px; display:none;" id="saveTemplateBtn">
+      💾 Save Current Mapping as Template
+    </button>
+  </div>
+
+  <!-- STRATEGIC FOOTER -->
+  <div class="strategic" style="margin-top: 32px;">
+    <h4>Board Briefing: Customer Risk Intelligence Platform</h4>
+    <p>
+      <b>Historical Analysis Capability:</b> QIB can now analyze years of customer data in bulk, identifying previously missed high-risk cases.<br><br>
+      <b>Portfolio-Level Assessment:</b> Shift from individual case review to strategic portfolio management.<br><br>
+      <b>System Independence:</b> Operates without full system integrations—immediate deployment value.<br><br>
+      <b>Regulatory Benefits:</b> Enables proactive compliance reporting and faster response to AML/CFT requirements.
+    </p>
+  </div>
+
+</div>
+
+<script src="js/data-ingestion-engine.js"></script>
+<script>
+
+let currentUploadSource = null;
+let currentMapping = null;
+let currentValidation = null;
+let currentAnalysis = null;
+
+function simulateUpload(source) {
+  currentUploadSource = source;
+
+  // Simulate file upload
+  const sampleData = generateSampleData(source, 847);
+
+  // Step 2: Detect source
+  const detection = DataIngestionEngine.detectDataSource(Object.keys(sampleData[0]));
+  displayDetection(detection);
+
+  // Step 3: Generate mapping
+  currentMapping = detection.suggestedMapping;
+  displayMapping(Object.keys(sampleData[0]), currentMapping);
+}
+
+function generateSampleData(source, count) {
+  const sectorList = ['TRADE', 'FINANCE', 'TECH', 'REAL_ESTATE', 'CRYPTO', 'CONSULTANCY'];
+  const nationalities = ['QAT', 'USA', 'GBR', 'AE', 'SA', 'FR'];
+  const occupations = ['Manager', 'Engineer', 'Trader', 'Owner', 'Consultant', 'Investor'];
+
+  const data = [];
+  for (let i = 0; i < count; i++) {
+    const headers = source === 'T24'
+      ? ['CUSTOMER_ID', 'SECTOR', 'RESIDENCY', 'OCCUPATION', 'INCOME', 'PEP_FLAG', 'DOC_COMPLETE']
+      : source === 'CRM'
+      ? ['CustId', 'Industry', 'Location', 'Job', 'Salary', 'RiskFlag', 'DocCount']
+      : ['cust_id', 'risk_segment', 'country', 'business_type', 'annual_income', 'sanction_hit', 'doc_quality'];
+
+    const row = {};
+    headers.forEach(h => {
+      if (h.includes('ID') || h.includes('cust')) row[h] = 'CUST' + Math.floor(Math.random() * 100000);
+      else if (h.includes('SECTOR') || h.includes('Industry') || h.includes('risk_segment')) row[h] = sectorList[Math.floor(Math.random() * sectorList.length)];
+      else if (h.includes('RESIDENCY') || h.includes('Location') || h.includes('country')) row[h] = nationalities[Math.floor(Math.random() * nationalities.length)];
+      else if (h.includes('OCCUPATION') || h.includes('Job') || h.includes('business_type')) row[h] = occupations[Math.floor(Math.random() * occupations.length)];
+      else if (h.includes('INCOME') || h.includes('Salary') || h.includes('annual_income')) row[h] = Math.floor(Math.random() * 1000000) + 100000;
+      else if (h.includes('PEP') || h.includes('RiskFlag') || h.includes('sanction_hit')) row[h] = Math.random() > 0.95 ? 'YES' : 'NO';
+      else if (h.includes('DOC') || h.includes('quality')) row[h] = Math.floor(Math.random() * 100) + 60;
+    });
+    data.push(row);
+  }
+  return data;
+}
+
+function displayDetection(detection) {
+  document.getElementById('sourceDetectionSection').style.display = 'block';
+  document.getElementById('detectedSource').innerHTML = `
+    <div class="insight-row">
+      <span class="insight-label">Detected Source:</span>
+      <span class="insight-value">${detection.source}</span>
+    </div>
+    <div class="insight-row">
+      <span class="insight-label">Confidence:</span>
+      <span class="insight-value" style="color:var(--green)">${detection.confidence}</span>
+    </div>
+    <div class="insight-row" style="border-bottom:none; padding-top:16px; border-top:1px solid rgba(255,255,255,0.04);">
+      <span style="font-size:11px; color:var(--text-dim)">System auto-detected source and mapped ${Object.keys(detection.suggestedMapping.mappings).length} fields</span>
+    </div>
+  `;
+}
+
+function displayMapping(headers, mapping) {
+  document.getElementById('mappingSection').style.display = 'block';
+  const html = `
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>Uploaded Field</th>
+          <th>Platform Field</th>
+          <th>Status</th>
+        </tr>
+        ${headers.map(h => {
+          const mapped = mapping.mappings[h];
+          return `<tr>
+            <td><code style="font-size:11px;color:var(--blue)">${h}</code></td>
+            <td>${mapped ? `<code style="font-size:11px;color:var(--green)">${mapped}</code>` : '<span style="color:var(--text-dim)">⚠ Not matched</span>'}</td>
+            <td>${mapped ? '<span class="badge badge-ready">✓ Mapped</span>' : '<span class="badge badge-review">Review</span>'}</td>
+          </tr>`;
+        }).join('')}
+      </table>
+    </div>
+    <div class="insight-row" style="padding-top:12px; border-top: 1px solid rgba(255,255,255,0.04);">
+      <span class="insight-label">Mapping Status:</span>
+      <span class="badge badge-ready">${mapping.status}</span>
+    </div>
+  `;
+  document.getElementById('mappingTable').innerHTML = html;
+}
+
+function proceedToValidation() {
+  const sampleData = generateSampleData(currentUploadSource, 847);
+  currentValidation = DataIngestionEngine.validateDataset(sampleData, currentMapping.mappings);
+  
+  document.getElementById('validationSection').style.display = 'block';
+  const html = `
+    <div class="table-wrap">
+      <tr style="border-bottom: 1px solid var(--border);">
+        <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Total Records</td>
+        <td style="padding: 12px; border: 1px solid var(--border); color: var(--blue);">${currentValidation.totalRecords}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Valid Records</td>
+        <td style="padding: 12px; border: 1px solid var(--border); color: var(--green);">${currentValidation.validRecords}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Pass Rate</td>
+        <td style="padding: 12px; border: 1px solid var(--border); color: var(--green);">${currentValidation.summary.passRate}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Status</td>
+        <td style="padding: 12px; border: 1px solid var(--border);"><span class="badge badge-ready">✓ ${currentValidation.summary.status}</span></td>
+      </tr>
+    </table>
+    </div>
+    ${currentValidation.warnings.length === 0 ? '' : `
+      <div style="margin-top: 12px; padding: 10px 12px; background: rgba(255,184,0,0.08); border-left: 2px solid var(--amber); border-radius: 4px;">
+        <span style="font-size:11px; font-weight:700; color:var(--amber)">⚠ ${currentValidation.warnings.length} warning(s) — Review recommended</span>
+      </div>
+    `}
+  `;
+  document.getElementById('validationResults').innerHTML = html;
+}
+
+function proceedToAnalysis() {
+  const sampleData = generateSampleData(currentUploadSource, 847);
+  const eddData = DataIngestionEngine.transformToEddFormat(sampleData, currentMapping.mappings);
+  currentAnalysis = DataIngestionEngine.analyzeBatch(eddData, null);
+
+  document.getElementById('analysisSection').style.display = 'block';
+  document.getElementById('insightsSection').style.display = 'block';
+
+  // Results table
+  const html = `
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Total Analyzed</td>
+          <td style="padding: 12px; border: 1px solid var(--border); color: var(--blue);">${currentAnalysis.totalAnalyzed}</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Cases for Review</td>
+          <td style="padding: 12px; border: 1px solid var(--border); color: var(--amber);">${currentAnalysis.casesForReview}</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Cases Escalated</td>
+          <td style="padding: 12px; border: 1px solid var(--border); color: var(--red);">${currentAnalysis.casesEscalated}</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px; border: 1px solid var(--border); font-weight: 700;">Cases Closed</td>
+          <td style="padding: 12px; border: 1px solid var(--border); color: var(--green);">${currentAnalysis.casesClosed}</td>
+        </tr>
+      </table>
+    </div>
+  `;
+  document.getElementById('analysisResults').innerHTML = html;
+
+  // Insights
+  const insightsHtml = `
+    <div class="insight-row">
+      <span class="insight-label">Average Risk Score:</span>
+      <span class="insight-value">${currentAnalysis.insights.portfolioRiskSummary.averageRiskScore}</span>
+    </div>
+    <div class="insight-row">
+      <span class="insight-label">% Requiring Action:</span>
+      <span class="insight-value" style="color:var(--amber)">${currentAnalysis.insights.portfolioRiskSummary.percentageRequiringAction}</span>
+    </div>
+    <div class="insight-row">
+      <span class="insight-label">Low Risk:</span>
+      <span class="insight-value" style="color:var(--green)">${currentAnalysis.riskDistribution.low}</span>
+    </div>
+    <div class="insight-row">
+      <span class="insight-label">Medium Risk:</span>
+      <span class="insight-value" style="color:var(--amber)">${currentAnalysis.riskDistribution.medium}</span>
+    </div>
+    <div class="insight-row">
+      <span class="insight-label">High Risk:</span>
+      <span class="insight-value" style="color:var(--red)">${currentAnalysis.riskDistribution.high}</span>
+    </div>
+  `;
+  document.getElementById('riskInsights').innerHTML = insightsHtml;
+
+  const flagsHtml = currentAnalysis.insights.topFlags.map(f => `
+    <div class="insight-row">
+      <span class="insight-label">${f.flag}</span>
+      <span class="insight-value" style="color:var(--red)">${f.count}</span>
+    </div>
+  `).join('');
+  document.getElementById('topFlags').innerHTML = flagsHtml;
+
+  const actionsHtml = currentAnalysis.insights.recommendedActions.map(a => `
+    <div style="padding: 10px 12px; background: rgba(0,0,0,0.2); border-left: 2px solid ${a.priority === 'CRITICAL' ? 'var(--red)' : 'var(--amber)'}; border-radius: 4px; margin-bottom: 8px;">
+      <div style="font-size:11px; font-weight:700; color:${a.priority === 'CRITICAL' ? 'var(--red)' : 'var(--amber)'}; text-transform:uppercase; margin-bottom:2px;">${a.priority}</div>
+      <div style="font-size:12px; color:var(--text); margin-bottom:4px;">${a.action}</div>
+      <div style="font-size:11px; color:var(--text-dim);">${a.reason}</div>
+    </div>
+  `).join('');
+  document.getElementById('recommendedActions').innerHTML = actionsHtml;
+
+  document.getElementById('saveTemplateBtn').style.display = 'inline-flex';
+}
+
+function saveCurrentTemplate() {
+  const name = prompt('Enter template name (e.g., "T24 Customer Extract"):');
+  if (name) {
+    DataIngestionEngine.saveTemplate(name, currentMapping.mappings);
+    alert('✓ Template saved: ' + name);
+  }
+}
+
+</script>
+</body>
+</html>
