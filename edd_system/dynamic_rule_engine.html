@@ -964,14 +964,17 @@ function renderKPIs() {
   const active   = rules.filter(r => r.status === 'active').length;
   const highImpact = rules.filter(r => r.impact === 'high' && r.status === 'active').length;
   const totalTriggered = rules.reduce((s, r) => s + (r.triggers || 0), 0);
-  const avgEsc   = rules.filter(r => r.status === 'active' && r.triggers > 0)
-    .reduce((s, r, _, a) => s + r.escalationRate / a.length, 0).toFixed(1);
+  const activeWithTriggers = rules.filter(r => r.status === 'active' && r.triggers > 0);
+  const avgEsc = activeWithTriggers.length > 0
+    ? activeWithTriggers.reduce((s, r) => s + r.escalationRate, 0) / activeWithTriggers.length
+    : 0;
+  const avgEscDisplay = avgEsc.toFixed(1);
 
   const kpis = [
     { label:'Active Rules', value: active,         delta:'↑ 2 this week', dir:'up',   color:'blue' },
     { label:'High Impact',  value: highImpact,      delta:'Critical rules', dir:'',    color:'red' },
     { label:'Triggers (30d)',value: totalTriggered.toLocaleString(), delta:'↑ 12% vs last month', dir:'up', color:'gold' },
-    { label:'Avg Escalation Rate', value: avgEsc+'%', delta:'Industry avg: 34%', dir:'up', color:'orange' },
+    { label:'Avg Escalation Rate', value: avgEscDisplay+'%', delta:'Industry avg: 34%', dir:'up', color:'orange' },
     { label:'Draft Rules',  value: rules.filter(r=>r.status==='draft').length, delta:'Pending activation', dir:'', color:'green' }
   ];
 
@@ -1206,7 +1209,10 @@ function renderThresholds() {
 function saveThresholds() {
   const high   = parseInt(document.getElementById('thresh-high').value);
   const medium = parseInt(document.getElementById('thresh-medium').value);
-  if (high <= medium) { toast('High risk threshold must be greater than medium threshold', 'error'); return; }
+  if (high <= medium || medium < 1) {
+    toast('High risk threshold must be greater than medium, and medium must be at least 1', 'error');
+    return;
+  }
   config.thresholds = { high, medium };
   localStorage.setItem(CFG_KEY, JSON.stringify(config));
   addAudit('System', 'UPDATE', 'Risk Thresholds', `High: ${high}, Medium: ${medium}`);
@@ -1379,14 +1385,14 @@ function addCondition(prefill=null) {
     </select>
     <div class="condition-op">
       <select style="background:none;border:none;color:inherit;font-size:11px;font-weight:700;cursor:pointer;outline:none;" id="co-${id}">
-        <option ${prefill?.op==='>'?'selected':''}>></option>
-        <option ${prefill?.op==='>='?'selected':''}>>=</option>
-        <option ${prefill?.op==='<'?'selected':''}>&#60;</option>
-        <option ${prefill?.op==='<='?'selected':''}>&#60;=</option>
-        <option ${prefill?.op==='='?'selected':''}>=</option>
-        <option ${prefill?.op==='!='?'selected':''}>!=</option>
-        <option ${prefill?.op==='contains'?'selected':''}>contains</option>
-        <option ${prefill?.op==='in list'?'selected':''}>in list</option>
+        <option value=">"  ${prefill?.op==='>'?'selected':''}>&gt;</option>
+        <option value=">=" ${prefill?.op==='>='?'selected':''}>&gt;=</option>
+        <option value="<"  ${prefill?.op==='<'?'selected':''}>&lt;</option>
+        <option value="<=" ${prefill?.op==='<='?'selected':''}>&lt;=</option>
+        <option value="="  ${prefill?.op==='='?'selected':''}>=</option>
+        <option value="!=" ${prefill?.op==='!='?'selected':''}>!=</option>
+        <option value="contains" ${prefill?.op==='contains'?'selected':''}>contains</option>
+        <option value="in list"  ${prefill?.op==='in list'?'selected':''}>in list</option>
       </select>
     </div>
     <input class="form-control" id="cv-${id}" placeholder="Value" value="${prefill?.value||''}" style="font-size:12px;padding:7px 10px;">
@@ -1426,7 +1432,10 @@ function saveRule(e) {
       toast(`Rule "${name}" updated ✓`, 'success');
     }
   } else {
-    const newId = 'R' + String(rules.length + 1).padStart(3, '0');
+    const existingIds = new Set(rules.map(r => r.id));
+    let counter = rules.length + 1;
+    let newId;
+    do { newId = 'R' + String(counter++).padStart(3, '0'); } while (existingIds.has(newId));
     rules.push({ id:newId, name, layer, impact, priority, action, status, description: desc, conditions, triggers:0, escalationRate:0 });
     addAudit('Admin', 'CREATE', 'Rule', `Created new rule: ${name}`);
     toast(`Rule "${name}" created ✓`, 'success');
@@ -1455,6 +1464,7 @@ function deleteRule(id) {
 ══════════════════════════════════════════════════════════ */
 function addAudit(user, action, object, details) {
   auditLog.unshift({ ts: new Date().toISOString(), user, action, object, details });
+  /* Limit to 200 entries to keep localStorage usage manageable */
   if (auditLog.length > 200) auditLog = auditLog.slice(0, 200);
   localStorage.setItem(AUDIT_KEY, JSON.stringify(auditLog));
   renderAuditLog();
