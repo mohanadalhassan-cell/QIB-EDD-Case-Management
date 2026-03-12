@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QIB — Dynamic Risk Rule Engine Admin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2300D4FF'/><text x='16' y='22' font-size='14' font-weight='900' fill='%23050810' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+<style>
+/* ── VARIABLES ──────────────────────────────────────────────── */
+:root {
+  --bg:         #050810;
+  --bg-card:    rgba(8,15,35,0.9);
+  --bg-hover:   rgba(12,22,50,0.95);
+  --border:     rgba(0,212,255,0.12);
+  --border-act: rgba(0,212,255,0.45);
+  --blue:       #00D4FF;
+  --purple:     #8B5CF6;
+  --green:      #00E676;
+  --amber:      #FFB800;
+  --red:        #FF4757;
+  --text:       #e8eaf6;
+  --text-dim:   rgba(232,234,246,0.55);
+  --sidebar-w:  240px;
+  --hdr-h:      62px;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body {
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+.hdr {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:var(--hdr-h);
+  background:rgba(5,8,20,0.97);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  display:flex; align-items:center; gap:16px; padding:0 24px;
+}
+.hdr-logo { display:flex; align-items:center; gap:10px; }
+.hdr-logo .ql {
+  width:36px; height:36px; border-radius:8px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:18px; color:#050810;
+}
+.hdr-title { font-size:13px; font-weight:700; letter-spacing:.5px; }
+.hdr-title span { color:var(--blue); }
+.hdr-sep { width:1px; height:30px; background:var(--border); }
+.hdr-subtitle { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+.hdr-nav { display:flex; gap:8px; margin-left:auto; }
+.hdr-nav a {
+  padding:6px 14px; border-radius:6px; font-size:12px; font-weight:600;
+  border:1px solid var(--border); background:transparent; color:var(--text-dim);
+  cursor:pointer; text-decoration:none; display:flex; align-items:center; gap:6px;
+  transition:all .2s;
+}
+.hdr-nav a:hover { background:rgba(0,212,255,.08); border-color:var(--blue); color:var(--blue); }
+.hdr-nav a.primary { background:rgba(0,212,255,.1); border-color:var(--blue); color:var(--blue); }
+.badge-engine {
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#050810; font-size:10px; font-weight:800;
+  padding:2px 7px; border-radius:10px; letter-spacing:.5px;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.sidebar {
+  position:fixed; top:var(--hdr-h); left:0; bottom:0; width:var(--sidebar-w);
+  background:rgba(5,8,20,0.97);
+  border-right:1px solid var(--border);
+  overflow-y:auto; padding:20px 12px;
+  z-index:50;
+}
+.sidebar-section { margin-bottom:24px; }
+.sidebar-section-title {
+  font-size:10px; font-weight:700; color:var(--text-dim);
+  text-transform:uppercase; letter-spacing:1.2px;
+  padding:0 8px; margin-bottom:8px;
+}
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; border-radius:8px; cursor:pointer;
+  font-size:13px; color:var(--text-dim); transition:all .18s;
+  border:1px solid transparent; margin-bottom:2px; text-decoration:none;
+}
+.nav-item:hover { background:rgba(0,212,255,.06); color:var(--text); border-color:var(--border); }
+.nav-item.active { background:rgba(0,212,255,.12); color:var(--blue); border-color:rgba(0,212,255,.3); }
+.nav-item svg { flex-shrink:0; }
+.nav-badge {
+  margin-left:auto; font-size:10px; font-weight:700;
+  background:rgba(0,212,255,.15); color:var(--blue);
+  padding:2px 7px; border-radius:10px; min-width:22px; text-align:center;
+}
+.nav-badge.red { background:rgba(255,71,87,.15); color:var(--red); }
+.nav-badge.amber { background:rgba(255,184,0,.15); color:var(--amber); }
+
+.main { margin-left:var(--sidebar-w); padding-top:var(--hdr-h); min-height:100vh; }
+.content { padding:24px; }
+
+/* ── PANELS ─────────────────────────────────────────────────── */
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* ── SECTION HEADER ─────────────────────────────────────────── */
+.section-hdr {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:20px; flex-wrap:wrap; gap:12px;
+}
+.section-hdr h2 { font-size:20px; font-weight:700; }
+.section-hdr h2 span { color:var(--blue); }
+.section-meta { font-size:12px; color:var(--text-dim); margin-top:2px; }
+
+/* ── CARDS ──────────────────────────────────────────────────── */
+.card {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.card-title { font-size:13px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:.8px; margin-bottom:16px; }
+
+/* ── KPI ROW ─────────────────────────────────────────────────── */
+.kpi-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px; }
+.kpi-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:16px; text-align:center;
+}
+.kpi-v { font-size:28px; font-weight:800; color:var(--blue); line-height:1; }
+.kpi-v.green { color:var(--green); }
+.kpi-v.amber { color:var(--amber); }
+.kpi-v.red   { color:var(--red); }
+.kpi-l { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.6px; margin-top:6px; }
+
+/* ── TABLE ──────────────────────────────────────────────────── */
+.table-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+thead th {
+  background:rgba(0,212,255,.06); color:var(--text-dim);
+  font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.8px; padding:12px 14px; text-align:left;
+  border-bottom:1px solid var(--border); white-space:nowrap;
+}
+tbody tr { border-bottom:1px solid rgba(0,212,255,.06); transition:background .15s; }
+tbody tr:hover { background:var(--bg-hover); }
+tbody tr:last-child { border-bottom:none; }
+tbody td { padding:12px 14px; vertical-align:middle; }
+
+/* ── STATUS BADGES ──────────────────────────────────────────── */
+.badge {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.4px; white-space:nowrap;
+}
+.badge-active  { background:rgba(0,230,118,.12); color:var(--green);  border:1px solid rgba(0,230,118,.25); }
+.badge-inactive{ background:rgba(255,71,87,.12);  color:var(--red);    border:1px solid rgba(255,71,87,.25); }
+.badge-derived { background:rgba(139,92,246,.12); color:#a78bfa;       border:1px solid rgba(139,92,246,.25); }
+.badge-p1 { background:rgba(255,71,87,.1); color:var(--red); border:1px solid rgba(255,71,87,.2); }
+.badge-p2 { background:rgba(255,184,0,.1); color:var(--amber); border:1px solid rgba(255,184,0,.2); }
+.badge-p3 { background:rgba(0,212,255,.1); color:var(--blue); border:1px solid rgba(0,212,255,.2); }
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:7px 14px; border-radius:7px; font-size:12px; font-weight:700;
+  cursor:pointer; border:1px solid; transition:all .2s; letter-spacing:.3px;
+}
+.btn-primary { background:rgba(0,212,255,.1); border-color:var(--blue); color:var(--blue); }
+.btn-primary:hover { background:rgba(0,212,255,.2); }
+.btn-danger  { background:rgba(255,71,87,.1);  border-color:var(--red);  color:var(--red); }
+.btn-danger:hover  { background:rgba(255,71,87,.2); }
+.btn-success { background:rgba(0,230,118,.1);  border-color:var(--green); color:var(--green); }
+.btn-success:hover { background:rgba(0,230,118,.2); }
+.btn-warn    { background:rgba(255,184,0,.1);  border-color:var(--amber); color:var(--amber); }
+.btn-warn:hover    { background:rgba(255,184,0,.2); }
+.btn-ghost   { background:transparent; border-color:var(--border); color:var(--text-dim); }
+.btn-ghost:hover   { border-color:var(--blue); color:var(--text); }
+.btn-sm      { padding:4px 10px; font-size:11px; }
+.action-group { display:flex; gap:6px; flex-wrap:nowrap; }
+
+/* ── SCORE BAR ──────────────────────────────────────────────── */
+.score-pill {
+  display:inline-block; min-width:44px; text-align:center;
+  padding:3px 10px; border-radius:20px; font-size:12px; font-weight:800;
+}
+.score-low  { background:rgba(0,230,118,.12); color:var(--green);  border:1px solid rgba(0,230,118,.2); }
+.score-med  { background:rgba(255,184,0,.12);  color:var(--amber);  border:1px solid rgba(255,184,0,.2); }
+.score-high { background:rgba(255,71,87,.12);  color:var(--red);    border:1px solid rgba(255,71,87,.2); }
+
+/* ── WEIGHT PROGRESS ────────────────────────────────────────── */
+.weight-bar { display:flex; align-items:center; gap:8px; }
+.weight-track {
+  flex:1; height:6px; background:rgba(255,255,255,.06);
+  border-radius:3px; overflow:hidden; min-width:60px;
+}
+.weight-fill { height:100%; border-radius:3px; background:var(--blue); transition:width .3s; }
+.weight-num { font-size:12px; font-weight:700; color:var(--blue); min-width:28px; text-align:right; }
+
+/* ── MODAL ──────────────────────────────────────────────────── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:#0a1028; border:1px solid var(--border-act);
+  border-radius:16px; padding:28px; width:100%; max-width:560px;
+  box-shadow:0 20px 60px rgba(0,212,255,.1);
+}
+.modal h3 { font-size:17px; font-weight:700; margin-bottom:6px; }
+.modal .modal-sub { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+.modal-field { margin-bottom:16px; }
+.modal-field label { display:block; font-size:11px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:.7px; margin-bottom:6px; }
+.modal-field input,
+.modal-field select,
+.modal-field textarea {
+  width:100%; background:rgba(255,255,255,.05);
+  border:1px solid var(--border); border-radius:8px;
+  padding:10px 12px; color:var(--text); font-size:13px;
+  outline:none; transition:border-color .2s;
+}
+.modal-field input:focus,
+.modal-field select:focus { border-color:var(--blue); }
+.modal-field select option { background:#0a1028; }
+.modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:22px; }
+
+/* ── WARNING BOX ────────────────────────────────────────────── */
+.warn-box {
+  background:rgba(255,184,0,.08); border:1px solid rgba(255,184,0,.25);
+  border-radius:10px; padding:14px 16px; margin:16px 0;
+}
+.warn-box .warn-title { font-size:13px; font-weight:700; color:var(--amber); margin-bottom:8px; }
+.warn-box ul { list-style:none; }
+.warn-box li { font-size:12px; color:var(--text-dim); padding:3px 0; }
+.warn-box li::before { content:'▶  '; color:var(--amber); }
+
+/* ── SIMULATOR ──────────────────────────────────────────────── */
+.sim-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:760px){ .sim-grid { grid-template-columns:1fr; } }
+.sim-flags { display:flex; flex-direction:column; gap:10px; }
+.flag-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px; background:rgba(255,255,255,.03);
+  border:1px solid var(--border); border-radius:8px;
+}
+.flag-label { font-size:13px; color:var(--text); }
+.flag-sub   { font-size:11px; color:var(--text-dim); margin-top:1px; }
+.toggle {
+  position:relative; width:40px; height:22px; cursor:pointer;
+}
+.toggle input { display:none; }
+.toggle-track {
+  position:absolute; inset:0; border-radius:11px;
+  background:rgba(255,255,255,.1); transition:background .2s;
+}
+.toggle input:checked + .toggle-track { background:var(--blue); }
+.toggle-thumb {
+  position:absolute; top:3px; left:3px; width:16px; height:16px;
+  border-radius:50%; background:#fff; transition:transform .2s;
+}
+.toggle input:checked ~ .toggle-thumb { transform:translateX(18px); }
+
+.result-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:12px; padding:20px; height:fit-content;
+}
+.result-score {
+  font-size:56px; font-weight:900; line-height:1;
+  text-align:center; margin:12px 0;
+}
+.result-band {
+  text-align:center; font-size:14px; font-weight:700;
+  padding:6px 20px; border-radius:20px; display:inline-block;
+  margin:0 auto 12px; width:100%;
+}
+.result-action-box {
+  padding:14px; border-radius:10px; text-align:center;
+  font-size:13px; font-weight:700; margin-top:8px;
+}
+.result-rules { margin-top:14px; display:flex; flex-direction:column; gap:6px; }
+.result-rule-row {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:8px;
+  background:rgba(255,255,255,.03); font-size:12px;
+}
+.result-rule-row .r-icon { font-size:14px; }
+.result-rule-row .r-name { flex:1; }
+.result-rule-row .r-score { font-weight:700; }
+
+/* ── AUDIT LOG ──────────────────────────────────────────────── */
+.audit-row { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+.audit-row:last-child { border-bottom:none; }
+.audit-time { font-size:11px; color:var(--text-dim); white-space:nowrap; min-width:140px; }
+.audit-action { font-size:11px; font-weight:700; color:var(--blue); white-space:nowrap; }
+.audit-detail { font-size:12px; color:var(--text-dim); flex:1; }
+
+/* ── CATEGORY CARDS ─────────────────────────────────────────── */
+.cat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.cat-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:12px; padding:20px;
+}
+.cat-card .cat-name { font-size:16px; font-weight:800; margin-bottom:4px; }
+.cat-card .cat-range { font-size:24px; font-weight:900; margin:8px 0; }
+.cat-card .cat-action { font-size:12px; color:var(--text-dim); margin-bottom:16px; }
+
+/* ── SCROLLBAR ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(0,212,255,.2); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header class="hdr">
+  <div class="hdr-logo">
+    <div class="ql">Q</div>
+    <div>
+      <div class="hdr-title">QIB <span>Risk Rule Engine</span></div>
+      <div class="hdr-subtitle">Dynamic EDD Decision Engine — Admin Control</div>
+    </div>
+  </div>
+  <div class="hdr-sep"></div>
+  <span class="badge-engine">ADMIN</span>
+  <div class="hdr-nav">
+    <a href="admin_dashboard.html">← Admin Dashboard</a>
+    <a href="edd-automation-platform.html">EDD Platform</a>
+    <a href="#" class="primary" onclick="confirmReset()">↺ Reset Defaults</a>
+  </div>
+</header>
+
+<!-- ── SIDEBAR ────────────────────────────────────────────── -->
+<nav class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Engine Layers</div>
+    <a class="nav-item active" onclick="showPanel('fields')" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+      Fields
+      <span class="nav-badge" id="badge-fields">—</span>
+    </a>
+    <a class="nav-item" onclick="showPanel('rules')" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      Rules
+      <span class="nav-badge" id="badge-rules">—</span>
+    </a>
+    <a class="nav-item" onclick="showPanel('categories')" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z"/></svg>
+      Risk Categories
+      <span class="nav-badge" id="badge-categories">3</span>
+    </a>
+    <a class="nav-item" onclick="showPanel('simulator')" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+      Simulator
+    </a>
+    <a class="nav-item" onclick="showPanel('audit')" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+      Audit Log
+      <span class="nav-badge amber" id="badge-audit">0</span>
+    </a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">System Status</div>
+    <div style="padding:10px 12px; font-size:11px; color:var(--text-dim); line-height:1.8;">
+      <div>Last modified:<br><span id="last-mod" style="color:var(--text)">—</span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN CONTENT ────────────────────────────────────────── -->
+<main class="main">
+<div class="content">
+
+  <!-- ═══════════════════════════════════════════════════════
+       PANEL: FIELDS
+  ═══════════════════════════════════════════════════════ -->
+  <div id="panel-fields" class="panel active">
+    <div class="section-hdr">
+      <div>
+        <h2>Field <span>Logic Layer</span></h2>
+        <div class="section-meta">Manage data fields, weights, and dependency mappings. Disabling a field cascades to all dependent fields and rules.</div>
+      </div>
+      <button class="btn btn-primary" onclick="openAddFieldModal()">+ Add Field</button>
+    </div>
+
+    <div class="kpi-row" id="fields-kpi"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Field ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Weight</th>
+            <th>Dependencies</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="fields-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PANEL: RULES
+  ═══════════════════════════════════════════════════════ -->
+  <div id="panel-rules" class="panel">
+    <div class="section-hdr">
+      <div>
+        <h2>Rule <span>Engine</span></h2>
+        <div class="section-meta">Configure scoring rules. Each rule evaluates a condition and adds to the total risk score when fired.</div>
+      </div>
+      <button class="btn btn-primary" onclick="openAddRuleModal()">+ Add Rule</button>
+    </div>
+
+    <div class="kpi-row" id="rules-kpi"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rule ID</th>
+            <th>Rule Name</th>
+            <th>Field</th>
+            <th>Condition</th>
+            <th>Score</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rules-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PANEL: RISK CATEGORIES
+  ═══════════════════════════════════════════════════════ -->
+  <div id="panel-categories" class="panel">
+    <div class="section-hdr">
+      <div>
+        <h2>Risk <span>Categories</span></h2>
+        <div class="section-meta">Define score thresholds and the automated action triggered for each risk band.</div>
+      </div>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PANEL: SIMULATOR
+  ═══════════════════════════════════════════════════════ -->
+  <div id="panel-simulator" class="panel">
+    <div class="section-hdr">
+      <div>
+        <h2>Risk <span>Simulator</span></h2>
+        <div class="section-meta">Toggle customer risk flags and instantly see how the active rule set scores and decides.</div>
+      </div>
+      <button class="btn btn-primary" onclick="runSimulation()">▶ Evaluate</button>
+    </div>
+    <div class="sim-grid">
+      <div>
+        <div class="card">
+          <div class="card-title">Customer Risk Flags</div>
+          <div class="sim-flags" id="sim-flags"></div>
+        </div>
+      </div>
+      <div>
+        <div class="result-card" id="sim-result">
+          <div style="text-align:center; color:var(--text-dim); padding:40px 0; font-size:13px;">
+            Toggle flags and click <strong style="color:var(--text)">▶ Evaluate</strong> to run the engine.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PANEL: AUDIT LOG
+  ═══════════════════════════════════════════════════════ -->
+  <div id="panel-audit" class="panel">
+    <div class="section-hdr">
+      <div>
+        <h2>Audit <span>Log</span></h2>
+        <div class="section-meta">Immutable record of all admin changes to fields, rules, and categories.</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="clearAuditDisplay()">Clear View</button>
+    </div>
+    <div class="card">
+      <div id="audit-list"></div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL: EDIT FIELD
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-field">
+  <div class="modal">
+    <h3 id="modal-field-title">Edit Field</h3>
+    <div class="modal-sub">Adjust weight or description. Changing status will cascade to all dependent fields and rules.</div>
+    <input type="hidden" id="mf-id">
+    <div class="modal-field">
+      <label>Field Name</label>
+      <input type="text" id="mf-name" readonly style="opacity:.6;">
+    </div>
+    <div class="modal-field">
+      <label>Weight (0–100)</label>
+      <input type="number" id="mf-weight" min="0" max="100">
+    </div>
+    <div class="modal-field">
+      <label>Status</label>
+      <select id="mf-status">
+        <option value="ACTIVE">ACTIVE</option>
+        <option value="INACTIVE">INACTIVE</option>
+      </select>
+    </div>
+    <div id="mf-warn"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-field')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveField()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL: EDIT RULE
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-rule">
+  <div class="modal">
+    <h3 id="modal-rule-title">Edit Rule</h3>
+    <div class="modal-sub">Adjust the rule's score contribution or enable / disable it without affecting other rules.</div>
+    <input type="hidden" id="mr-id">
+    <div class="modal-field">
+      <label>Rule Name</label>
+      <input type="text" id="mr-name" readonly style="opacity:.6;">
+    </div>
+    <div class="modal-field">
+      <label>Condition</label>
+      <input type="text" id="mr-condition" readonly style="opacity:.6;">
+    </div>
+    <div class="modal-field">
+      <label>Score Contribution (+pts)</label>
+      <input type="number" id="mr-score" min="0" max="200">
+    </div>
+    <div class="modal-field">
+      <label>Priority (1 = highest)</label>
+      <input type="number" id="mr-priority" min="1" max="10">
+    </div>
+    <div class="modal-field">
+      <label>Status</label>
+      <select id="mr-status">
+        <option value="ACTIVE">ACTIVE</option>
+        <option value="INACTIVE">INACTIVE</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rule')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRule()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL: ADD FIELD
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-add-field">
+  <div class="modal">
+    <h3>Add New Field</h3>
+    <div class="modal-sub">Define a new data field for the Field Logic Layer.</div>
+    <div class="modal-field">
+      <label>Field ID (uppercase, no spaces)</label>
+      <input type="text" id="af-id" placeholder="e.g. INCOME_SOURCE">
+    </div>
+    <div class="modal-field">
+      <label>Field Name</label>
+      <input type="text" id="af-name" placeholder="e.g. Income Source Risk">
+    </div>
+    <div class="modal-field">
+      <label>Type</label>
+      <select id="af-type">
+        <option value="CATEGORICAL">CATEGORICAL</option>
+        <option value="BOOLEAN">BOOLEAN</option>
+        <option value="NUMERIC">NUMERIC</option>
+        <option value="DERIVED">DERIVED</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label>Weight (0–100)</label>
+      <input type="number" id="af-weight" min="0" max="100" value="20">
+    </div>
+    <div class="modal-field">
+      <label>Description</label>
+      <textarea id="af-desc" rows="2" placeholder="Describe what this field measures..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-field')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAddField()">Add Field</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL: ADD RULE
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-add-rule">
+  <div class="modal">
+    <h3>Add New Rule</h3>
+    <div class="modal-sub">Define a condition and score for a new risk rule.</div>
+    <div class="modal-field">
+      <label>Rule ID (e.g. R015)</label>
+      <input type="text" id="ar-id" placeholder="R015">
+    </div>
+    <div class="modal-field">
+      <label>Rule Name</label>
+      <input type="text" id="ar-name" placeholder="e.g. High Cash Deposit Volume">
+    </div>
+    <div class="modal-field">
+      <label>Parent Field</label>
+      <select id="ar-field"></select>
+    </div>
+    <div class="modal-field">
+      <label>Condition (descriptive)</label>
+      <input type="text" id="ar-condition" placeholder="e.g. CASH_DEPOSITS > QAR 50,000/mo">
+    </div>
+    <div class="modal-field">
+      <label>Condition Key (camelCase, used by simulator)</label>
+      <input type="text" id="ar-condkey" placeholder="e.g. highCashDeposit">
+    </div>
+    <div class="modal-field">
+      <label>Score Contribution (+pts)</label>
+      <input type="number" id="ar-score" min="0" max="200" value="20">
+    </div>
+    <div class="modal-field">
+      <label>Priority (1 = highest)</label>
+      <input type="number" id="ar-priority" min="1" max="10" value="3">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-rule')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAddRule()">Add Rule</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL: DISABLE WARNING
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-warn">
+  <div class="modal">
+    <h3>⚠ Dependency Warning</h3>
+    <div class="modal-sub">Disabling this field will cascade to the following components:</div>
+    <div id="warn-content"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-warn')">Cancel</button>
+      <button class="btn btn-danger" id="warn-confirm-btn">Confirm Disable</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL: EDIT CATEGORY
+═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-cat">
+  <div class="modal">
+    <h3>Edit Risk Category</h3>
+    <div class="modal-sub">Adjust the score range for this risk band. Ensure ranges are non-overlapping and contiguous.</div>
+    <input type="hidden" id="mc-id">
+    <div class="modal-field">
+      <label>Category Name</label>
+      <input type="text" id="mc-name" readonly style="opacity:.6;">
+    </div>
+    <div class="modal-field">
+      <label>Minimum Score</label>
+      <input type="number" id="mc-min" min="0">
+    </div>
+    <div class="modal-field">
+      <label>Maximum Score</label>
+      <input type="number" id="mc-max" min="0">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-cat')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCat()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SCRIPTS ───────────────────────────────────────────── -->
+<script src="js/dynamic_rule_engine.js"></script>
+<script>
+// ── NAVIGATION ──────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  refresh();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ── REFRESH ALL PANELS ───────────────────────────────────────
+function refresh() {
+  renderFields();
+  renderRules();
+  renderCategories();
+  renderSimFlags();
+  renderAuditLog();
+  updateBadges();
+  updateLastMod();
+}
+
+function updateBadges() {
+  const fields = DynamicRuleEngine.getFields();
+  const rules  = DynamicRuleEngine.getRules();
+  const audit  = DynamicRuleEngine.getAuditLog();
+  const activeF = fields.filter(f => f.status === 'ACTIVE').length;
+  const activeR = rules.filter(r => r.status === 'ACTIVE').length;
+  document.getElementById('badge-fields').textContent = `${activeF}/${fields.length}`;
+  document.getElementById('badge-rules').textContent  = `${activeR}/${rules.length}`;
+  document.getElementById('badge-audit').textContent  = audit.length;
+}
+
+function updateLastMod() {
+  const d = new Date(DynamicRuleEngine.getLastModified());
+  document.getElementById('last-mod').textContent = d.toLocaleString('en-GB', { dateStyle:'short', timeStyle:'short' });
+}
+
+// ── FIELDS ──────────────────────────────────────────────────
+function renderFields() {
+  const fields = DynamicRuleEngine.getFields();
+  const active = fields.filter(f => f.status === 'ACTIVE').length;
+  const derived= fields.filter(f => f.type === 'DERIVED').length;
+
+  document.getElementById('fields-kpi').innerHTML = `
+    <div class="kpi-card"><div class="kpi-v">${fields.length}</div><div class="kpi-l">Total Fields</div></div>
+    <div class="kpi-card"><div class="kpi-v green">${active}</div><div class="kpi-l">Active</div></div>
+    <div class="kpi-card"><div class="kpi-v red">${fields.length - active}</div><div class="kpi-l">Inactive</div></div>
+    <div class="kpi-card"><div class="kpi-v" style="color:var(--purple)">${derived}</div><div class="kpi-l">Derived</div></div>
+  `;
+
+  document.getElementById('fields-tbody').innerHTML = fields.map(f => `
+    <tr>
+      <td><code style="font-size:11px; color:var(--blue)">${f.id}</code></td>
+      <td>
+        <div style="font-weight:600">${f.name}</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:2px">${f.description || ''}</div>
+      </td>
+      <td>
+        <span class="badge ${f.type === 'DERIVED' ? 'badge-derived' : 'badge-active'}"
+              style="${f.type === 'DERIVED' ? '' : 'background:rgba(0,212,255,.1);color:var(--blue);border-color:rgba(0,212,255,.25);'}">
+          ${f.type}
+        </span>
+      </td>
+      <td>
+        <span class="badge ${f.status === 'ACTIVE' ? 'badge-active' : 'badge-inactive'}">
+          ${f.status === 'ACTIVE' ? '● ' : '○ '}${f.status}
+        </span>
+      </td>
+      <td>
+        <div class="weight-bar">
+          <div class="weight-track"><div class="weight-fill" style="width:${f.weight}%"></div></div>
+          <div class="weight-num">${f.weight}</div>
+        </div>
+      </td>
+      <td>
+        ${(f.dependencies || []).length
+          ? (f.dependencies || []).map(d => `<code style="font-size:10px; color:var(--text-dim); background:rgba(255,255,255,.05); padding:2px 6px; border-radius:4px; margin-right:4px">${d}</code>`).join('')
+          : '<span style="color:var(--text-dim);font-size:11px">—</span>'}
+      </td>
+      <td>
+        <div class="action-group">
+          <button class="btn btn-primary btn-sm" onclick="openEditField('${f.id}')">Edit</button>
+          ${f.status === 'ACTIVE'
+            ? `<button class="btn btn-danger btn-sm" onclick="toggleFieldWithCheck('${f.id}','INACTIVE')">Disable</button>`
+            : `<button class="btn btn-success btn-sm" onclick="setFieldDirect('${f.id}','ACTIVE')">Enable</button>`}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openEditField(fieldId) {
+  const f = DynamicRuleEngine.getFields().find(x => x.id === fieldId);
+  document.getElementById('mf-id').value = f.id;
+  document.getElementById('mf-name').value = f.name;
+  document.getElementById('mf-weight').value = f.weight;
+  document.getElementById('mf-status').value = f.status;
+  document.getElementById('mf-warn').innerHTML = '';
+  document.getElementById('modal-field-title').textContent = `Edit Field — ${f.id}`;
+
+  // Show dependency warning if disabling
+  const impact = DynamicRuleEngine.getDependencyImpact(fieldId);
+  if (impact.totalImpact > 0) {
+    document.getElementById('mf-warn').innerHTML = `
+      <div class="warn-box">
+        <div class="warn-title">⚠ Dependency Impact (if disabled)</div>
+        <ul>
+          ${impact.dependentFields.map(d => `<li>Dependent field: <strong>${d}</strong> will be disabled</li>`).join('')}
+          ${impact.affectedRules.map(r => `<li>Rule disabled: <strong>${r.name}</strong> (${r.id})</li>`).join('')}
+        </ul>
+      </div>`;
+  }
+  document.getElementById('modal-field').classList.add('open');
+}
+
+function saveField() {
+  const id     = document.getElementById('mf-id').value;
+  const weight = document.getElementById('mf-weight').value;
+  const status = document.getElementById('mf-status').value;
+  const f = DynamicRuleEngine.getFields().find(x => x.id === id);
+  if (f.status === 'ACTIVE' && status === 'INACTIVE') {
+    const impact = DynamicRuleEngine.getDependencyImpact(id);
+    if (impact.totalImpact > 0) {
+      showDisableWarning(id, impact, () => {
+        DynamicRuleEngine.setFieldStatus(id, 'INACTIVE');
+        DynamicRuleEngine.updateFieldWeight(id, weight);
+        closeModal('modal-field');
+        refresh();
+      });
+      return;
+    }
+  }
+  if (Number(weight) !== f.weight) DynamicRuleEngine.updateFieldWeight(id, weight);
+  if (status !== f.status) DynamicRuleEngine.setFieldStatus(id, status);
+  closeModal('modal-field');
+  refresh();
+}
+
+function toggleFieldWithCheck(fieldId, newStatus) {
+  if (newStatus === 'INACTIVE') {
+    const impact = DynamicRuleEngine.getDependencyImpact(fieldId);
+    if (impact.totalImpact > 0) {
+      showDisableWarning(fieldId, impact, () => {
+        DynamicRuleEngine.setFieldStatus(fieldId, 'INACTIVE');
+        refresh();
+      });
+      return;
+    }
+  }
+  DynamicRuleEngine.setFieldStatus(fieldId, newStatus);
+  refresh();
+}
+
+function setFieldDirect(fieldId, status) {
+  DynamicRuleEngine.setFieldStatus(fieldId, status);
+  refresh();
+}
+
+function showDisableWarning(fieldId, impact, onConfirm) {
+  document.getElementById('warn-content').innerHTML = `
+    <div class="warn-box">
+      <div class="warn-title">Disabling <strong>${fieldId}</strong> will affect:</div>
+      <ul>
+        ${impact.dependentFields.map(d => `<li>Dependent field disabled: <strong>${d}</strong></li>`).join('')}
+        ${impact.affectedRules.map(r => `<li>Rule disabled: <strong>${r.name}</strong> (${r.id})</li>`).join('')}
+      </ul>
+    </div>`;
+  const btn = document.getElementById('warn-confirm-btn');
+  btn.onclick = () => { closeModal('modal-warn'); onConfirm(); };
+  document.getElementById('modal-warn').classList.add('open');
+}
+
+function openAddFieldModal() {
+  ['af-id','af-name','af-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('af-weight').value = 20;
+  document.getElementById('af-type').value = 'CATEGORICAL';
+  document.getElementById('modal-add-field').classList.add('open');
+}
+
+function saveAddField() {
+  const id   = document.getElementById('af-id').value.trim().toUpperCase();
+  const name = document.getElementById('af-name').value.trim();
+  const type = document.getElementById('af-type').value;
+  const w    = Number(document.getElementById('af-weight').value);
+  const desc = document.getElementById('af-desc').value.trim();
+  if (!id || !name) { alert('Field ID and Name are required.'); return; }
+  const fields = DynamicRuleEngine.getFields();
+  if (fields.find(f => f.id === id)) { alert(`Field "${id}" already exists.`); return; }
+  fields.push({ id, name, type, status:'ACTIVE', weight:w, description:desc, dependencies:[] });
+  closeModal('modal-add-field');
+  refresh();
+}
+
+// ── RULES ────────────────────────────────────────────────────
+function renderRules() {
+  const rules  = DynamicRuleEngine.getRules();
+  const fields = DynamicRuleEngine.getFields();
+  const active  = rules.filter(r => r.status === 'ACTIVE').length;
+  const maxScore = rules.reduce((s,r) => s + (r.status === 'ACTIVE' ? r.score : 0), 0);
+
+  document.getElementById('rules-kpi').innerHTML = `
+    <div class="kpi-card"><div class="kpi-v">${rules.length}</div><div class="kpi-l">Total Rules</div></div>
+    <div class="kpi-card"><div class="kpi-v green">${active}</div><div class="kpi-l">Active</div></div>
+    <div class="kpi-card"><div class="kpi-v red">${rules.length - active}</div><div class="kpi-l">Disabled</div></div>
+    <div class="kpi-card"><div class="kpi-v amber">${maxScore}</div><div class="kpi-l">Max Possible Score</div></div>
+  `;
+
+  document.getElementById('rules-tbody').innerHTML = rules.map(r => {
+    const scoreClass = r.score >= 60 ? 'score-high' : r.score >= 30 ? 'score-med' : 'score-low';
+    const prioClass  = r.priority === 1 ? 'badge-p1' : r.priority === 2 ? 'badge-p2' : 'badge-p3';
+    const fieldName  = (fields.find(f => f.id === r.fieldId) || {}).name || r.fieldId;
+    return `
+    <tr>
+      <td><code style="font-size:11px; color:var(--purple)">${r.id}</code></td>
+      <td>
+        <div style="font-weight:600">${r.name}</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:2px">${r.description || ''}</div>
+      </td>
+      <td><code style="font-size:11px; color:var(--blue)">${r.fieldId}</code><div style="font-size:10px; color:var(--text-dim)">${fieldName}</div></td>
+      <td style="font-size:11px; color:var(--text-dim); max-width:180px">${r.condition}</td>
+      <td><span class="score-pill ${scoreClass}">+${r.score}</span></td>
+      <td><span class="badge ${prioClass}">P${r.priority}</span></td>
+      <td><span class="badge ${r.status === 'ACTIVE' ? 'badge-active' : 'badge-inactive'}">${r.status === 'ACTIVE' ? '● ACTIVE' : '○ INACTIVE'}</span></td>
+      <td>
+        <div class="action-group">
+          <button class="btn btn-primary btn-sm" onclick="openEditRule('${r.id}')">Edit</button>
+          ${r.status === 'ACTIVE'
+            ? `<button class="btn btn-danger btn-sm" onclick="toggleRule('${r.id}','INACTIVE')">Disable</button>`
+            : `<button class="btn btn-success btn-sm" onclick="toggleRule('${r.id}','ACTIVE')">Enable</button>`}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openEditRule(ruleId) {
+  const r = DynamicRuleEngine.getRules().find(x => x.id === ruleId);
+  document.getElementById('mr-id').value = r.id;
+  document.getElementById('mr-name').value = r.name;
+  document.getElementById('mr-condition').value = r.condition;
+  document.getElementById('mr-score').value = r.score;
+  document.getElementById('mr-priority').value = r.priority;
+  document.getElementById('mr-status').value = r.status;
+  document.getElementById('modal-rule-title').textContent = `Edit Rule — ${r.id}`;
+  document.getElementById('modal-rule').classList.add('open');
+}
+
+function saveRule() {
+  const id    = document.getElementById('mr-id').value;
+  const score = document.getElementById('mr-score').value;
+  const prio  = document.getElementById('mr-priority').value;
+  const stat  = document.getElementById('mr-status').value;
+  DynamicRuleEngine.updateRuleScore(id, score);
+  DynamicRuleEngine.updateRulePriority(id, prio);
+  DynamicRuleEngine.setRuleStatus(id, stat);
+  closeModal('modal-rule');
+  refresh();
+}
+
+function toggleRule(ruleId, status) {
+  DynamicRuleEngine.setRuleStatus(ruleId, status);
+  refresh();
+}
+
+function openAddRuleModal() {
+  ['ar-id','ar-name','ar-condition','ar-condkey'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ar-score').value = 20;
+  document.getElementById('ar-priority').value = 3;
+  // populate field dropdown
+  const sel = document.getElementById('ar-field');
+  sel.innerHTML = DynamicRuleEngine.getFields()
+    .map(f => `<option value="${f.id}">${f.id} — ${f.name}</option>`)
+    .join('');
+  document.getElementById('modal-add-rule').classList.add('open');
+}
+
+function saveAddRule() {
+  const id      = document.getElementById('ar-id').value.trim().toUpperCase();
+  const name    = document.getElementById('ar-name').value.trim();
+  const fieldId = document.getElementById('ar-field').value;
+  const cond    = document.getElementById('ar-condition').value.trim();
+  const condKey = document.getElementById('ar-condkey').value.trim();
+  const score   = Number(document.getElementById('ar-score').value);
+  const prio    = Number(document.getElementById('ar-priority').value);
+  if (!id || !name || !fieldId || !cond || !condKey) { alert('All fields are required.'); return; }
+  const rules = DynamicRuleEngine.getRules();
+  if (rules.find(r => r.id === id)) { alert(`Rule "${id}" already exists.`); return; }
+  rules.push({ id, name, fieldId, condition:cond, conditionKey:condKey, score, status:'ACTIVE', priority:prio, description:'' });
+  closeModal('modal-add-rule');
+  refresh();
+}
+
+// ── CATEGORIES ───────────────────────────────────────────────
+function renderCategories() {
+  const cats = DynamicRuleEngine.getCategories();
+  document.getElementById('cat-grid').innerHTML = cats.map(c => `
+    <div class="cat-card" style="border-color:${c.color}33">
+      <div class="cat-name" style="color:${c.color}">${c.name}</div>
+      <div style="font-size:11px; color:var(--text-dim)">Score Range</div>
+      <div class="cat-range" style="color:${c.color}">${c.minScore} – ${c.maxScore === 999 ? '∞' : c.maxScore}</div>
+      <div class="cat-action">Action: <strong style="color:${c.color}">${c.actionLabel}</strong></div>
+      <div style="font-size:12px; color:var(--text-dim); margin-bottom:16px">${c.description}</div>
+      <button class="btn btn-ghost btn-sm" onclick="openEditCat('${c.id}')">Edit Range</button>
+    </div>
+  `).join('');
+}
+
+function openEditCat(catId) {
+  const c = DynamicRuleEngine.getCategories().find(x => x.id === catId);
+  document.getElementById('mc-id').value   = c.id;
+  document.getElementById('mc-name').value  = c.name;
+  document.getElementById('mc-min').value   = c.minScore;
+  document.getElementById('mc-max').value   = c.maxScore === 999 ? 9999 : c.maxScore;
+  document.getElementById('modal-cat').classList.add('open');
+}
+
+function saveCat() {
+  const id  = document.getElementById('mc-id').value;
+  const min = document.getElementById('mc-min').value;
+  const max = document.getElementById('mc-max').value;
+  DynamicRuleEngine.updateRiskCategory(id, min, max);
+  closeModal('modal-cat');
+  refresh();
+}
+
+// ── SIMULATOR ────────────────────────────────────────────────
+const SIM_FLAGS = [
+  { key:'highRiskNationality',   label:'High-Risk Nationality',    sub:'e.g. FATF grey/black-listed country' },
+  { key:'sanctionedCountry',     label:'Sanctioned Country',        sub:'OFAC / UN / EU sanctions hit' },
+  { key:'cryptoSector',          label:'Crypto / Virtual Assets',   sub:'Operating in virtual asset sector' },
+  { key:'gamblingSector',        label:'Gambling Sector',           sub:'Operating in gambling or gaming' },
+  { key:'preciousMetalsSector',  label:'Precious Metals Sector',    sub:'Dealing in gold, gems, luxury goods' },
+  { key:'nonResident',           label:'Non-Resident',              sub:'Customer not resident in Qatar' },
+  { key:'complexOwnership',      label:'Complex Ownership',         sub:'Offshore or opaque structure' },
+  { key:'isPEP',                 label:'PEP Match',                 sub:'Politically Exposed Person confirmed' },
+  { key:'isSanctioned',          label:'Sanctions Match',           sub:'OFAC/UN/EU list match confirmed' },
+  { key:'lowDocCompleteness',    label:'Low Document Completeness', sub:'Below 75% documentation' },
+  { key:'veryLowDocCompleteness','label':'Very Low Documents',      sub:'Below 50% documentation (additive)' },
+  { key:'transactionAlerts',     label:'Transaction Alerts',        sub:'1+ active monitoring alerts' },
+  { key:'highTransactionAlerts', label:'Multiple TX Alerts',        sub:'3+ transaction alerts (additive)' },
+  { key:'adverseMedia',          label:'Adverse Media',             sub:'Negative news hit found' }
+];
+
+function renderSimFlags() {
+  document.getElementById('sim-flags').innerHTML = SIM_FLAGS.map(f => `
+    <div class="flag-row">
+      <div>
+        <div class="flag-label">${f.label}</div>
+        <div class="flag-sub">${f.sub}</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="sim-${f.key}">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+    </div>
+  `).join('');
+}
+
+function runSimulation() {
+  const input = {};
+  SIM_FLAGS.forEach(f => {
+    input[f.key] = document.getElementById('sim-' + f.key)?.checked || false;
+  });
+
+  const result = DynamicRuleEngine.evaluate(input);
+  const icon   = DynamicRuleEngine.getDecisionIcon(result.action);
+  const desc   = DynamicRuleEngine.getDecisionDescription(result.action);
+  const scoreClass = result.totalScore >= 70 ? 'red' : result.totalScore >= 31 ? 'amber' : 'green';
+  const actionBg   = result.totalScore >= 70 ? 'rgba(255,71,87,.1)' : result.totalScore >= 31 ? 'rgba(255,184,0,.1)' : 'rgba(0,230,118,.1)';
+  const actionBdr  = result.totalScore >= 70 ? 'rgba(255,71,87,.3)' : result.totalScore >= 31 ? 'rgba(255,184,0,.3)' : 'rgba(0,230,118,.3)';
+
+  const firedHtml = result.firedRules.length
+    ? result.firedRules.map(r => `
+      <div class="result-rule-row">
+        <span class="r-icon">🔴</span>
+        <span class="r-name">${r.name}</span>
+        <span class="r-score" style="color:var(--red)">+${r.contributedScore}</span>
+      </div>`).join('')
+    : `<div class="result-rule-row"><span class="r-icon">✅</span><span class="r-name" style="color:var(--text-dim)">No rules fired — clean profile</span></div>`;
+
+  document.getElementById('sim-result').innerHTML = `
+    <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px">Total Risk Score</div>
+    <div class="result-score" style="color:var(--${scoreClass})">${result.totalScore}</div>
+    <div style="text-align:center; margin-bottom:10px">
+      <span class="badge ${result.totalScore >= 70 ? 'badge-inactive' : result.totalScore >= 31 ? '' : 'badge-active'}"
+            style="${result.totalScore >= 31 && result.totalScore < 70 ? 'background:rgba(255,184,0,.12);color:var(--amber);border-color:rgba(255,184,0,.25)' : ''}">
+        ${result.category}
+      </span>
+    </div>
+    <div class="result-action-box" style="background:${actionBg}; border:1px solid ${actionBdr}; color:${result.categoryColor}">
+      ${icon} &nbsp;${result.actionLabel}
+    </div>
+    <div style="font-size:11px; color:var(--text-dim); margin:10px 0 14px; line-height:1.6">${desc}</div>
+    <div style="font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px">
+      Fired Rules (${result.firedRules.length})
+    </div>
+    <div class="result-rules">${firedHtml}</div>
+    <div style="font-size:10px; color:var(--text-dim); margin-top:12px">
+      Active fields: ${result.activeFieldCount}/${result.totalFieldCount} &nbsp;|&nbsp;
+      Evaluated: ${new Date(result.evaluatedAt).toLocaleTimeString()}
+    </div>
+  `;
+}
+
+// ── AUDIT LOG ────────────────────────────────────────────────
+let _auditVisible = true;
+function renderAuditLog() {
+  if (!_auditVisible) return;
+  const log = DynamicRuleEngine.getAuditLog();
+  if (!log.length) {
+    document.getElementById('audit-list').innerHTML = '<div style="color:var(--text-dim); font-size:13px; padding:20px 0; text-align:center">No audit entries yet.</div>';
+    return;
+  }
+  document.getElementById('audit-list').innerHTML = log.map(e => `
+    <div class="audit-row">
+      <div class="audit-time">${new Date(e.timestamp).toLocaleString('en-GB',{dateStyle:'short',timeStyle:'medium'})}</div>
+      <div class="audit-action">${e.action}</div>
+      <div class="audit-detail">${e.details}</div>
+    </div>
+  `).join('');
+}
+
+function clearAuditDisplay() {
+  _auditVisible = false;
+  document.getElementById('audit-list').innerHTML = '<div style="color:var(--text-dim); font-size:13px; padding:20px 0; text-align:center">Display cleared. Log entries are still retained in storage.</div>';
+}
+
+// ── RESET ────────────────────────────────────────────────────
+function confirmReset() {
+  if (confirm('Reset ALL fields, rules, and categories to factory defaults?\n\nThis action cannot be undone.')) {
+    DynamicRuleEngine.resetToDefaults();
+    refresh();
+  }
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', refresh);
+</script>
+</body>
+</html>
