@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic EDD Engine — Admin Control Panel | QIB</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <script src="js/language-pack.js"></script>
+
+  <style>
+    /* ── PAGE-LEVEL OVERRIDES ────────────────────────────────── */
+    :root {
+      --engine-accent:   #00d4ff;
+      --engine-green:    #10b981;
+      --engine-yellow:   #f59e0b;
+      --engine-red:      #ef4444;
+      --card-bg:         rgba(255,255,255,0.04);
+      --card-border:     rgba(255,255,255,0.08);
+    }
+
+    .engine-header {
+      background: linear-gradient(135deg, #003d6b 0%, #005a8e 100%);
+      color: #fff;
+      padding: 28px 32px;
+      border-radius: 16px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .engine-header h1 { margin: 0; font-size: 24px; font-weight: 700; }
+    .engine-header .subtitle { opacity: .8; font-size: 13px; margin-top: 4px; }
+
+    /* ── TAB SYSTEM ─────────────────────────────────────────── */
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--card-border); margin-bottom: 24px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 10px 20px; border: none; background: transparent;
+      color: rgba(255,255,255,0.55); cursor: pointer; font-size: 13px;
+      border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap;
+    }
+    .tab-btn:hover  { color: rgba(255,255,255,0.85); }
+    .tab-btn.active { color: var(--engine-accent); border-bottom-color: var(--engine-accent); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── CARDS ──────────────────────────────────────────────── */
+    .engine-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    .engine-card h2 { margin: 0 0 18px; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+    /* ── TABLES ─────────────────────────────────────────────── */
+    .engine-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .engine-table th {
+      text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .6px; color: rgba(255,255,255,0.45);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .engine-table td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    .engine-table tr:last-child td { border-bottom: none; }
+    .engine-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+    /* ── TOGGLE SWITCH ──────────────────────────────────────── */
+    .toggle-switch { position: relative; display: inline-block; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.15);
+      border-radius: 12px; cursor: pointer; transition: .25s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 18px; height: 18px; left: 3px; top: 3px;
+      background: #fff; border-radius: 50%; transition: .25s;
+    }
+    input:checked + .toggle-slider { background: var(--engine-green); }
+    input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    /* ── BADGE ──────────────────────────────────────────────── */
+    .badge-low    { background: rgba(16,185,129,.15); color: #10b981; border: 1px solid rgba(16,185,129,.3); }
+    .badge-medium { background: rgba(245,158,11,.15); color: #f59e0b; border: 1px solid rgba(245,158,11,.3); }
+    .badge-high   { background: rgba(239,68,68,.15);  color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+    .badge-tag {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+
+    /* ── INLINE EDITABLE ────────────────────────────────────── */
+    .inline-input {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; border-radius: 6px; padding: 5px 10px; width: 80px;
+      font-size: 13px; text-align: center;
+    }
+    .inline-input:focus { outline: none; border-color: var(--engine-accent); }
+
+    /* ── ACTION BUTTONS ─────────────────────────────────────── */
+    .btn-xs {
+      padding: 4px 10px; border-radius: 6px; border: none;
+      font-size: 11px; font-weight: 600; cursor: pointer; transition: .2s;
+    }
+    .btn-xs:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-save   { background: var(--engine-green); color: #fff; }
+    .btn-del    { background: var(--engine-red);   color: #fff; }
+    .btn-info   { background: rgba(0,212,255,.15);  color: var(--engine-accent); border: 1px solid rgba(0,212,255,.3); }
+    .btn-add    { background: var(--engine-accent); color: #003d6b; font-weight: 700; }
+
+    /* ── DEPENDENCY GRAPH ───────────────────────────────────── */
+    .dep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .dep-node {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 16px;
+    }
+    .dep-node.inactive { opacity: .5; border-style: dashed; }
+    .dep-node-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .dep-list { font-size: 12px; color: rgba(255,255,255,.6); }
+    .dep-list li { margin-bottom: 4px; list-style: none; display: flex; align-items: center; gap: 4px; }
+    .dep-arrow { color: var(--engine-accent); }
+
+    /* ── THRESHOLD SLIDERS ──────────────────────────────────── */
+    .threshold-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .threshold-label { width: 80px; font-size: 13px; font-weight: 600; }
+    .threshold-input {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; border-radius: 6px; padding: 6px 10px; width: 90px;
+      font-size: 13px;
+    }
+    .threshold-input:focus { outline: none; border-color: var(--engine-accent); }
+
+    /* ── LIVE TESTER ────────────────────────────────────────── */
+    .tester-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 700px) { .tester-grid { grid-template-columns: 1fr; } }
+    .tester-field { display: flex; flex-direction: column; gap: 6px; }
+    .tester-field label { font-size: 12px; color: rgba(255,255,255,.6); }
+    .tester-field input, .tester-field select {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; border-radius: 8px; padding: 8px 12px; font-size: 13px;
+    }
+    .tester-field input:focus, .tester-field select:focus { outline: none; border-color: var(--engine-accent); }
+    .result-box {
+      background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 12px; padding: 20px;
+    }
+    .result-score { font-size: 48px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .result-decision { font-size: 14px; font-weight: 600; margin-top: 8px; }
+
+    /* ── ADD RULE MODAL ─────────────────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7);
+      z-index: 9999; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #0d1b2a; border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 28px 32px; width: min(560px, 90vw); max-height: 90vh; overflow-y: auto;
+    }
+    .modal-box h3 { margin: 0 0 20px; font-size: 17px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; color: rgba(255,255,255,.55); }
+    .form-group input, .form-group select, .form-group textarea {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; border-radius: 8px; padding: 8px 12px; font-size: 13px;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--engine-accent);
+    }
+
+    /* ── AUDIT LOG ──────────────────────────────────────────── */
+    .audit-entry {
+      display: flex; gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px;
+    }
+    .audit-time { color: rgba(255,255,255,.4); white-space: nowrap; }
+    .audit-actor { color: var(--engine-accent); font-weight: 600; width: 80px; flex-shrink: 0; }
+    .audit-action { color: rgba(255,255,255,.8); }
+
+    /* ── MISC ───────────────────────────────────────────────── */
+    .inline-flex { display: inline-flex; align-items: center; gap: 6px; }
+    .text-muted   { color: rgba(255,255,255,.45); font-size: 12px; }
+    .text-accent  { color: var(--engine-accent); }
+    .section-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    select option { background: #0d1b2a; color: #fff; }
+    .impact-alert {
+      background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.3);
+      border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #f59e0b;
+      margin-top: 8px; display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>EDD System</h1>
+          <span>Digital Platform</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main</div>
+          <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="edd_case.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <span>EDD Cases</span>
+          </a>
+          <a href="organization.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <span>Organization</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Risk &amp; Compliance</div>
+          <a href="risk_management.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>Risk Lists</span>
+          </a>
+          <a href="admin_edd_engine.html" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.09-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.11.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.11.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.09.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.11-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            <span>EDD Engine Config</span>
+          </a>
+          <a href="compliance_view.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <span>Compliance</span>
+          </a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">KYC Governance</div>
+          <a href="kyc_monitoring.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>KYC Monitoring</span>
+          </a>
+          <a href="audit_console.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            <span>Audit Console</span>
+          </a>
+        </div>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar"></div>
+        <div class="user-info">
+          <div class="user-name">EDD Admin</div>
+          <div class="user-role">Engine Configuration</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Dynamic EDD Engine</h1>
+          <div class="breadcrumb">
+            <span>Home</span> / <span>Risk &amp; Compliance</span> / <span>EDD Engine Config</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn btn-success btn-sm" onclick="AdminPanel.exportConfig()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Export Config
+          </button>
+          <button class="btn btn-info btn-sm" onclick="AdminPanel.importConfig()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+            Import
+          </button>
+          <button class="btn btn-sm" style="background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3)" onclick="AdminPanel.confirmReset()">
+            Reset to Defaults
+          </button>
+        </div>
+      </header>
+
+      <div class="page-content">
+
+        <!-- ─── Engine Status Banner ────────────────────────────── -->
+        <div class="engine-header">
+          <div>
+            <h1>⚙️ Dynamic EDD Engine — Admin Control Panel</h1>
+            <div class="subtitle">محرك تحليل ديناميكي — لوحة تحكم المسؤول | Configure fields, rules, thresholds and decisions without code changes</div>
+          </div>
+          <div id="engine-status-badge" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);color:#10b981;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;">
+            🟢 Engine Active
+          </div>
+        </div>
+
+        <!-- ─── Summary KPIs ────────────────────────────────────── -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;" id="kpi-row"></div>
+
+        <!-- ─── Tabs ────────────────────────────────────────────── -->
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="fields">🗂 Fields</button>
+          <button class="tab-btn" data-tab="rules">📐 Rules</button>
+          <button class="tab-btn" data-tab="dependency">🔗 Dependency Map</button>
+          <button class="tab-btn" data-tab="thresholds">📊 Thresholds</button>
+          <button class="tab-btn" data-tab="decisions">🔀 Decision Engine</button>
+          <button class="tab-btn" data-tab="tester">🧪 Live Tester</button>
+          <button class="tab-btn" data-tab="audit">📋 Audit Log</button>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 1 — FIELDS
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel active" id="tab-fields">
+          <div class="engine-card">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+              Field Logic Layer — طبقة منطق الحقول
+            </h2>
+            <p class="text-muted" style="margin-bottom:16px">
+              Each field represents a T24 data source. Disable a field to stop all its rules from contributing to the score.
+              Adjust the weight to increase or decrease the field's influence on the final score.
+            </p>
+            <table class="engine-table" id="fields-table">
+              <thead>
+                <tr>
+                  <th>Active</th>
+                  <th>Field ID</th>
+                  <th>Name</th>
+                  <th>Source</th>
+                  <th>Category</th>
+                  <th>Weight</th>
+                  <th>Rules</th>
+                  <th>Dependencies</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fields-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 2 — RULES
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel" id="tab-rules">
+          <div class="engine-card">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              Rule Engine — محرك القواعد
+            </h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+              <p class="text-muted" style="margin:0">
+                Rules are evaluated in priority order. Toggle any rule on/off instantly.
+                Add custom rules without changing code.
+              </p>
+              <button class="btn-xs btn-add" onclick="AdminPanel.openAddRuleModal()">+ Add Rule</button>
+            </div>
+            <table class="engine-table" id="rules-table">
+              <thead>
+                <tr>
+                  <th>Active</th>
+                  <th>Priority</th>
+                  <th>Rule ID</th>
+                  <th>Name</th>
+                  <th>Field</th>
+                  <th>Condition</th>
+                  <th>Action</th>
+                  <th>Score Δ</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="rules-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 3 — DEPENDENCY MAP
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel" id="tab-dependency">
+          <div class="engine-card">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M22 11V9l-7-7H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5V4h9v5h5v2h3zM13 14h-2v-2H9v-2h2v-2h2v2h2v2h-2v2zm4 1v3h-3v2h3v3l4-4-4-4z"/></svg>
+              Dependency Map — خريطة الاعتماديات
+            </h2>
+            <p class="text-muted" style="margin-bottom:20px">
+              Shows which fields depend on others and which rules each field drives.
+              Before disabling a field, review this map to understand the downstream impact.
+            </p>
+            <div class="dep-grid" id="dep-grid"></div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 4 — THRESHOLDS
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel" id="tab-thresholds">
+          <div class="engine-card">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M21 6.5h-2.26c-.48-1.13-1.61-1.93-2.93-1.96A3.49 3.49 0 0013.5 6.5H3v2h10.5c.48 1.13 1.61 1.93 2.93 1.96a3.49 3.49 0 002.31-1.96H21v-2zm-5.25 2.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zM3 15.5h2.26c.48 1.13 1.61 1.93 2.93 1.96a3.49 3.49 0 002.31-1.96H21v-2H10.5c-.48-1.13-1.61-1.93-2.93-1.96a3.49 3.49 0 00-2.31 1.96H3v2zm5.25-2.25c.69 0 1.25.56 1.25 1.25s-.56 1.25-1.25 1.25-1.25-.56-1.25-1.25.56-1.25 1.25-1.25z"/></svg>
+              Risk Category Thresholds — حدود تصنيف المخاطر
+            </h2>
+            <p class="text-muted" style="margin-bottom:20px">
+              Define the score boundaries that separate LOW / MEDIUM / HIGH risk categories.
+              Changes take effect immediately for all new evaluations.
+            </p>
+            <div id="threshold-form"></div>
+            <button class="btn-xs btn-save" style="margin-top:12px" onclick="AdminPanel.saveThresholds()">Save Thresholds</button>
+          </div>
+
+          <div class="engine-card">
+            <h2>📈 Threshold Visualisation</h2>
+            <div id="threshold-viz" style="position:relative;height:40px;border-radius:10px;overflow:hidden;margin-top:8px;"></div>
+            <div id="threshold-labels" style="display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;"></div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 5 — DECISION ENGINE
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel" id="tab-decisions">
+          <div class="engine-card">
+            <h2>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+              Decision Engine — محرك القرار
+            </h2>
+            <p class="text-muted" style="margin-bottom:20px">
+              Maps each risk category to a compliance action.
+              Customise the labels shown to end-users for each outcome.
+            </p>
+            <div id="decisions-form"></div>
+            <button class="btn-xs btn-save" style="margin-top:12px" onclick="AdminPanel.saveDecisions()">Save Decisions</button>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 6 — LIVE TESTER
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel" id="tab-tester">
+          <div class="engine-card">
+            <h2>🧪 Live Score Tester — اختبار التقييم المباشر</h2>
+            <p class="text-muted" style="margin-bottom:20px">
+              Enter raw field scores to test the engine against the current active configuration.
+              Results update in real time using only active fields and rules.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;">
+              <div>
+                <div class="tester-grid" id="tester-inputs"></div>
+                <button class="btn-xs btn-add" style="margin-top:16px;padding:8px 20px;font-size:13px" onclick="AdminPanel.runTest()">▶ Evaluate</button>
+              </div>
+              <div class="result-box" id="tester-result" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════
+             TAB 7 — AUDIT LOG
+        ═════════════════════════════════════════════════════════ -->
+        <div class="tab-panel" id="tab-audit">
+          <div class="engine-card">
+            <h2>📋 Session Audit Log — سجل التغييرات</h2>
+            <p class="text-muted" style="margin-bottom:16px">Records all configuration changes made during this session.</p>
+            <div id="audit-log-list">
+              <p class="text-muted" style="text-align:center;padding:24px">No changes recorded yet in this session.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /page-content -->
+    </main>
+  </div><!-- /app-container -->
+
+  <!-- ════════════════════════════════════════════════════════════
+       ADD RULE MODAL
+  ═════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="add-rule-modal">
+    <div class="modal-box">
+      <h3>➕ Add New Rule — إضافة قاعدة جديدة</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Rule Name (EN)</label>
+          <input type="text" id="nr-name" placeholder="e.g. Very High Risk Country">
+        </div>
+        <div class="form-group">
+          <label>Rule Name (AR)</label>
+          <input type="text" id="nr-name-ar" placeholder="مثال: دولة بالغة الخطورة">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Field</label>
+          <select id="nr-field"></select>
+        </div>
+        <div class="form-group">
+          <label>Priority (lower = first)</label>
+          <input type="number" id="nr-priority" value="50" min="0" max="999">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Operator</label>
+          <select id="nr-operator">
+            <option value="GTE">≥ (Greater or equal)</option>
+            <option value="LTE">≤ (Less or equal)</option>
+            <option value="EQ">= (Equal)</option>
+            <option value="RANGE">RANGE (between two values)</option>
+            <option value="IN">IN (list)</option>
+            <option value="NOT_IN">NOT IN (list)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Operand / Threshold</label>
+          <input type="text" id="nr-operand" placeholder="e.g. 150  or  100,149  or  true">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Action</label>
+          <select id="nr-action">
+            <option value="ADD">ADD score</option>
+            <option value="SET_HIGH">SET_HIGH (force max score)</option>
+            <option value="MULTIPLY">MULTIPLY score</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Score Value (Δ)</label>
+          <input type="number" id="nr-value" value="10">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Condition (human-readable)</label>
+          <input type="text" id="nr-condition" placeholder="e.g. COUNTRY_RISK_SCORE >= 170">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="nr-description" rows="2" placeholder="Explain when this rule triggers and why"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+        <button class="btn-xs btn-info" onclick="AdminPanel.closeAddRuleModal()">Cancel</button>
+        <button class="btn-xs btn-save" onclick="AdminPanel.submitNewRule()">Add Rule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Impact Warning Dialog -->
+  <div class="modal-overlay" id="impact-modal">
+    <div class="modal-box">
+      <h3 style="color:#f59e0b">⚠️ Dependency Impact Warning</h3>
+      <div id="impact-modal-body" style="font-size:13px;line-height:1.7;margin:16px 0;color:rgba(255,255,255,.8)"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button class="btn-xs btn-info" onclick="AdminPanel.closeImpactModal()">Cancel</button>
+        <button class="btn-xs btn-del" id="impact-confirm-btn">Disable Anyway</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="AdminPanel.handleImport(event)">
+
+  <!-- ── Scripts ───────────────────────────────────────────── -->
+  <script src="js/dynamic_edd_engine.js"></script>
+  <script>
+  /**
+   * AdminPanel — UI controller for admin_edd_engine.html
+   * Bridges DynamicEDDEngine with DOM interactions.
+   */
+  var AdminPanel = (function () {
+
+    var _pendingToggleFieldId  = null;
+    var _pendingToggleActive   = null;
+    // Use the constant from the engine to avoid duplication
+    var MAX_RISK_SCORE = (typeof DynamicEDDEngine !== 'undefined') ? DynamicEDDEngine.MAX_RISK_SCORE : 9999;
+
+    // ── helpers ─────────────────────────────────────────────
+    function _badge(cat) {
+      var cls = 'badge-' + cat.toLowerCase();
+      return '<span class="badge-tag ' + cls + '">' + cat + '</span>';
+    }
+
+    function _toast(msg, type) {
+      var t = document.createElement('div');
+      var bgColor = type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#10b981';
+      t.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:9999;padding:12px 22px;'
+        + 'border-radius:10px;font-size:13px;font-weight:600;color:#fff;'
+        + 'background:' + bgColor + ';'
+        + 'box-shadow:0 4px 20px rgba(0,0,0,.3);opacity:0;transition:opacity .3s';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(function () { t.style.opacity = '1'; }, 10);
+      setTimeout(function () { t.style.opacity = '0'; setTimeout(function () { t.remove(); }, 400); }, 2800);
+    }
+
+    function _auditEntry(action, detail) {
+      DynamicEDDEngine.logChange('Admin', action, detail);
+      _renderAuditLog();
+    }
+
+    // ── tab navigation ───────────────────────────────────────
+    function _initTabs() {
+      document.querySelectorAll('.tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+          document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+          btn.classList.add('active');
+          var tabId = 'tab-' + btn.dataset.tab;
+          var panel = document.getElementById(tabId);
+          if (panel) { panel.classList.add('active'); }
+        });
+      });
+    }
+
+    // ── KPI row ──────────────────────────────────────────────
+    function _renderKPIs() {
+      var config = DynamicEDDEngine.getConfig();
+      var totalFields  = config.fields.length;
+      var activeFields = config.fields.filter(function (f) { return f.active; }).length;
+      var totalRules   = config.rules.length;
+      var activeRules  = config.rules.filter(function (r) { return r.active; }).length;
+
+      var kpis = [
+        { label: 'Total Fields',  value: totalFields,               color: '#00d4ff' },
+        { label: 'Active Fields', value: activeFields,              color: '#10b981' },
+        { label: 'Total Rules',   value: totalRules,                color: '#00d4ff' },
+        { label: 'Active Rules',  value: activeRules,               color: '#10b981' },
+        { label: 'LOW  Threshold',  value: '0 – ' + config.thresholds.low.max,   color: '#10b981' },
+        { label: 'MED Threshold',   value: config.thresholds.medium.min + ' – ' + config.thresholds.medium.max, color: '#f59e0b' },
+        { label: 'HIGH Threshold',  value: config.thresholds.high.min + '+',     color: '#ef4444' }
+      ];
+
+      var row = document.getElementById('kpi-row');
+      if (!row) { return; }
+      row.innerHTML = kpis.map(function (k) {
+        return '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);'
+          + 'border-radius:12px;padding:16px;text-align:center">'
+          + '<div style="font-size:22px;font-weight:800;color:' + k.color + '">' + k.value + '</div>'
+          + '<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">' + k.label + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    // ── FIELDS TABLE ─────────────────────────────────────────
+    function _renderFieldsTable() {
+      var config = DynamicEDDEngine.getConfig();
+      var tbody = document.getElementById('fields-tbody');
+      if (!tbody) { return; }
+
+      tbody.innerHTML = config.fields.map(function (f) {
+        var ruleCount = config.rules.filter(function (r) { return r.fieldId === f.id; }).length;
+        var deps = f.dependencies && f.dependencies.length
+          ? f.dependencies.map(function (d) {
+              return '<span style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);'
+                + 'border-radius:4px;padding:1px 6px;font-size:10px;color:var(--engine-accent)">' + d + '</span>';
+            }).join(' ')
+          : '<span class="text-muted">—</span>';
+
+        return '<tr id="field-row-' + f.id + '">'
+          + '<td><label class="toggle-switch"><input type="checkbox"'
+          + (f.active ? ' checked' : '')
+          + ' onchange="AdminPanel.onFieldToggle(\'' + f.id + '\',this.checked)">'
+          + '<span class="toggle-slider"></span></label></td>'
+          + '<td><code style="font-size:11px;color:var(--engine-accent)">' + f.id + '</code></td>'
+          + '<td><div style="font-weight:600">' + f.name + '</div><div class="text-muted">' + f.nameAr + '</div></td>'
+          + '<td><span class="badge-tag badge-low" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)">' + f.source + '</span></td>'
+          + '<td><span style="font-size:12px;color:rgba(255,255,255,.7)">' + f.category + '</span></td>'
+          + '<td><input class="inline-input" type="number" step="0.1" min="0.1" max="5" value="' + f.weight + '"'
+          + ' id="weight-' + f.id + '" onchange="AdminPanel.onWeightChange(\'' + f.id + '\',this.value)"></td>'
+          + '<td><span style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--engine-accent)">' + ruleCount + ' rules</span></td>'
+          + '<td>' + deps + '</td>'
+          + '<td><button class="btn-xs btn-info" onclick="AdminPanel.showDependencyInfo(\'' + f.id + '\')">Impact</button></td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    // ── RULES TABLE ──────────────────────────────────────────
+    function _renderRulesTable() {
+      var config = DynamicEDDEngine.getConfig();
+      var tbody = document.getElementById('rules-tbody');
+      if (!tbody) { return; }
+
+      tbody.innerHTML = config.rules.map(function (r) {
+        var field = config.fields.find(function (f) { return f.id === r.fieldId; }) || { name: r.fieldId };
+        var isCustom = r.id.indexOf('RULE_CUSTOM_') === 0;
+        var scoreCell = r.action === 'SET_HIGH'
+          ? '<span style="color:#ef4444;font-weight:700">FORCE HIGH</span>'
+          : '<span style="color:#10b981;font-weight:700">+' + r.value + '</span>';
+        return '<tr>'
+          + '<td><label class="toggle-switch"><input type="checkbox"'
+          + (r.active ? ' checked' : '')
+          + ' onchange="AdminPanel.onRuleToggle(\'' + r.id + '\',this.checked)">'
+          + '<span class="toggle-slider"></span></label></td>'
+          + '<td style="text-align:center"><span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6)">' + (r.priority || 99) + '</span></td>'
+          + '<td><code style="font-size:10px;color:rgba(0,212,255,.7)">' + r.id + '</code></td>'
+          + '<td><div style="font-weight:600">' + r.name + '</div><div class="text-muted">' + r.nameAr + '</div></td>'
+          + '<td><span style="font-size:12px;color:var(--engine-accent)">' + field.name + '</span></td>'
+          + '<td><code style="font-size:11px;color:rgba(255,255,255,.6)">' + r.condition + '</code></td>'
+          + '<td><span class="badge-tag" style="background:rgba(16,185,129,.1);color:#10b981;border:1px solid rgba(16,185,129,.3)">' + r.action + '</span></td>'
+          + '<td>' + scoreCell + '</td>'
+          + '<td>'
+          + (isCustom ? '<button class="btn-xs btn-del" onclick="AdminPanel.deleteRule(\'' + r.id + '\')">Delete</button>' : '<span class="text-muted">Built-in</span>')
+          + '</td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    // ── DEPENDENCY MAP ───────────────────────────────────────
+    function _renderDepMap() {
+      var map  = DynamicEDDEngine.getDependencyMap();
+      var grid = document.getElementById('dep-grid');
+      if (!grid) { return; }
+
+      grid.innerHTML = Object.values(map).map(function (entry) {
+        var f = entry.field;
+        var depOnHtml = entry.dependsOn.length
+          ? entry.dependsOn.map(function (d) {
+              return '<li><span class="dep-arrow">◀</span> <strong>' + d.name + '</strong> (' + d.id + ')</li>';
+            }).join('')
+          : '<li class="text-muted">No upstream dependencies</li>';
+
+        var usedByHtml = entry.usedByFields.length
+          ? entry.usedByFields.map(function (d) {
+              return '<li><span class="dep-arrow">▶</span> <strong>' + d.name + '</strong> (' + d.id + ')</li>';
+            }).join('')
+          : '<li class="text-muted">No downstream fields</li>';
+
+        var rulesHtml = entry.affectedRules.length
+          ? entry.affectedRules.map(function (r) {
+              return '<li>' + (r.active ? '✅' : '⏸') + ' ' + r.name + '</li>';
+            }).join('')
+          : '<li class="text-muted">No rules</li>';
+
+        return '<div class="dep-node' + (f.active ? '' : ' inactive') + '">'
+          + '<div class="dep-node-title">'
+          + (f.active ? '🟢' : '🔴') + ' <strong>' + f.name + '</strong></div>'
+          + '<div style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:10px">' + f.id + '</div>'
+          + '<div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:4px">Depends on:</div>'
+          + '<ul class="dep-list">' + depOnHtml + '</ul>'
+          + '<div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);margin:8px 0 4px">Used by:</div>'
+          + '<ul class="dep-list">' + usedByHtml + '</ul>'
+          + '<div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.5);margin:8px 0 4px">Rules (' + entry.affectedRules.length + '):</div>'
+          + '<ul class="dep-list">' + rulesHtml + '</ul>'
+          + '</div>';
+      }).join('');
+    }
+
+    // ── THRESHOLDS FORM ──────────────────────────────────────
+    function _renderThresholds() {
+      var t    = DynamicEDDEngine.getThresholds();
+      var form = document.getElementById('threshold-form');
+      if (!form) { return; }
+
+      form.innerHTML = [
+        { key: 'low',    label: 'LOW',    color: '#10b981', note: 'Min is always 0' },
+        { key: 'medium', label: 'MEDIUM', color: '#f59e0b', note: '' },
+        { key: 'high',   label: 'HIGH',   color: '#ef4444', note: 'Max is unlimited' }
+      ].map(function (row) {
+        return '<div class="threshold-row">'
+          + '<span class="threshold-label" style="color:' + row.color + '">' + row.label + '</span>'
+          + '<span class="text-muted" style="font-size:12px;width:60px">Min:</span>'
+          + '<input class="threshold-input" id="thr-' + row.key + '-min" type="number"'
+          + (row.key === 'low' ? ' disabled style="opacity:.4"' : '') + ' value="' + t[row.key].min + '">'
+          + '<span class="text-muted" style="font-size:12px;width:60px;margin-left:14px">Max:</span>'
+          + '<input class="threshold-input" id="thr-' + row.key + '-max" type="number"'
+          + (row.key === 'high' ? ' disabled style="opacity:.4" title="Maximum is unbounded (' + MAX_RISK_SCORE + ')"' : '') + ' value="' + t[row.key].max + '">'
+          + (row.key === 'high' ? '<span class="text-muted" style="margin-left:8px">Unlimited</span>' : '')
+          + (row.note ? '<span class="text-muted" style="margin-left:12px">' + row.note + '</span>' : '')
+          + '</div>';
+      }).join('');
+
+      _renderThresholdViz(t);
+    }
+
+    function _renderThresholdViz(t) {
+      var viz = document.getElementById('threshold-viz');
+      var lbl = document.getElementById('threshold-labels');
+      if (!viz || !lbl) { return; }
+      var max   = t.high.min + 100;
+      var lowW  = Math.round(((t.low.max + 1)  / max) * 100);
+      var medW  = Math.round(((t.medium.max - t.medium.min + 1) / max) * 100);
+      var highW = 100 - lowW - medW;
+      viz.innerHTML = '<div style="float:left;width:' + lowW  + '%;height:100%;background:#10b981;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">LOW</div>'
+        + '<div style="float:left;width:' + medW  + '%;height:100%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">MEDIUM</div>'
+        + '<div style="float:left;width:' + highW + '%;height:100%;background:#ef4444;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff">HIGH</div>';
+      lbl.innerHTML = '<span>0</span><span>' + t.low.max + '</span><span>' + t.medium.max + '</span><span>' + max + '+</span>';
+    }
+
+    // ── DECISIONS FORM ───────────────────────────────────────
+    function _renderDecisions() {
+      var d    = DynamicEDDEngine.getDecisions();
+      var form = document.getElementById('decisions-form');
+      if (!form) { return; }
+
+      var levels = ['low', 'medium', 'high'];
+      var icons  = { low: '✅', medium: '🔍', high: '🔴' };
+      var colors = { low: '#10b981', medium: '#f59e0b', high: '#ef4444' };
+
+      form.innerHTML = levels.map(function (level) {
+        var dec = d[level];
+        return '<div class="engine-card" style="margin-bottom:14px;background:rgba(255,255,255,.02)">'
+          + '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">'
+          + '<div style="font-size:22px">' + icons[level] + '</div>'
+          + '<div style="flex:1">'
+          + '<div style="font-weight:700;color:' + colors[level] + ';font-size:14px;text-transform:uppercase">' + level + ' Risk</div>'
+          + '<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">'
+          + '<div class="form-group" style="min-width:180px">'
+          + '<label style="font-size:11px;color:rgba(255,255,255,.5)">Action Code</label>'
+          + '<input class="threshold-input" id="dec-' + level + '-action" value="' + dec.action + '" style="width:200px">'
+          + '</div>'
+          + '<div class="form-group" style="min-width:180px">'
+          + '<label style="font-size:11px;color:rgba(255,255,255,.5)">Label (EN)</label>'
+          + '<input class="threshold-input" id="dec-' + level + '-label" value="' + dec.label + '" style="width:200px">'
+          + '</div>'
+          + '<div class="form-group" style="min-width:180px">'
+          + '<label style="font-size:11px;color:rgba(255,255,255,.5)">Label (AR)</label>'
+          + '<input class="threshold-input" id="dec-' + level + '-labelar" value="' + dec.labelAr + '" style="width:200px">'
+          + '</div>'
+          + '</div></div></div></div>';
+      }).join('');
+    }
+
+    // ── LIVE TESTER ──────────────────────────────────────────
+    function _renderTesterInputs() {
+      var config  = DynamicEDDEngine.getConfig();
+      var inputs  = document.getElementById('tester-inputs');
+      if (!inputs) { return; }
+
+      var testerFields = [
+        { id: 'COUNTRY_RISK_SCORE',    label: 'Country Risk Score',    placeholder: '0–200', type: 'number' },
+        { id: 'ACTIVITY_RISK_SCORE',   label: 'Activity Risk Score',   placeholder: '0–200', type: 'number' },
+        { id: 'PRODUCT_RISK_SCORE',    label: 'Product Risk Score',    placeholder: '0–200', type: 'number' },
+        { id: 'OCCUPATION_RISK_SCORE', label: 'Occupation Risk Score', placeholder: '0–200', type: 'number' },
+        { id: 'PEP_STATUS',            label: 'PEP Status',            options: ['false', 'true'], type: 'select' },
+        { id: 'TRANSACTION_ANOMALY_SCORE', label: 'Transaction Anomaly Score', placeholder: '0–100', type: 'number' },
+        { id: 'WEALTH_SOURCE',         label: 'Wealth Source',         options: ['VERIFIED', 'PARTIAL', 'UNKNOWN'], type: 'select' },
+        { id: 'SANCTIONS_MATCH',       label: 'Sanctions Match',       options: ['false', 'true'], type: 'select' }
+      ];
+
+      inputs.innerHTML = testerFields.map(function (f) {
+        var ctrl = f.type === 'select'
+          ? '<select id="tst-' + f.id + '">' + f.options.map(function (o) { return '<option value="' + o + '">' + o + '</option>'; }).join('') + '</select>'
+          : '<input type="number" id="tst-' + f.id + '" placeholder="' + f.placeholder + '" value="0" min="0" max="9999">';
+        return '<div class="tester-field"><label>' + f.label + '</label>' + ctrl + '</div>';
+      }).join('');
+    }
+
+    // ── ADD RULE MODAL ───────────────────────────────────────
+    function _populateFieldDropdown() {
+      var config = DynamicEDDEngine.getConfig();
+      var sel = document.getElementById('nr-field');
+      if (!sel) { return; }
+      sel.innerHTML = config.fields.map(function (f) {
+        return '<option value="' + f.id + '">' + f.name + ' (' + f.id + ')</option>';
+      }).join('');
+    }
+
+    // ── AUDIT LOG ────────────────────────────────────────────
+    function _renderAuditLog() {
+      var log  = DynamicEDDEngine.getAuditLog();
+      var list = document.getElementById('audit-log-list');
+      if (!list) { return; }
+      if (!log.length) {
+        list.innerHTML = '<p class="text-muted" style="text-align:center;padding:24px">No changes recorded yet in this session.</p>';
+        return;
+      }
+      list.innerHTML = log.slice().reverse().map(function (entry) {
+        var ts = new Date(entry.timestamp);
+        var time = ts.toLocaleTimeString();
+        return '<div class="audit-entry"><span class="audit-time">' + time + '</span>'
+          + '<span class="audit-actor">' + entry.actor + '</span>'
+          + '<span class="audit-action"><strong>' + entry.action + '</strong>' + (entry.detail ? ' — ' + entry.detail : '') + '</span></div>';
+      }).join('');
+    }
+
+    // ── full re-render ───────────────────────────────────────
+    function _refresh() {
+      _renderKPIs();
+      _renderFieldsTable();
+      _renderRulesTable();
+      _renderDepMap();
+      _renderThresholds();
+      _renderDecisions();
+    }
+
+    // ════════════════════════════════════════════════════════
+    // PUBLIC METHODS
+    // ════════════════════════════════════════════════════════
+
+    return {
+
+      init: function () {
+        _initTabs();
+        _refresh();
+        _renderTesterInputs();
+        _populateFieldDropdown();
+
+        // Re-render whenever config changes
+        DynamicEDDEngine.onConfigChange(function () {
+          _refresh();
+          _populateFieldDropdown();
+        });
+      },
+
+      // ── Field events ─────────────────────────────────────
+      onFieldToggle: function (fieldId, active) {
+        if (!active) {
+          // Show impact warning before disabling
+          var impact = DynamicEDDEngine.getToggleImpact(fieldId);
+          var hasImpact = (impact && (impact.affectedRules.length > 0 || impact.affectedFields.length > 0));
+          if (hasImpact) {
+            _pendingToggleFieldId = fieldId;
+            _pendingToggleActive  = active;
+            var body = document.getElementById('impact-modal-body');
+            var rulesText = impact.affectedRules.map(function (r) { return '• ' + r.name; }).join('<br>');
+            var fieldsText = impact.affectedFields.map(function (f) { return '• ' + f.name; }).join('<br>');
+            body.innerHTML = '<p>Disabling <strong>' + impact.fieldName + '</strong> will affect:</p>'
+              + (rulesText ? '<p><strong>Rules that will be suspended:</strong><br>' + rulesText + '</p>' : '')
+              + (fieldsText ? '<p><strong>Dependent fields that may be affected:</strong><br>' + fieldsText + '</p>' : '');
+            document.getElementById('impact-confirm-btn').onclick = function () {
+              AdminPanel.confirmImpactToggle();
+            };
+            document.getElementById('impact-modal').classList.add('open');
+            // Revert checkbox until confirmed
+            var cb = document.querySelector('#field-row-' + fieldId + ' input[type=checkbox]');
+            if (cb) { cb.checked = true; }
+            return;
+          }
+        }
+        var result = DynamicEDDEngine.toggleField(fieldId, active);
+        if (result.success) {
+          _auditEntry('FIELD_TOGGLE', fieldId + ' → ' + (active ? 'ACTIVE' : 'INACTIVE'));
+          _toast('Field ' + fieldId + ' ' + (active ? 'enabled' : 'disabled'));
+        }
+      },
+
+      onWeightChange: function (fieldId, value) {
+        var w = parseFloat(value);
+        if (isNaN(w) || w <= 0) { return; }
+        DynamicEDDEngine.updateFieldWeight(fieldId, w);
+        _auditEntry('WEIGHT_UPDATE', fieldId + ' weight → ' + w);
+        _toast('Weight updated for ' + fieldId);
+      },
+
+      showDependencyInfo: function (fieldId) {
+        var impact = DynamicEDDEngine.getToggleImpact(fieldId);
+        if (!impact) { return; }
+        var rulesText  = impact.affectedRules.map(function (r) { return '• ' + r.name; }).join('\n') || 'None';
+        var fieldsText = impact.affectedFields.map(function (f) { return '• ' + f.name; }).join('\n') || 'None';
+        alert('Impact of disabling "' + impact.fieldName + '":\n\nRules affected:\n' + rulesText + '\n\nDependent fields:\n' + fieldsText);
+      },
+
+      confirmImpactToggle: function () {
+        if (_pendingToggleFieldId !== null) {
+          var result = DynamicEDDEngine.toggleField(_pendingToggleFieldId, _pendingToggleActive);
+          if (result.success) {
+            _auditEntry('FIELD_TOGGLE', _pendingToggleFieldId + ' → INACTIVE (confirmed)');
+            _toast('Field disabled: ' + _pendingToggleFieldId, 'warning');
+          }
+          _pendingToggleFieldId = null;
+          _pendingToggleActive  = null;
+        }
+        this.closeImpactModal();
+      },
+
+      closeImpactModal: function () {
+        document.getElementById('impact-modal').classList.remove('open');
+        _pendingToggleFieldId = null;
+        _pendingToggleActive  = null;
+        _renderFieldsTable();
+      },
+
+      // ── Rule events ──────────────────────────────────────
+      onRuleToggle: function (ruleId, active) {
+        DynamicEDDEngine.toggleRule(ruleId, active);
+        _auditEntry('RULE_TOGGLE', ruleId + ' → ' + (active ? 'ACTIVE' : 'INACTIVE'));
+        _toast('Rule ' + ruleId + ' ' + (active ? 'enabled' : 'disabled'));
+      },
+
+      deleteRule: function (ruleId) {
+        if (!confirm('Delete rule "' + ruleId + '"? This cannot be undone.')) { return; }
+        DynamicEDDEngine.removeRule(ruleId);
+        _auditEntry('RULE_DELETE', ruleId);
+        _toast('Rule deleted');
+      },
+
+      // ── Add Rule Modal ───────────────────────────────────
+      openAddRuleModal: function () {
+        _populateFieldDropdown();
+        document.getElementById('add-rule-modal').classList.add('open');
+      },
+
+      closeAddRuleModal: function () {
+        document.getElementById('add-rule-modal').classList.remove('open');
+      },
+
+      submitNewRule: function () {
+        var name     = document.getElementById('nr-name').value.trim();
+        var nameAr   = document.getElementById('nr-name-ar').value.trim();
+        var fieldId  = document.getElementById('nr-field').value;
+        var priority = parseInt(document.getElementById('nr-priority').value, 10) || 50;
+        var operator = document.getElementById('nr-operator').value;
+        var operandRaw = document.getElementById('nr-operand').value.trim();
+        var action   = document.getElementById('nr-action').value;
+        var value    = parseFloat(document.getElementById('nr-value').value) || 0;
+        var condition = document.getElementById('nr-condition').value.trim();
+        var desc     = document.getElementById('nr-description').value.trim();
+
+        if (!name || !fieldId) {
+          _toast('Name and Field are required', 'error');
+          return;
+        }
+
+        // Parse operand
+        var operand = operandRaw;
+        if (operator === 'RANGE') {
+          var parts = operandRaw.split(',').map(function (s) { return parseFloat(s.trim()); });
+          operand = parts.length === 2 ? parts : [0, 9999];
+        } else if (operandRaw === 'true') {
+          operand = true;
+        } else if (operandRaw === 'false') {
+          operand = false;
+        } else if (!isNaN(parseFloat(operandRaw))) {
+          operand = parseFloat(operandRaw);
+        } else if (operator === 'IN' || operator === 'NOT_IN') {
+          operand = operandRaw.split(',').map(function (s) { return s.trim(); });
+        }
+
+        var result = DynamicEDDEngine.addRule({
+          name: name, nameAr: nameAr || name,
+          fieldId: fieldId, priority: priority,
+          operator: operator, operand: operand,
+          action: action, value: value,
+          condition: condition || (operator + ' ' + operandRaw),
+          description: desc
+        });
+
+        if (result.success) {
+          _auditEntry('RULE_ADD', result.rule.id + ' — ' + name);
+          _toast('Rule added: ' + result.rule.id);
+          this.closeAddRuleModal();
+        } else {
+          _toast(result.error || 'Failed to add rule', 'error');
+        }
+      },
+
+      // ── Thresholds ───────────────────────────────────────
+      saveThresholds: function () {
+        var t = DynamicEDDEngine.getThresholds();
+        var medMin = parseInt(document.getElementById('thr-medium-min').value, 10);
+        var medMax = parseInt(document.getElementById('thr-medium-max').value, 10);
+        var highMin = parseInt(document.getElementById('thr-high-min').value, 10);
+
+        if (isNaN(medMin) || isNaN(medMax) || isNaN(highMin)) {
+          _toast('Please enter valid numeric values for all thresholds', 'error');
+          return;
+        }
+        if (medMin >= medMax) {
+          _toast('MEDIUM: min must be less than max (e.g. 100 < 149)', 'error');
+          return;
+        }
+        if ((medMax + 1) !== highMin) {
+          _toast('HIGH min must equal MEDIUM max + 1 (e.g. MEDIUM max = 149 → HIGH min = 150)', 'error');
+          return;
+        }
+
+        var newThresholds = {
+          low:    { min: 0,      max: medMin - 1 },
+          medium: { min: medMin, max: medMax },
+          high:   { min: highMin, max: MAX_RISK_SCORE }
+        };
+
+        DynamicEDDEngine.updateThresholds(newThresholds);
+        _auditEntry('THRESHOLDS_UPDATE', 'LOW 0–' + (medMin - 1) + ' / MED ' + medMin + '–' + medMax + ' / HIGH ' + highMin + '+');
+        _toast('Thresholds saved');
+      },
+
+      // ── Decisions ────────────────────────────────────────
+      saveDecisions: function () {
+        var levels = ['low', 'medium', 'high'];
+        levels.forEach(function (level) {
+          DynamicEDDEngine.updateDecision(level, {
+            action:  document.getElementById('dec-' + level + '-action').value.trim(),
+            label:   document.getElementById('dec-' + level + '-label').value.trim(),
+            labelAr: document.getElementById('dec-' + level + '-labelar').value.trim()
+          });
+        });
+        _auditEntry('DECISIONS_UPDATE', 'Decision labels updated for LOW / MEDIUM / HIGH');
+        _toast('Decision settings saved');
+      },
+
+      // ── Live Tester ──────────────────────────────────────
+      runTest: function () {
+        var scores = {
+          COUNTRY_RISK_SCORE:    parseFloat(document.getElementById('tst-COUNTRY_RISK_SCORE').value)    || 0,
+          ACTIVITY_RISK_SCORE:   parseFloat(document.getElementById('tst-ACTIVITY_RISK_SCORE').value)   || 0,
+          PRODUCT_RISK_SCORE:    parseFloat(document.getElementById('tst-PRODUCT_RISK_SCORE').value)    || 0,
+          OCCUPATION_RISK_SCORE: parseFloat(document.getElementById('tst-OCCUPATION_RISK_SCORE').value) || 0,
+          PEP_STATUS:            document.getElementById('tst-PEP_STATUS').value === 'true',
+          TRANSACTION_ANOMALY_SCORE: parseFloat(document.getElementById('tst-TRANSACTION_ANOMALY_SCORE').value) || 0,
+          WEALTH_SOURCE:         document.getElementById('tst-WEALTH_SOURCE').value,
+          SANCTIONS_MATCH:       document.getElementById('tst-SANCTIONS_MATCH').value === 'true'
+        };
+
+        var result = DynamicEDDEngine.evaluate(scores);
+        var catColor = result.category === 'HIGH' ? '#ef4444' : result.category === 'MEDIUM' ? '#f59e0b' : '#10b981';
+
+        var breakdownRows = Object.values(result.breakdown).map(function (b) {
+          return '<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)">'
+            + '<span style="color:rgba(255,255,255,.7)">' + b.name + (b.active ? '' : ' <span style="opacity:.4">(inactive)</span>') + '</span>'
+            + '<span style="font-weight:700;color:' + (b.weightedScore > 0 ? '#00d4ff' : 'rgba(255,255,255,.4)') + '">+' + (b.weightedScore || 0) + '</span>'
+            + '</div>';
+        }).join('');
+
+        var resultBox = document.getElementById('tester-result');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = '<div class="result-score" style="color:' + catColor + '">' + result.finalScore + '</div>'
+          + '<div style="color:' + catColor + ';font-size:18px;font-weight:800;margin-bottom:4px">' + result.category + '</div>'
+          + '<div class="result-decision">📋 ' + result.decision.label + ' — ' + result.decision.labelAr + '</div>'
+          + '<div style="margin-top:16px;font-size:11px;font-weight:600;color:rgba(255,255,255,.4);margin-bottom:8px">SCORE BREAKDOWN</div>'
+          + breakdownRows
+          + '<div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.4)">'
+          + result.triggeredRules.length + ' rule(s) triggered</div>';
+      },
+
+      // ── Export / Import / Reset ──────────────────────────
+      exportConfig: function () {
+        var config  = DynamicEDDEngine.getConfig();
+        var blob    = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+        var url     = URL.createObjectURL(blob);
+        var a       = document.createElement('a');
+        a.href      = url;
+        a.download  = 'edd_engine_config_' + new Date().toISOString().slice(0, 10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        _auditEntry('CONFIG_EXPORT', 'Configuration exported to JSON');
+      },
+
+      importConfig: function () {
+        document.getElementById('import-file-input').click();
+      },
+
+      handleImport: function (event) {
+        var file = event.target.files[0];
+        if (!file) { return; }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            var config = JSON.parse(e.target.result);
+            if (!config.fields || !config.rules) { throw new Error('Invalid config file'); }
+            DynamicEDDEngine.saveConfig(config);
+            _auditEntry('CONFIG_IMPORT', 'Configuration imported from ' + file.name);
+            _toast('Configuration imported successfully');
+          } catch (err) {
+            _toast('Failed to import: ' + err.message, 'error');
+          }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+      },
+
+      confirmReset: function () {
+        if (!confirm('Reset all engine settings to factory defaults? This will erase all custom rules and weights.')) { return; }
+        DynamicEDDEngine.resetConfig();
+        _auditEntry('CONFIG_RESET', 'Engine reset to factory defaults');
+        _toast('Configuration reset to defaults');
+        _refresh();
+        _renderTesterInputs();
+        _populateFieldDropdown();
+      }
+
+    };
+  }());
+
+  document.addEventListener('DOMContentLoaded', function () {
+    AdminPanel.init();
+  });
+  </script>
+</body>
+</html>
