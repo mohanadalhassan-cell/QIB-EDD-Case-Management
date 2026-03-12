@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Analytics Dashboard — EDD Policy Refinement</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    .analytics-header {
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(136,0,255,0.1));
+      border: 2px solid rgba(0,212,255,0.3);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(20px);
+    }
+    
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .kpi-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .kpi-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(0,212,255,0.5);
+      transform: translateY(-2px);
+    }
+    
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #00D4FF;
+      margin: 12px 0;
+    }
+    
+    .kpi-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .recommendation-card {
+      background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(255,193,7,0.1));
+      border: 1px solid rgba(255,152,0,0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .recommendation-card:hover {
+      background: linear-gradient(135deg, rgba(255,152,0,0.15), rgba(255,193,7,0.15));
+      transform: translateX(4px);
+    }
+    
+    .recommendation-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    
+    .badge-keep { background: rgba(29,191,115,0.3); color: #1DBF73; }
+    .badge-reduce { background: rgba(255,152,0,0.3); color: #FFA726; }
+    .badge-move-manual { background: rgba(66,165,245,0.3); color: #42A5F5; }
+    .badge-doc-request { background: rgba(156,39,176,0.3); color: #AB47BC; }
+    .badge-split { background: rgba(244,67,54,0.3); color: #F44336; }
+    .badge-monitor { background: rgba(158,158,158,0.3); color: #9E9E9E; }
+    
+    .impact-high { color: #F44336; }
+    .impact-medium { color: #FFA726; }
+    .impact-low { color: #4CAF50; }
+    
+    .chart-section {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .alert-warning {
+      background: linear-gradient(135deg, rgba(255,193,7,0.15), rgba(255,152,0,0.15));
+      border-left: 4px solid #FFA726;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .alert-severe {
+      background: linear-gradient(135deg, rgba(244,67,54,0.15), rgba(229,57,53,0.15));
+      border-left: 4px solid #F44336;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-bg"></div>
+  <div class="gradient-mesh"></div>
+  
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div class="sidebar-title">
+          <h1>Analytics</h1>
+          <span>Decision Engine</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Analysis</div>
+          <a href="#overview" class="nav-item active">Overview</a>
+          <a href="#rules" class="nav-item">Rule Performance</a>
+          <a href="#occupations" class="nav-item">Occupations</a>
+          <a href="#pep" class="nav-item">PEP Analysis</a>
+          <a href="#false-positives" class="nav-item">False Positives</a>
+          <a href="#recommendations" class="nav-item">Recommendations</a>
+        </div>
+      </nav>
+    </aside>
+    
+    <main class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h1 class="page-title">Decision Analytics Dashboard</h1>
+          <div class="breadcrumb">
+            <span>Management</span> / <span>Analytics</span> / <span>Policy Refinement</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn btn-success btn-sm" onclick="exportAnalyticsReport()">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Export Report
+          </button>
+          <button class="header-btn" id="logout-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          </button>
+        </div>
+      </header>
+      
+      <!-- Page Content -->
+      <div class="page-content">
+        
+        <!-- ALERTS SECTION -->
+        <div id="alerts-section" style="margin-bottom: 24px;"></div>
+        
+        <!-- OVERVIEW SECTION -->
+        <div id="overview" class="analytics-header">
+          <h2 style="color: #00D4FF; font-size: 24px; margin: 0 0 16px 0;">📊 Key Metrics Overview</h2>
+          <p style="color: rgba(255,255,255,0.7); margin: 0;">Analysis-based KPIs to assess whether current EDD logic is appropriate</p>
+        </div>
+        
+        <div class="kpi-grid" id="kpi-grid">
+          <!-- KPIs will be inserted here -->
+        </div>
+        
+        <!-- RULES PERFORMANCE -->
+        <div id="rules" class="chart-section">
+          <h3 style="color: #00D4FF; margin-top: 0;">🔍 Rule Performance Analysis</h3>
+          <p style="color: rgba(255,255,255,0.7);">Top escalating rules and their accuracy rates</p>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+            <thead>
+              <tr style="border-bottom: 2px solid rgba(0,212,255,0.3);">
+                <th style="text-align: left; padding: 12px; color: #00D4FF;">Rule Name</th>
+                <th style="text-align: center; padding: 12px; color: #00D4FF;">Triggered</th>
+                <th style="text-align: center; padding: 12px; color: #00D4FF;">Escalation %</th>
+                <th style="text-align: center; padding: 12px; color: #00D4FF;">Precision %</th>
+                <th style="text-align: center; padding: 12px; color: #00D4FF;">Status</th>
+              </tr>
+            </thead>
+            <tbody id="rules-table">
+              <!-- Rules will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- OCCUPATION ANALYSIS -->
+        <div id="occupations" class="chart-section">
+          <h3 style="color: #00D4FF; margin-top: 0;">💼 Occupation-Based Escalation Analysis</h3>
+          <p style="color: rgba(255,255,255,0.7);">Which occupation categories drive most escalations</p>
+          <div id="occupation-cards">
+            <!-- Occupation analysis will be inserted here -->
+          </div>
+        </div>
+        
+        <!-- RECOMMENDATIONS -->
+        <div id="recommendations" class="chart-section">
+          <h3 style="color: #00D4FF; margin-top: 0;">💡 Policy Refinement Recommendations</h3>
+          <p style="color: rgba(255,255,255,0.7);">Evidence-based actions to improve EDD logic</p>
+          <div id="recommendations-cards">
+            <!-- Recommendations will be inserted here -->
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="js/decision-analytics-engine.js"></script>
+  <script>
+    // Load sample data and initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeDashboard();
+    });
+    
+    function initializeDashboard() {
+      // Sample case data - in production, this would come from the database
+      const sampleCases = getSampleAnalyticsCases();
+      
+      // Run analysis
+      const analysis = DecisionAnalyticsEngine.analyze(sampleCases);
+      
+      // Render dashboard
+      renderAlerts(analysis.alerts);
+      renderKPIs(analysis.keyMetrics);
+      renderRulePerformance(analysis.rulePerformance);
+      renderOccupationAnalysis(analysis.occupationAnalysis);
+      renderRecommendations(analysis.ruleRecommendations);
+    }
+    
+    function renderAlerts(alerts) {
+      const container = document.getElementById('alerts-section');
+      if (!alerts || alerts.length === 0) return;
+      
+      alerts.forEach(alert => {
+        const severity = alert.severity === 'high' ? 'alert-severe' : 'alert-warning';
+        container.innerHTML += `
+          <div class="${severity}">
+            <strong>${alert.title}</strong>
+            <p style="margin: 8px 0 0 0; font-size: 14px;">${alert.message}</p>
+          </div>
+        `;
+      });
+    }
+    
+    function renderKPIs(metrics) {
+      const container = document.getElementById('kpi-grid');
+      const kpis = [
+        { label: 'Approval Rate', value: metrics.approvalRate, unit: '%' },
+        { label: 'Escalation Rate', value: metrics.escalationRate, unit: '%' },
+        { label: 'Rejection Rate', value: metrics.rejectionRate, unit: '%' },
+        { label: 'False Positive Rate', value: metrics.falsePositiveRate, unit: '%' },
+        { label: 'Manual Review Rate', value: metrics.manualReviewRate, unit: '%' },
+        { label: 'Clarification Rate', value: metrics.clarificationRate, unit: '%' },
+        { label: 'Avg Resolution Days', value: metrics.avgResolutionDays, unit: 'd' }
+      ];
+      
+      container.innerHTML = kpis.map(kpi => `
+        <div class="kpi-card">
+          <div class="kpi-label">${kpi.label}</div>
+          <div class="kpi-value">${kpi.value}${kpi.unit}</div>
+        </div>
+      `).join('');
+    }
+    
+    function renderRulePerformance(ruleStats) {
+      const container = document.getElementById('rules-table');
+      const rules = Object.values(ruleStats)
+        .sort((a, b) => parseFloat(b.escalationRate) - parseFloat(a.escalationRate))
+        .slice(0, 10);
+      
+      container.innerHTML = rules.map(rule => {
+        const statusColor = rule.precision > 80 ? '🟢' : (rule.precision > 60 ? '🟡' : '🔴');
+        return `
+          <tr style="border-bottom: 1px solid rgba(0,212,255,0.1);">
+            <td style="padding: 12px; color: #00D4FF;">${rule.name}</td>
+            <td style="padding: 12px; text-align: center; color: rgba(255,255,255,0.8);">${rule.timesTriggered}</td>
+            <td style="padding: 12px; text-align: center; color: rgba(255,255,255,0.8);">${rule.escalationRate}%</td>
+            <td style="padding: 12px; text-align: center; color: rgba(255,255,255,0.8);">${rule.precision}%</td>
+            <td style="padding: 12px; text-align: center;">${statusColor}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+    function renderOccupationAnalysis(occupations) {
+      const container = document.getElementById('occupation-cards');
+      const sorted = Object.values(occupations)
+        .sort((a, b) => parseFloat(b.escalationRate) - parseFloat(a.escalationRate))
+        .slice(0, 8);
+      
+      container.innerHTML = sorted.map(occ => `
+        <div class="recommendation-card" onclick="viewOccupationDetails('${occ.occupationCode}')">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <h4 style="margin: 0 0 8px 0; color: #00D4FF;">${occ.occupationName}</h4>
+              <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.7);">
+                ${occ.count} cases | ${occ.escalationRate}% escalation | ${occ.falsePositiveRate}% false positives
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 24px; font-weight: 700; color: #FFA726;">${occ.escalationRate}%</div>
+              <div style="font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 4px;">escalation</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderRecommendations(recs) {
+      const container = document.getElementById('recommendations-cards');
+      
+      container.innerHTML = recs.slice(0, 15).map(rec => {
+        const badgeClass = `badge-${rec.recommendation.replace(/_|-/g, '')}`;
+        const impactClass = `impact-${rec.impact}`;
+        
+        return `
+          <div class="recommendation-card">
+            <div>
+              <span class="recommendation-badge ${badgeClass}">${rec.recommendation.replace(/-/g, ' ')}</span>
+              <span style="float: right; font-size: 10px; font-weight: 700;" class="${impactClass}">${rec.impact.toUpperCase()} IMPACT</span>
+              <h4 style="margin: 8px 0 8px 0; color: #00D4FF;">${rec.ruleName}</h4>
+              <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5;">${rec.rationale}</p>
+              ${rec.suggestedAction ? `<p style="margin: 8px 0 0 0; font-size: 12px; color: #FFA726; font-weight: 600;">→ ${rec.suggestedAction}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function getSampleAnalyticsCases() {
+      // Sample data - would be real data in production
+      const cases = [];
+      const segments = ['mass', 'premium', 'tamayuz', 'private'];
+      const occupations = [
+        { code: 'DOC', name: 'Doctor' },
+        { code: 'LAW', name: 'Lawyer' },
+        { code: 'EXE', name: 'Executive' },
+        { code: 'FIN', name: 'Finance Director' },
+        { code: 'RET', name: 'Retired' }
+      ];
+      
+      for (let i = 0; i < 150; i++) {
+        const occ = occupations[Math.floor(Math.random() * occupations.length)];
+        const escalated = Math.random() > 0.3;
+        const approved = escalated ? Math.random() > 0.25 : Math.random() > 0.1;
+        
+        cases.push({
+          id: `CASE-${String(i + 1).padStart(6, '0')}`,
+          segment: segments[Math.floor(Math.random() * segments.length)],
+          riskLevel: escalated ? 'high' : 'medium',
+          createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000),
+          resolvedAt: new Date(Date.now() - Math.random() * 85 * 24 * 60 * 60 * 1000),
+          escalated: escalated,
+          initialDecision: escalated ? 'escalate' : 'clarify',
+          finalDecision: approved ? 'approve' : 'reject',
+          needsReview: escalated,
+          reviewResult: escalated ? (approved ? 'approve' : 'reject') : null,
+          approvedAfterReview: escalated && approved,
+          triggers: escalated ? ['occupation-risk', 'segment-risk'] : ['occupation-risk'],
+          rulesApplied: [
+            { name: 'Occupation Risk Rule', category: 'occupation', confidence: 0.7 },
+            { name: 'Segment Rule', category: 'segment', confidence: 0.6 }
+          ],
+          occupationRisks: { 
+            occupationCode: occ.code, 
+            occupationName: occ.name, 
+            triggered: true 
+          },
+          pepRisks: { matched: Math.random() > 0.85 },
+          wealthRisks: { sourceUnknown: Math.random() > 0.7 },
+          transactionRisks: { unusualPatterns: Math.random() > 0.8 },
+          requestedDocs: escalated ? ['employment-verification', 'source-of-funds'] : [],
+          receivedDocs: escalated && approved ? ['employment-verification'] : []
+        });
+      }
+      
+      return cases.map((c, idx) => DecisionAnalyticsEngine.caseModel.createRecord(c));
+    }
+    
+    function exportAnalyticsReport() {
+      alert('Analytics report export functionality will be implemented.\nData: CSV, JSON, PDF formats available.');
+    }
+    
+    function viewOccupationDetails(occupationCode) {
+      alert(`Detailed analysis for occupations: ${occupationCode}\nDrill-down view will show all cases and specific rule triggers.`);
+    }
+  </script>
+</body>
+</html>
