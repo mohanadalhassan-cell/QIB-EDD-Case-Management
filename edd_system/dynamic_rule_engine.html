@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic EDD Rule Engine — Admin Control Panel</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <script src="js/language-pack.js"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <style>
+    /* ── Engine-specific overrides ── */
+    .engine-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-nocode { background: rgba(0,212,255,0.12); color: #00D4FF; border: 1px solid rgba(0,212,255,0.25); }
+    .badge-live   { background: rgba(0,230,118,0.12); color: #00E676; border: 1px solid rgba(0,230,118,0.25); animation: pulse 2s infinite; }
+    .badge-critical { background: rgba(255,23,68,0.15); color: #FF1744; }
+    .badge-high     { background: rgba(255,82,82,0.15); color: #FF5252; }
+    .badge-medium   { background: rgba(255,167,38,0.15); color: #FFA726; }
+    .badge-low      { background: rgba(0,230,118,0.15); color: #00E676; }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+    /* Layer tabs */
+    .layer-tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid rgba(0,212,255,0.12); }
+    .layer-tab {
+      padding: 10px 20px; cursor: pointer; font-size: 13px; font-weight: 600;
+      border-bottom: 2px solid transparent; color: var(--text-secondary);
+      transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+      white-space: nowrap;
+    }
+    .layer-tab.active { color: #00D4FF; border-bottom-color: #00D4FF; }
+    .layer-tab:hover:not(.active) { color: rgba(255,255,255,0.85); }
+    .layer-panel { display: none; }
+    .layer-panel.active { display: block; }
+
+    /* Rule card */
+    .rule-card {
+      background: rgba(12,28,56,0.6); border: 1px solid rgba(0,212,255,0.1);
+      border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .rule-card:hover { border-color: rgba(0,212,255,0.25); }
+    .rule-card.disabled { opacity: 0.5; }
+    .rule-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .rule-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .rule-name-ar { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; font-family: var(--font-arabic); direction: rtl; }
+    .rule-meta { display: flex; gap: 8px; align-items: center; }
+    .rule-conditions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .condition-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;
+      background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+      color: rgba(255,255,255,0.85);
+    }
+    .condition-op { color: #00D4FF; font-weight: 700; }
+    .condition-logic {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      color: #FFA726; padding: 0 4px;
+    }
+    .rule-action {
+      margin-top: 10px; padding: 8px 12px;
+      background: rgba(0,0,0,0.25); border-radius: 8px; font-size: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .action-force { color: #FF5252; }
+    .action-boost  { color: #FFA726; }
+    .action-reduce { color: #00E676; }
+
+    /* Toggle switch */
+    .toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background: rgba(255,255,255,0.15); border-radius: 22px; transition: 0.3s;
+    }
+    .toggle-slider:before {
+      content: ''; position: absolute; height: 16px; width: 16px;
+      left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.3s;
+    }
+    input:checked + .toggle-slider { background: #00D4FF; }
+    input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+    /* Weight sliders */
+    .weight-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .weight-label { width: 200px; font-size: 13px; color: var(--text-secondary); flex-shrink: 0; }
+    .weight-slider { flex: 1; accent-color: #00D4FF; }
+    .weight-value { width: 48px; text-align: right; font-size: 13px; font-weight: 700; color: #00D4FF; }
+
+    /* Threshold cards */
+    .threshold-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .threshold-card {
+      background: rgba(12,28,56,0.6); border: 1px solid rgba(0,212,255,0.1);
+      border-radius: 12px; padding: 16px; text-align: center;
+    }
+    .threshold-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+    .threshold-min-input {
+      width: 80px; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,212,255,0.2);
+      color: #fff; border-radius: 8px; padding: 6px 10px; text-align: center;
+      font-size: 18px; font-weight: 700;
+    }
+    .threshold-decision { font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
+
+    /* Evaluation panel */
+    .eval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .eval-grid { grid-template-columns: 1fr; } }
+    .eval-field { margin-bottom: 12px; }
+    .eval-field label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+    .eval-field input, .eval-field select {
+      width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(0,212,255,0.2);
+      color: #fff; border-radius: 8px; padding: 8px 12px; font-size: 13px;
+    }
+    .eval-field input::placeholder { color: rgba(255,255,255,0.3); }
+
+    /* Score gauge */
+    .score-gauge {
+      width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 16px;
+      background: conic-gradient(var(--gauge-color, #00E676) var(--gauge-pct, 0%), rgba(255,255,255,0.07) 0%);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .score-gauge-inner {
+      width: 108px; height: 108px; border-radius: 50%;
+      background: var(--bg-card); display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .score-number { font-size: 30px; font-weight: 800; }
+    .score-label  { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; }
+
+    /* Result chips */
+    .result-chip {
+      display: inline-block; padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+    }
+
+    /* Rule form modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-box {
+      background: var(--bg-card); border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 16px; padding: 28px; width: 100%; max-width: 600px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+    .form-row { margin-bottom: 14px; }
+    .form-row label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 5px; }
+    .form-row input, .form-row select, .form-row textarea {
+      width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(0,212,255,0.2);
+      color: #fff; border-radius: 8px; padding: 8px 12px; font-size: 13px;
+    }
+    .condition-builder { margin-bottom: 12px; }
+    .condition-builder .cond-row {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
+    }
+    .cond-row select, .cond-row input {
+      flex: 1; background: rgba(0,0,0,0.35); border: 1px solid rgba(0,212,255,0.2);
+      color: #fff; border-radius: 8px; padding: 7px 10px; font-size: 12px;
+    }
+    .btn-remove-cond {
+      background: rgba(255,82,82,0.15); border: none; color: #FF5252;
+      border-radius: 6px; padding: 6px 10px; cursor: pointer; font-size: 12px;
+    }
+
+    /* Buttons */
+    .btn { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: #00D4FF; color: #000; }
+    .btn-primary:hover { background: #00b5d8; }
+    .btn-secondary { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+    .btn-danger { background: rgba(255,82,82,0.15); color: #FF5252; border: 1px solid rgba(255,82,82,0.25); }
+    .btn-danger:hover { background: rgba(255,82,82,0.25); }
+    .btn-sm { padding: 5px 12px; font-size: 11px; border-radius: 6px; }
+
+    /* Field score table */
+    .score-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .score-table th { text-align: left; padding: 8px 12px; color: #00D4FF; border-bottom: 1px solid rgba(0,212,255,0.2); }
+    .score-table td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.8); }
+    .score-bar-wrap { background: rgba(255,255,255,0.07); border-radius: 4px; height: 6px; width: 100%; }
+    .score-bar-fill { height: 6px; border-radius: 4px; background: var(--accent); transition: width 0.4s; }
+
+    /* Notifications */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+      background: rgba(12,28,56,0.95); border: 1px solid rgba(0,212,255,0.3);
+      border-radius: 10px; padding: 12px 20px; font-size: 13px; color: #fff;
+      display: flex; align-items: center; gap: 10px; opacity: 0;
+      transform: translateY(10px); transition: all 0.3s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast-icon { font-size: 16px; }
+  </style>
+</head>
+<body>
+<div class="ambient-bg"></div>
+<div class="gradient-mesh"></div>
+
+<div class="app-container">
+  <!-- Sidebar (same nav as dashboard) -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      </div>
+      <div class="sidebar-title">
+        <h1>Simplify Governance</h1>
+        <span>Rule Engine Admin</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="edd_case.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+          <span>EDD Cases</span>
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Risk & Compliance</div>
+        <a href="risk_management.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <span>Risk Lists</span>
+        </a>
+        <a href="dynamic_rule_engine.html" class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          <span>Dynamic Rule Engine</span>
+          <span class="nav-badge" style="background:#00D4FF;color:#000;">NEW</span>
+        </a>
+        <a href="decision-analytics-dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+          <span>Decision Analytics</span>
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">KYC Governance</div>
+        <a href="kyc_monitoring.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <span>KYC Monitoring</span>
+        </a>
+        <a href="audit_console.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span>Audit Console</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="user-avatar" style="background: linear-gradient(135deg,#00D4FF,#1F3A5F); display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:14px;">AD</div>
+      <div class="user-info">
+        <div class="user-name">Admin</div>
+        <div class="user-role">Rule Engine Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <h1 class="page-title">Dynamic EDD Rule Engine</h1>
+        <div class="breadcrumb">
+          <span>Home</span> / <span>Rule Engine Admin</span>
+        </div>
+      </div>
+      <div class="header-right" style="display:flex;gap:12px;align-items:center;">
+        <span class="engine-badge badge-nocode">⚙️ No-Code Config</span>
+        <span class="engine-badge badge-live">● Live</span>
+        <button class="btn btn-secondary btn-sm" id="btn-reset-defaults">Reset Defaults</button>
+        <button class="btn btn-primary btn-sm" id="btn-export-config">Export Config</button>
+      </div>
+    </header>
+
+    <!-- Architecture overview banner -->
+    <div style="background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);border-radius:12px;padding:16px 20px;margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.7);">
+          <strong style="color:#00D4FF;">5-Layer Dynamic EDD Architecture</strong> — All rules, weights and thresholds are configurable at runtime. Changes take effect immediately for new case evaluations.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;padding:4px 10px;background:rgba(0,0,0,0.3);border-radius:6px;color:rgba(255,255,255,0.7);">L1 · Data Fields</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(0,212,255,0.1);border-radius:6px;color:#00D4FF;">L2 · Field Scoring</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(0,212,255,0.1);border-radius:6px;color:#00D4FF;">L3 · Rule Engine</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(0,212,255,0.1);border-radius:6px;color:#00D4FF;">L4 · Risk Scoring</span>
+          <span style="font-size:11px;padding:4px 10px;background:rgba(0,212,255,0.1);border-radius:6px;color:#00D4FF;">L5 · Decision</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer Tabs -->
+    <div class="layer-tabs" id="layer-tabs">
+      <button class="layer-tab active" data-tab="rules">L3 · Rule Engine</button>
+      <button class="layer-tab" data-tab="weights">L4 · Risk Weights</button>
+      <button class="layer-tab" data-tab="thresholds">L5 · Decision Thresholds</button>
+      <button class="layer-tab" data-tab="evaluate">🧪 Live Evaluator</button>
+    </div>
+
+    <!-- ── PANEL: Rule Engine ── -->
+    <div class="layer-panel active" id="panel-rules">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Classification Rules</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Rules are evaluated in priority order. FORCE_DECISION rules short-circuit remaining evaluation.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-add-rule">+ Add Rule</button>
+      </div>
+      <div id="rules-container"><!-- rendered by JS --></div>
+    </div>
+
+    <!-- ── PANEL: Risk Weights ── -->
+    <div class="layer-panel" id="panel-weights">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:15px;font-weight:700;color:#fff;">Field Risk Weights</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Weights determine the contribution of each field to the composite risk score. Total should sum to 1.0.</div>
+      </div>
+      <div class="card">
+        <div class="card-body" id="weights-container"><!-- rendered by JS --></div>
+        <div style="padding:16px 20px;border-top:1px solid rgba(0,212,255,0.1);display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:12px;color:var(--text-secondary);">Total weight: <strong id="total-weight" style="color:#00D4FF;">1.00</strong></span>
+          <button class="btn btn-primary btn-sm" id="btn-save-weights">Save Weights</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PANEL: Decision Thresholds ── -->
+    <div class="layer-panel" id="panel-thresholds">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:15px;font-weight:700;color:#fff;">Decision Thresholds</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Set the minimum composite score for each risk category. Scored from highest to lowest.</div>
+      </div>
+      <div class="threshold-grid" id="thresholds-container"><!-- rendered by JS --></div>
+      <div style="margin-top:16px;text-align:right;">
+        <button class="btn btn-primary btn-sm" id="btn-save-thresholds">Save Thresholds</button>
+      </div>
+    </div>
+
+    <!-- ── PANEL: Live Evaluator ── -->
+    <div class="layer-panel" id="panel-evaluate">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:15px;font-weight:700;color:#fff;">Live Customer Evaluator</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px;">Enter customer field values to see how the engine scores and decides in real time.</div>
+      </div>
+      <div class="eval-grid">
+        <!-- Input Form -->
+        <div class="card">
+          <div class="card-header" style="padding:16px 20px;border-bottom:1px solid rgba(0,212,255,0.1);">
+            <div class="card-title" style="font-size:13px;font-weight:700;">Customer Data Input</div>
+          </div>
+          <div class="card-body" style="padding:16px 20px;" id="eval-form">
+            <!-- rendered by JS -->
+          </div>
+          <div style="padding:12px 20px;border-top:1px solid rgba(0,212,255,0.1);display:flex;gap:10px;">
+            <button class="btn btn-primary" id="btn-evaluate" style="flex:1;">Evaluate</button>
+            <button class="btn btn-secondary btn-sm" id="btn-demo-high">High Risk Demo</button>
+            <button class="btn btn-secondary btn-sm" id="btn-demo-low">Low Risk Demo</button>
+          </div>
+        </div>
+
+        <!-- Result Panel -->
+        <div class="card" id="eval-result-panel">
+          <div class="card-header" style="padding:16px 20px;border-bottom:1px solid rgba(0,212,255,0.1);">
+            <div class="card-title" style="font-size:13px;font-weight:700;">Evaluation Result</div>
+          </div>
+          <div class="card-body" style="padding:20px;text-align:center;" id="eval-result">
+            <div style="color:rgba(255,255,255,0.3);font-size:13px;margin-top:40px;">Enter customer data and click Evaluate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ── Add / Edit Rule Modal ── -->
+<div class="modal-overlay" id="rule-modal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Add Rule</div>
+    <input type="hidden" id="modal-rule-id">
+    <div class="form-row">
+      <label>Rule Name (English)</label>
+      <input type="text" id="modal-rule-name" placeholder="e.g. Auto-Escalate: PEP Customer">
+    </div>
+    <div class="form-row">
+      <label>Rule Name (Arabic)</label>
+      <input type="text" id="modal-rule-name-ar" dir="rtl" placeholder="مثال: تصعيد تلقائي">
+    </div>
+    <div class="form-row">
+      <label>Priority (lower = evaluated first)</label>
+      <input type="number" id="modal-rule-priority" min="1" max="100" value="10">
+    </div>
+    <div class="form-row">
+      <label>Condition Logic</label>
+      <select id="modal-rule-logic">
+        <option value="AND">AND — All conditions must match</option>
+        <option value="OR">OR — Any condition must match</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Conditions</label>
+      <div class="condition-builder" id="modal-conditions"></div>
+      <button class="btn btn-secondary btn-sm" id="btn-add-condition" style="margin-top:6px;">+ Add Condition</button>
+    </div>
+    <div class="form-row">
+      <label>Action Type</label>
+      <select id="modal-action-type" onchange="updateActionForm()">
+        <option value="FORCE_DECISION">FORCE_DECISION — Override final decision</option>
+        <option value="BOOST_SCORE">BOOST_SCORE — Increase composite score</option>
+        <option value="REDUCE_SCORE">REDUCE_SCORE — Decrease composite score</option>
+      </select>
+    </div>
+    <div id="modal-action-params"><!-- rendered dynamically --></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;">
+      <button class="btn btn-secondary" id="btn-modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="btn-modal-save">Save Rule</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✅</span>
+  <span id="toast-msg"></span>
+</div>
+
+<script src="js/dynamic_edd_engine.js"></script>
+<script src="js/dynamic_rule_engine_ui.js"></script>
+</body>
+</html>
