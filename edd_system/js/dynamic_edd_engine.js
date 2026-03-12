@@ -215,10 +215,10 @@ const DEFAULT_ENGINE_CONFIG = {
 
   /* ── Layer 5 · Decision Thresholds ───────────────────────── */
   decisionThresholds: {
-    CRITICAL: { min: 90, decision: 'EDD_REQUIRED', label: 'Critical Risk', labelAr: 'مخاطر حرجة', color: '#FF1744' },
-    HIGH: { min: 70, decision: 'EDD_REQUIRED', label: 'High Risk', labelAr: 'مخاطر عالية', color: '#FF5252' },
-    MEDIUM: { min: 40, decision: 'EDD_REVIEW', label: 'Medium Risk', labelAr: 'مخاطر متوسطة', color: '#FFA726' },
-    LOW: { min: 0, decision: 'CDD_SUFFICIENT', label: 'Low Risk', labelAr: 'مخاطر منخفضة', color: '#00E676' },
+    CRITICAL: { min: 90, decision: 'ESCALATE TO COMPLIANCE', internalCode: 'EDD_REQUIRED', label: 'Critical Risk', labelAr: 'مخاطر حرجة — تصعيد فوري', color: '#FF1744' },
+    HIGH:     { min: 70, decision: 'ESCALATE TO COMPLIANCE', internalCode: 'EDD_REQUIRED', label: 'High Risk',     labelAr: 'مخاطر عالية — تصعيد إلى الامتثال', color: '#FF5252' },
+    MEDIUM:   { min: 40, decision: 'REQUEST ADDITIONAL INFO', internalCode: 'EDD_REVIEW',  label: 'Medium Risk',   labelAr: 'مخاطر متوسطة — طلب معلومات إضافية', color: '#FFA726' },
+    LOW:      { min: 0,  decision: 'CLOSE CASE',             internalCode: 'CDD_SUFFICIENT', label: 'Low Risk',   labelAr: 'مخاطر منخفضة — إغلاق الحالة', color: '#00E676' },
   },
 };
 
@@ -261,6 +261,30 @@ function saveConfig(config) {
   } catch (e) {
     console.error('[DynamicEDDEngine] Failed to save config:', e);
     return false;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AUDIT LOG HELPERS
+   ───────────────────────────────────────────────────────────── */
+
+const AUDIT_LOG_KEY = 'edd_audit_log';
+const MAX_AUDIT_ENTRIES = 500;
+
+function appendAuditLog(action, details) {
+  try {
+    const raw = localStorage.getItem(AUDIT_LOG_KEY);
+    const log = raw ? JSON.parse(raw) : [];
+    log.unshift({
+      timestamp: new Date().toISOString(),
+      action,
+      actor: (typeof window !== 'undefined' && window._eddCurrentUser) || 'Admin',
+      details,
+    });
+    if (log.length > MAX_AUDIT_ENTRIES) log.length = MAX_AUDIT_ENTRIES;
+    localStorage.setItem(AUDIT_LOG_KEY, JSON.stringify(log));
+  } catch (e) {
+    console.warn('[DynamicEDDEngine] Failed to write audit log:', e);
   }
 }
 
@@ -347,8 +371,15 @@ function evaluateCondition(condition, customerData) {
   }
 }
 
-function evaluateRule(rule, customerData) {
+function evaluateRule(rule, customerData, enabledFieldIds) {
   if (!rule.enabled) return false;
+
+  // If any condition references a disabled field, skip the rule and signal it
+  if (enabledFieldIds) {
+    const depDisabled = rule.conditions.some((c) => !enabledFieldIds.includes(c.field));
+    if (depDisabled) return 'DEPENDENT_RULES_DISABLED';
+  }
+
   const results = rule.conditions.map((c) => evaluateCondition(c, customerData));
   return rule.logic === 'OR' ? results.some(Boolean) : results.every(Boolean);
 }
@@ -373,6 +404,56 @@ function computeBaseScore(customerData, config) {
   }
 
   return totalWeight > 0 ? Math.round(weightedScore / totalWeight) : 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LAYER 4b — EXPLAINABILITY ENGINE
+   ───────────────────────────────────────────────────────────── */
+
+const EXPLAINABILITY_MAP = {
+  nationality: {
+    HIGH_RISK_LIST:    'High Risk Country',
+    MEDIUM_RISK_LIST:  'Medium Risk Country',
+  },
+  pep:             { true: 'Politically Exposed Person (PEP)', false: null },
+  sanctions:       { true: 'Sanctions List Match', false: null },
+  adverse_media:   { true: 'Adverse Media Hit', false: null },
+  occupation: {
+    'Money Services':           'High Risk Occupation: Money Services',
+    'Political / Government':   'High Risk Occupation: Political / Government',
+    'Real Estate':              'Elevated Risk Occupation: Real Estate',
+    'Cash Intensive Business':  'High Risk Occupation: Cash Intensive Business',
+  },
+  income:            { high: 'Unusually High Income Level', variance: 'Income Variance' },
+  transaction_volume:{ high: 'Unusual Transaction Pattern',  moderate: 'Above-Average Transaction Volume' },
+  country_risk:      { high: 'High Country Risk Score', moderate: 'Elevated Country Risk' },
+};
+
+function buildExplainability(fieldScores) {
+  const reasons = [];
+  for (const fs of fieldScores) {
+    const map = EXPLAINABILITY_MAP[fs.fieldId];
+    if (!map) continue;
+    const val = String(fs.rawValue);
+
+    if (map[val] !== undefined) {
+      if (map[val]) reasons.push(map[val]);
+      continue;
+    }
+
+    // Numeric-tier reasons
+    if (fs.fieldId === 'income') {
+      if (fs.score >= 70) reasons.push(EXPLAINABILITY_MAP.income.high);
+      else if (fs.score >= 40) reasons.push(EXPLAINABILITY_MAP.income.variance);
+    } else if (fs.fieldId === 'transaction_volume') {
+      if (fs.score >= 70) reasons.push(EXPLAINABILITY_MAP.transaction_volume.high);
+      else if (fs.score >= 40) reasons.push(EXPLAINABILITY_MAP.transaction_volume.moderate);
+    } else if (fs.fieldId === 'country_risk') {
+      if (fs.score >= 70) reasons.push(EXPLAINABILITY_MAP.country_risk.high);
+      else if (fs.score >= 40) reasons.push(EXPLAINABILITY_MAP.country_risk.moderate);
+    }
+  }
+  return reasons;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -402,15 +483,24 @@ const DynamicEDDEngine = {
   evaluate(customerData, overrideConfig = null) {
     const config = overrideConfig || loadConfig();
     const triggeredRules = [];
+    const dependentDisabledRules = [];
     let scoreAdjustment = 0;
     let forcedDecision = null;
+
+    // Build the set of currently enabled field IDs for dependency checking
+    const enabledFieldIds = config.fields.filter((f) => f.enabled).map((f) => f.id);
 
     // Sort rules by priority
     const sortedRules = [...config.rules].sort((a, b) => a.priority - b.priority);
 
     // Layer 3 — Rule Engine pass
     for (const rule of sortedRules) {
-      if (evaluateRule(rule, customerData)) {
+      const result = evaluateRule(rule, customerData, enabledFieldIds);
+      if (result === 'DEPENDENT_RULES_DISABLED') {
+        dependentDisabledRules.push({ id: rule.id, name: rule.name });
+        continue; // skip — dependent field is disabled
+      }
+      if (result === true) {
         triggeredRules.push(rule);
         if (rule.action.type === 'FORCE_DECISION') {
           forcedDecision = rule.action;
@@ -430,12 +520,14 @@ const DynamicEDDEngine = {
     // Layer 5 — Decision
     let decision;
     if (forcedDecision) {
+      const thr = config.decisionThresholds[forcedDecision.riskCategory] || {};
       decision = {
         category: forcedDecision.riskCategory,
-        decision: forcedDecision.decision,
-        label: config.decisionThresholds[forcedDecision.riskCategory]?.label || forcedDecision.riskCategory,
-        labelAr: config.decisionThresholds[forcedDecision.riskCategory]?.labelAr || '',
-        color: config.decisionThresholds[forcedDecision.riskCategory]?.color || '#FF5252',
+        decision: thr.decision || forcedDecision.decision || forcedDecision.riskCategory,
+        internalCode: thr.internalCode || forcedDecision.decision,
+        label: thr.label || forcedDecision.riskCategory,
+        labelAr: thr.labelAr || '',
+        color: thr.color || '#FF5252',
         forced: true,
         forcedByRule: triggeredRules[0]?.id,
       };
@@ -444,21 +536,28 @@ const DynamicEDDEngine = {
       decision.forced = false;
     }
 
+    // Layer 4b — Explainability
+    const computedFieldScores = config.fields
+      .filter((f) => f.enabled)
+      .map((f) => ({
+        fieldId: f.id,
+        label: f.label,
+        rawValue: customerData[f.id],
+        score: scoreField(f.id, customerData[f.id], config.fieldScoring),
+        weight: config.weights[f.id] || 0,
+      }));
+
+    const riskReasons = buildExplainability(computedFieldScores);
+
     return {
       baseScore,
       scoreAdjustment,
       finalScore,
       decision,
       triggeredRules: triggeredRules.map((r) => ({ id: r.id, name: r.name })),
-      fieldScores: config.fields
-        .filter((f) => f.enabled)
-        .map((f) => ({
-          fieldId: f.id,
-          label: f.label,
-          rawValue: customerData[f.id],
-          score: scoreField(f.id, customerData[f.id], config.fieldScoring),
-          weight: config.weights[f.id] || 0,
-        })),
+      dependentDisabledRules,
+      fieldScores: computedFieldScores,
+      riskReasons,
       evaluatedAt: new Date().toISOString(),
     };
   },
@@ -487,6 +586,7 @@ const DynamicEDDEngine = {
     rule.id = rule.id || 'RULE-' + Date.now();
     config.rules.push(rule);
     saveConfig(config);
+    appendAuditLog('RULE_ADDED', { ruleId: rule.id, ruleName: rule.name });
     return rule.id;
   },
 
@@ -496,15 +596,21 @@ const DynamicEDDEngine = {
     if (idx === -1) return false;
     config.rules[idx] = { ...config.rules[idx], ...updates };
     saveConfig(config);
+    appendAuditLog('RULE_UPDATED', { ruleId, changes: Object.keys(updates) });
     return true;
   },
 
   deleteRule(ruleId) {
     const config = loadConfig();
     const before = config.rules.length;
+    const deleted = config.rules.find((r) => r.id === ruleId);
     config.rules = config.rules.filter((r) => r.id !== ruleId);
     saveConfig(config);
-    return config.rules.length < before;
+    if (config.rules.length < before) {
+      appendAuditLog('RULE_DELETED', { ruleId, ruleName: deleted?.name });
+      return true;
+    }
+    return false;
   },
 
   updateWeights(weights) {
@@ -523,6 +629,46 @@ const DynamicEDDEngine = {
     const config = loadConfig();
     config.fieldScoring[fieldId] = { ...config.fieldScoring[fieldId], ...scoringMap };
     saveConfig(config);
+  },
+
+  /* Enable or disable a single field. Rules that reference disabled fields
+     will be skipped during evaluation (DEPENDENT_RULES_DISABLED).          */
+  updateFieldEnabled(fieldId, enabled) {
+    const config = loadConfig();
+    const field = config.fields.find((f) => f.id === fieldId);
+    if (!field) return false;
+    field.enabled = Boolean(enabled);
+    saveConfig(config);
+    appendAuditLog('FIELD_TOGGLED', { fieldId, enabled: field.enabled });
+    return true;
+  },
+
+  /* ── Audit Trail ─────────────────────────────────────────── */
+
+  getAuditLog() {
+    try {
+      const raw = localStorage.getItem(AUDIT_LOG_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  },
+
+  clearAuditLog() {
+    localStorage.removeItem(AUDIT_LOG_KEY);
+  },
+
+  /* ── Batch Evaluation (Performance Test) ────────────────── */
+
+  /**
+   * Evaluate an array of customer records in one call.
+   * @param {object[]} customers  - Array of customer data objects
+   * @param {object}   [overrideConfig]
+   * @returns {object[]} Array of evaluation results
+   */
+  evaluateBatch(customers, overrideConfig = null) {
+    const config = overrideConfig || loadConfig();
+    return customers.map((c) => this.evaluate(c, config));
   },
 
   /* ── Demo Helper ─────────────────────────────────────────── */

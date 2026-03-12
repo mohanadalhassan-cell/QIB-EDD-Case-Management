@@ -36,6 +36,8 @@ document.getElementById('layer-tabs').addEventListener('click', (e) => {
   document.querySelectorAll('.layer-panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  // Lazy-render audit log when that tab is opened
+  if (btn.dataset.tab === 'audit') renderAuditLog();
 });
 
 /* ══════════════════════════════════════════════════════════
@@ -70,13 +72,23 @@ function actionBadge(rule) {
 
 function renderRules() {
   config = DynamicEDDEngine.getConfig();
+  const enabledFieldIds = config.fields.filter((f) => f.enabled).map((f) => f.id);
   const container = document.getElementById('rules-container');
   const sorted = [...config.rules].sort((a, b) => a.priority - b.priority);
   if (sorted.length === 0) {
     container.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">No rules configured. Click "+ Add Rule" to create one.</div>';
     return;
   }
-  container.innerHTML = sorted.map(rule => `
+  container.innerHTML = sorted.map(rule => {
+    // Detect if any condition references a currently-disabled field
+    const disabledDeps = rule.conditions
+      .map((c) => c.field)
+      .filter((f) => !enabledFieldIds.includes(f));
+    const hasDep = disabledDeps.length > 0;
+    const depBadge = hasDep
+      ? `<span class="engine-badge" style="background:rgba(255,167,38,0.15);color:#FFA726;border:1px solid rgba(255,167,38,0.3);">⚠ DEPENDENT RULES DISABLED</span>`
+      : '';
+    return `
     <div class="rule-card ${rule.enabled ? '' : 'disabled'}" data-rule-id="${esc(rule.id)}">
       <div class="rule-header">
         <div>
@@ -86,6 +98,7 @@ function renderRules() {
         <div class="rule-meta">
           <span style="font-size:11px;color:rgba(255,255,255,0.4);">P${esc(String(rule.priority))}</span>
           ${actionBadge(rule)}
+          ${depBadge}
           <label class="toggle-switch" title="${rule.enabled ? 'Disable' : 'Enable'} rule">
             <input type="checkbox" ${rule.enabled ? 'checked' : ''} data-rule-id="${esc(rule.id)}" class="rule-toggle">
             <span class="toggle-slider"></span>
@@ -98,7 +111,7 @@ function renderRules() {
         <span style="font-size:11px;color:rgba(255,255,255,0.4);">IF</span>
         ${rule.conditions.map((c, i) => `
           ${i > 0 ? `<span class="condition-logic">${esc(rule.logic)}</span>` : ''}
-          <span class="condition-chip">
+          <span class="condition-chip${!enabledFieldIds.includes(c.field) ? ' dep-disabled' : ''}">
             <span style="color:#fff;">${esc(c.field)}</span>
             <span class="condition-op">${esc(OPERATORS[c.operator] || c.operator)}</span>
             <span style="color:#FFA726;">${esc(Array.isArray(c.value) ? c.value.join(', ') : String(c.value))}</span>
@@ -114,7 +127,7 @@ function renderRules() {
         }
       </div>
     </div>
-  `).join('');
+  `}).join('');
 
   // Attach event listeners using data attributes (avoids inline handler injection)
   container.querySelectorAll('.rule-toggle').forEach(el => {
@@ -444,7 +457,7 @@ function getEvalData() {
 }
 
 function showResult(result) {
-  const { finalScore, baseScore, scoreAdjustment, decision, triggeredRules, fieldScores } = result;
+  const { finalScore, baseScore, scoreAdjustment, decision, triggeredRules, fieldScores, riskReasons, dependentDisabledRules } = result;
   const pct = finalScore + '%';
   const gaugeColor = safeColor(decision.color || '#00E676');
   document.getElementById('eval-result').innerHTML = `
@@ -459,16 +472,33 @@ function showResult(result) {
         ${esc(decision.label || decision.category)}
       </span>
     </div>
-    <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">${esc(decision.decision)}</div>
+    <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:0.5px;">${esc(decision.decision)}</div>
+    ${decision.internalCode && decision.internalCode !== decision.decision
+      ? `<div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:8px;">${esc(decision.internalCode)}</div>`
+      : ''}
     ${decision.forced
       ? `<div style="font-size:11px;color:#FFA726;margin-bottom:12px;">⚡ Forced by rule: ${esc(String(decision.forcedByRule))}</div>`
       : `<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:12px;">Base: ${esc(String(baseScore))} ${scoreAdjustment >= 0 ? '+' : ''}${esc(String(scoreAdjustment))} adj = <strong>${esc(String(finalScore))}</strong></div>`
     }
+
+    ${riskReasons && riskReasons.length > 0 ? `
+    <div style="text-align:left;margin-bottom:14px;background:rgba(255,82,82,0.07);border:1px solid rgba(255,82,82,0.15);border-radius:8px;padding:12px 14px;">
+      <div style="font-size:11px;font-weight:700;color:#FF5252;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">⚠ Risk Triggered By:</div>
+      ${riskReasons.map(r => `<div style="font-size:12px;color:rgba(255,255,255,0.8);margin-bottom:4px;">• ${esc(r)}</div>`).join('')}
+    </div>` : ''}
+
     ${triggeredRules.length > 0 ? `
     <div style="text-align:left;margin-bottom:12px;">
       <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:6px;">Triggered Rules:</div>
       ${triggeredRules.map(r => `<div style="font-size:11px;color:#FFA726;margin-bottom:2px;">▶ ${esc(r.id)}: ${esc(r.name)}</div>`).join('')}
     </div>` : ''}
+
+    ${dependentDisabledRules && dependentDisabledRules.length > 0 ? `
+    <div style="text-align:left;margin-bottom:12px;background:rgba(255,167,38,0.07);border:1px solid rgba(255,167,38,0.2);border-radius:8px;padding:8px 12px;">
+      <div style="font-size:11px;color:#FFA726;font-weight:700;margin-bottom:4px;">⚠ DEPENDENT RULES DISABLED (skipped):</div>
+      ${dependentDisabledRules.map(r => `<div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:2px;">↳ ${esc(r.id)}: ${esc(r.name)}</div>`).join('')}
+    </div>` : ''}
+
     <table class="score-table" style="text-align:left;margin-top:4px;">
       <thead><tr><th>Field</th><th>Score</th><th>Weight</th><th></th></tr></thead>
       <tbody>
@@ -533,7 +563,7 @@ document.getElementById('btn-demo-low').addEventListener('click', () => {
 document.getElementById('btn-reset-defaults').addEventListener('click', () => {
   if (!confirm('Reset all rules, weights and thresholds to factory defaults?')) return;
   config = DynamicEDDEngine.resetToDefaults();
-  renderRules(); renderWeights(); renderThresholds(); renderEvalForm();
+  renderRules(); renderWeights(); renderThresholds(); renderEvalForm(); renderFields();
   showToast('Configuration reset to defaults', '🔄');
 });
 
@@ -547,8 +577,94 @@ document.getElementById('btn-export-config').addEventListener('click', () => {
   showToast('Configuration exported');
 });
 
+/* ══════════════════════════════════════════════════════════
+   LAYER 1 — FIELD TOGGLE RENDERING
+   ══════════════════════════════════════════════════════════ */
+
+function renderFields() {
+  config = DynamicEDDEngine.getConfig();
+  const container = document.getElementById('fields-container');
+  if (!container) return;
+  container.innerHTML = config.fields.map(f => `
+    <div class="weight-row" style="align-items:center;">
+      <div class="weight-label" style="flex:1;">
+        <div style="font-size:13px;color:${f.enabled ? '#fff' : 'rgba(255,255,255,0.35)'};">${esc(f.label)}</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;">${esc(f.id)} · ${esc(f.type)} · ${esc(f.dataSource)}</div>
+      </div>
+      <label class="toggle-switch" title="${f.enabled ? 'Disable' : 'Enable'} field">
+        <input type="checkbox" ${f.enabled ? 'checked' : ''} class="field-toggle" data-field-id="${esc(f.id)}">
+        <span class="toggle-slider"></span>
+      </label>
+      <span style="width:80px;font-size:11px;color:${f.enabled ? '#00E676' : '#FFA726'};text-align:right;">
+        ${f.enabled ? 'ENABLED' : 'DISABLED'}
+      </span>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.field-toggle').forEach(el => {
+    el.addEventListener('change', () => {
+      DynamicEDDEngine.updateFieldEnabled(el.dataset.fieldId, el.checked);
+      config = DynamicEDDEngine.getConfig();
+      showToast(`Field "${el.dataset.fieldId}" ${el.checked ? 'enabled' : 'disabled'}`, el.checked ? '✅' : '⏸');
+      renderFields();
+      renderWeights();
+      renderRules();   // update dependency badges
+      renderEvalForm(); // remove/add field from evaluator
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   AUDIT TRAIL RENDERING
+   ══════════════════════════════════════════════════════════ */
+
+const ACTION_ICONS = {
+  RULE_ADDED:   '➕',
+  RULE_UPDATED: '✏️',
+  RULE_DELETED: '🗑',
+  FIELD_TOGGLED:'🔀',
+};
+
+function renderAuditLog() {
+  const container = document.getElementById('audit-container');
+  if (!container) return;
+  const log = DynamicEDDEngine.getAuditLog();
+  if (log.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">No audit events recorded yet.</div>';
+    return;
+  }
+  container.innerHTML = `
+    <table class="score-table" style="width:100%;">
+      <thead><tr>
+        <th style="width:160px;">Timestamp</th>
+        <th style="width:40px;">Event</th>
+        <th>Action</th>
+        <th>Actor</th>
+        <th>Details</th>
+      </tr></thead>
+      <tbody>
+        ${log.map(entry => `
+        <tr>
+          <td style="font-size:11px;color:rgba(255,255,255,0.4);">${esc(new Date(entry.timestamp).toLocaleString())}</td>
+          <td style="text-align:center;">${ACTION_ICONS[entry.action] || '📋'}</td>
+          <td style="color:#00D4FF;">${esc(entry.action)}</td>
+          <td style="color:rgba(255,255,255,0.6);">${esc(entry.actor || 'Admin')}</td>
+          <td style="font-size:11px;color:rgba(255,255,255,0.5);">${esc(JSON.stringify(entry.details))}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+document.getElementById('btn-clear-audit') && document.getElementById('btn-clear-audit').addEventListener('click', () => {
+  if (!confirm('Clear all audit log entries?')) return;
+  DynamicEDDEngine.clearAuditLog();
+  renderAuditLog();
+  showToast('Audit log cleared', '🗑');
+});
+
 /* ── Initial Render ── */
 renderRules();
 renderWeights();
 renderThresholds();
 renderEvalForm();
+renderFields();
