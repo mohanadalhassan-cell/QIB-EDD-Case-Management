@@ -13,6 +13,10 @@
   <script src="js/sample_data_generator.js"></script>
   <script src="js/edd_data_model.js"></script>
   <script src="js/data_bridge.js"></script>
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <!-- Language & Voice Features -->
+  <script src="js/language-pack.js"></script>
+  <script src="js/voice-assistant.js"></script>
   <style>
     /* ═══════════════════════════════════════════════════════════════
        QIB 3D DIGITAL COMMAND CENTER — PREMIUM EXECUTIVE CONTROL ROOM
@@ -659,9 +663,17 @@
       <!-- Top Bar -->
       <div class="cc-top-bar">
         <h1 class="cc-title">⚡ QIB Digital Command Center — 3D Executive Control Room</h1>
-        <div class="cc-status">
-          <span class="cc-status-dot"></span>
-          <span>System: ACTIVE</span>
+        <div class="cc-status" style="display: flex; align-items: center; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="cc-status-dot"></span>
+            <span>System: ACTIVE</span>
+          </div>
+          <!-- Language & Voice Controls -->
+          <button id="lang-switch-btn" onclick="window.languageSwitcher && window.languageSwitcher()" title="🇬🇧 EN / 🇶🇦 AR" style="padding: 6px 10px; background: linear-gradient(135deg, #42A5F5, #1E88E5); border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 11px; font-weight: 600;">
+            <span id="lang-label">EN</span>
+          </button>
+          <button id="explain-btn" onclick="VoiceAssistant && VoiceAssistant.explainCurrentPage()" title="Explain Page" style="padding: 6px 10px; background: linear-gradient(135deg, #FFA726, #F57C00); border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 11px;">🔊</button>
+          <button id="voice-btn" onclick="VoiceAssistant && VoiceAssistant.startListening()" title="Voice Commands" style="padding: 6px 10px; background: linear-gradient(135deg, #1DBF73, #00A854); border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 11px;">🎤</button>
         </div>
       </div>
 
@@ -1396,6 +1408,25 @@
         cancelAnimationFrame(animationId);
       }
     });
+  </script>
+  
+  <!-- Language & Voice Initialization -->
+  <script>
+    if (typeof initLanguageSystem === 'function') {
+      initLanguageSystem();
+      window.languageSwitcher = function() {
+        const currentLang = localStorage.getItem('userLanguage') || 'en';
+        const newLang = currentLang === 'en' ? 'ar' : 'en';
+        setGlobalLanguage(newLang);
+        document.body.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = newLang;
+        document.getElementById('lang-label').textContent = newLang === 'ar' ? 'AR' : 'EN';
+        location.reload();
+      };
+      const currentLang = localStorage.getItem('userLanguage') || 'en';
+      document.getElementById('lang-label').textContent = currentLang === 'ar' ? 'AR' : 'EN';
+      if (typeof VoiceAssistant !== 'undefined') console.log('✅ Voice Assistant loaded');
+    }
   </script>
 </body>
 </html>

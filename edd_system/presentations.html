@@ -8,7 +8,13 @@
   <meta name="lang" content="en-GB,ar-QA">
   <link rel="stylesheet" href="css/edd_system.css">
   <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/settings-drawer.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <!-- Language & Voice Features -->
+  <script src="js/language-pack.js"></script>
+  <script src="js/voice-assistant.js"></script>
   <style>
     /* Presentations Page Specific Styles */
     .presentations-grid {
@@ -780,7 +786,7 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
           <div class="user-name" id="user-name">WPS & Digital Back Office</div>
           <div class="user-role" id="user-role">Operations Management</div>
@@ -805,6 +811,16 @@
           <button class="header-btn" title="Notifications">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
             <span class="badge">3</span>
+          </button>
+          <!-- Language & Voice Controls -->
+          <button class="btn btn-info btn-sm" id="lang-switch-btn" onclick="window.languageSwitcher && window.languageSwitcher()" title="🇬🇧 EN / 🇶🇦 AR" style="padding: 8px 12px; background: linear-gradient(135deg, #42A5F5, #1E88E5); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">
+            <span id="lang-label">EN</span>
+          </button>
+          <button class="btn btn-accent btn-sm" id="explain-btn" onclick="VoiceAssistant && VoiceAssistant.explainCurrentPage()" title="Explain Page" style="padding: 8px 12px; background: linear-gradient(135deg, #FFA726, #F57C00); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">🔊</button>
+          <button class="btn btn-success btn-sm" id="voice-btn" onclick="VoiceAssistant && VoiceAssistant.startListening()" title="Voice Commands" style="padding: 8px 12px; background: linear-gradient(135deg, #1DBF73, #00A854); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">🎤</button>
+          <button class="theme-toggle-btn" id="theme-toggle-btn" title="Switch to Light Mode">☀️</button>
+          <button class="settings-toggle-btn" id="settings-toggle-btn" title="Settings" onclick="SettingsDrawer.toggle()">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.09-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.11.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.11.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.09.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.11-.62l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
           </button>
           <button class="header-btn" id="logout-btn" title="Logout">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
@@ -1503,15 +1519,15 @@
           </button>
 
           <!-- Fullscreen Toggle Button -->
-          <button class="pres-toggle-fullscreen" onclick="togglePresentationFullscreen()" title="Toggle Fullscreen (F)" style="position: absolute; top: 24px; right: 90px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+          <button class="pres-toggle-fullscreen" onclick="togglePresentationFullscreen()" title="Toggle Fullscreen (F)" style="position: absolute; top: 24px; right: 90px; background: rgba(0,212,255,0.2); border: 2px solid #00D4FF; color: #00D4FF; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
             <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
           </button>
 
           <!-- Zoom Controls -->
-          <div class="pres-zoom-controls" style="position: absolute; top: 24px; right: 155px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; display: flex; gap: 8px; padding: 8px; z-index: 100;">
-            <button onclick="zoomPresentation(-0.1)" style="background: transparent; border: none; color: white; cursor: pointer; padding: 4px 8px; font-size: 16px; border-radius: 6px; transition: all 0.2s;" title="Zoom Out">−</button>
-            <span id="zoomPercentage" style="color: white; padding: 4px 8px; font-size: 12px; min-width: 40px; text-align: center;">100%</span>
-            <button onclick="zoomPresentation(0.1)" style="background: transparent; border: none; color: white; cursor: pointer; padding: 4px 8px; font-size: 16px; border-radius: 6px; transition: all 0.2s;" title="Zoom In">+</button>
+          <div class="pres-zoom-controls" style="position: absolute; top: 24px; right: 155px; background: rgba(0,212,255,0.1); border: 2px solid rgba(0,212,255,0.5); border-radius: 10px; display: flex; gap: 8px; padding: 8px; z-index: 100;">
+            <button onclick="zoomPresentation(-0.1)" style="background: transparent; border: none; color: #00D4FF; cursor: pointer; padding: 4px 8px; font-size: 16px; border-radius: 6px; transition: all 0.2s;" title="Zoom Out">−</button>
+            <span id="zoomPercentage" style="color: #00D4FF; padding: 4px 8px; font-size: 12px; min-width: 40px; text-align: center;">100%</span>
+            <button onclick="zoomPresentation(0.1)" style="background: transparent; border: none; color: #00D4FF; cursor: pointer; padding: 4px 8px; font-size: 16px; border-radius: 6px; transition: all 0.2s;" title="Zoom In">+</button>
           </div>
 
           <!-- Header Bar -->
@@ -1708,28 +1724,34 @@
 
           .pres-slide-container {
             flex: 1;
-            max-width: 1200px;
+            max-width: 1400px;
+            width: 100%;
             margin: 0 auto;
-            padding: 60px 120px;
+            padding: 40px 80px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow-y: auto;
-            max-height: 80vh;
+            overflow: hidden;
           }
 
           .pres-slide {
             width: 100%;
             animation: slideIn 0.5s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
           }
 
           .pres-slide-title {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
+            width: 100%;
           }
 
           .pres-slide-title h2 {
-            font-size: 48px;
+            font-size: 40px;
             font-weight: 700;
             color: white;
             margin: 0;
@@ -1737,9 +1759,9 @@
           }
 
           .pres-slide-title p {
-            font-size: 20px;
+            font-size: 16px;
             color: rgba(255,255,255,0.5);
-            margin-top: 10px;
+            margin-top: 8px;
             direction: rtl;
           }
 
@@ -1751,17 +1773,19 @@
           /* Content Wrapper - contains all slide content */
           .pres-content-wrapper {
             color: rgba(255,255,255,0.85);
-            font-size: 15px;
-            line-height: 1.8;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 100%;
+            text-align: center;
           }
 
           .pres-content-wrapper h3,
           .pres-content-wrapper .pres-section-title {
             color: #00D4FF;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            margin: 24px 0 16px 0;
-            padding-bottom: 8px;
+            margin: 16px 0 12px 0;
+            padding-bottom: 6px;
             border-bottom: 1px solid rgba(0,212,255,0.3);
           }
 
@@ -1771,7 +1795,7 @@
           }
 
           .pres-content-wrapper p {
-            margin: 12px 0;
+            margin: 8px 0;
             color: rgba(255,255,255,0.8);
           }
 
@@ -1780,13 +1804,14 @@
           }
 
           .pres-content-wrapper ul {
-            margin: 12px 0;
-            padding-left: 24px;
+            margin: 8px 0;
+            padding-left: 20px;
           }
 
           .pres-content-wrapper li {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: rgba(255,255,255,0.8);
+            font-size: 13px;
           }
 
           .pres-content-wrapper pre {
@@ -1801,39 +1826,41 @@
           .pres-content-card {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px 0;
             transition: all 0.3s ease;
           }
 
           .pres-content-card:hover {
             background: rgba(255,255,255,0.06);
             border-color: rgba(0,212,255,0.3);
-            transform: translateY(-4px);
+            transform: translateY(-2px);
           }
 
           .pres-content-card h4 {
             color: #00D4FF;
-            font-size: 16px;
-            margin: 0 0 12px 0;
+            font-size: 14px;
+            margin: 0 0 8px 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
           }
 
           .pres-content-card p, .pres-content-card ul {
             color: rgba(255,255,255,0.7);
-            font-size: 14px;
-            line-height: 1.7;
+            font-size: 12px;
+            line-height: 1.5;
             margin: 0;
           }
 
           .pres-content-card ul {
-            padding-left: 20px;
+            padding-left: 18px;
           }
 
           .pres-content-card li {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+            font-size: 12px;
           }
 
           .pres-footer {
@@ -1888,14 +1915,15 @@
           .pres-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 12px 0;
             background: rgba(0,0,0,0.2);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
+            font-size: 12px;
           }
 
           .pres-table th, .pres-table td {
-            padding: 16px 20px;
+            padding: 10px 14px;
             text-align: left;
             border-bottom: 1px solid rgba(255,255,255,0.08);
           }
@@ -1904,14 +1932,14 @@
             background: rgba(0,212,255,0.15);
             color: #00D4FF;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
           }
 
           .pres-table td {
             color: rgba(255,255,255,0.8);
-            font-size: 14px;
+            font-size: 11px;
           }
 
           .pres-table tr:hover td {
@@ -1923,34 +1951,34 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            padding: 20px;
-            margin: 20px 0;
+            gap: 4px;
+            padding: 12px;
+            margin: 12px 0;
           }
 
           .pres-workflow-step {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
           }
 
           .pres-workflow-box {
-            padding: 14px 24px;
+            padding: 10px 18px;
             background: rgba(0,212,255,0.1);
             border: 2px solid rgba(0,212,255,0.3);
-            border-radius: 12px;
+            border-radius: 10px;
             color: white;
             font-weight: 500;
             text-align: center;
-            min-width: 280px;
-            font-size: 14px;
+            min-width: 220px;
+            font-size: 12px;
           }
 
           .pres-workflow-box.highlight {
             background: rgba(0,212,255,0.2);
             border-color: #00D4FF;
-            box-shadow: 0 0 20px rgba(0,212,255,0.3);
+            box-shadow: 0 0 15px rgba(0,212,255,0.3);
           }
 
           .pres-workflow-box.warning {
@@ -1964,22 +1992,23 @@
           }
 
           .pres-workflow-arrow {
-            font-size: 28px;
+            font-size: 20px;
             color: rgba(0,212,255,0.5);
           }
 
           /* Responsive */
           @media (max-width: 768px) {
-            .pres-header { padding: 16px 20px; }
+            .pres-header { padding: 12px 16px; }
             .pres-header-icon { display: none; }
-            .pres-header-progress { margin-right: 0; }
-            .pres-slide-container { padding: 40px 40px; max-height: 75vh; }
-            .pres-slide-title h2 { font-size: 28px; }
+            .pres-header-progress { margin-right: 0; font-size: 12px; }
+            .pres-slide-container { padding: 20px 20px; }
+            .pres-slide-title h2 { font-size: 24px; }
+            .pres-slide-title p { font-size: 12px; }
             .pres-nav-arrow { width: 50px; height: 50px; }
             .pres-nav-left { left: 10px; }
             .pres-nav-right { right: 10px; }
-            .pres-zoom-controls { right: 80px !important; }
-            .pres-toggle-fullscreen { right: 30px !important; }
+            .pres-zoom-controls { right: 60px !important; }
+            .pres-toggle-fullscreen { right: 24px !important; }
           }
         </style>
       `;
@@ -2318,5 +2347,26 @@
 <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر 2030">🏛️</div>
 
   <script src="js/accessibility.js"></script>
+  <script src="js/theme-manager.js"></script>
+  <script src="js/settings-drawer.js"></script>
+  
+  <!-- Language & Voice Initialization -->
+  <script>
+    if (typeof initLanguageSystem === 'function') {
+      initLanguageSystem();
+      window.languageSwitcher = function() {
+        const currentLang = localStorage.getItem('userLanguage') || 'en';
+        const newLang = currentLang === 'en' ? 'ar' : 'en';
+        setGlobalLanguage(newLang);
+        document.body.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = newLang;
+        document.getElementById('lang-label').textContent = newLang === 'ar' ? 'AR' : 'EN';
+        location.reload();
+      };
+      const currentLang = localStorage.getItem('userLanguage') || 'en';
+      document.getElementById('lang-label').textContent = currentLang === 'ar' ? 'AR' : 'EN';
+      if (typeof VoiceAssistant !== 'undefined') console.log('✅ Voice Assistant loaded');
+    }
+  </script>
 </body>
 </html>

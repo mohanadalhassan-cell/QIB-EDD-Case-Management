@@ -1,17 +1,19 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enterprise Governance — Digital Platform</title>
+  <title>Enterprise Governance â€” Digital Platform</title>
   <meta name="accessibility" content="wcag2.1-aa">
   <meta name="lang" content="en-GB,ar-QA">
   <link rel="stylesheet" href="css/edd_system.css">
   <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/settings-drawer.css">
   <style>
-    /* ═══════════════════════════════════════════════════════════════
-       ENTERPRISE GOVERNANCE PLATFORM — PREMIUM DESIGN SYSTEM
-       ═══════════════════════════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       ENTERPRISE GOVERNANCE PLATFORM â€” PREMIUM DESIGN SYSTEM
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     :root {
       --gold: #D4AF37;
       --gold-light: #F5D95C;
@@ -26,7 +28,7 @@
       --glow-cyan: rgba(0,212,255,0.3);
     }
 
-    /* ─── Animations ───────────────────────────────────────────── */
+    /* â”€â”€â”€ Animations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
     @keyframes scaleIn { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
@@ -49,7 +51,7 @@
       to { opacity:1; transform:translateX(0) scale(1); }
     }
 
-    /* ─── Particle Background ──────────────────────────────────── */
+    /* â”€â”€â”€ Particle Background â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .particle-field {
       position:fixed; top:0; left:0; width:100%; height:100%;
       pointer-events:none; z-index:0; overflow:hidden;
@@ -63,7 +65,7 @@
       animation: particleFloat var(--dur) var(--delay) ease-in-out infinite;
     }
 
-    /* ─── Page Container ───────────────────────────────────────── */
+    /* â”€â”€â”€ Page Container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .gov-container {
       padding:24px 28px;
       min-height:100vh;
@@ -71,7 +73,7 @@
       z-index:1;
     }
 
-    /* ─── Header ───────────────────────────────────────────────── */
+    /* â”€â”€â”€ Header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .gov-header {
       display:flex;
       justify-content:space-between;
@@ -105,7 +107,7 @@
       box-shadow: 0 0 8px rgba(34,197,94,0.5);
     }
 
-    /* ─── Counter Bar ──────────────────────────────────────────── */
+    /* â”€â”€â”€ Counter Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .counter-bar {
       display:flex; gap:16px; align-items:center;
       animation: fadeUp 0.6s 0.2s ease backwards;
@@ -133,7 +135,7 @@
       letter-spacing:1px; font-weight:600; margin-top:2px;
     }
 
-    /* ─── Search ───────────────────────────────────────────────── */
+    /* â”€â”€â”€ Search â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .gov-search {
       position:relative;
       animation: fadeUp 0.6s 0.3s ease backwards;
@@ -152,21 +154,21 @@
       box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
     }
     .gov-search::before {
-      content:'🔍'; position:absolute;
+      content:'ðŸ”'; position:absolute;
       left:14px; top:50%; transform:translateY(-50%);
       font-size:15px;
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       GOVERNANCE MAP — 4-Layer Hierarchy
-       ═══════════════════════════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       GOVERNANCE MAP â€” 4-Layer Hierarchy
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .gov-map {
       display:flex; flex-direction:column;
       align-items:center; gap:0;
       margin-bottom:40px;
     }
 
-    /* ─── Connector Lines ──────────────────────────────────────── */
+    /* â”€â”€â”€ Connector Lines â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .connector {
       width:3px; height:40px;
       background: linear-gradient(180deg, var(--gold), rgba(212,175,55,0.3));
@@ -202,9 +204,9 @@
       border-radius:3px;
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       LAYER 1 — BOARD OF DIRECTORS (Semicircle)
-       ═══════════════════════════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 1 â€” BOARD OF DIRECTORS (Semicircle)
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .board-layer {
       animation: scaleIn 0.8s 0.2s cubic-bezier(0.175,0.885,0.32,1.275) backwards;
       width:100%; max-width:1100px;
@@ -331,9 +333,9 @@
     .board-member.independent:hover { border-color: rgba(34,197,94,0.6); box-shadow: 0 10px 30px rgba(34,197,94,0.15); }
     .board-member.vice { border-left:3px solid #F59E0B; }
 
-    /* ═══════════════════════════════════════════════════════════════
-       LAYER 2 — GROUP CEO
-       ═══════════════════════════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 2 â€” GROUP CEO
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .ceo-layer {
       animation: scaleIn 0.8s 0.6s cubic-bezier(0.175,0.885,0.32,1.275) backwards;
     }
@@ -371,9 +373,9 @@
     }
     .ceo-title-text { font-size:12px; color:#94a3b8; }
 
-    /* ═══════════════════════════════════════════════════════════════
-       LAYER 3 — EXECUTIVE LEADERSHIP
-       ═══════════════════════════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 3 â€” EXECUTIVE LEADERSHIP
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .exec-layer {
       width:100%; max-width:1100px;
       animation: fadeUp 0.8s 1.0s ease backwards;
@@ -441,9 +443,9 @@
       box-shadow: 0 4px 15px var(--glow-cyan);
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       LAYER 4 — DEPARTMENT GOVERNANCE DASHBOARDS
-       ═══════════════════════════════════════════════════════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 4 â€” DEPARTMENT GOVERNANCE DASHBOARDS
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .dept-layer {
       width:100%; max-width:1200px; margin-top:36px;
       animation: fadeUp 0.8s 1.4s ease backwards;
@@ -606,9 +608,9 @@
       width:6px; height:6px; border-radius:50%;
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        TEAM EXPANSION PANELS
-       ═══════════════════════════════════════════════════════════════ */
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .team-panel {
       display:none; margin-top:16px;
       background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(20,20,35,0.5));
@@ -652,9 +654,9 @@
     .team-member-name { font-size:11px; font-weight:600; color:white; }
     .team-member-role { font-size:9px; color:#64748b; margin-top:1px; }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        DIGITAL TRANSFORMATION SECTION
-       ═══════════════════════════════════════════════════════════════ */
+       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .dt-section {
       margin-top:36px;
       background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(59,130,246,0.05));
@@ -703,7 +705,7 @@
       color:#A78BFA; font-weight:600; display:inline-block;
     }
 
-    /* ─── Detail Panel ─────────────────────────────────────────── */
+    /* â”€â”€â”€ Detail Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .detail-overlay {
       position:fixed; inset:0; background:rgba(0,0,0,0.6);
       opacity:0; visibility:hidden; transition: all 0.3s ease; z-index:999;
@@ -730,7 +732,7 @@
     }
     .detail-body { padding:24px; }
 
-    /* ─── Responsive ───────────────────────────────────────────── */
+    /* â”€â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     @media (max-width:768px) {
       .gov-header { flex-direction:column; gap:16px; align-items:flex-start; }
       .counter-bar { flex-wrap:wrap; }
@@ -847,7 +849,7 @@
       </nav>
 
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
           <div class="user-name" id="user-name">WPS & Digital Back Office</div>
           <div class="user-role" id="user-role">Operations Management</div>
@@ -858,17 +860,17 @@
       </div>
     </aside>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         MAIN CONTENT — ENTERPRISE GOVERNANCE MAP
-         ═══════════════════════════════════════════════════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         MAIN CONTENT â€” ENTERPRISE GOVERNANCE MAP
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <main class="main-content">
       <div class="gov-container">
 
         <!-- Header -->
         <div class="gov-header">
           <div class="gov-header-left">
-            <h1>🏛️ Enterprise Governance</h1>
-            <p><span class="live-dot"></span> Digital Governance Platform — Real-Time Executive View</p>
+            <h1>ðŸ›ï¸ Enterprise Governance</h1>
+            <p><span class="live-dot"></span> Digital Governance Platform â€” Real-Time Executive View</p>
           </div>
           <div class="counter-bar">
             <div class="counter-item">
@@ -889,25 +891,25 @@
           </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════
-             GOVERNANCE MAP — 4 LAYERS
-             ═══════════════════════════════════════════════════════ -->
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+             GOVERNANCE MAP â€” 4 LAYERS
+             â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="gov-map">
 
-          <!-- ─── LAYER 1: Board of Directors ─────────────────── -->
+          <!-- â”€â”€â”€ LAYER 1: Board of Directors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="board-layer">
             <div class="board-section">
               <div class="board-label">
-                <h2>🏛️ Board of Directors</h2>
+                <h2>ðŸ›ï¸ Board of Directors</h2>
                 <p>Strategic Governance & Oversight</p>
               </div>
 
               <!-- Chairman -->
               <div class="chairman-row">
                 <div class="chairman-card" onclick="showDetail('chairman')">
-                  <div class="chairman-badge">👑 CHAIRMAN</div>
+                  <div class="chairman-badge">ðŸ‘‘ CHAIRMAN</div>
                   <div class="chairman-photo">
-                    <div class="chairman-photo-fallback" style="background:linear-gradient(135deg,#D4AF37,#B8860B);">👑</div>
+                    <div class="chairman-photo-fallback" style="background:linear-gradient(135deg,#D4AF37,#B8860B);">ðŸ‘‘</div>
                   </div>
                   <div class="chairman-title-text">Chairman of the Board (Non-Executive)</div>
                 </div>
@@ -984,13 +986,13 @@
             </div>
           </div>
 
-          <!-- Connector: Board → CEO -->
+          <!-- Connector: Board â†’ CEO -->
           <div class="connector" style="height:50px;"></div>
 
-          <!-- ─── LAYER 2: Group CEO ──────────────────────────── -->
+          <!-- â”€â”€â”€ LAYER 2: Group CEO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="ceo-layer">
             <div class="ceo-card" onclick="showDetail('gceo')">
-              <div class="ceo-badge">👨‍💼 GROUP CEO</div>
+              <div class="ceo-badge">ðŸ‘¨â€ðŸ’¼ GROUP CEO</div>
               <div class="ceo-photo">
                 <img src="" alt="GCEO" style="display:none;">
                 <div class="chairman-photo-fallback" style="display:flex">GC</div>
@@ -999,7 +1001,7 @@
             </div>
           </div>
 
-          <!-- Connector: CEO → Executives -->
+          <!-- Connector: CEO â†’ Executives -->
           <div class="connector cyan" style="height:50px;"></div>
 
           <!-- Fan Line -->
@@ -1007,7 +1009,7 @@
             <div class="fan-horizontal"></div>
           </div>
 
-          <!-- ─── LAYER 3: Executive Leadership ───────────────── -->
+          <!-- â”€â”€â”€ LAYER 3: Executive Leadership â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="exec-layer">
             <div class="exec-label">Executive Governance Structure</div>
             <div class="exec-grid">
@@ -1020,7 +1022,7 @@
                 <div class="exec-card-badge" style="background:linear-gradient(135deg,#22C55E,#16A34A);">COO</div>
                 <div class="exec-card-title">Chief Operating Officer</div>
                 <div class="exec-card-dept">Operations & IT</div>
-                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('coo')">👥 View Team</button>
+                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('coo')">ðŸ‘¥ View Team</button>
               </div>
               <!-- CPBO -->
               <div class="exec-card" style="--card-accent:#F59E0B;" onclick="showDetail('cpbo')">
@@ -1031,7 +1033,7 @@
                 <div class="exec-card-badge" style="background:linear-gradient(135deg,#F59E0B,#D97706);">CPBO</div>
                 <div class="exec-card-title">Chief Personal Banking Officer</div>
                 <div class="exec-card-dept">Personal Banking</div>
-                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('personal')">👥 View Team</button>
+                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('personal')">ðŸ‘¥ View Team</button>
               </div>
               <!-- CWBO -->
               <div class="exec-card" style="--card-accent:#8B5CF6;" onclick="showDetail('cwbo')">
@@ -1072,7 +1074,7 @@
                 <div class="exec-card-badge" style="background:linear-gradient(135deg,#14B8A6,#0D9488);">CSDO</div>
                 <div class="exec-card-title">Chief Strategy & Digital Officer</div>
                 <div class="exec-card-dept">Strategy & Digital</div>
-                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('strategy')">👥 View Team</button>
+                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('strategy')">ðŸ‘¥ View Team</button>
               </div>
               <!-- HCG - HIDDEN FROM EXTERNAL DEMO -->
               <div class="exec-card" style="--card-accent:#6366F1;display:none;" onclick="showDetail('hcg')">
@@ -1083,27 +1085,27 @@
                 <div class="exec-card-badge" style="background:linear-gradient(135deg,#6366F1,#4F46E5);">HCG</div>
                 <div class="exec-card-title">Head of Human Capital</div>
                 <div class="exec-card-dept">Human Resources</div>
-                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('hcg')">👥 View Team</button>
+                <button class="exec-card-team-btn" onclick="event.stopPropagation();toggleTeam('hcg')">ðŸ‘¥ View Team</button>
               </div>
               <!-- EM/GCEO Office -->
               <div class="exec-card" style="--card-accent:#64748B;">
                 <div class="exec-card-photo">
-                  <div class="exec-card-fallback" style="background:linear-gradient(135deg,#64748B,#475569);">RA</div>
+                  <div class="exec-card-fallback" style="background:linear-gradient(135deg,#64748B,#475569);">MA</div>
                 </div>
-                <div class="exec-card-badge" style="background:linear-gradient(135deg,#64748B,#475569);">EM</div>
-                <div class="exec-card-name">Raafat Alrantisi</div>
-                <div class="exec-card-title">Executive Manager</div>
-                <div class="exec-card-dept">GCEO Office</div>
+                <div class="exec-card-badge" style="background:linear-gradient(135deg,#64748B,#475569);">OPS</div>
+                <div class="exec-card-name">Mohanad Al Hassan</div>
+                <div class="exec-card-title">Operations Manager</div>
+                <div class="exec-card-dept">Operations</div>
               </div>
             </div>
 
             <!-- Team Expansion Panels -->
             <div class="team-panel" id="team-coo">
-              <div class="team-panel-title">👥 COO Direct Reports — Operations & IT</div>
+              <div class="team-panel-title">ðŸ‘¥ COO Direct Reports â€” Operations & IT</div>
               <div class="team-grid">
                 <div class="team-member" onclick="toggleTeam('ops-amit')">
                   <div class="team-member-photo"><div class="tm-fallback">AM</div></div>
-                  <div><div class="team-member-name">Head of Operations</div><div class="team-member-role">Operations</div><div style="font-size:9px;color:var(--cyan);margin-top:2px;cursor:pointer;">👥 View Direct Reports (3)</div></div>
+                  <div><div class="team-member-name">Head of Operations</div><div class="team-member-role">Operations</div><div style="font-size:9px;color:var(--cyan);margin-top:2px;cursor:pointer;">ðŸ‘¥ View Direct Reports (3)</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">KQ</div></div>
@@ -1111,11 +1113,11 @@
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AS</div></div>
-                  <div><div class="team-member-name">AGM – Business Services</div><div class="team-member-role">Business Services</div></div>
+                  <div><div class="team-member-name">AGM â€“ Business Services</div><div class="team-member-role">Business Services</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AA</div></div>
-                  <div><div class="team-member-name">SEM – Internal Control</div><div class="team-member-role">Internal Control</div></div>
+                  <div><div class="team-member-name">SEM â€“ Internal Control</div><div class="team-member-role">Internal Control</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AK</div></div>
@@ -1123,14 +1125,14 @@
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">BB</div></div>
-                  <div><div class="team-member-name">SEM – Service Delivery</div><div class="team-member-role">Service Operations</div></div>
+                  <div><div class="team-member-name">SEM â€“ Service Delivery</div><div class="team-member-role">Service Operations</div></div>
                 </div>
                 </div>
               </div>
             </div>
 
             <div class="team-panel" id="team-personal">
-              <div class="team-panel-title" style="color:#F59E0B;">👥 Personal Banking Team</div>
+              <div class="team-panel-title" style="color:#F59E0B;">ðŸ‘¥ Personal Banking Team</div>
               <div class="team-grid">
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AN</div></div>
@@ -1144,7 +1146,7 @@
                   <div class="team-member-photo"><div class="tm-fallback" style="background:linear-gradient(135deg,#EF4444,#DC2626);">HA</div></div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">DH</div></div>
-                  <div><div class="team-member-name">Division Head – Branch & Sales</div><div class="team-member-role">Branch Operations</div><div style="font-size:9px;color:#EF4444;margin-top:2px;cursor:pointer;" onclick="event.stopPropagation();toggleTeam('branch')">🏪 View Branch Division (7)</div></div>
+                  <div><div class="team-member-name">Division Head â€“ Branch & Sales</div><div class="team-member-role">Branch Operations</div><div style="font-size:9px;color:#EF4444;margin-top:2px;cursor:pointer;" onclick="event.stopPropagation();toggleTeam('branch')">ðŸª View Branch Division (7)</div></div>
                 </div>
                 </div>
                 <div class="team-member">
@@ -1155,7 +1157,7 @@
             </div>
 
             <div class="team-panel" id="team-strategy">
-              <div class="team-panel-title" style="color:#14B8A6;">👥 Strategy & Digital Office</div>
+              <div class="team-panel-title" style="color:#14B8A6;">ðŸ‘¥ Strategy & Digital Office</div>
               <div class="team-grid">
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback" style="background:linear-gradient(135deg,#3B82F6,#2563EB);">PD</div></div>
@@ -1173,7 +1175,7 @@
             </div>
 
             <div class="team-panel" id="team-hcg" style="display:none;">
-              <div class="team-panel-title" style="color:#6366F1;">👥 Human Capital Group</div>
+              <div class="team-panel-title" style="color:#6366F1;">ðŸ‘¥ Human Capital Group</div>
               <div class="team-grid">
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">KM</div></div>
@@ -1190,17 +1192,17 @@
               </div>
             </div>
 
-            <!-- ─── Operations Direct Reports ─── -->
+            <!-- â”€â”€â”€ Operations Direct Reports â”€â”€â”€ -->
             <div class="team-panel" id="team-ops-amit">
-              <div class="team-panel-title" style="color:#A78BFA;">👥 Operations Direct Reports</div>
+              <div class="team-panel-title" style="color:#A78BFA;">ðŸ‘¥ Operations Direct Reports</div>
               <div class="team-grid">
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AA</div></div>
-                  <div><div class="team-member-name">SEM – Wholesale Banking Operations</div><div class="team-member-role">Operations</div></div>
+                  <div><div class="team-member-name">SEM â€“ Wholesale Banking Operations</div><div class="team-member-role">Operations</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><img src="" style="display:none;"><div class="tm-fallback">EM</div></div>
-                  <div><div class="team-member-name">Retail & Shared Services Operations</div><div class="team-member-role">Operations</div><div style="font-size:9px;color:#3B82F6;margin-top:2px;cursor:pointer;" onclick="event.stopPropagation();toggleTeam('sayed')">👥 View Direct Reports (6)</div></div>
+                  <div><div class="team-member-name">Retail & Shared Services Operations</div><div class="team-member-role">Operations</div><div style="font-size:9px;color:#3B82F6;margin-top:2px;cursor:pointer;" onclick="event.stopPropagation();toggleTeam('sayed')">ðŸ‘¥ View Direct Reports (6)</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AK</div></div>
@@ -1209,40 +1211,40 @@
               </div>
             </div>
 
-            <!-- ─── Retail & Shared Services Operations ─── -->
+            <!-- â”€â”€â”€ Retail & Shared Services Operations â”€â”€â”€ -->
             <div class="team-panel" id="team-sayed">
-              <div class="team-panel-title" style="color:#3B82F6;">👥 Retail & Shared Services Operations</div>
+              <div class="team-panel-title" style="color:#3B82F6;">ðŸ‘¥ Retail & Shared Services Operations</div>
               <div class="team-grid">
                 <div class="team-member" onclick="toggleTeam('wps')">
                   <div class="team-member-photo"><div class="tm-fallback" style="background:linear-gradient(135deg,#22C55E,#16A34A);">WO</div></div>
-                  <div><div class="team-member-name">Manager – WPS & Digital Back Office</div><div class="team-member-role">Operations Manager</div><div style="font-size:9px;color:#22C55E;margin-top:2px;cursor:pointer;">👥 View Team</div></div>
+                  <div><div class="team-member-name">Manager â€“ WPS & Digital Back Office</div><div class="team-member-role">Operations Manager</div><div style="font-size:9px;color:#22C55E;margin-top:2px;cursor:pointer;">ðŸ‘¥ View Team</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">YK</div></div>
-                  <div><div class="team-member-name">Manager – Special Services</div><div class="team-member-role">Special Services</div></div>
+                  <div><div class="team-member-name">Manager â€“ Special Services</div><div class="team-member-role">Special Services</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AS</div></div>
-                  <div><div class="team-member-name">Manager – Main Vault</div><div class="team-member-role">Vault Operations</div></div>
+                  <div><div class="team-member-name">Manager â€“ Main Vault</div><div class="team-member-role">Vault Operations</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback" style="background:linear-gradient(135deg,#EF4444,#DC2626);">GE</div></div>
-                  <div><div class="team-member-name">Manager – CDD & EDD</div><div class="team-member-role">Operations Compliance</div></div>
+                  <div><div class="team-member-name">Manager â€“ CDD & EDD</div><div class="team-member-role">Operations Compliance</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);">QA</div></div>
-                  <div><div class="team-member-name">Manager – Remittance & Cheques</div><div class="team-member-role">Remittance Services</div></div>
+                  <div><div class="team-member-name">Manager â€“ Remittance & Cheques</div><div class="team-member-role">Remittance Services</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback" style="background:linear-gradient(135deg,#EC4899,#DB2777);">HK</div></div>
-                  <div><div class="team-member-name">Manager – Cards & Payments</div><div class="team-member-role">Card Services</div></div>
+                  <div><div class="team-member-name">Manager â€“ Cards & Payments</div><div class="team-member-role">Card Services</div></div>
                 </div>
               </div>
             </div>
 
-            <!-- ─── WPS & Digital Back Office Team ─── -->
+            <!-- â”€â”€â”€ WPS & Digital Back Office Team â”€â”€â”€ -->
             <div class="team-panel" id="team-wps">
-              <div class="team-panel-title" style="color:#22C55E;">👥 WPS & Digital Back Office Team</div>
+              <div class="team-panel-title" style="color:#22C55E;">ðŸ‘¥ WPS & Digital Back Office Team</div>
               <div class="team-grid">
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">SS</div></div>
@@ -1259,9 +1261,9 @@
               </div>
             </div>
 
-            <!-- ─── Branch & Sales Division ─── -->
+            <!-- â”€â”€â”€ Branch & Sales Division â”€â”€â”€ -->
             <div class="team-panel" id="team-branch">
-              <div class="team-panel-title" style="color:#EF4444;">🏪 Branch & Sales Division</div>
+              <div class="team-panel-title" style="color:#EF4444;">ðŸª Branch & Sales Division</div>
               <div class="team-grid">
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">BD</div></div>
@@ -1269,23 +1271,23 @@
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AM</div></div>
-                  <div><div class="team-member-name">Area Manager – North</div><div class="team-member-role">Area Management</div></div>
+                  <div><div class="team-member-name">Area Manager â€“ North</div><div class="team-member-role">Area Management</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">AM</div></div>
-                  <div><div class="team-member-name">Area Manager – South</div><div class="team-member-role">Area Management</div></div>
+                  <div><div class="team-member-name">Area Manager â€“ South</div><div class="team-member-role">Area Management</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">BM</div></div>
-                  <div><div class="team-member-name">Branch Manager – Doha</div><div class="team-member-role">Branch Operations</div></div>
+                  <div><div class="team-member-name">Branch Manager â€“ Doha</div><div class="team-member-role">Branch Operations</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">BA</div></div>
-                  <div><div class="team-member-name">SM – Branch Analytics</div><div class="team-member-role">Analytics</div></div>
+                  <div><div class="team-member-name">SM â€“ Branch Analytics</div><div class="team-member-role">Analytics</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">CS</div></div>
-                  <div><div class="team-member-name">Supervisor – Customer Service</div><div class="team-member-role">Customer Service</div></div>
+                  <div><div class="team-member-name">Supervisor â€“ Customer Service</div><div class="team-member-role">Customer Service</div></div>
                 </div>
                 <div class="team-member">
                   <div class="team-member-photo"><div class="tm-fallback">HS</div></div>
@@ -1296,53 +1298,53 @@
           </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              LAYER 4: DEPARTMENT GOVERNANCE DASHBOARDS
-             ═══════════════════════════════════════════════════════ -->
+             â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="dept-layer">
           <div class="dept-label">
-            <h3>📊 Department Governance Dashboards</h3>
+            <h3>ðŸ“Š Department Governance Dashboards</h3>
             <p>Click any department to view real-time operational metrics</p>
           </div>
 
           <!-- Tabs -->
           <div class="dept-tabs">
             <div class="dept-tab active" onclick="switchDashboard('business')">
-              <span class="tab-icon">🏢</span> Business
+              <span class="tab-icon">ðŸ¢</span> Business
               <span class="tab-count">47</span>
             </div>
             <div class="dept-tab" onclick="switchDashboard('risk')">
-              <span class="tab-icon">🛡️</span> Risk
+              <span class="tab-icon">ðŸ›¡ï¸</span> Risk
               <span class="tab-count">23</span>
             </div>
             <div class="dept-tab" onclick="switchDashboard('compliance')">
-              <span class="tab-icon">⚖️</span> Compliance
+              <span class="tab-icon">âš–ï¸</span> Compliance
               <span class="tab-count">15</span>
             </div>
             <div class="dept-tab" onclick="switchDashboard('operations')">
-              <span class="tab-icon">⚙️</span> Operations & IT
+              <span class="tab-icon">âš™ï¸</span> Operations & IT
               <span class="tab-count">89</span>
             </div>
             <div class="dept-tab" onclick="switchDashboard('change')">
-              <span class="tab-icon">🔄</span> Change Mgmt
+              <span class="tab-icon">ðŸ”„</span> Change Mgmt
               <span class="tab-count">12</span>
             </div>
             <div class="dept-tab" onclick="switchDashboard('it')">
-              <span class="tab-icon">💻</span> IT Systems
+              <span class="tab-icon">ðŸ’»</span> IT Systems
               <span class="tab-count">5</span>
             </div>
           </div>
 
-          <!-- ─── Business Dashboard ──────────────────────────── -->
+          <!-- â”€â”€â”€ Business Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="dashboard-panel active" id="dash-business">
             <div class="dashboard-grid">
               <div class="dash-card" style="--dash-accent:#F59E0B;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Customer Cases</div>
-                  <div class="dash-card-icon">📋</div>
+                  <div class="dash-card-icon">ðŸ“‹</div>
                 </div>
                 <div class="dash-card-value">47</div>
-                <div class="dash-card-sub"><span class="trend-up">▲ 12%</span> vs last month</div>
+                <div class="dash-card-sub"><span class="trend-up">â–² 12%</span> vs last month</div>
                 <div class="dash-progress">
                   <div class="dash-progress-label"><span>Mass Banking</span><span>24</span></div>
                   <div class="dash-progress-bar"><div class="dash-progress-fill" style="width:51%;--bar-color:#F59E0B;"></div></div>
@@ -1360,10 +1362,10 @@
               <div class="dash-card" style="--dash-accent:#EF4444;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Pending Documents</div>
-                  <div class="dash-card-icon">📬</div>
+                  <div class="dash-card-icon">ðŸ“¬</div>
                 </div>
                 <div class="dash-card-value">18</div>
-                <div class="dash-card-sub"><span class="trend-down">▼ 5%</span> improving</div>
+                <div class="dash-card-sub"><span class="trend-down">â–¼ 5%</span> improving</div>
                 <div class="dash-alert-list">
                   <div class="dash-alert" style="--alert-color:#EF4444;"><div class="dash-alert-dot"></div>3 SOF documents overdue</div>
                   <div class="dash-alert" style="--alert-color:#F59E0B;"><div class="dash-alert-dot"></div>7 awaiting customer response</div>
@@ -1374,7 +1376,7 @@
               <div class="dash-card" style="--dash-accent:#00D4FF;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Communication Status</div>
-                  <div class="dash-card-icon">📱</div>
+                  <div class="dash-card-icon">ðŸ“±</div>
                 </div>
                 <div class="dash-card-value">92%</div>
                 <div class="dash-card-sub">Customer response rate</div>
@@ -1391,16 +1393,16 @@
             </div>
           </div>
 
-          <!-- ─── Risk Dashboard ──────────────────────────────── -->
+          <!-- â”€â”€â”€ Risk Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="dashboard-panel" id="dash-risk">
             <div class="dashboard-grid">
               <div class="dash-card" style="--dash-accent:#EF4444;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">High-Risk Customers</div>
-                  <div class="dash-card-icon">🔴</div>
+                  <div class="dash-card-icon">ðŸ”´</div>
                 </div>
                 <div class="dash-card-value">23</div>
-                <div class="dash-card-sub"><span class="trend-up">▲ 3</span> new this week</div>
+                <div class="dash-card-sub"><span class="trend-up">â–² 3</span> new this week</div>
                 <div class="dash-progress">
                   <div class="dash-progress-label"><span>PEP Flagged</span><span>8</span></div>
                   <div class="dash-progress-bar"><div class="dash-progress-fill" style="width:35%;--bar-color:#EF4444;"></div></div>
@@ -1418,7 +1420,7 @@
               <div class="dash-card" style="--dash-accent:#D4AF37;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Risk Classification</div>
-                  <div class="dash-card-icon">📊</div>
+                  <div class="dash-card-icon">ðŸ“Š</div>
                 </div>
                 <div class="dash-card-value">440</div>
                 <div class="dash-card-sub">Total classified customers</div>
@@ -1436,10 +1438,10 @@
               <div class="dash-card" style="--dash-accent:#F59E0B;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">SLA Compliance</div>
-                  <div class="dash-card-icon">⏱️</div>
+                  <div class="dash-card-icon">â±ï¸</div>
                 </div>
                 <div class="dash-card-value">87%</div>
-                <div class="dash-card-sub"><span class="trend-down">▼ 2%</span> 6 breaches this week</div>
+                <div class="dash-card-sub"><span class="trend-down">â–¼ 2%</span> 6 breaches this week</div>
                 <div class="dash-alert-list">
                   <div class="dash-alert" style="--alert-color:#EF4444;"><div class="dash-alert-dot"></div>2 cases exceeded 48h SLA</div>
                   <div class="dash-alert" style="--alert-color:#F59E0B;"><div class="dash-alert-dot"></div>4 approaching SLA deadline</div>
@@ -1449,18 +1451,18 @@
             </div>
           </div>
 
-          <!-- ─── Compliance Dashboard ────────────────────────── -->
+          <!-- â”€â”€â”€ Compliance Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="dashboard-panel" id="dash-compliance">
             <div class="dashboard-grid">
               <div class="dash-card" style="--dash-accent:#8B5CF6;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Exception Cases</div>
-                  <div class="dash-card-icon">⚠️</div>
+                  <div class="dash-card-icon">âš ï¸</div>
                 </div>
                 <div class="dash-card-value">15</div>
                 <div class="dash-card-sub">Requiring compliance decision</div>
                 <div class="dash-alert-list">
-                  <div class="dash-alert" style="--alert-color:#EF4444;"><div class="dash-alert-dot"></div>5 PEP cases – awaiting Head review</div>
+                  <div class="dash-alert" style="--alert-color:#EF4444;"><div class="dash-alert-dot"></div>5 PEP cases â€“ awaiting Head review</div>
                   <div class="dash-alert" style="--alert-color:#F59E0B;"><div class="dash-alert-dot"></div>6 sanctions screening pending</div>
                   <div class="dash-alert" style="--alert-color:#8B5CF6;"><div class="dash-alert-dot"></div>4 FATCA/CRS reviews</div>
                 </div>
@@ -1469,7 +1471,7 @@
               <div class="dash-card" style="--dash-accent:#22C55E;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Regulatory Reporting</div>
-                  <div class="dash-card-icon">📋</div>
+                  <div class="dash-card-icon">ðŸ“‹</div>
                 </div>
                 <div class="dash-card-value">3</div>
                 <div class="dash-card-sub">Reports due to QCB this month</div>
@@ -1486,7 +1488,7 @@
               <div class="dash-card" style="--dash-accent:#00D4FF;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Screening Status</div>
-                  <div class="dash-card-icon">🔍</div>
+                  <div class="dash-card-icon">ðŸ”</div>
                 </div>
                 <div class="dash-card-value">98.5%</div>
                 <div class="dash-card-sub">Screening completion rate</div>
@@ -1503,13 +1505,13 @@
             </div>
           </div>
 
-          <!-- ─── Operations Dashboard ────────────────────────── -->
+          <!-- â”€â”€â”€ Operations Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="dashboard-panel" id="dash-operations">
             <div class="dashboard-grid">
               <div class="dash-card" style="--dash-accent:#22C55E;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">CDD Case Workload</div>
-                  <div class="dash-card-icon">📂</div>
+                  <div class="dash-card-icon">ðŸ“‚</div>
                 </div>
                 <div class="dash-card-value">89</div>
                 <div class="dash-card-sub">Active CDD cases across teams</div>
@@ -1530,7 +1532,7 @@
               <div class="dash-card" style="--dash-accent:#00D4FF;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Document Verification</div>
-                  <div class="dash-card-icon">📝</div>
+                  <div class="dash-card-icon">ðŸ“</div>
                 </div>
                 <div class="dash-card-value">156</div>
                 <div class="dash-card-sub">Documents processed this week</div>
@@ -1548,10 +1550,10 @@
               <div class="dash-card" style="--dash-accent:#A78BFA;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Workflow Progress</div>
-                  <div class="dash-card-icon">📈</div>
+                  <div class="dash-card-icon">ðŸ“ˆ</div>
                 </div>
                 <div class="dash-card-value">76%</div>
-                <div class="dash-card-sub"><span class="trend-up">▲ 8%</span> efficiency improvement</div>
+                <div class="dash-card-sub"><span class="trend-up">â–² 8%</span> efficiency improvement</div>
                 <div class="dash-progress">
                   <div class="dash-progress-label"><span>Business Stage</span><span>76%</span></div>
                   <div class="dash-progress-bar"><div class="dash-progress-fill" style="width:76%;--bar-color:#F59E0B;"></div></div>
@@ -1568,13 +1570,13 @@
             </div>
           </div>
 
-          <!-- ─── Change Management Dashboard ─────────────────── -->
+          <!-- â”€â”€â”€ Change Management Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="dashboard-panel" id="dash-change">
             <div class="dashboard-grid">
               <div class="dash-card" style="--dash-accent:#14B8A6;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Staff Feedback</div>
-                  <div class="dash-card-icon">💬</div>
+                  <div class="dash-card-icon">ðŸ’¬</div>
                 </div>
                 <div class="dash-card-value">12</div>
                 <div class="dash-card-sub">Submissions this month</div>
@@ -1588,7 +1590,7 @@
               <div class="dash-card" style="--dash-accent:#3B82F6;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Process Changes</div>
-                  <div class="dash-card-icon">🔄</div>
+                  <div class="dash-card-icon">ðŸ”„</div>
                 </div>
                 <div class="dash-card-value">5</div>
                 <div class="dash-card-sub">Pending CAB approval</div>
@@ -1605,7 +1607,7 @@
               <div class="dash-card" style="--dash-accent:#D4AF37;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Training Progress</div>
-                  <div class="dash-card-icon">🎓</div>
+                  <div class="dash-card-icon">ðŸŽ“</div>
                 </div>
                 <div class="dash-card-value">84%</div>
                 <div class="dash-card-sub">Staff trained on new workflows</div>
@@ -1625,13 +1627,13 @@
             </div>
           </div>
 
-          <!-- ─── IT Systems Dashboard ────────────────────────── -->
+          <!-- â”€â”€â”€ IT Systems Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
           <div class="dashboard-panel" id="dash-it">
             <div class="dashboard-grid">
               <div class="dash-card" style="--dash-accent:#06B6D4;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">System Performance</div>
-                  <div class="dash-card-icon">🖥️</div>
+                  <div class="dash-card-icon">ðŸ–¥ï¸</div>
                 </div>
                 <div class="dash-card-value">99.7%</div>
                 <div class="dash-card-sub">Platform uptime (30 days)</div>
@@ -1648,23 +1650,23 @@
               <div class="dash-card" style="--dash-accent:#22C55E;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">Integration Health</div>
-                  <div class="dash-card-icon">🔗</div>
+                  <div class="dash-card-icon">ðŸ”—</div>
                 </div>
                 <div class="dash-card-value">5/5</div>
                 <div class="dash-card-sub">All integrations operational</div>
                 <div class="dash-alert-list">
-                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>T24 Core Banking ✓</div>
-                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>DMS Document System ✓</div>
-                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>QCB KYC API ✓</div>
-                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>Email/SMS Gateway ✓</div>
-                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>SnapView Analytics ✓</div>
+                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>T24 Core Banking âœ“</div>
+                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>DMS Document System âœ“</div>
+                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>QCB KYC API âœ“</div>
+                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>Email/SMS Gateway âœ“</div>
+                  <div class="dash-alert" style="--alert-color:#22C55E;"><div class="dash-alert-dot"></div>SnapView Analytics âœ“</div>
                 </div>
               </div>
 
               <div class="dash-card" style="--dash-accent:#A78BFA;">
                 <div class="dash-card-header">
                   <div class="dash-card-title">FLOW Workflow Health</div>
-                  <div class="dash-card-icon">⚡</div>
+                  <div class="dash-card-icon">âš¡</div>
                 </div>
                 <div class="dash-card-value">Active</div>
                 <div class="dash-card-sub">All workflow engines running</div>
@@ -1683,59 +1685,59 @@
 
           <!-- Role Access Mapping -->
           <div style="margin-top:20px; padding:16px; background:var(--glass); border:1px solid var(--glass-border); border-radius:14px;">
-            <div style="font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:10px;">🔐 Role-Based Dashboard Access</div>
+            <div style="font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:10px;">ðŸ” Role-Based Dashboard Access</div>
             <div class="role-badge-strip">
-              <div class="role-badge-item"><div class="rb-dot" style="background:#D4AF37;"></div>Executives — All Dashboards</div>
-              <div class="role-badge-item"><div class="rb-dot" style="background:#F59E0B;"></div>Business — Business Dashboard</div>
-              <div class="role-badge-item"><div class="rb-dot" style="background:#EF4444;"></div>Risk — Risk Dashboard</div>
-              <div class="role-badge-item"><div class="rb-dot" style="background:#8B5CF6;"></div>Compliance — Compliance Dashboard</div>
-              <div class="role-badge-item"><div class="rb-dot" style="background:#22C55E;"></div>Operations — Operations Dashboard</div>
-              <div class="role-badge-item"><div class="rb-dot" style="background:#00D4FF;"></div>IT — IT Systems Dashboard</div>
+              <div class="role-badge-item"><div class="rb-dot" style="background:#D4AF37;"></div>Executives â€” All Dashboards</div>
+              <div class="role-badge-item"><div class="rb-dot" style="background:#F59E0B;"></div>Business â€” Business Dashboard</div>
+              <div class="role-badge-item"><div class="rb-dot" style="background:#EF4444;"></div>Risk â€” Risk Dashboard</div>
+              <div class="role-badge-item"><div class="rb-dot" style="background:#8B5CF6;"></div>Compliance â€” Compliance Dashboard</div>
+              <div class="role-badge-item"><div class="rb-dot" style="background:#22C55E;"></div>Operations â€” Operations Dashboard</div>
+              <div class="role-badge-item"><div class="rb-dot" style="background:#00D4FF;"></div>IT â€” IT Systems Dashboard</div>
             </div>
           </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════
+        <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
              DIGITAL TRANSFORMATION SECTION
-             ═══════════════════════════════════════════════════════ -->
+             â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
         <div class="dt-section">
           <div class="dt-header">
-            <h3>🚀 Digital Transformation Initiative</h3>
-            <p>Operations · IT · Change Management — Project Ownership</p>
+            <h3>ðŸš€ Digital Transformation Initiative</h3>
+            <p>Operations Â· IT Â· Change Management â€” Project Ownership</p>
           </div>
           <div class="dt-grid">
             <div class="dt-card">
-              <div class="dt-card-icon">🔄</div>
+              <div class="dt-card-icon">ðŸ”„</div>
               <div class="dt-card-title">Workflow Digitization</div>
               <div class="dt-card-desc">Paper-based EDD processes replaced with digital FLOW workflows. End-to-end traceability and SLA tracking.</div>
               <div class="dt-card-owner">Owner: Operations</div>
             </div>
             <div class="dt-card">
-              <div class="dt-card-icon">🔗</div>
+              <div class="dt-card-icon">ðŸ”—</div>
               <div class="dt-card-title">System Integration</div>
-              <div class="dt-card-desc">T24, SnapView, QCB KYC API, DMS — unified through ESB middleware for real-time data flow.</div>
+              <div class="dt-card-desc">T24, SnapView, QCB KYC API, DMS â€” unified through ESB middleware for real-time data flow.</div>
               <div class="dt-card-owner">Owner: IT</div>
             </div>
             <div class="dt-card">
-              <div class="dt-card-icon">📊</div>
+              <div class="dt-card-icon">ðŸ“Š</div>
               <div class="dt-card-title">Decision Support</div>
-              <div class="dt-card-desc">System assists, HUMAN decides. Behavioural indicators presented for officer judgment — no automated risk scoring.</div>
+              <div class="dt-card-desc">System assists, HUMAN decides. Behavioural indicators presented for officer judgment â€” no automated risk scoring.</div>
               <div class="dt-card-owner">Owner: Operations + Risk</div>
             </div>
             <div class="dt-card">
-              <div class="dt-card-icon">👥</div>
+              <div class="dt-card-icon">ðŸ‘¥</div>
               <div class="dt-card-title">Staff Enablement</div>
               <div class="dt-card-desc">Workflow improvement, staff feedback loops, process optimization, and cross-department coordination.</div>
               <div class="dt-card-owner">Owner: Change Management</div>
             </div>
             <div class="dt-card">
-              <div class="dt-card-icon">🛡️</div>
+              <div class="dt-card-icon">ðŸ›¡ï¸</div>
               <div class="dt-card-title">Risk Governance</div>
-              <div class="dt-card-desc">Enterprise Risk Scoring Engine with 3 dimensions — Customer (240), Operational (100), Employee (100).</div>
+              <div class="dt-card-desc">Enterprise Risk Scoring Engine with 3 dimensions â€” Customer (240), Operational (100), Employee (100).</div>
               <div class="dt-card-owner">Owner: Risk Management</div>
             </div>
             <div class="dt-card">
-              <div class="dt-card-icon">✅</div>
+              <div class="dt-card-icon">âœ…</div>
               <div class="dt-card-title">Maker/Checker Controls</div>
               <div class="dt-card-desc">Dual-control at CDD and Compliance stages. Segregation of duties enforced at every decision point.</div>
               <div class="dt-card-owner">Owner: Compliance</div>
@@ -1743,18 +1745,18 @@
           </div>
         </div>
 
-        <!-- ═══ CREDITS SECTION — Hidden ═══ -->
+        <!-- â•â•â• CREDITS SECTION â€” Hidden â•â•â• -->
         <div style="display:none;" class="credits-section">
           <div style="text-align:center;padding:40px;">
-            <h3 style="color:var(--gold);font-size:18px;margin-bottom:8px;">🏆 Concept Demonstration</h3>
-            <p style="color:#64748b;font-size:12px;direction:rtl;">نظام إدارة حالات التدقيق المعزز</p>
+            <h3 style="color:var(--gold);font-size:18px;margin-bottom:8px;">ðŸ† Concept Demonstration</h3>
+            <p style="color:#64748b;font-size:12px;direction:rtl;">Ù†Ø¸Ø§Ù… Ø¥Ø¯Ø§Ø±Ø© Ø­Ø§Ù„Ø§Øª Ø§Ù„ØªØ¯Ù‚ÙŠÙ‚ Ø§Ù„Ù…Ø¹Ø²Ø²</p>
             <div style="display:flex;justify-content:center;gap:24px;margin-top:20px;">
               <div style="text-align:center;">
-                <div style="font-size:9px;color:#3B82F6;font-weight:700;letter-spacing:1px;margin-bottom:8px;">⚡ CONCEPT OWNER</div>
+                <div style="font-size:9px;color:#3B82F6;font-weight:700;letter-spacing:1px;margin-bottom:8px;">âš¡ CONCEPT OWNER</div>
                 <img src="assets/employees/MR.MOHANAD ALHASSAM.jpeg" alt="Mohanad" style="width:60px;height:60px;border-radius:50%;border:2px solid #3B82F6;object-fit:cover;" onerror="this.style.display='none'">
                 <div style="color:white;font-size:12px;font-weight:600;margin-top:6px;">Concept Owner</div>
                 <div style="color:#64748b;font-size:10px;">Advanced Systems & Governance</div>
-                <div style="color:#3B82F6;font-size:10px;direction:rtl;">مفهوم النظام والحوكمة</div>
+                <div style="color:#3B82F6;font-size:10px;direction:rtl;">Ù…ÙÙ‡ÙˆÙ… Ø§Ù„Ù†Ø¸Ø§Ù… ÙˆØ§Ù„Ø­ÙˆÙƒÙ…Ø©</div>
               </div>
             </div>
           </div>
@@ -1774,7 +1776,7 @@
     <div class="detail-body" id="detail-body"></div>
   </div>
 
-  <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+  <!-- ðŸŽ¯ UNIFIED SYSTEMS (New v2.0) -->
   <script src="js/path_manager.js"></script>
   <script src="js/risk_datasets.js"></script>
   <script src="js/risk_engine.js"></script>
@@ -1783,7 +1785,7 @@
   <script src="js/data_bridge.js"></script>
 
   <script>
-    // ═══ Session Authentication Check ═══
+    // â•â•â• Session Authentication Check â•â•â•
     window.addEventListener('load', () => {
       setTimeout(() => {
         if (!sessionStorage.getItem('edd_session') && !sessionStorage.getItem('auth_token')) {
@@ -1792,9 +1794,9 @@
       }, 100);
     });
 
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // SESSION & INITIALIZATION
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     document.addEventListener('DOMContentLoaded', () => {
       const sessionData = sessionStorage.getItem('edd_session');
       if (!sessionData) { window.location.replace('login.html'); return; }
@@ -1837,9 +1839,9 @@
       return parts.length >= 2 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0].substring(0,2).toUpperCase();
     }
 
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // PARTICLES
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function createParticles() {
       const field = document.getElementById('particle-field');
       for (let i = 0; i < 40; i++) {
@@ -1857,9 +1859,9 @@
       }
     }
 
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // DASHBOARD SWITCHING
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function switchDashboard(dept) {
       document.querySelectorAll('.dept-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.dashboard-panel').forEach(p => p.classList.remove('active'));
@@ -1868,17 +1870,17 @@
       if (panel) panel.classList.add('active');
     }
 
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // TEAM TOGGLE
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function toggleTeam(teamId) {
       const el = document.getElementById('team-'+teamId);
       if (el) el.classList.toggle('active');
     }
 
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // SEARCH
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     function handleSearch(e) {
       const q = e.target.value.toLowerCase().trim();
       document.querySelectorAll('.chairman-card,.board-member,.exec-card,.team-member').forEach(card => {
@@ -1886,12 +1888,12 @@
       });
     }
 
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // DETAIL PANEL
-    // ═══════════════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     const leaders = {
-      chairman: { title:'Chairman of the Board (Non-Executive)', dept:'Board of Directors', tag:'👑 CHAIRMAN' },
-      gceo: { name:'Mr. Bassel Gamal', nameAr:'السيد باسل جمال', title:'Group Chief Executive Officer', dept:'Executive Leadership', tag:'GROUP CEO', photo:'assets/employees/GCEO.jpeg' },
+      chairman: { title:'Chairman of the Board (Non-Executive)', dept:'Board of Directors', tag:'ðŸ‘‘ CHAIRMAN' },
+      gceo: { name:'Mr. Bassel Gamal', nameAr:'Ø§Ù„Ø³ÙŠØ¯ Ø¨Ø§Ø³Ù„ Ø¬Ù…Ø§Ù„', title:'Group Chief Executive Officer', dept:'Executive Leadership', tag:'GROUP CEO', photo:'assets/employees/GCEO.jpeg' },
       coo: { name:'Saleem Ulhaq', title:'Chief Operating Officer', dept:'Operations & IT', tag:'COO', photo:'assets/employees/Saleem.jpeg' },
       cpbo: { name:'D. Anand', title:'Chief Personal Banking Officer', dept:'Personal Banking', tag:'CPBO', photo:'assets/employees/Anand.jpeg' },
       cwbo: { title:'Chief Wholesale Banking Officer', dept:'Wholesale Banking', tag:'CWBO' },
@@ -1900,12 +1902,12 @@
       csdo: { title:'Chief Strategy & Digital Officer', dept:'Strategy & Digital', tag:'CSDO' },
       hcg: { title:'Head of Human Capital Group', dept:'Human Resources', tag:'HCG' },
       'ops-amit': { title:'Head of Operations', dept:'Operations Division', tag:'HEAD OPS' },
-      'ops-sayed': { title:'Head of Retail & Shared Services Operations', dept:'Operations – Retail' },
-      'ops-mohanad': { title:'Manager – WPS & Digital Back Office', dept:'Operations – WPS' },
-      'ops-ghaleb': { title:'Manager – CDD & EDD', dept:'Operations – CDD/EDD' },
-      'ops-qader': { title:'Manager – Remittance & Cheques', dept:'Operations – Remittance' },
-      'ops-hanaa': { title:'Manager – Cards, Gov Salaries & Dividends', dept:'Operations – Cards' },
-      'branch-hassan': { title:'Division Head – Branch & Sales', dept:'Branch Division' }
+      'ops-sayed': { title:'Head of Retail & Shared Services Operations', dept:'Operations â€“ Retail' },
+      'ops-mohanad': { title:'Manager â€“ WPS & Digital Back Office', dept:'Operations â€“ WPS' },
+      'ops-ghaleb': { title:'Manager â€“ CDD & EDD', dept:'Operations â€“ CDD/EDD' },
+      'ops-qader': { title:'Manager â€“ Remittance & Cheques', dept:'Operations â€“ Remittance' },
+      'ops-hanaa': { title:'Manager â€“ Cards, Gov Salaries & Dividends', dept:'Operations â€“ Cards' },
+      'branch-hassan': { title:'Division Head â€“ Branch & Sales', dept:'Branch Division' }
     };
 
     function showDetail(key) {
@@ -1913,7 +1915,7 @@
       if (!emp) return;
       const body = document.getElementById('detail-body');
       body.innerHTML = `
-        <div style="width:100px;height:100px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,var(--cyan),#0288D1);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;text-transform:uppercase;">▪ </div>
+        <div style="width:100px;height:100px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,var(--cyan),#0288D1);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;text-transform:uppercase;">â–ª </div>
         ${emp.tag ? `<div style="text-align:center;margin-bottom:12px;"><span style="padding:5px 14px;background:linear-gradient(135deg,var(--cyan),#0288D1);border-radius:16px;font-size:10px;color:white;font-weight:700;">${emp.tag}</span></div>` : ''}
         <h3 style="text-align:center;font-size:18px;margin:0 0 8px;color:white;">${emp.title}</h3>
         <p style="text-align:center;font-size:13px;color:var(--cyan);margin:0 0 20px;">Professional Role</p>
@@ -1940,19 +1942,24 @@
   <div class="accessibility-controls" role="toolbar" aria-label="Accessibility Controls">
     <div class="accessibility-control-group">
       <span class="accessibility-label">Text</span>
-      <button class="accessibility-btn" id="btn-text-size-decrease" title="Decrease Text Size (Alt+Minus)" aria-label="Decrease text size">A−</button>
+      <button class="accessibility-btn" id="btn-text-size-decrease" title="Decrease Text Size (Alt+Minus)" aria-label="Decrease text size">Aâˆ’</button>
       <button class="accessibility-btn" id="btn-text-size" title="Increase Text Size (Alt+Plus)" aria-label="Increase text size">A+</button>
     </div>
     <div class="accessibility-control-group">
       <span class="accessibility-label">Display</span>
-      <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)" aria-label="Toggle high contrast">◐</button>
+      <button class="accessibility-btn" id="btn-contrast" title="High Contrast Mode (Alt+M)" aria-label="Toggle high contrast">â—</button>
       <button class="accessibility-btn" id="btn-dyslexia" title="Dyslexia-Friendly Font (Alt+D)" aria-label="Toggle dyslexia font">d</button>
-      <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)" aria-label="Toggle color blind mode">◉</button>
+      <button class="accessibility-btn" id="btn-colorblind" title="Color-Blind Mode (Alt+C)" aria-label="Toggle color blind mode">â—‰</button>
     </div>
   </div>
   
-<div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر 2030">🏛️</div>
+<div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="Ø±Ø¤ÙŠØ© Ù‚Ø·Ø± 2030">ðŸ›ï¸</div>
 
   <script src="js/accessibility.js"></script>
+  <script src="js/theme-manager.js"></script>
+  <script src="js/settings-drawer.js"></script>
 </body>
 </html>
+
+
+

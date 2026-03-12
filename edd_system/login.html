@@ -23,6 +23,12 @@
   <!-- Particle canvas -->
   <canvas id="particle-canvas"></canvas>
 
+  <!-- Language Toggle -->
+  <div style="position: fixed; top: 20px; right: 20px; z-index: 100; display: flex; gap: 8px; background: rgba(6, 14, 26, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 10px; padding: 6px;">
+    <button id="lang-en" class="lang-toggle active" onclick="setLanguage('en')" style="padding: 8px 12px; border: none; background: rgba(0, 212, 255, 0.15); color: #00D4FF; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.2s ease;">🇬🇧 EN</button>
+    <button id="lang-ar" class="lang-toggle" onclick="setLanguage('ar')" style="padding: 8px 12px; border: none; background: transparent; color: rgba(0, 212, 255, 0.6); border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; transition: all 0.2s ease;">🇶🇦 AR</button>
+  </div>
+
   <!-- Login card -->
   <div class="login-container">
     <div class="glass-card">
@@ -244,5 +250,31 @@
 
   <script src="js/particles.js?v=1.1"></script>
   <script src="js/login.js?v=1.1"></script>
+  <script>
+    // Language Toggle Function
+    function setLanguage(lang) {
+      document.documentElement.lang = lang;
+      document.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      localStorage.setItem('preferredLanguage', lang);
+      
+      // Update button states
+      document.querySelectorAll('.lang-toggle').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'transparent';
+        btn.style.color = 'rgba(0, 212, 255, 0.6)';
+      });
+      
+      const activeBtn = document.getElementById(`lang-${lang}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.style.background = 'rgba(0, 212, 255, 0.15)';
+        activeBtn.style.color = '#00D4FF';
+      }
+    }
+    
+    // Load saved language preference
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    setLanguage(savedLang);
+  </script>
 </body>
 </html>

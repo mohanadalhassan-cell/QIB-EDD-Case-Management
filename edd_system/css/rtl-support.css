@@ -1,0 +1,564 @@
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* RTL (RIGHT-TO-LEFT) LAYOUT SUPPORT FOR ARABIC */
+/* Apply these styles when document.dir = 'rtl' */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* RTL Global Styles */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] body {
+  text-align: right;
+}
+
+/* RTL Form Elements */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+  padding-right: 12px;
+  padding-left: 4px;
+}
+
+[dir="rtl"] label {
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+/* RTL Flexbox Layouts */
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex-col {
+  flex-direction: column;
+}
+
+/* RTL Grid Layouts */
+[dir="rtl"] .grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .sidebar {
+  left: auto;
+  right: 0;
+  border-left: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 0;
+  padding-right: 20px;
+}
+
+[dir="rtl"] .page-wrapper {
+  margin-left: 0;
+  margin-right: 260px;
+}
+
+/* RTL Navigation */
+[dir="rtl"] .navbar {
+  flex-direction: row-reverse;
+  text-align: right;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+[dir="rtl"] .navbar-left {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[dir="rtl"] .navbar-right {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+[dir="rtl"] .nav-item {
+  margin-left: 0;
+  margin-right: 16px;
+  padding-right: 16px;
+  padding-left: 0;
+  border-right: 2px solid transparent;
+  border-left: none;
+}
+
+[dir="rtl"] .nav-item:hover,
+[dir="rtl"] .nav-item.active {
+  border-right-color: var(--accent, #00D4FF);
+  border-left: none;
+}
+
+/* RTL Buttons */
+[dir="rtl"] button,
+[dir="rtl"] .btn {
+  text-align: right;
+}
+
+[dir="rtl"] button svg,
+[dir="rtl"] .btn svg {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+[dir="rtl"] button span,
+[dir="rtl"] .btn span {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+/* RTL Icons and Images */
+[dir="rtl"] .icon-right {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .icon-left {
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+/* RTL Cards */
+[dir="rtl"] .card {
+  text-align: right;
+}
+
+[dir="rtl"] .card-header {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .card-body {
+  text-align: right;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+/* RTL Tables */
+[dir="rtl"] table,
+[dir="rtl"] thead,
+[dir="rtl"] tbody,
+[dir="rtl"] tr,
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+  padding-right: 12px;
+  padding-left: 4px;
+  border-left: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td:first-child {
+  border-right: none;
+}
+
+/* RTL Lists */
+[dir="rtl"] ul,
+[dir="rtl"] ol {
+  padding-right: 24px;
+  padding-left: 0;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+[dir="rtl"] li {
+  text-align: right;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* RTL Modals and Dialogs */
+[dir="rtl"] .modal,
+[dir="rtl"] .dialog,
+[dir="rtl"] [role="dialog"] {
+  text-align: right;
+}
+
+[dir="rtl"] .modal-header,
+[dir="rtl"] .dialog-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .modal-close,
+[dir="rtl"] .dialog-close {
+  left: 20px;
+  right: auto;
+}
+
+/* RTL Popups and Tooltips */
+[dir="rtl"] .tooltip,
+[dir="rtl"] .popup,
+[dir="rtl"] .popover {
+  text-align: right;
+}
+
+/* RTL Badges and Tags */
+[dir="rtl"] .badge {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+/* RTL Progress Bars */
+[dir="rtl"] .progress-bar {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* RTL Breadcrumbs */
+[dir="rtl"] .breadcrumb {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+  content: "\\";
+  margin: 0 8px 0 0;
+  transform: scaleX(-1);
+}
+
+/* RTL Dropdowns */
+[dir="rtl"] .dropdown {
+  text-align: right;
+}
+
+[dir="rtl"] .dropdown-menu {
+  left: auto;
+  right: 0;
+  text-align: right;
+}
+
+[dir="rtl"] .dropdown-item {
+  padding-right: 16px;
+  padding-left: 0;
+  text-align: right;
+}
+
+/* RTL Sliders */
+[dir="rtl"] input[type="range"] {
+  direction: rtl;
+}
+
+/* RTL Checkboxes and Radio */
+[dir="rtl"] input[type="checkbox"],
+[dir="rtl"] input[type="radio"] {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+[dir="rtl"] input[type="checkbox"] + label,
+[dir="rtl"] input[type="radio"] + label {
+  margin-right: 0;
+  margin-left: 8px;
+  text-align: right;
+}
+
+/* RTL Case Cards */
+[dir="rtl"] .case-card {
+  flex-direction: row-reverse;
+  text-align: right;
+  padding-right: 16px;
+  padding-left: 16px;
+  border-right: 4px solid;
+  border-left: none;
+}
+
+[dir="rtl"] .case-priority {
+  margin-left: 12px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .case-info {
+  text-align: right;
+}
+
+[dir="rtl"] .case-meta {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* RTL Accessibility Controls */
+[dir="rtl"] .accessibility-controls {
+  flex-direction: row-reverse;
+  left: auto;
+  right: 20px;
+  text-align: right;
+  border-right: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[dir="rtl"] .accessibility-control-group {
+  margin-left: 0;
+  margin-right: 16px;
+}
+
+[dir="rtl"] .accessibility-btn {
+  margin-left: 8px;
+  margin-right: 0;
+  text-align: right;
+}
+
+/* RTL Sidebar */
+[dir="rtl"] .sidebar-nav {
+  text-align: right;
+}
+
+[dir="rtl"] .sidebar-nav a {
+  padding-right: 12px;
+  padding-left: 0;
+  text-align: right;
+}
+
+[dir="rtl"] .sidebar-nav svg {
+  margin-right: 12px;
+  margin-left: 0;
+}
+
+/* RTL Badge */
+[dir="rtl"] .nav-badge {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* RTL Segment Tabs */
+[dir="rtl"] .segment-tabs {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .segment-tab {
+  text-align: right;
+  margin-left: 8px;
+  margin-right: 0;
+  border-bottom: 3px solid transparent;
+}
+
+[dir="rtl"] .segment-tab.active {
+  border-bottom-color: var(--accent, #00D4FF);
+}
+
+[dir="rtl"] .segment-tab-icon {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+/* RTL Queue Header */
+[dir="rtl"] .queue-header {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .queue-title {
+  text-align: right;
+}
+
+/* RTL Status Badge */
+[dir="rtl"] .queue-badge {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* RTL Activity Items */
+[dir="rtl"] .activity-item {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .activity-icon {
+  margin-left: 12px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .activity-content {
+  text-align: right;
+}
+
+/* RTL Input Groups */
+[dir="rtl"] .input-group {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .input-group-text {
+  border-left: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  margin-left: 0;
+  margin-right: -1px;
+}
+
+[dir="rtl"] .input-group > input {
+  margin-right: 0;
+  margin-left: -1px;
+}
+
+/* RTL Pagination */
+[dir="rtl"] .pagination {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+/* RTL Alerts */
+[dir="rtl"] .alert {
+  text-align: right;
+  padding-right: 20px;
+  padding-left: 20px;
+  border-left: none;
+  border-right: 4px solid;
+}
+
+[dir="rtl"] .alert-icon {
+  margin-left: 12px;
+  margin-right: 0;
+}
+
+/* RTL Dashboard Grid */
+[dir="rtl"] .dashboard-grid {
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-card {
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-card-header {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-card-icon {
+  margin-left: 12px;
+  margin-right: 0;
+}
+
+/* RTL Content Grid */
+[dir="rtl"] .content-grid {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL Text Alignment Utilities */
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+[dir="rtl"] .text-center {
+  text-align: center;
+}
+
+/* RTL Margin Utilities */
+[dir="rtl"] .ml-auto {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+/* RTL Padding Utilities */
+[dir="rtl"] .ps-4 {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+[dir="rtl"] .pe-4 {
+  padding-right: 0;
+  padding-left: 1.5rem;
+}
+
+/* RTL Font Fallbacks for Arabic */
+[dir="rtl"],
+[lang="ar"],
+[lang="ar-QA"] {
+  font-family: 'Segoe UI', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 
+              'Droid Arabic Kufi', 'Traditional Arabic', 'Simplified Arabic', 
+              Arial, sans-serif;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* RTL Heading Styles */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  text-align: right;
+}
+
+/* RTL Link Styles */
+[dir="rtl"] a {
+  text-align: right;
+}
+
+/* RTL Float Utilities */
+[dir="rtl"] .float-left {
+  float: right;
+}
+
+[dir="rtl"] .float-right {
+  float: left;
+}
+
+/* RTL Clear Utilities */
+[dir="rtl"] .clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* RTL Transform for Mirrored Icons (optional) */
+[dir="rtl"] .icon-flip {
+  transform: scaleX(-1);
+}
+
+/* RTL Animation (ensure smooth RTL transitions) */
+@media (prefers-reduced-motion: reduce) {
+  [dir="rtl"] * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* RTL Mobile Responsive */
+@media (max-width: 768px) {
+  [dir="rtl"] .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  [dir="rtl"] .page-wrapper {
+    margin-right: 0;
+    margin-top: 0;
+  }
+
+  [dir="rtl"] .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  [dir="rtl"] .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ensure RTL is applied to all elements */
+:root[dir="rtl"],
+:root[lang^="ar"] {
+  direction: rtl;
+  text-align: right;
+}

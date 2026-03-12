@@ -3,11 +3,17 @@
 # ============================================================================
 # تكوين شامل لنشر نظام EDD/QIB على منصة Netlify
 
+# ============================================================================
+# NETLIFY DEPLOYMENT CONFIGURATION
+# ============================================================================
+# Static site deployment for Simplify Governance Platform
+
 [build]
-  # الأوامر التي تعمل قبل البناء
-  command = "npm run build"
-  # المجلد الذي سيتم نشره
+  # Publish directory contains all the HTML/CSS/JS files
   publish = "edd_system"
+  # No build command needed for static files
+  command = ""
+
   
 # ============================================================================
 # ENVIRONMENT VARIABLES FOR PRODUCTION
@@ -30,17 +36,14 @@
 # ============================================================================
 # REDIRECTS & REWRITES
 # ============================================================================
-[[redirects]]
-  # Redirect all API requests to the backend
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
+# API requests would go here if needed
+# [[redirects]]
+#   from = "/api/*"
+#   to = "/.netlify/functions/api/:splat"
+#   status = 200
 
-[[redirects]]
-  # Single Page Application - ensure routes go to index.html
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# NOTE: SPA redirect NOT used - this is a multi-page application
+# where each .html file is a standalone route
 
 # ============================================================================
 # HEADERS & SECURITY

@@ -8,7 +8,13 @@
   <meta name="lang" content="en-GB,ar-QA">
   <link rel="stylesheet" href="css/edd_system.css">
   <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/settings-drawer.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <!-- Language & Voice Features -->
+  <script src="js/language-pack.js"></script>
+  <script src="js/voice-assistant.js"></script>
   <style>
     /* Segment Tabs */
     .segment-tabs {
@@ -400,7 +406,7 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
           <div class="user-name" id="user-name">WPS & Digital Back Office</div>
           <div class="user-role" id="user-role">Operations Management</div>
@@ -422,6 +428,12 @@
           <button class="header-btn" onclick="refreshData()" title="Refresh">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
           </button>
+          <!-- Language & Voice Controls -->
+          <button class="btn btn-info btn-sm" id="lang-switch-btn" onclick="window.languageSwitcher && window.languageSwitcher()" title="🇬🇧 EN / 🇶🇦 AR" style="padding: 8px 12px; background: linear-gradient(135deg, #42A5F5, #1E88E5); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">
+            <span id="lang-label">EN</span>
+          </button>
+          <button class="btn btn-accent btn-sm" id="explain-btn" onclick="VoiceAssistant && VoiceAssistant.explainCurrentPage()" title="Explain Page" style="padding: 8px 12px; background: linear-gradient(135deg, #FFA726, #F57C00); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">🔊</button>
+          <button class="btn btn-success btn-sm" id="voice-btn" onclick="VoiceAssistant && VoiceAssistant.startListening()" title="Voice Commands" style="padding: 8px 12px; background: linear-gradient(135deg, #1DBF73, #00A854); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">🎤</button>
           <button class="header-btn" id="logout-btn" title="Logout">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
           </button>
@@ -654,12 +666,17 @@
     let currentSegment = 'mass';
 
     // Initialize when page fully loads
-    window.addEventListener('load', () => {
-      console.log('✓ Business View loaded');
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('✓ Business View DOM loaded');
       loadUserInfo();
       updateCounts();
-      renderCases();
+      renderCases('mass');
       setupLogout();
+    });
+    
+    window.addEventListener('load', () => {
+      console.log('✓ Business View fully loaded');
+      renderCases(currentSegment);
     });
 
     function loadUserInfo() {
@@ -672,51 +689,90 @@
     }
 
     function switchSegment(segment) {
-      console.log('🔄 Switching to:', segment);
+      console.log('🔄 Switching to segment:', segment);
+      if (!segmentCases[segment]) {
+        console.error('❌ Invalid segment:', segment);
+        return;
+      }
+      
       currentSegment = segment;
       
-      // Update tabs - Add active class to selected, remove from others
-      document.querySelectorAll('.segment-tab').forEach(tab => {
+      // Update tabs - Remove active class from all, add to selected
+      const allTabs = document.querySelectorAll('.segment-tab');
+      console.log('Found tabs:', allTabs.length);
+      allTabs.forEach(tab => {
         tab.classList.remove('active');
       });
+      
+      // Add active class to the clicked tab
       const activeTab = document.getElementById('tab-' + segment);
       if (activeTab) {
         activeTab.classList.add('active');
         console.log('✓ Tab activated:', segment);
+      } else {
+        console.warn('⚠️ Tab not found for segment:', segment);
       }
       
       // Update queue title
-      document.getElementById('queue-title').textContent = segmentNames[segment] + ' Queue';
-      document.getElementById('queue-badge').textContent = segmentCases[segment].length + ' Pending';
+      const queueTitle = document.getElementById('queue-title');
+      const queueBadge = document.getElementById('queue-badge');
+      if (queueTitle) queueTitle.textContent = segmentNames[segment] + ' Queue';
+      if (queueBadge) queueBadge.textContent = segmentCases[segment].length + ' Pending';
       
       // Update statistics for the selected segment
       updateCounts();
       
-      // Render cases
-      renderCases();
+      // Render cases for selected segment
+      renderCases(segment);
       
-      console.log('✓ Segment switched to:', segment, 'with', segmentCases[segment].length, 'cases');
+      console.log('✓ Segment switched to:', segment, 'Cases:', segmentCases[segment].length);
     }
 
     function updateCounts() {
-      document.getElementById('mass-count').textContent = segmentCases.mass.length;
-      document.getElementById('tamayuz-count').textContent = segmentCases.tamayuz.length;
-      document.getElementById('private-count').textContent = segmentCases.private.length;
+      // Update tab counts
+      const massCountEl = document.getElementById('mass-count');
+      const tamayuzCountEl = document.getElementById('tamayuz-count');
+      const privateCountEl = document.getElementById('private-count');
       
-      // Calculate stats
+      if (massCountEl) massCountEl.textContent = segmentCases.mass.length;
+      if (tamayuzCountEl) tamayuzCountEl.textContent = segmentCases.tamayuz.length;
+      if (privateCountEl) privateCountEl.textContent = segmentCases.private.length;
+      
+      // Calculate stats from all cases
       const allCases = [...segmentCases.mass, ...segmentCases.tamayuz, ...segmentCases.private];
       const pending = allCases.filter(c => c.status === 'Pending Review').length;
       const inProgress = allCases.filter(c => c.status === 'In Progress').length;
       const overdue = allCases.filter(c => c.days > 10).length;
       
-      document.getElementById('stat-pending').textContent = pending;
-      document.getElementById('stat-inprogress').textContent = inProgress;
-      document.getElementById('stat-overdue').textContent = overdue;
+      // Update stat cards
+      const statPending = document.getElementById('stat-pending');
+      const statProgress = document.getElementById('stat-inprogress');
+      const statOverdue = document.getElementById('stat-overdue');
+      
+      if (statPending) statPending.textContent = pending;
+      if (statProgress) statProgress.textContent = inProgress;
+      if (statOverdue) statOverdue.textContent = overdue;
+      
+      console.log('✓ Counts updated - Pending:', pending, 'In Progress:', inProgress, 'Overdue:', overdue);
     }
 
-    function renderCases() {
+    function renderCases(segment) {
+      segment = segment || currentSegment;
       const container = document.getElementById('case-list');
-      const cases = segmentCases[currentSegment];
+      
+      if (!container) {
+        console.error('❌ case-list container not found');
+        return;
+      }
+      
+      const cases = segmentCases[segment];
+      if (!cases || cases.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No cases in this segment</div>';
+        console.log('⚠️ No cases found for segment:', segment);
+        return;
+      }
+      
+      console.log('Rendering', cases.length, 'cases for segment:', segment);
       
       container.innerHTML = cases.map(c => {
         const daysClass = c.days > 10 ? 'overdue' : c.days > 5 ? 'warning' : 'normal';
@@ -738,6 +794,8 @@
           </div>
         `;
       }).join('');
+      
+      console.log('✓ Cases rendered successfully');
     }
 
     function openCase(caseId) {
@@ -754,8 +812,8 @@
 
     function requestDocs() {
       const cases = segmentCases[currentSegment];
-      if (cases.length === 0) {
-        alert('No cases available in this segment');
+      if (!cases || cases.length === 0) {
+        alert('❌ No cases available in this segment');
         return;
       }
       const caseId = cases[0].id;
@@ -764,8 +822,8 @@
 
     function contactCustomer() {
       const cases = segmentCases[currentSegment];
-      if (cases.length === 0) {
-        alert('No cases available in this segment');
+      if (!cases || cases.length === 0) {
+        alert('❌ No cases available in this segment');
         return;
       }
       const caseId = cases[0].id;
@@ -774,8 +832,8 @@
 
     function escalateCase() {
       const cases = segmentCases[currentSegment];
-      if (cases.length === 0) {
-        alert('No cases available in this segment');
+      if (!cases || cases.length === 0) {
+        alert('❌ No cases available in this segment');
         return;
       }
       const caseId = cases[0].id;
@@ -783,10 +841,15 @@
     }
 
     function setupLogout() {
-      document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('qibEddSession');
-        window.location.href = 'login.html';
-      });
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('qibEddSession');
+          sessionStorage.removeItem('edd_session');
+          sessionStorage.removeItem('auth_token');
+          window.location.href = 'login.html';
+        });
+      }
     }
   </script>
 
@@ -810,5 +873,26 @@
   <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر 2030">🏛️</div>
 
   <script src="js/accessibility.js"></script>
+  <script src="js/theme-manager.js"></script>
+  <script src="js/settings-drawer.js"></script>
+  
+  <!-- Language & Voice Initialization -->
+  <script>
+    if (typeof initLanguageSystem === 'function') {
+      initLanguageSystem();
+      window.languageSwitcher = function() {
+        const currentLang = localStorage.getItem('userLanguage') || 'en';
+        const newLang = currentLang === 'en' ? 'ar' : 'en';
+        setGlobalLanguage(newLang);
+        document.body.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = newLang;
+        document.getElementById('lang-label').textContent = newLang === 'ar' ? 'AR' : 'EN';
+        location.reload();
+      };
+      const currentLang = localStorage.getItem('userLanguage') || 'en';
+      document.getElementById('lang-label').textContent = currentLang === 'ar' ? 'AR' : 'EN';
+      if (typeof VoiceAssistant !== 'undefined') console.log('✅ Voice Assistant loaded');
+    }
+  </script>
 </body>
 </html>

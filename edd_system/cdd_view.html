@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Governance System — CDD Operations</title>
   <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <!-- Language & Voice Features -->
+  <script src="js/language-pack.js"></script>
+  <script src="js/voice-assistant.js"></script>
 </head>
 <body>
   <div class="ambient-bg"></div>
@@ -104,7 +110,7 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/Arslan.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
         <div class="user-info">
           <div class="user-name" id="user-name">WPS & Digital Back Office</div>
           <div class="user-role" id="user-role">Operations Management</div>
@@ -126,6 +132,12 @@
           <button id="create-case-btn" style="padding: 10px 16px; background: linear-gradient(135deg, #00D4FF 0%, #00BCD4 100%); border: none; color: #000; border-radius: 8px; cursor: pointer; font-weight: 600; margin-right: 12px;">
             + Create Case
           </button>
+          <!-- Language & Voice Controls -->
+          <button class="btn btn-info btn-sm" id="lang-switch-btn" onclick="window.languageSwitcher && window.languageSwitcher()" title="🇬🇧 EN / 🇶🇦 AR" style="padding: 8px 12px; background: linear-gradient(135deg, #42A5F5, #1E88E5); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">
+            <span id="lang-label">EN</span>
+          </button>
+          <button class="btn btn-accent btn-sm" id="explain-btn" onclick="VoiceAssistant && VoiceAssistant.explainCurrentPage()" title="Explain Page" style="padding: 8px 12px; background: linear-gradient(135deg, #FFA726, #F57C00); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">🔊</button>
+          <button class="btn btn-success btn-sm" id="voice-btn" onclick="VoiceAssistant && VoiceAssistant.startListening()" title="Voice Commands" style="padding: 8px 12px; background: linear-gradient(135deg, #1DBF73, #00A854); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 12px; margin-right: 6px;">🎤</button>
           <button class="header-btn" id="logout-btn" title="Logout">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
           </button>
@@ -441,6 +453,25 @@
         }
       }, 100);
     });
+  </script>
+  
+  <!-- Language & Voice Initialization -->
+  <script>
+    if (typeof initLanguageSystem === 'function') {
+      initLanguageSystem();
+      window.languageSwitcher = function() {
+        const currentLang = localStorage.getItem('userLanguage') || 'en';
+        const newLang = currentLang === 'en' ? 'ar' : 'en';
+        setGlobalLanguage(newLang);
+        document.body.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = newLang;
+        document.getElementById('lang-label').textContent = newLang === 'ar' ? 'AR' : 'EN';
+        location.reload();
+      };
+      const currentLang = localStorage.getItem('userLanguage') || 'en';
+      document.getElementById('lang-label').textContent = currentLang === 'ar' ? 'AR' : 'EN';
+      if (typeof VoiceAssistant !== 'undefined') console.log('✅ Voice Assistant loaded');
+    }
   </script>
 </body>
 </html>

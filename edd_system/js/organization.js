@@ -437,10 +437,10 @@ function getEmployeeData(id) {
     },
     'EXE-002': {
       id: 'EXE-002',
-      name: 'Raafat Alrantisi',
-      title: 'Executive Manager – GCEO Office',
-      department: 'GCEO Office',
-      division: 'Executive',
+      name: 'Mohanad Al Hassan',
+      title: 'Operations Manager',
+      department: 'Operations',
+      division: 'Operations',
       reportsTo: 'GCEO - Bassel Gamal',
       workflowGroups: ['Management']
     },

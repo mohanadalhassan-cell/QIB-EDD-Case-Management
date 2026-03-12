@@ -1,0 +1,378 @@
+/* ═══════════════════════════════════════════════════════════════
+   Settings & Accessibility Drawer — Unified Control Panel
+   ═══════════════════════════════════════════════════════════════ */
+
+.settings-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.settings-drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settings-drawer {
+  position: fixed;
+  right: -420px;
+  top: 0;
+  width: 380px;
+  height: 100vh;
+  background: linear-gradient(135deg, rgba(10, 20, 40, 0.98) 0%, rgba(15, 37, 64, 0.98) 100%);
+  backdrop-filter: blur(20px);
+  border-left: 1.5px solid rgba(0, 212, 255, 0.3);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.settings-drawer.active {
+  right: 0;
+}
+
+.settings-drawer-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: rgba(10, 20, 40, 0.95);
+  z-index: 1;
+}
+
+.settings-drawer-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-drawer-title svg {
+  width: 20px;
+  height: 20px;
+  fill: #00D4FF;
+}
+
+.settings-drawer-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 10px;
+  color: #00D4FF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.2s ease;
+}
+
+.settings-drawer-close:hover {
+  background: rgba(0, 212, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.settings-drawer-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.settings-section {
+  margin-bottom: 28px;
+}
+
+.settings-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(0, 212, 255, 0.6);
+  margin-bottom: 12px;
+  padding: 0 6px;
+}
+
+.settings-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-option:hover {
+  background: rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.25);
+  transform: translateX(-2px);
+}
+
+.settings-option-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-option-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.settings-option-desc {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.settings-option-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00D4FF;
+  background: rgba(0, 212, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.font-size-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+}
+
+.font-size-btn {
+  flex: 1;
+  padding: 10px 8px;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.05);
+  color: #00D4FF;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.font-size-btn:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+.font-size-btn.active {
+  background: #00D4FF;
+  color: #0c1e35;
+  border-color: #00D4FF;
+}
+
+.color-mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.color-mode-option {
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 212, 255, 0.1);
+  background: rgba(0, 212, 255, 0.05);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.color-mode-option:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  background: rgba(0, 212, 255, 0.12);
+}
+
+.color-mode-option.active {
+  border-color: #00D4FF;
+  background: rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.3);
+}
+
+.color-mode-icon {
+  font-size: 24px;
+}
+
+.color-mode-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.settings-button {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.1);
+  color: #00D4FF;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.settings-button:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+/* Settings Icon Button in Header */
+.settings-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.settings-toggle-btn:hover {
+  background: var(--accent-dim);
+  transform: rotate(15deg);
+}
+
+.settings-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Light Mode Settings */
+body.light-mode .settings-drawer {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 247, 255, 0.95) 100%);
+  border-left-color: rgba(31, 58, 95, 0.2);
+}
+
+body.light-mode .settings-drawer-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(31, 58, 95, 0.15);
+}
+
+body.light-mode .settings-drawer-title {
+  color: #1F3A5F;
+}
+
+body.light-mode .settings-drawer-title svg {
+  fill: #1F3A5F;
+}
+
+body.light-mode .settings-drawer-close {
+  background: rgba(31, 58, 95, 0.1);
+  color: #1F3A5F;
+}
+
+body.light-mode .settings-drawer-close:hover {
+  background: rgba(31, 58, 95, 0.2);
+}
+
+body.light-mode .settings-section-title {
+  color: rgba(31, 58, 95, 0.6);
+}
+
+body.light-mode .settings-option {
+  background: rgba(31, 58, 95, 0.05);
+  border-color: rgba(31, 58, 95, 0.1);
+}
+
+body.light-mode .settings-option:hover {
+  background: rgba(31, 58, 95, 0.12);
+  border-color: rgba(31, 58, 95, 0.25);
+}
+
+body.light-mode .settings-option-name {
+  color: #1F3A5F;
+}
+
+body.light-mode .settings-option-desc {
+  color: rgba(31, 58, 95, 0.6);
+}
+
+body.light-mode .settings-option-value {
+  background: rgba(31, 58, 95, 0.15);
+  color: #1F3A5F;
+}
+
+body.light-mode .font-size-btn {
+  border-color: rgba(31, 58, 95, 0.2);
+  background: rgba(31, 58, 95, 0.05);
+  color: #1F3A5F;
+}
+
+body.light-mode .font-size-btn:hover {
+  background: rgba(31, 58, 95, 0.15);
+}
+
+body.light-mode .font-size-btn.active {
+  background: #1F3A5F;
+  color: #ffffff;
+}
+
+body.light-mode .color-mode-option {
+  border-color: rgba(31, 58, 95, 0.1);
+  background: rgba(31, 58, 95, 0.05);
+  color: #1F3A5F;
+}
+
+body.light-mode .color-mode-option:hover {
+  border-color: rgba(31, 58, 95, 0.3);
+  background: rgba(31, 58, 95, 0.12);
+}
+
+body.light-mode .color-mode-option.active {
+  border-color: #1F3A5F;
+  background: rgba(31, 58, 95, 0.2);
+}
+
+body.light-mode .color-mode-name {
+  color: #1F3A5F;
+}
+
+body.light-mode .settings-button {
+  border-color: rgba(31, 58, 95, 0.2);
+  background: rgba(31, 58, 95, 0.1);
+  color: #1F3A5F;
+}
+
+body.light-mode .settings-button:hover {
+  background: rgba(31, 58, 95, 0.2);
+}
+
+/* Accessibility Controls - Hide Original */
+.accessibility-controls {
+  display: none;
+}
