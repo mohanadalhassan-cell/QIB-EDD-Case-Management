@@ -64,13 +64,21 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Rate limiting
-const limiter = rateLimit({
+// Rate limiting (API-only). Static assets are excluded to avoid throttling the UI.
+const isLocalhostRequest = (req) => {
+  const ip = req.ip || req.socket?.remoteAddress || '';
+  return ip.includes('127.0.0.1') || ip.includes('::1') || ip.includes('localhost');
+};
+
+const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // 100 requests per windowMs
-  message: 'Too many requests, please try again later'
+  max: NODE_ENV === 'development' ? 5000 : Number(process.env.RATE_LIMIT_MAX || 100),
+  message: 'Too many requests, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => NODE_ENV === 'development' && isLocalhostRequest(req)
 });
-app.use(limiter);
+app.use('/api', apiLimiter);
 
 // ============================================================================
 // MIDDLEWARE
