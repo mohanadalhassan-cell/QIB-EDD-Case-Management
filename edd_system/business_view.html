@@ -465,17 +465,17 @@
           <button class="segment-tab mass active" onclick="switchSegment('mass')" id="tab-mass">
             <div class="segment-tab-icon">🏦</div>
             <div class="segment-tab-name">Mass Banking</div>
-            <div class="segment-tab-count"><span id="mass-count">5</span> Cases</div>
+            <div class="segment-tab-count"><span id="mass-count">10</span> Cases</div>
           </button>
           <button class="segment-tab tamayuz" onclick="switchSegment('tamayuz')" id="tab-tamayuz">
             <div class="segment-tab-icon">⭐</div>
             <div class="segment-tab-name">Tamayuz Banking</div>
-            <div class="segment-tab-count"><span id="tamayuz-count">4</span> Cases</div>
+            <div class="segment-tab-count"><span id="tamayuz-count">10</span> Cases</div>
           </button>
           <button class="segment-tab private" onclick="switchSegment('private')" id="tab-private">
             <div class="segment-tab-icon">👑</div>
             <div class="segment-tab-name">Private Banking</div>
-            <div class="segment-tab-count"><span id="private-count">3</span> Cases</div>
+            <div class="segment-tab-count"><span id="private-count">10</span> Cases</div>
           </button>
         </div>
 
@@ -653,25 +653,85 @@
       }, 100);
     });
 
-    // Segment Data
+    // Segment Data (10+ cases per segment with detailed profile)
+    const branchLocations = {
+      'West Bay': { lat: 25.3217, lng: 51.5260, area: 'West Bay Business District' },
+      'Al Sadd': { lat: 25.2854, lng: 51.5029, area: 'Al Sadd' },
+      'Al Wakra': { lat: 25.1715, lng: 51.6070, area: 'Al Wakra' },
+      'Lusail': { lat: 25.4202, lng: 51.5309, area: 'Lusail Marina' },
+      'The Pearl': { lat: 25.3782, lng: 51.5469, area: 'The Pearl - Doha' },
+      'Old Airport': { lat: 25.2505, lng: 51.5526, area: 'Old Airport Road' }
+    };
+
+    const completedTemplates = {
+      pending: ['Customer Profile', 'KYC Refresh', 'Risk Trigger Validation', 'Document Checklist'],
+      progress: ['Customer Profile', 'KYC Refresh', 'Risk Trigger Validation', 'Document Checklist', 'Transaction Review', 'Geo Exposure Review'],
+      done: ['Customer Profile', 'KYC Refresh', 'Risk Trigger Validation', 'Document Checklist', 'Transaction Review', 'Geo Exposure Review', 'RM Narrative', 'Compliance Review']
+    };
+
+    function buildCase(caseNum, segment, customer, rim, qid, trigger, reason, status, days, branch, occupation, income, recommendation) {
+      const loc = branchLocations[branch] || branchLocations['West Bay'];
+      const risk = status === 'Completed' ? 'medium' : 'high';
+      const completedSections = status === 'Completed' ? completedTemplates.done : status === 'In Progress' ? completedTemplates.progress : completedTemplates.pending;
+      return {
+        id: `EDD-2024-${String(caseNum).padStart(6, '0')}`,
+        customer,
+        rim,
+        qid,
+        segment,
+        risk,
+        days,
+        status,
+        trigger,
+        highRiskReason: reason,
+        occupation,
+        declaredIncome: income,
+        location: { branch, area: loc.area, lat: loc.lat, lng: loc.lng },
+        completedSections,
+        analysis: {
+          summary: `Risk pattern detected for ${customer} due to ${trigger.toLowerCase()} and profile deviation against expected behavior.`,
+          transactionSignals: 'Cash intensity above expected monthly baseline, international movement frequency elevated, and counterparty diversity expanded.',
+          recommendation
+        }
+      };
+    }
+
     const segmentCases = {
       mass: [
-        { id: 'EDD-2024-001242', customer: 'Mohammed Ali Hassan', rim: 'RIM010234', risk: 'high', days: 12, status: 'Pending Review', trigger: 'High Risk Nationality' },
-        { id: 'EDD-2024-001243', customer: 'Fatima Al-Rashid', rim: 'RIM011345', risk: 'high', days: 8, status: 'Pending Review', trigger: 'Large Cash Deposit' },
-        { id: 'EDD-2024-001244', customer: 'Ahmed Al-Mansouri', rim: 'RIM012456', risk: 'medium', days: 5, status: 'In Progress', trigger: 'Occupation Risk' },
-        { id: 'EDD-2024-001250', customer: 'Khalid Al-Thani', rim: 'RIM018012', risk: 'medium', days: 3, status: 'Pending Review', trigger: 'KYC Update Required' },
-        { id: 'EDD-2024-001251', customer: 'Sara Al-Emadi', rim: 'RIM019123', risk: 'low', days: 2, status: 'In Progress', trigger: 'Periodic Review' }
+        buildCase(1242, 'Mass Banking', 'Mohammed Ali Hassan', 'RIM010234', '27500100231', 'High Risk Nationality', 'Customer linked to high-risk jurisdiction with repeated cross-border cash transactions.', 'Pending Review', 12, 'Al Sadd', 'Small Business Owner', 'QAR 18,500', 'Keep case in EDD and request supporting source-of-wealth evidence.'),
+        buildCase(1243, 'Mass Banking', 'Fatima Al-Rashid', 'RIM011345', '27500100232', 'Large Cash Deposit', 'Cash deposits exceed declared income profile by material margin in last 90 days.', 'Pending Review', 11, 'West Bay', 'Retail Supervisor', 'QAR 14,200', 'Request payroll proofs and escalate if mismatch persists.'),
+        buildCase(1244, 'Mass Banking', 'Ahmed Al-Mansouri', 'RIM012456', '27500100233', 'Occupation Risk', 'Occupation category has elevated AML risk with recent unusual cash behavior.', 'In Progress', 9, 'Old Airport', 'Exchange House Agent', 'QAR 16,000', 'Finalize transaction narrative and route to checker.'),
+        buildCase(1245, 'Mass Banking', 'Khalid Al-Thani', 'RIM018012', '27500100234', 'KYC Update Required', 'Critical KYC attributes expired while transaction volume increased.', 'Pending Review', 10, 'Lusail', 'Sales Executive', 'QAR 12,700', 'Complete KYC refresh before account activity expansion.'),
+        buildCase(1246, 'Mass Banking', 'Sara Al-Emadi', 'RIM019123', '27500100235', 'Periodic Review', 'Periodic review identified mismatches in profile and current behavior.', 'In Progress', 8, 'Al Wakra', 'Government Clerk', 'QAR 13,400', 'Validate updated declarations and close with monitoring flag.'),
+        buildCase(1247, 'Mass Banking', 'Nasser Al-Hammadi', 'RIM019124', '27500100236', 'International Transfers', 'Transfer velocity and destination concentration triggered high-risk rules.', 'Pending Review', 13, 'West Bay', 'Logistics Coordinator', 'QAR 17,900', 'Escalate for enhanced destination-country verification.'),
+        buildCase(1248, 'Mass Banking', 'Huda Al-Kuwari', 'RIM019125', '27500100237', 'PEP Adjacency', 'Close family linkage to politically exposed profile requires enhanced controls.', 'Pending Review', 14, 'The Pearl', 'Consultant', 'QAR 22,300', 'Keep under EDD and apply periodic transaction checkpointing.'),
+        buildCase(1249, 'Mass Banking', 'Yasir Al-Nuaimi', 'RIM019126', '27500100238', 'Document Inconsistency', 'Supporting income documents do not reconcile with account inflows.', 'In Progress', 7, 'Al Sadd', 'Trader', 'QAR 19,100', 'Collect certified documentation and re-score risk.'),
+        buildCase(1250, 'Mass Banking', 'Mona Al-Misnad', 'RIM019127', '27500100239', 'Geo Exposure', 'Frequent transactions to sanctioned-adjacent corridors increased risk score.', 'Pending Review', 16, 'Lusail', 'Entrepreneur', 'QAR 24,700', 'Route to compliance for corridor-level verification.'),
+        buildCase(1251, 'Mass Banking', 'Talal Al-Mohannadi', 'RIM019128', '27500100240', 'Adverse Media Hit', 'Recent adverse media mention requires full EDD reassessment.', 'Completed', 4, 'Al Wakra', 'Procurement Manager', 'QAR 21,500', 'Maintain monthly watchlist screening and close with rationale.')
       ],
       tamayuz: [
-        { id: 'EDD-2024-001245', customer: 'Yousef Al-Naimi', rim: 'RIM013567', risk: 'high', days: 15, status: 'Pending Review', trigger: 'PEP Related' },
-        { id: 'EDD-2024-001246', customer: 'Noor Al-Kaabi', rim: 'RIM014678', risk: 'high', days: 10, status: 'Pending Review', trigger: 'Unusual Transaction' },
-        { id: 'EDD-2024-001252', customer: 'Omar Al-Sulaiti', rim: 'RIM020234', risk: 'medium', days: 6, status: 'In Progress', trigger: 'Source of Funds' },
-        { id: 'EDD-2024-001253', customer: 'Mariam Al-Hajri', rim: 'RIM021345', risk: 'medium', days: 4, status: 'Pending Review', trigger: 'Activity Pattern' }
+        buildCase(1252, 'Tamayuz Banking', 'Yousef Al-Naimi', 'RIM013567', '27500110231', 'PEP Related', 'Beneficial relationship with exposed public profile and elevated transfer activity.', 'Pending Review', 15, 'West Bay', 'Business Partner', 'QAR 42,000', 'Escalate to CDD checker with full UBO evidence.'),
+        buildCase(1253, 'Tamayuz Banking', 'Noor Al-Kaabi', 'RIM014678', '27500110232', 'Unusual Transaction', 'Unusual split transactions indicate structuring behavior.', 'Pending Review', 12, 'The Pearl', 'Investment Advisor', 'QAR 38,500', 'Initiate source-of-funds deep dive.'),
+        buildCase(1254, 'Tamayuz Banking', 'Omar Al-Sulaiti', 'RIM020234', '27500110233', 'Source of Funds', 'Declared funding source not aligned with incoming transfer pattern.', 'In Progress', 8, 'Lusail', 'Portfolio Manager', 'QAR 35,600', 'Complete SOF evidence pack and update risk note.'),
+        buildCase(1255, 'Tamayuz Banking', 'Mariam Al-Hajri', 'RIM021345', '27500110234', 'Activity Pattern', 'Rapid increase in account turnover with insufficient explanation.', 'Pending Review', 11, 'Al Sadd', 'Independent Consultant', 'QAR 33,900', 'Request RM justification and enhanced monitoring.'),
+        buildCase(1256, 'Tamayuz Banking', 'Abdulrahman Al-Marri', 'RIM021346', '27500110235', 'High-Risk Counterparty', 'Large exposures to counterparties flagged in internal watch lists.', 'Pending Review', 14, 'West Bay', 'Import Manager', 'QAR 45,200', 'Escalate and screen counterparties with compliance support.'),
+        buildCase(1257, 'Tamayuz Banking', 'Layla Al-Hassan', 'RIM021347', '27500110236', 'Document Gap', 'Income and wealth support documents are partially missing.', 'In Progress', 9, 'The Pearl', 'Senior Architect', 'QAR 39,300', 'Collect missing artifacts and re-run risk model.'),
+        buildCase(1258, 'Tamayuz Banking', 'Majed Al-Obaidli', 'RIM021348', '27500110237', 'Geo-Risk Spike', 'Payment destinations shifted toward elevated-risk regions.', 'Pending Review', 13, 'Old Airport', 'Operations Director', 'QAR 41,000', 'Perform geography concentration assessment and controls.'),
+        buildCase(1259, 'Tamayuz Banking', 'Rania Al-Kubaisi', 'RIM021349', '27500110238', 'KYC Variance', 'Profile changes detected without supporting formal updates.', 'In Progress', 7, 'Lusail', 'Medical Consultant', 'QAR 36,400', 'Update KYC profile and confirm current business activity.'),
+        buildCase(1260, 'Tamayuz Banking', 'Jassim Al-Mutawa', 'RIM021350', '27500110239', 'Wealth Inconsistency', 'Net wealth trend inconsistent with declared source trajectory.', 'Pending Review', 17, 'Al Wakra', 'Business Owner', 'QAR 48,700', 'Require wealth corroboration and checker review.'),
+        buildCase(1261, 'Tamayuz Banking', 'Dana Al-Ansari', 'RIM021351', '27500110240', 'Periodic EDD Trigger', 'Scheduled EDD trigger with risk factors still above threshold.', 'Completed', 5, 'West Bay', 'Corporate Advisor', 'QAR 37,200', 'Close with quarterly monitoring plan.')
       ],
       private: [
-        { id: 'EDD-2024-001247', customer: 'Sheikh Mohammed Al-Attiyah', rim: 'RIM015789', risk: 'high', days: 18, status: 'Pending Review', trigger: 'PEP - Senior Official' },
-        { id: 'EDD-2024-001248', customer: 'Dr. Aisha Al-Kuwari', rim: 'RIM016890', risk: 'high', days: 14, status: 'Pending Review', trigger: 'High Value Account' },
-        { id: 'EDD-2024-001249', customer: 'Hassan Al-Mohannadi', rim: 'RIM017901', risk: 'medium', days: 7, status: 'In Progress', trigger: 'International Transfers' }
+        buildCase(1262, 'Private Banking', 'Sheikh Mohammed Al-Attiyah', 'RIM015789', '27500120231', 'PEP - Senior Official', 'Senior-official exposure with high-value movement requires full EDD traceability.', 'Pending Review', 18, 'The Pearl', 'Principal Investor', 'QAR 120,000', 'Escalate to executive compliance committee.'),
+        buildCase(1263, 'Private Banking', 'Dr. Aisha Al-Kuwari', 'RIM016890', '27500120232', 'High Value Account', 'Large-value inflows and concentrated outbound payments exceed expected profile.', 'Pending Review', 15, 'Lusail', 'Healthcare Executive', 'QAR 98,000', 'Require source-of-wealth deep validation.'),
+        buildCase(1264, 'Private Banking', 'Hassan Al-Mohannadi', 'RIM017901', '27500120233', 'International Transfers', 'International transfer network shows elevated complexity and risk score.', 'In Progress', 10, 'West Bay', 'Investment Partner', 'QAR 88,500', 'Complete counterparty screening narrative.'),
+        buildCase(1265, 'Private Banking', 'Noura Al-Dosari', 'RIM017902', '27500120234', 'Adverse Media Concern', 'Recent adverse media exposure requires comprehensive case commentary.', 'Pending Review', 14, 'The Pearl', 'Board Member', 'QAR 110,300', 'Conduct media-source reliability review and escalation.'),
+        buildCase(1266, 'Private Banking', 'Fahad Al-Thani', 'RIM017903', '27500120235', 'Complex Ownership', 'Layered ownership in related entities introduces opacity risk.', 'Pending Review', 16, 'West Bay', 'Holding Company Director', 'QAR 134,000', 'Collect ownership chain evidence and UBO declarations.'),
+        buildCase(1267, 'Private Banking', 'Reem Al-Suwaidi', 'RIM017904', '27500120236', 'Jurisdiction Exposure', 'Repeated exposure to high-risk jurisdictions in portfolio movements.', 'In Progress', 9, 'Lusail', 'Family Office Manager', 'QAR 102,700', 'Add geography mitigation controls and approvals.'),
+        buildCase(1268, 'Private Banking', 'Khalifa Al-Jaber', 'RIM017905', '27500120237', 'Transaction Structuring', 'Multiple near-threshold transactions indicate possible structuring.', 'Pending Review', 13, 'Al Sadd', 'Real Estate Investor', 'QAR 95,400', 'Advance to forensic transaction review.'),
+        buildCase(1269, 'Private Banking', 'Amal Al-Fahad', 'RIM017906', '27500120238', 'Wealth Verification Gap', 'Declared wealth growth not supported by submitted documentation.', 'In Progress', 8, 'West Bay', 'Executive Consultant', 'QAR 89,300', 'Obtain notarized proof and re-score risk model.'),
+        buildCase(1270, 'Private Banking', 'Saad Al-Nasser', 'RIM017907', '27500120239', 'Related Party Risk', 'Related-party transaction links triggered elevated compliance concern.', 'Pending Review', 12, 'The Pearl', 'Private Investor', 'QAR 116,800', 'Validate related-party disclosures and approvals.'),
+        buildCase(1271, 'Private Banking', 'Maha Al-Baker', 'RIM017908', '27500120240', 'Periodic EDD Trigger', 'Recurring EDD trigger with unresolved prior observations.', 'Completed', 6, 'Lusail', 'Entrepreneur', 'QAR 93,600', 'Close with enhanced surveillance conditions.')
       ]
     };
 
@@ -708,56 +768,32 @@
     }
 
     function switchSegment(segment) {
-      console.log('🔄 Switching to segment:', segment);
-      if (!segmentCases[segment]) {
-        console.error('❌ Invalid segment:', segment);
-        return;
-      }
-      
+      if (!segmentCases[segment]) return;
       currentSegment = segment;
-      
-      // Update tabs - Remove active class from all, add to selected
+
       const allTabs = document.querySelectorAll('.segment-tab');
-      console.log('Found tabs:', allTabs.length);
-      allTabs.forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Add active class to the clicked tab
+      allTabs.forEach(tab => tab.classList.remove('active'));
       const activeTab = document.getElementById('tab-' + segment);
-      if (activeTab) {
-        activeTab.classList.add('active');
-        console.log('✓ Tab activated:', segment);
-      } else {
-        console.warn('⚠️ Tab not found for segment:', segment);
-      }
-      
-      // Update queue title
+      if (activeTab) activeTab.classList.add('active');
+
       const queueTitle = document.getElementById('queue-title');
       const queueBadge = document.getElementById('queue-badge');
       if (queueTitle) queueTitle.textContent = segmentNames[segment] + ' Queue';
-      if (queueBadge) queueBadge.textContent = segmentCases[segment].length + ' Pending';
-      
-      // Update statistics for the selected segment
+      if (queueBadge) queueBadge.textContent = segmentCases[segment].length + ' Cases';
+
       updateCounts();
-      
-      // Render cases for selected segment
       renderCases(segment);
-      
+    }
 
     function applySegmentFromHash() {
       const hash = (window.location.hash || '').replace('#', '').toLowerCase();
-      if (hash === 'mass' || hash === 'tamayuz' || hash === 'private') {
-        switchSegment(hash);
-      }
+      if (hash === 'mass' || hash === 'tamayuz' || hash === 'private') switchSegment(hash);
     }
 
     function toggleRetailMenu() {
       const group = document.getElementById('retail-banking-group');
       if (!group) return;
       group.classList.toggle('open');
-    }
-      console.log('✓ Segment switched to:', segment, 'Cases:', segmentCases[segment].length);
     }
 
     function updateCounts() {
@@ -775,17 +811,18 @@
       const pending = allCases.filter(c => c.status === 'Pending Review').length;
       const inProgress = allCases.filter(c => c.status === 'In Progress').length;
       const overdue = allCases.filter(c => c.days > 10).length;
+      const completed = allCases.filter(c => c.status === 'Completed').length;
       
       // Update stat cards
       const statPending = document.getElementById('stat-pending');
       const statProgress = document.getElementById('stat-inprogress');
       const statOverdue = document.getElementById('stat-overdue');
+      const statCompleted = document.getElementById('stat-completed');
       
       if (statPending) statPending.textContent = pending;
       if (statProgress) statProgress.textContent = inProgress;
       if (statOverdue) statOverdue.textContent = overdue;
-      
-      console.log('✓ Counts updated - Pending:', pending, 'In Progress:', inProgress, 'Overdue:', overdue);
+      if (statCompleted) statCompleted.textContent = completed;
     }
 
     function renderCases(segment) {
@@ -817,6 +854,7 @@
               <div class="case-id">${c.id}</div>
               <div class="case-customer">${c.customer}</div>
               <div class="case-rim">${c.rim} • ${c.trigger}</div>
+              <div class="case-rim" style="font-size:11px; opacity:.85; margin-top:4px;">${c.highRiskReason}</div>
             </div>
             <div class="case-meta">
               <div class="case-days ${daysClass}">${c.days} days</div>
@@ -830,12 +868,91 @@
       console.log('✓ Cases rendered successfully');
     }
 
+    function getCaseById(caseId) {
+      const allCases = [...segmentCases.mass, ...segmentCases.tamayuz, ...segmentCases.private];
+      return allCases.find(c => c.id === caseId);
+    }
+
     function openCase(caseId) {
-      window.location.href = 'edd_case.html?id=' + caseId;
+      const c = getCaseById(caseId);
+      if (!c) { showBvToast('Case details not found', 'error'); return; }
+      openCaseDetailModal(c, 'view');
     }
 
     function reviewCase(caseId) {
-      window.location.href = 'edd_case.html?id=' + caseId + '&action=review';
+      const c = getCaseById(caseId);
+      if (!c) { showBvToast('Case details not found', 'error'); return; }
+      openCaseDetailModal(c, 'review');
+    }
+
+    function openCaseDetailModal(c, mode) {
+      closeCaseDetailModal();
+      const sectionsHtml = c.completedSections.map(s => `<li style="margin:4px 0;">✅ ${s}</li>`).join('');
+      const mapUrl = `https://www.google.com/maps?q=${c.location.lat},${c.location.lng}&output=embed`;
+      const actionUrl = `edd_case.html?id=${c.id}${mode === 'review' ? '&action=review' : ''}`;
+
+      const modal = document.createElement('div');
+      modal.id = 'case-detail-modal';
+      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;display:flex;align-items:center;justify-content:center;padding:18px;';
+      modal.innerHTML = `
+        <div style="width:min(1100px,96vw);max-height:92vh;overflow:auto;background:linear-gradient(135deg,#111b2f,#0b1426);border:1px solid rgba(0,212,255,.25);border-radius:16px;padding:20px;color:#fff;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <h3 style="margin:0;font-size:18px;">${c.id} - ${c.customer}</h3>
+            <button onclick="closeCaseDetailModal()" style="background:none;border:none;color:#bbb;font-size:24px;cursor:pointer;">&times;</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;">
+            <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;">
+              <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">تفاصيل العميل</div>
+              <div style="font-size:14px;line-height:1.9;">
+                <div><strong>Customer:</strong> ${c.customer}</div>
+                <div><strong>RIM:</strong> ${c.rim}</div>
+                <div><strong>QID:</strong> ${c.qid}</div>
+                <div><strong>Segment:</strong> ${c.segment}</div>
+                <div><strong>Occupation:</strong> ${c.occupation}</div>
+                <div><strong>Declared Income:</strong> ${c.declaredIncome}</div>
+                <div><strong>Status:</strong> ${c.status}</div>
+              </div>
+
+              <div style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);">
+                <div style="font-size:13px;color:#ff9f9f;margin-bottom:6px;">سبب التصنيف عالي المخاطر</div>
+                <div style="font-size:13px;line-height:1.7;">${c.highRiskReason}</div>
+              </div>
+
+              <div style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.30);">
+                <div style="font-size:13px;color:#9df3d0;margin-bottom:6px;">الأقسام المكتملة</div>
+                <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;">${sectionsHtml}</ul>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;">
+                <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">الخريطة</div>
+                <div style="font-size:12px;color:#c7d5ea;margin-bottom:8px;">${c.location.branch} - ${c.location.area}</div>
+                <iframe src="${mapUrl}" style="width:100%;height:220px;border:0;border-radius:10px;" loading="lazy"></iframe>
+              </div>
+
+              <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;">
+                <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">التحليل</div>
+                <div style="font-size:13px;line-height:1.7;"><strong>Summary:</strong> ${c.analysis.summary}</div>
+                <div style="font-size:13px;line-height:1.7;margin-top:6px;"><strong>Signals:</strong> ${c.analysis.transactionSignals}</div>
+                <div style="font-size:13px;line-height:1.7;margin-top:6px;"><strong>Recommendation:</strong> ${c.analysis.recommendation}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px;">
+            <button onclick="closeCaseDetailModal()" style="padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:transparent;color:#ddd;cursor:pointer;">Close</button>
+            <button onclick="window.location.href='${actionUrl}'" style="padding:10px 14px;border-radius:8px;border:none;background:linear-gradient(135deg,#00D4FF,#0288D1);color:#fff;cursor:pointer;">Open Full Case</button>
+          </div>
+        </div>`;
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeCaseDetailModal(); });
+      document.body.appendChild(modal);
+    }
+
+    function closeCaseDetailModal() {
+      const existing = document.getElementById('case-detail-modal');
+      if (existing) existing.remove();
     }
 
     function refreshData() {
