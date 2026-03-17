@@ -106,10 +106,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar">SE</div>
         <div class="user-info">
-          <div class="user-name" id="user-name">WPS & Digital Back Office</div>
-          <div class="user-role" id="user-role">Operations Management</div>
+          <div class="user-name" id="user-name">Sayed Elmahday</div>
+          <div class="user-role" id="user-role">Head of Retail and Shared Service Operation</div>
         </div>
       </div>
     </aside>
@@ -119,7 +119,7 @@
       <!-- Header -->
       <header class="header">
         <div class="header-left">
-          <h1 class="page-title">Alternative Channels · القنوات البديلة</h1>
+          <h1 class="page-title">Alternative Channels</h1>
           <div class="breadcrumb">
             <a href="dashboard.html" style="color: var(--accent); text-decoration: none;">Dashboard</a>
             <span style="margin: 0 6px; opacity: 0.5;">/</span>
@@ -141,13 +141,24 @@
       <div class="page-content">
 
         <!-- Stats Row -->
-        <div class="stats-grid" style="margin-bottom: 24px;">
+        <div class="stats-grid" style="margin-bottom: 24px; grid-template-columns: repeat(5, 1fr);">
+          <div class="stat-card" style="border: 1px solid rgba(0,212,255,0.35); background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,212,255,0.02));">
+            <div class="stat-icon" style="background: rgba(0,212,255,0.15);">
+              <svg viewBox="0 0 24 24" fill="#00D4FF" width="24" height="24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+            </div>
+            <div class="stat-value" style="color:#00D4FF; font-size:26px;">3,845</div>
+            <div class="stat-label">Mobile App Active Users</div>
+            <div class="stat-trend up">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 14l5-5 5 5H7z"/></svg>
+              +127 this week
+            </div>
+          </div>
           <div class="stat-card">
             <div class="stat-icon" style="background: rgba(0,212,255,0.15);">
               <svg viewBox="0 0 24 24" fill="#00D4FF" width="24" height="24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
             </div>
             <div class="stat-value">6</div>
-            <div class="stat-label">Mobile Banking</div>
+            <div class="stat-label">Mobile — Open Requests</div>
             <div class="stat-trend up">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 14l5-5 5 5H7z"/></svg>
               +2 today
@@ -158,21 +169,229 @@
               <svg viewBox="0 0 24 24" fill="#00E676" width="24" height="24"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1z"/></svg>
             </div>
             <div class="stat-value">4</div>
-            <div class="stat-label">Internet Banking</div>
+            <div class="stat-label">Internet — Open Requests</div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background: rgba(255,152,0,0.15);">
               <svg viewBox="0 0 24 24" fill="#FF9800" width="24" height="24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
             </div>
             <div class="stat-value">3</div>
-            <div class="stat-label">Call Center</div>
+            <div class="stat-label">Call Center Requests</div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" style="background: rgba(136,0,255,0.15);">
               <svg viewBox="0 0 24 24" fill="#8800FF" width="24" height="24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             </div>
             <div class="stat-value">1</div>
-            <div class="stat-label">Email / Portal</div>
+            <div class="stat-label">Email / Portal Requests</div>
+          </div>
+        </div>
+
+        <!-- Channel Mix by Segment -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+              Channel Usage by Banking Segment
+            </h2>
+            <span style="font-size: 12px; color: var(--text-muted); font-weight: 500; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--glass-border);">Active Customer Mix · March 2026</span>
+          </div>
+          <div class="card-body" style="padding: 0 0 20px 0;">
+
+            <!-- Segment × Channel Matrix Table -->
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: rgba(255,255,255,0.03);">
+                    <th style="padding: 12px 20px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); min-width: 180px;">Banking Segment</th>
+                    <th style="padding: 12px 16px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #00D4FF; border-bottom: 1px solid var(--glass-border); min-width: 130px;">📱 Mobile App</th>
+                    <th style="padding: 12px 16px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #00E676; border-bottom: 1px solid var(--glass-border); min-width: 140px;">💻 Internet Banking</th>
+                    <th style="padding: 12px 16px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #FF9800; border-bottom: 1px solid var(--glass-border); min-width: 120px;">📞 Call Center</th>
+                    <th style="padding: 12px 16px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #B388FF; border-bottom: 1px solid var(--glass-border); min-width: 100px;">🏧 ATM</th>
+                    <th style="padding: 12px 16px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #E91E63; border-bottom: 1px solid var(--glass-border); min-width: 130px;">🌐 Digital Portal</th>
+                    <th style="padding: 12px 16px; text-align: center; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-secondary); border-bottom: 1px solid var(--glass-border); min-width: 110px;">Total Active</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- ── Row: Mass Banking ── -->
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;" onmouseenter="this.style.background='rgba(255,255,255,0.03)'" onmouseleave="this.style.background=''">
+                    <td style="padding: 16px 20px;">
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 38px; height: 38px; background: rgba(0,212,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink:0;">🏦</div>
+                        <div>
+                          <div style="font-weight: 700; font-size: 14px;">Mass Banking</div>
+                          <div style="font-size: 11px; color: var(--text-muted);">4,910 total customers</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 22px; font-weight: 800; color: #00D4FF; line-height: 1;">2,847</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:58%; background:#00D4FF; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">58% enrolled</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #00E676; line-height: 1;">1,205</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:25%; background:#00E676; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">25% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #FF9800; line-height: 1;">892</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:18%; background:#FF9800; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">18% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #B388FF; line-height: 1;">3,120</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:64%; background:#B388FF; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">64% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #E91E63; line-height: 1;">445</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:9%; background:#E91E63; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">9% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 22px; font-weight: 800; color: var(--text-primary);">4,910</div>
+                      <div style="font-size: 10px; color: var(--text-muted);">100% base</div>
+                    </td>
+                  </tr>
+
+                  <!-- ── Row: Tamayuz Banking ── -->
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;" onmouseenter="this.style.background='rgba(255,255,255,0.03)'" onmouseleave="this.style.background=''">
+                    <td style="padding: 16px 20px;">
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 38px; height: 38px; background: rgba(255,215,0,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink:0;">⭐</div>
+                        <div>
+                          <div style="font-weight: 700; font-size: 14px;">Tamayuz Banking</div>
+                          <div style="font-size: 11px; color: var(--text-muted);">1,190 total customers</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 22px; font-weight: 800; color: #00D4FF; line-height: 1;">856</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:72%; background:#00D4FF; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">72% enrolled</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #00E676; line-height: 1;">742</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:62%; background:#00E676; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">62% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #FF9800; line-height: 1;">215</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:18%; background:#FF9800; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">18% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #B388FF; line-height: 1;">1,045</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:88%; background:#B388FF; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">88% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #E91E63; line-height: 1;">188</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:16%; background:#E91E63; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">16% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 22px; font-weight: 800; color: var(--text-primary);">1,190</div>
+                      <div style="font-size: 10px; color: var(--text-muted);">100% base</div>
+                    </td>
+                  </tr>
+
+                  <!-- ── Row: Private Banking ── -->
+                  <tr style="transition: background 0.2s;" onmouseenter="this.style.background='rgba(255,255,255,0.03)'" onmouseleave="this.style.background=''">
+                    <td style="padding: 16px 20px;">
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 38px; height: 38px; background: rgba(180,0,255,0.12); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink:0;">💎</div>
+                        <div>
+                          <div style="font-weight: 700; font-size: 14px;">Private Banking</div>
+                          <div style="font-size: 11px; color: var(--text-muted);">160 total customers</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 22px; font-weight: 800; color: #00D4FF; line-height: 1;">142</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:89%; background:#00D4FF; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">89% enrolled</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #00E676; line-height: 1;">198</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:100%; background:#00E676; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">multi-device</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #FF9800; line-height: 1;">87</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:54%; background:#FF9800; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">54% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #B388FF; line-height: 1;">203</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:100%; background:#B388FF; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">multi-card</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 20px; font-weight: 700; color: #E91E63; line-height: 1;">65</div>
+                      <div style="height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 6px auto; max-width: 90px;"><div style="height:100%; width:41%; background:#E91E63; border-radius:2px;"></div></div>
+                      <div style="font-size: 10px; color: var(--text-muted);">41% active</div>
+                    </td>
+                    <td style="padding: 16px; text-align: center;">
+                      <div style="font-size: 22px; font-weight: 800; color: var(--text-primary);">160</div>
+                      <div style="font-size: 10px; color: var(--text-muted);">100% base</div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Mobile Banking Enrollment Summary Cards -->
+            <div style="margin: 20px 20px 4px; padding: 18px 20px; background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.2); border-radius: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                <span style="font-size: 22px;">📱</span>
+                <span style="font-size: 14px; font-weight: 700; color: var(--text-primary);">Mobile Banking Active Enrollment — by Segment</span>
+                <span style="margin-left: auto; padding: 4px 14px; background: rgba(0,230,118,0.15); color: #00E676; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid rgba(0,230,118,0.3);">↑ +127 This Week · Total: 3,845</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+
+                <!-- Mass -->
+                <div style="padding: 16px 18px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.18); border-radius: 12px; position: relative;">
+                  <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">🏦 Mass Banking</div>
+                  <div style="font-size: 32px; font-weight: 900; color: #00D4FF; line-height: 1; margin-bottom: 6px;">2,847</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Active users out of 4,910 total</div>
+                  <div style="height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-top: 10px; margin-bottom: 4px;">
+                    <div style="height: 100%; width: 58%; background: linear-gradient(90deg, #00D4FF, #0097A7); border-radius: 3px;"></div>
+                  </div>
+                  <div style="font-size: 11px; color: #00D4FF; font-weight: 600;">58% enrollment rate</div>
+                  <div style="position: absolute; top: 14px; right: 14px; padding: 3px 10px; background: rgba(0,212,255,0.15); border-radius: 20px; font-size: 11px; color: #00D4FF; font-weight: 800; border: 1px solid rgba(0,212,255,0.3);">58%</div>
+                </div>
+
+                <!-- Tamayuz -->
+                <div style="padding: 16px 18px; background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.18); border-radius: 12px; position: relative;">
+                  <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">⭐ Tamayuz Banking</div>
+                  <div style="font-size: 32px; font-weight: 900; color: #00D4FF; line-height: 1; margin-bottom: 6px;">856</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Active users out of 1,190 total</div>
+                  <div style="height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-top: 10px; margin-bottom: 4px;">
+                    <div style="height: 100%; width: 72%; background: linear-gradient(90deg, #00D4FF, #0097A7); border-radius: 3px;"></div>
+                  </div>
+                  <div style="font-size: 11px; color: #00D4FF; font-weight: 600;">72% enrollment rate</div>
+                  <div style="position: absolute; top: 14px; right: 14px; padding: 3px 10px; background: rgba(0,212,255,0.15); border-radius: 20px; font-size: 11px; color: #00D4FF; font-weight: 800; border: 1px solid rgba(0,212,255,0.3);">72%</div>
+                </div>
+
+                <!-- Private -->
+                <div style="padding: 16px 18px; background: rgba(180,0,255,0.06); border: 1px solid rgba(180,0,255,0.18); border-radius: 12px; position: relative;">
+                  <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">💎 Private Banking</div>
+                  <div style="font-size: 32px; font-weight: 900; color: #00D4FF; line-height: 1; margin-bottom: 6px;">142</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Active users out of 160 total</div>
+                  <div style="height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-top: 10px; margin-bottom: 4px;">
+                    <div style="height: 100%; width: 89%; background: linear-gradient(90deg, #00D4FF, #0097A7); border-radius: 3px;"></div>
+                  </div>
+                  <div style="font-size: 11px; color: #00D4FF; font-weight: 600;">89% enrollment rate</div>
+                  <div style="position: absolute; top: 14px; right: 14px; padding: 3px 10px; background: rgba(0,212,255,0.15); border-radius: 20px; font-size: 11px; color: #00D4FF; font-weight: 800; border: 1px solid rgba(0,212,255,0.3);">89%</div>
+                </div>
+
+              </div>
+            </div>
+
           </div>
         </div>
 
