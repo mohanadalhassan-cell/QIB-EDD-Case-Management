@@ -812,33 +812,39 @@
 
     function requestDocs() {
       const cases = segmentCases[currentSegment];
-      if (!cases || cases.length === 0) {
-        alert('❌ No cases available in this segment');
-        return;
-      }
-      const caseId = cases[0].id;
-      alert(`📄 Document Request Initiated\n\nCase: ${caseId}\nCustomer: ${cases[0].customer}\nRIM: ${cases[0].rim}\n\nDocuments will be requested from the customer.`);
+      if (!cases || cases.length === 0) { showBvToast('❌ No cases available in this segment', 'error'); return; }
+      const c = cases[0];
+      showBvToast(`📄 Document request sent — Case: ${c.id} | Customer: ${c.customer}`);
     }
 
     function contactCustomer() {
       const cases = segmentCases[currentSegment];
-      if (!cases || cases.length === 0) {
-        alert('❌ No cases available in this segment');
-        return;
-      }
-      const caseId = cases[0].id;
-      alert(`📞 Customer Contact\n\nCase: ${caseId}\nCustomer: ${cases[0].customer}\n\nInitiating customer communication channel.`);
+      if (!cases || cases.length === 0) { showBvToast('❌ No cases available in this segment', 'error'); return; }
+      const c = cases[0];
+      showBvToast(`📞 Contact initiated — Case: ${c.id} | Customer: ${c.customer}`);
     }
 
     function escalateCase() {
       const cases = segmentCases[currentSegment];
-      if (!cases || cases.length === 0) {
-        alert('❌ No cases available in this segment');
-        return;
-      }
-      const caseId = cases[0].id;
-      alert(`⚠️ Case Escalation\n\nCase: ${caseId}\nCustomer: ${cases[0].customer}\n\nEscalating to Compliance/CDD Team for higher-level review.`);
+      if (!cases || cases.length === 0) { showBvToast('❌ No cases available in this segment', 'error'); return; }
+      const c = cases[0];
+      showBvToast(`⚠️ Escalated to Compliance — Case: ${c.id} | ${c.customer}`, 'warn');
     }
+
+      function showBvToast(msg, type) {
+        let t = document.getElementById('bv-toast');
+        if (!t) {
+          t = document.createElement('div');
+          t.id = 'bv-toast';
+          t.style.cssText = 'position:fixed;bottom:32px;right:32px;z-index:9999;min-width:300px;max-width:420px;padding:14px 20px;border-radius:12px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.5);transition:opacity 0.4s;opacity:0;line-height:1.5;';
+          document.body.appendChild(t);
+        }
+        t.style.background = type === 'error' ? 'rgba(239,68,68,0.96)' : type === 'warn' ? 'rgba(245,158,11,0.96)' : 'rgba(16,185,129,0.96)';
+        t.textContent = msg;
+        t.style.opacity = '1';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+      }
 
     function setupLogout() {
       const logoutBtn = document.getElementById('logout-btn');

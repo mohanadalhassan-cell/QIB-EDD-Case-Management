@@ -675,7 +675,7 @@
               <div class="risk-score-details">RIM: 12847593 • Personal Banking • KYC expires in 45 days</div>
               <div class="risk-score-action">⚠️ Previous non-compliance history • 3 missed document submissions</div>
             </div>
-            <button class="action-btn primary">Initiate Outreach</button>
+              <button class="action-btn primary" onclick="showKycToast('📞 Outreach initiated for Mohammed Al-Rashid (RIM: 12847593)')">Initiate Outreach</button>
           </div>
           
           <div class="risk-score-item">
@@ -685,7 +685,7 @@
               <div class="risk-score-details">RIM: 98234571 • Wholesale Banking • KYC expires in 32 days</div>
               <div class="risk-score-action">⚠️ High Risk Rating • Unresponsive to previous 2 contact attempts</div>
             </div>
-            <button class="action-btn primary">Initiate Outreach</button>
+              <button class="action-btn primary" onclick="showKycToast('📞 Outreach initiated for Al-Wakra Trading LLC (RIM: 98234571)')">Initiate Outreach</button>
           </div>
           
           <div class="risk-score-item">
@@ -695,7 +695,7 @@
               <div class="risk-score-details">RIM: 45782931 • Personal Banking • KYC expires in 67 days</div>
               <div class="risk-score-action">⚠️ Transaction pattern change detected • Risk rating increased</div>
             </div>
-            <button class="action-btn secondary">Schedule Follow-up</button>
+              <button class="action-btn secondary" onclick="showKycToast('📅 Follow-up scheduled for Fatima Hassan Al-Thani (RIM: 45782931)')">Schedule Follow-up</button>
           </div>
         </div>
       </div>
@@ -931,12 +931,12 @@
           </div>
           <div style="display: flex; gap: 0.5rem;">
             <button class="action-btn secondary" disabled>Previous</button>
-            <button class="action-btn secondary">1</button>
-            <button class="action-btn primary">2</button>
-            <button class="action-btn secondary">3</button>
-            <button class="action-btn secondary">...</button>
-            <button class="action-btn secondary">241</button>
-            <button class="action-btn secondary">Next</button>
+            <button class="action-btn primary" onclick="showKycToast('📄 Page 1 of 241 — showing records 1–6')">1</button>
+            <button class="action-btn secondary" onclick="showKycToast('📄 Page 2 of 241 — showing records 7–12')">2</button>
+            <button class="action-btn secondary" onclick="showKycToast('📄 Page 3 of 241 — showing records 13–18')">3</button>
+            <button class="action-btn secondary" style="cursor:default">...</button>
+            <button class="action-btn secondary" onclick="showKycToast('📄 Page 241 of 241 — showing last records')">241</button>
+            <button class="action-btn secondary" onclick="showKycToast('📄 Page 2 of 241 — showing records 7–12')">Next</button>
           </div>
         </div>
       </div>
@@ -974,31 +974,66 @@
       }
     });
 
+      function showKycToast(msg, type) {
+        let t = document.getElementById('kyc-toast');
+        if (!t) {
+          t = document.createElement('div');
+          t.id = 'kyc-toast';
+          t.style.cssText = 'position:fixed;bottom:32px;right:32px;z-index:9999;min-width:300px;max-width:440px;padding:14px 20px;border-radius:12px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.5);transition:opacity 0.4s;opacity:0;line-height:1.5;';
+          document.body.appendChild(t);
+        }
+        t.style.background = type === 'error' ? 'rgba(239,68,68,0.96)' : type === 'warn' ? 'rgba(245,158,11,0.96)' : 'rgba(16,185,129,0.96)';
+        t.textContent = msg;
+        t.style.opacity = '1';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3500);
+      }
+
+      function showKycConfirm(msg, onConfirm) {
+        let overlay = document.getElementById('kyc-confirm-overlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.id = 'kyc-confirm-overlay';
+          overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:10000;display:flex;align-items:center;justify-content:center;';
+          overlay.innerHTML = `<div style="background:#1a1a2e;border:1px solid rgba(255,193,7,0.3);border-radius:16px;padding:28px 32px;max-width:400px;width:90%;text-align:center;">
+            <div style="font-size:28px;margin-bottom:12px;">⚠️</div>
+            <p id="kyc-confirm-msg" style="color:#fff;font-size:14px;margin-bottom:24px;line-height:1.6;"></p>
+            <div style="display:flex;gap:12px;justify-content:center;">
+              <button onclick="document.getElementById('kyc-confirm-overlay').style.display='none'" style="padding:10px 24px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:#aaa;cursor:pointer;font-weight:600;">Cancel</button>
+              <button id="kyc-confirm-ok" style="padding:10px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;cursor:pointer;font-weight:700;">Confirm</button>
+            </div>
+          </div>`;
+          document.body.appendChild(overlay);
+        }
+        document.getElementById('kyc-confirm-msg').textContent = msg;
+        overlay.style.display = 'flex';
+        document.getElementById('kyc-confirm-ok').onclick = function() {
+          overlay.style.display = 'none';
+          onConfirm();
+        };
+      }
+
     function refreshData() {
-      alert('Refreshing data from T24...');
-      // Simulated refresh
-      setTimeout(() => {
-        alert('Data refreshed successfully!');
-      }, 1000);
+      showKycToast('🔄 Refreshing data from T24 Core Banking...');
+      setTimeout(() => showKycToast('✅ Data refreshed successfully'), 1200);
     }
 
     function exportReport() {
-      alert('Exporting KYC Compliance Report...');
+      showKycToast('📊 KYC Compliance Report export started...');
     }
 
     function exportAlerts() {
-      alert('Exporting Expired KYC Alerts to Excel...');
+      showKycToast('📥 Expired KYC Alerts export started (Excel format)...');
     }
 
     function escalateAll() {
-      if (confirm('Are you sure you want to escalate all filtered alerts to the next level?')) {
-        alert('Bulk escalation initiated. Notifications sent to respective teams.');
-      }
+      showKycConfirm('Escalate all filtered alerts to the next approval level?', () => {
+        showKycToast('⚠️ Bulk escalation initiated — notifications sent to respective teams', 'warn');
+      });
     }
 
     function viewCase(rim) {
-      alert('Opening case details for RIM: ' + rim);
-      // In production, this would navigate to the detailed case view
+      window.location.href = 'edd_case.html?rimId=' + rim;
     }
 
     // Filter functionality
