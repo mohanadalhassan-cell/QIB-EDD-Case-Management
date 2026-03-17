@@ -353,19 +353,21 @@
               <span class="nav-group-arrow">▶</span>
             </button>
             <div class="nav-submenu">
-              <div class="nav-subtitle">قطاع الفروع</div>
+              <div class="nav-subtitle">Branch Sector</div>
               <a href="business_view.html#mass" class="nav-subitem">🏦 Mass Banking</a>
               <a href="business_view.html#tamayuz" class="nav-subitem">Tamayuz Banking</a>
               <a href="business_view.html#private" class="nav-subitem">Private Banking</a>
 
-              <div class="nav-subtitle">قطاع Alternative Channels</div>
+              <div class="nav-subtitle">Alternative Channels Sector</div>
               <a href="alternative_channels.html#mobile" class="nav-subitem">📱 Mobile Banking</a>
               <a href="alternative_channels.html#internet" class="nav-subitem">💻 Internet Banking</a>
               <a href="alternative_channels.html#callcenter" class="nav-subitem">📞 Call Center</a>
               <a href="alternative_channels.html#atm" class="nav-subitem">ATM</a>
+              <a href="alternative_channels.html" class="nav-subitem">Alt. Channels</a>
+              <a href="customer360.html" class="nav-subitem">Customer 360</a>
 
-              <div class="nav-subtitle">قطاع المنتجات</div>
-              <div class="nav-subitem" style="opacity:.55; cursor:default;">(فارغ)</div>
+              <div class="nav-subtitle">Products Sector</div>
+              <div class="nav-subitem" style="opacity:.55; cursor:default;">(Empty)</div>
             </div>
           </div>
           <a href="cdd_view.html" class="nav-item">
@@ -378,17 +380,7 @@
           </a>
         </div>
         
-        <div class="nav-section">
-          <div class="nav-section-title">Channels</div>
-          <a href="alternative_channels.html" class="nav-item">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H5V5h14v14zM7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/></svg>
-            <span>Alt. Channels</span>
-          </a>
-          <a href="customer360.html" class="nav-item">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-            <span>Customer 360</span>
-          </a>
-        </div>
+        
         
         <div class="nav-section">
           <div class="nav-section-title">Risk & Compliance</div>
@@ -424,10 +416,10 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar">SE</div>
         <div class="user-info">
-          <div class="user-name" id="user-name">WPS & Digital Back Office</div>
-          <div class="user-role" id="user-role">Operations Management</div>
+          <div class="user-name" id="user-name">Sayed Elmahday</div>
+          <div class="user-role" id="user-role">Head of Retail and Shared Service Operation</div>
         </div>
       </div>
     </aside>
@@ -762,7 +754,7 @@
       const session = JSON.parse(localStorage.getItem('qibEddSession') || '{}');
       if (session.employeeName) {
         document.getElementById('user-name').textContent = session.employeeName;
-        document.getElementById('user-role').textContent = session.role || 'Retail Banking';
+        document.getElementById('user-role').textContent = session.role || 'Head of Retail and Shared Service Operation';
         document.getElementById('user-avatar').textContent = session.employeeName.split(' ').map(n => n[0]).join('').substring(0, 2);
       }
     }
@@ -903,7 +895,7 @@
 
           <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;">
             <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;">
-              <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">تفاصيل العميل</div>
+              <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">Customer Details</div>
               <div style="font-size:14px;line-height:1.9;">
                 <div><strong>Customer:</strong> ${c.customer}</div>
                 <div><strong>RIM:</strong> ${c.rim}</div>
@@ -915,25 +907,25 @@
               </div>
 
               <div style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35);">
-                <div style="font-size:13px;color:#ff9f9f;margin-bottom:6px;">سبب التصنيف عالي المخاطر</div>
+                <div style="font-size:13px;color:#ff9f9f;margin-bottom:6px;">High-Risk Classification Reason</div>
                 <div style="font-size:13px;line-height:1.7;">${c.highRiskReason}</div>
               </div>
 
               <div style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.30);">
-                <div style="font-size:13px;color:#9df3d0;margin-bottom:6px;">الأقسام المكتملة</div>
+                <div style="font-size:13px;color:#9df3d0;margin-bottom:6px;">Completed Sections</div>
                 <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;">${sectionsHtml}</ul>
               </div>
             </div>
 
             <div style="display:flex;flex-direction:column;gap:12px;">
               <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;">
-                <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">الخريطة</div>
+                <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">Map</div>
                 <div style="font-size:12px;color:#c7d5ea;margin-bottom:8px;">${c.location.branch} - ${c.location.area}</div>
                 <iframe src="${mapUrl}" style="width:100%;height:220px;border:0;border-radius:10px;" loading="lazy"></iframe>
               </div>
 
               <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;">
-                <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">التحليل</div>
+                <div style="font-size:13px;color:#9fb6d4;margin-bottom:8px;">Analysis</div>
                 <div style="font-size:13px;line-height:1.7;"><strong>Summary:</strong> ${c.analysis.summary}</div>
                 <div style="font-size:13px;line-height:1.7;margin-top:6px;"><strong>Signals:</strong> ${c.analysis.transactionSignals}</div>
                 <div style="font-size:13px;line-height:1.7;margin-top:6px;"><strong>Recommendation:</strong> ${c.analysis.recommendation}</div>
@@ -1025,7 +1017,7 @@
     </div>
   </div>
   
-  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="رؤية قطر 2030">🏛️</div>
+  <div class="vision-2030-badge" role="img" aria-label="Qatar National Vision 2030" title="Qatar National Vision 2030">🏛️</div>
 
   <script src="js/accessibility.js"></script>
   <script src="js/theme-manager.js"></script>
@@ -1036,16 +1028,21 @@
     if (typeof initLanguageSystem === 'function') {
       initLanguageSystem();
       window.languageSwitcher = function() {
-        const currentLang = localStorage.getItem('userLanguage') || 'en';
-        const newLang = currentLang === 'en' ? 'ar' : 'en';
-        setGlobalLanguage(newLang);
-        document.body.dir = newLang === 'ar' ? 'rtl' : 'ltr';
-        document.documentElement.lang = newLang;
-        document.getElementById('lang-label').textContent = newLang === 'ar' ? 'AR' : 'EN';
-        location.reload();
+        localStorage.setItem('userLanguage', 'en');
+        if (typeof setGlobalLanguage === 'function') setGlobalLanguage('en');
+        document.body.dir = 'ltr';
+        document.documentElement.lang = 'en';
+        document.getElementById('lang-label').textContent = 'EN';
       };
-      const currentLang = localStorage.getItem('userLanguage') || 'en';
-      document.getElementById('lang-label').textContent = currentLang === 'ar' ? 'AR' : 'EN';
+      localStorage.setItem('userLanguage', 'en');
+      document.getElementById('lang-label').textContent = 'EN';
+      setTimeout(() => {
+        document.querySelectorAll('*').forEach((el) => {
+          if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+            el.textContent = el.textContent.replace('العربية', 'Arabic');
+          }
+        });
+      }, 50);
       if (typeof VoiceAssistant !== 'undefined') console.log('✅ Voice Assistant loaded');
     }
   </script>
