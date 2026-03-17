@@ -829,6 +829,21 @@
       document.getElementById('ccSearchInput').focus();
     }
 
+    function showDashboardToast(msg, type) {
+      let t = document.getElementById('dashboard-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'dashboard-toast';
+        t.style.cssText = 'position:fixed;bottom:30px;right:30px;z-index:10001;min-width:280px;max-width:430px;padding:14px 18px;border-radius:12px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.45);opacity:0;transition:opacity .3s;line-height:1.5;';
+        document.body.appendChild(t);
+      }
+      t.style.background = type === 'error' ? 'rgba(239,68,68,.95)' : 'rgba(16,185,129,.95)';
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.style.opacity = '0'; }, 3200);
+    }
+
     function searchCallCenter() {
       const input = document.getElementById('ccSearchInput').value.trim();
       if (!input) return;
@@ -844,7 +859,7 @@
       if (customer) {
         EnterpriseUI.showCallCenterView(customer.rim);
       } else {
-        alert('Customer not found. Try: RIM001234, RIM005678, etc.');
+        showDashboardToast('Customer not found. Try: RIM001234, RIM005678, etc.', 'error');
       }
     }
   </script>
