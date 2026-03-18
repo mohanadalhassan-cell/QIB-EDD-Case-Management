@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="css/settings-drawer.css">
   <link rel="stylesheet" href="css/rtl-support.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <script src="js/security-guard.js"></script>
+  <script src="js/theme-manager.js"></script>
   <!-- Language & Voice Features -->
   <script src="js/language-pack.js"></script>
   <script src="js/voice-assistant.js"></script>
@@ -23,6 +25,7 @@
   </style>
 </head>
 <body>
+  <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] });</script>
   <div class="ambient-bg"></div>
   <div class="gradient-mesh"></div>
   
@@ -119,9 +122,9 @@
       </nav>
       
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background: #607D8B; color: #fff; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; font-size: 22px;">🏢</div>
         <div class="user-info">
-          <div class="user-name" id="user-name">WPS & Digital Back Office</div>
+          <div class="user-name" id="user-name">إدارة العمليات</div>
           <div class="user-role" id="user-role">Operations Management</div>
         </div>
       </div>

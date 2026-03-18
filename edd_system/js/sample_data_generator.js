@@ -143,7 +143,7 @@ const SAMPLE_DATA_GENERATOR = (() => {
       lastUpdated: generateDate(30),
       updatedBy: randomItem(['ahmed.thani@qib.qa', 'fatima.altiwari@qib.qa', 'system@qib.qa']),
       department: randomItem(['CDD', 'KYC', 'COMPLIANCE', 'OPERATIONS']),
-      assignedTo: randomItem(['Mohanad Al Hassan', 'Fatima Al-Tiwari', 'Mohammed Al-Kaabi']),
+      assignedTo: randomItem(['العمليات', 'Fatima Al-Tiwari', 'Mohammed Al-Kaabi']),
       documentRef: `DOC-${generateId('REF')}`,
       notes: generateNotes(),
       complianceChecks: {

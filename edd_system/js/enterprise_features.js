@@ -806,6 +806,7 @@ Retail Banking Group
           titleAr: 'التحقق من الهوية',
           content: `
             <h3>Customer Re-Verification Methods</h3>
+            <p style="color:#00D4FF;font-size:14px;font-weight:600;margin-bottom:10px;">The branch determines which of the following methods is used for customer re-verification:</p>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
               <div style="background: rgba(0,212,255,0.1); padding: 20px; border-radius: 12px; text-align: center;">
                 <div style="font-size: 40px; margin-bottom: 10px;">📷</div>

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Check session - use edd_session with authenticated flag
   const sessionData = sessionStorage.getItem('edd_session');
   if (!sessionData) {
-    window.location.replace('/edd_system/login.html');
+    window.location.replace('login.html');
     return;
   }
 
@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     session = JSON.parse(sessionData);
     if (!session.authenticated || !session.user) {
-      window.location.replace('/edd_system/login.html');
+      window.location.replace('login.html');
       return;
     }
   } catch (e) {
-    window.location.replace('/edd_system/login.html');
+    window.location.replace('login.html');
     return;
   }
 
@@ -41,6 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.removeItem('edd_user');
     window.location.replace('/edd_system/login.html');
   });
+
+  // ═══ NEW: APPLY ROLE-BASED FILTERING ═══
+  applyRoleBasedFiltering(currentUser.role);
 
   // Load dashboard data
   loadDashboardStats();
@@ -63,6 +66,114 @@ function getRoleLabel(role) {
   };
   return labels[role] || role;
 }
+
+// ═══ NEW: ROLE-BASED FILTERING AND VIEW MANAGEMENT ═══
+function applyRoleBasedFiltering(role) {
+  'use strict';
+
+  // Get page elements for role-based modification
+  const pageTitle = document.querySelector('.page-title');
+  const breadcrumb = document.querySelector('.breadcrumb');
+  
+  switch (role) {
+    
+    case 'business': {
+      // EMPLOYEE/MAKER VIEW: Only assigned cases + submission capability
+      if (pageTitle) pageTitle.textContent = 'My EDD Cases — Business Department';
+      if (breadcrumb) breadcrumb.innerHTML = '<a href="dashboard.html">Dashboard</a> / <span>My Cases</span>';
+      
+      // Filter to show only "My Cases"
+      const casesTable = document.getElementById('cases-table');
+      if (casesTable) {
+        const originalCases = casesTable.querySelectorAll('tr');
+        originalCases.forEach(tr => {
+          // Mark as "My Case" if applicable
+          tr.classList.add('business-view');
+        });
+      }
+      
+      // Show "Submit for Review" action instead of generic "Review"
+      document.body.classList.add('role-business');
+      break;
+    }
+    
+    case 'management': {
+      // MANAGER VIEW: Full analytics + trend analysis (no case editing)
+      if (pageTitle) pageTitle.textContent = 'Management Dashboard — EDD Analytics';
+      if (breadcrumb) breadcrumb.innerHTML = '<a href="dashboard.html">Dashboard</a> / <span>Analytics</span>';
+      
+      // Hide case-level actions
+      document.querySelectorAll('[onclick*="openCase"], [onclick*="editCase"]').forEach(btn => {
+        btn.style.display = 'none';
+      });
+      
+      // Show export button if it exists
+      const exportBtn = document.createElement('button');
+      exportBtn.className = 'btn btn-secondary btn-sm';
+      exportBtn.innerHTML = '📊 Export to Excel';
+      exportBtn.style.cssText = 'margin-left: 8px; background: rgba(76, 175, 80, 0.15); border: 1px solid rgba(76, 175, 80, 0.3); color: #4CAF50; padding: 8px 14px; border-radius: 8px; cursor: pointer;';
+      exportBtn.onclick = () => exportDashboardToExcel();
+      const headerRight = document.querySelector('.header-right');
+      if (headerRight) headerRight.appendChild(exportBtn);
+      
+      document.body.classList.add('role-management');
+      break;
+    }
+    
+    case 'audit': {
+      // AUDITOR VIEW: Redirect to Audit Console
+      window.location.href = 'audit_console.html';
+      break;
+    }
+    
+    case 'compliance': {
+      // COMPLIANCE VIEW: Can see cases marked for compliance review
+      window.location.href = 'compliance_view.html';
+      break;
+    }
+    
+    case 'it': {
+      // ADMIN/IT VIEW: System administration
+      window.location.href = 'admin_dashboard.html';
+      break;
+    }
+    
+    default: {
+      // Unknown role: show basic dashboard
+      console.warn('Unknown role:', role);
+      document.body.classList.add('role-unknown');
+    }
+  }
+}
+
+// ═══ EXPORT TO EXCEL FUNCTION ═══
+function exportDashboardToExcel() {
+  const stats = EDDMockData.getStatistics();
+  const csv = [
+    ['EDD Dashboard Export — ' + new Date().toLocaleDateString()],
+    [],
+    ['Metric', 'Value'],
+    ['Total EDD Cases', stats.totalCases],
+    ['Pending Review', stats.inProgress],
+    ['SLA Breached', stats.slaBreach],
+    ['Completed', stats.completed],
+    [],
+    ['By Segment', 'Count'],
+    ['Mass Banking', stats.bySegment.Mass],
+    ['Tamayuz Banking', stats.bySegment.Tamayuz],
+    ['Private Banking', stats.bySegment.Private]
+  ];
+  
+  let csvContent = csv.map(row => row.join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'EDD_Dashboard_' + new Date().toISOString().split('T')[0] + '.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 
 function loadDashboardStats() {
   const stats = EDDMockData.getStatistics();

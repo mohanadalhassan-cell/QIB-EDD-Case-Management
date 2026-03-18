@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Check session
   const session = JSON.parse(sessionStorage.getItem('edd_session') || '{}');
   if (!session.authenticated) {
-    window.location.replace('/edd_system/login.html');
+    window.location.replace('login.html');
     return;
   }
 
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Logout handler
   document.getElementById('logout-btn').addEventListener('click', function() {
     sessionStorage.removeItem('edd_session');
-    window.location.href = '/edd_system/login.html';
+    window.location.href = 'login.html';
   });
 });
 

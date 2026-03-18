@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - EDD_QIB System</title>
     <link rel="stylesheet" href="../css/edd_system.css">
+    <script src="js/security-guard.js"></script>
+    <script src="js/theme-manager.js"></script>
     <style>
         :root {
             --primary-color: #1a4d7a;
@@ -32,6 +34,23 @@
         .admin-container {
             max-width: 1600px;
             margin: 0 auto;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #0b1224;
+            box-shadow: 0 8px 18px rgba(14, 165, 233, 0.35);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(14, 165, 233, 0.4);
         }
 
         .admin-header {
@@ -499,7 +518,7 @@
         }
     </style>
     
-    <!-- 🎯 UNIFIED SYSTEMS (New v2.0) -->
+    <!-- ðŸŽ¯ UNIFIED SYSTEMS (New v2.0) -->
     <script src="js/path_manager.js"></script>
     <script src="js/risk_datasets.js"></script>
     <script src="js/risk_engine.js"></script>
@@ -508,14 +527,18 @@
     <script src="js/data_bridge.js"></script>
 </head>
 <body>
+    <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['it', 'management'] });</script>
     <div class="admin-container">
         <!-- Header -->
         <div class="admin-header">
             <div>
-                <h1>🛡️ Admin Dashboard</h1>
+                <h1>ðŸ›¡ï¸ Admin Dashboard</h1>
                 <div class="subtitle">System Management & Monitoring</div>
             </div>
-            <div class="status-badge">🟢 System Healthy</div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <button class="action-btn" onclick="window.location.href='access_control.html'">Access Control</button>
+                <div class="status-badge">System Healthy</div>
+            </div>
         </div>
 
         <!-- Alerts -->
@@ -526,41 +549,41 @@
             <!-- Total Users -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">👥 Total Users</div>
-                    <div class="card-icon">📊</div>
+                    <div class="card-title">ðŸ‘¥ Total Users</div>
+                    <div class="card-icon">ðŸ“Š</div>
                 </div>
                 <div class="stat-value" id="totalUsers">0</div>
                 <div class="stat-label">Active Users</div>
-                <div class="stat-change positive">↑ 12% from last month</div>
+                <div class="stat-change positive">â†‘ 12% from last month</div>
             </div>
 
             <!-- Active Cases -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">📋 Active Cases</div>
-                    <div class="card-icon">💼</div>
+                    <div class="card-title">ðŸ“‹ Active Cases</div>
+                    <div class="card-icon">ðŸ’¼</div>
                 </div>
                 <div class="stat-value" id="activeCases">0</div>
                 <div class="stat-label">Under Review</div>
-                <div class="stat-change positive">↑ 8% this week</div>
+                <div class="stat-change positive">â†‘ 8% this week</div>
             </div>
 
             <!-- SLA Compliance -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">⏱️ SLA Compliance</div>
-                    <div class="card-icon">✅</div>
+                    <div class="card-title">â±ï¸ SLA Compliance</div>
+                    <div class="card-icon">âœ…</div>
                 </div>
                 <div class="stat-value" id="slaCompliance">0%</div>
                 <div class="stat-label">On-time Completion</div>
-                <div class="stat-change positive">↑ 2.5% improvement</div>
+                <div class="stat-change positive">â†‘ 2.5% improvement</div>
             </div>
 
             <!-- System Uptime -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">🔧 System Uptime</div>
-                    <div class="card-icon">📡</div>
+                    <div class="card-title">ðŸ”§ System Uptime</div>
+                    <div class="card-icon">ðŸ“¡</div>
                 </div>
                 <div class="stat-value" id="systemUptime">0%</div>
                 <div class="stat-label">This Month</div>
@@ -570,24 +593,24 @@
             <!-- PII Data Security -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">🔒 Data Security</div>
-                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">ðŸ”’ Data Security</div>
+                    <div class="card-icon">ðŸ›¡ï¸</div>
                 </div>
                 <div class="stat-label">Encryption Status</div>
-                <div class="stat-change positive" style="margin-bottom: 10px;">✓ TLS 1.3 Enabled</div>
-                <div class="stat-change positive" style="margin-bottom: 10px;">✓ AES-256 Encryption</div>
-                <div class="stat-change positive">✓ Zero Breaches</div>
+                <div class="stat-change positive" style="margin-bottom: 10px;">âœ“ TLS 1.3 Enabled</div>
+                <div class="stat-change positive" style="margin-bottom: 10px;">âœ“ AES-256 Encryption</div>
+                <div class="stat-change positive">âœ“ Zero Breaches</div>
             </div>
 
             <!-- API Requests -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">🔌 API Stats</div>
-                    <div class="card-icon">📈</div>
+                    <div class="card-title">ðŸ”Œ API Stats</div>
+                    <div class="card-icon">ðŸ“ˆ</div>
                 </div>
                 <div class="stat-value" id="apiRequests">0</div>
                 <div class="stat-label">Requests (Today)</div>
-                <div class="stat-change positive">↑ 5.2K avg/day</div>
+                <div class="stat-change positive">â†‘ 5.2K avg/day</div>
             </div>
         </div>
 
@@ -595,8 +618,8 @@
         <div class="admin-grid">
             <div class="card" style="grid-column: 1 / -1;">
                 <div class="card-header">
-                    <div class="card-title">📊 Case Status Distribution</div>
-                    <div class="card-icon">📉</div>
+                    <div class="card-title">ðŸ“Š Case Status Distribution</div>
+                    <div class="card-icon">ðŸ“‰</div>
                 </div>
                 <div class="chart-container">
                     <div class="bar-chart" id="caseChart"></div>
@@ -607,10 +630,10 @@
         <!-- Management Tabs -->
         <div class="table-section">
             <div class="tabs">
-                <button class="tab-button active" onclick="switchTab('users')">👥 User Management</button>
-                <button class="tab-button" onclick="switchTab('audit')">📋 Audit Log</button>
-                <button class="tab-button" onclick="switchTab('settings')">⚙️ System Settings</button>
-                <button class="tab-button" onclick="switchTab('health')">🏥 System Health</button>
+                <button class="tab-button active" onclick="switchTab('users')">ðŸ‘¥ User Management</button>
+                <button class="tab-button" onclick="switchTab('audit')">ðŸ“‹ Audit Log</button>
+                <button class="tab-button" onclick="switchTab('settings')">âš™ï¸ System Settings</button>
+                <button class="tab-button" onclick="switchTab('health')">ðŸ¥ System Health</button>
             </div>
 
             <!-- User Management Tab -->
@@ -673,10 +696,10 @@
             <!-- Settings Tab -->
             <div id="settings-tab" style="display: none;">
                 <div style="margin: 20px;">
-                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">🔧 System Configuration</h3>
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">ðŸ”§ System Configuration</h3>
 
                     <div class="alert alert-info">
-                        <span>📝</span>
+                        <span>ðŸ“</span>
                         <span>Update system settings below. Changes take effect immediately.</span>
                     </div>
 
@@ -744,8 +767,8 @@
                     </div>
 
                     <div style="margin-top: 30px;">
-                        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
-                        <button class="btn btn-secondary" style="margin-left: 10px;" onclick="resetSettings()">↺ Reset to Defaults</button>
+                        <button class="btn btn-primary" onclick="saveSettings()">ðŸ’¾ Save Settings</button>
+                        <button class="btn btn-secondary" style="margin-left: 10px;" onclick="resetSettings()">â†º Reset to Defaults</button>
                     </div>
                 </div>
             </div>
@@ -753,13 +776,13 @@
             <!-- Health Tab -->
             <div id="health-tab" style="display: none;">
                 <div>
-                    <h3 style="color: var(--primary-color); margin-bottom: 20px; margin-top: 20px;">🏥 System Health Status</h3>
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px; margin-top: 20px;">ðŸ¥ System Health Status</h3>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">Database Connection</div>
-                                <span class="badge badge-success">✓ Connected</span>
+                                <span class="badge badge-success">âœ“ Connected</span>
                             </div>
                             <div class="stat-label">Response Time: 45ms</div>
                             <div class="stat-label">Connections: 12/50</div>
@@ -768,7 +791,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">API Server</div>
-                                <span class="badge badge-success">✓ Operational</span>
+                                <span class="badge badge-success">âœ“ Operational</span>
                             </div>
                             <div class="stat-label">CPU Usage: 28%</div>
                             <div class="stat-label">Memory: 560MB / 2GB</div>
@@ -777,7 +800,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">Email Service</div>
-                                <span class="badge badge-success">✓ Running</span>
+                                <span class="badge badge-success">âœ“ Running</span>
                             </div>
                             <div class="stat-label">Queue: 24 pending</div>
                             <div class="stat-label">Success Rate: 99.8%</div>
@@ -786,7 +809,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">Authentication</div>
-                                <span class="badge badge-success">✓ Operational</span>
+                                <span class="badge badge-success">âœ“ Operational</span>
                             </div>
                             <div class="stat-label">Active Sessions: 45</div>
                             <div class="stat-label">Last Sync: 2 mins ago</div>
@@ -795,7 +818,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">Backup System</div>
-                                <span class="badge badge-success">✓ Completed</span>
+                                <span class="badge badge-success">âœ“ Completed</span>
                             </div>
                             <div class="stat-label">Last Backup: 2hr 15min ago</div>
                             <div class="stat-label">Size: 2.4GB</div>
@@ -804,7 +827,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="card-title">SSL Certificate</div>
-                                <span class="badge badge-success">✓ Valid</span>
+                                <span class="badge badge-success">âœ“ Valid</span>
                             </div>
                             <div class="stat-label">Expires: 89 days</div>
                             <div class="stat-label">Algorithm: TLS 1.3</div>
@@ -818,7 +841,7 @@
     <!-- Add User Modal -->
     <div class="modal-backdrop" id="addUserModal">
         <div class="modal">
-            <div class="modal-header">➕ Add New User</div>
+            <div class="modal-header">âž• Add New User</div>
             <div class="modal-body">
                 <div class="form-group">
                     <label>Full Name</label>
@@ -1012,7 +1035,7 @@
                 return;
             }
 
-            alert(`✓ User ${name} created successfully!`);
+            alert(`âœ“ User ${name} created successfully!`);
             closeModal('addUserModal');
             loadUsers();
 
@@ -1033,7 +1056,7 @@
         }
 
         function saveSettings() {
-            alert('✓ Settings saved successfully!');
+            alert('âœ“ Settings saved successfully!');
         }
 
         function resetSettings() {
@@ -1060,3 +1083,5 @@
     </script>
 </body>
 </html>
+
+

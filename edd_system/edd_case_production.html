@@ -1,11 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EDD Investigation Workspace — 11-Section Template</title>
+  <title>EDD Investigation Workspace â€” 11-Section Template</title>
   <link rel="stylesheet" href="css/edd_system.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <script src="js/security-guard.js"></script>
+  <script src="js/theme-manager.js"></script>
   <style>
     /* EDD Investigation Workspace Styles */
     .edd-investigation-workspace {
@@ -463,6 +465,11 @@
       background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
       width: 0%;
       transition: width 0.3s;
+    }
+
+    .edd-missing {
+      outline: 2px solid #F44336;
+      border-radius: 6px;
     }
 
     /* Data Source Transparency Legend */
@@ -1283,13 +1290,14 @@
   </style>
 </head>
 <body>
+  <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['business', 'cdd', 'compliance', 'management', 'audit', 'it'] });</script>
   <!-- Skip to main content link for screen readers -->
   <a href="#main-content" class="skip-to-main">Skip to main content</a>
 
   <!-- Accessibility Control Panel -->
   <div class="a11y-panel">
     <button class="a11y-panel-toggle" aria-label="Open accessibility options" onclick="document.querySelector('.a11y-panel-content').classList.toggle('active');">
-      ♿
+      â™¿
     </button>
 
     <div class="a11y-panel-content">
@@ -1298,7 +1306,7 @@
       <div class="a11y-control">
         <label>Text Size</label>
         <div class="a11y-control-group">
-          <button class="a11y-button" onclick="window.accessibilityManager.adjustFontSize(-10);" aria-label="decrease font size">A−</button>
+          <button class="a11y-button" onclick="window.accessibilityManager.adjustFontSize(-10);" aria-label="decrease font size">Aâˆ’</button>
           <input type="range" class="a11y-slider" min="75" max="200" value="100" 
                  onchange="window.accessibilityManager.settings.fontSize = this.value; window.accessibilityManager.saveSettings(); document.documentElement.style.fontSize = (this.value / 100) * 16 + 'px';"
                  aria-label="adjust font size">
@@ -1316,15 +1324,15 @@
 
       <div class="a11y-control">
         <label>Audio Feedback</label>
-        <button class="a11y-button active" onclick="window.accessibilityManager.settings.audioFeedbackEnabled = !window.accessibilityManager.settings.audioFeedbackEnabled; window.accessibilityManager.saveSettings(); this.textContent = window.accessibilityManager.settings.audioFeedbackEnabled ? '🔊 Audio On' : '🔇 Audio Off'; this.classList.toggle('active');">
-          🔊 Audio On
+        <button class="a11y-button active" onclick="window.accessibilityManager.settings.audioFeedbackEnabled = !window.accessibilityManager.settings.audioFeedbackEnabled; window.accessibilityManager.saveSettings(); this.textContent = window.accessibilityManager.settings.audioFeedbackEnabled ? 'ðŸ”Š Audio On' : 'ðŸ”‡ Audio Off'; this.classList.toggle('active');">
+          ðŸ”Š Audio On
         </button>
       </div>
 
       <div class="a11y-control">
         <label>Voice Navigation</label>
         <button class="a11y-button" onclick="startVoiceCommandsHandler();" aria-label="start voice commands">
-          🎤 Start Voice
+          ðŸŽ¤ Start Voice
         </button>
         <div class="a11y-status">Say: "next section", "submit", "read page"</div>
       </div>
@@ -1332,7 +1340,7 @@
       <div class="a11y-control">
         <label>Display</label>
         <button class="fullscreen-btn" onclick="window.accessibilityManager.toggleFullscreen();" aria-label="toggle fullscreen">
-          ⛶ Fullscreen
+          â›¶ Fullscreen
         </button>
       </div>
 
@@ -1352,7 +1360,7 @@
   <div id="openingScreen" class="edd-opening-screen">
     <div class="edd-opening-content">
       <div class="edd-opening-logo">
-        🔍
+        ðŸ”
       </div>
       <h1 class="edd-opening-title">EDD Investigation Platform</h1>
       <p class="edd-opening-subtitle">Customer Risk Assessment & Compliance Review</p>
@@ -1363,7 +1371,7 @@
         <em>"This system is not just a digital EDD form, but an investigation platform that helps the bank understand customer risk and make informed compliance decisions."</em>
       </div>
       <button class="edd-opening-button" onclick="startInvestigation()">
-        ▶ Start Investigation →
+        â–¶ Start Investigation â†’
       </button>
     </div>
   </div>
@@ -1397,9 +1405,9 @@
       </nav>
 
       <div class="sidebar-user">
-        <div class="user-avatar" id="user-avatar" style="background-image: url('assets/employees/MR.MOHANAD ALHASSAM.jpeg'); background-size: cover; background-position: center;"></div>
+        <div class="user-avatar" id="user-avatar" style="background: #607D8B; color: #fff; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; font-size: 22px;">🏢</div>
         <div class="user-info">
-          <div class="user-name" id="user-name">WPS & Digital Back Office</div>
+          <div class="user-name" id="user-name">إدارة العمليات</div>
           <div class="user-role" id="user-role">Operations Management</div>
         </div>
       </div>
@@ -1409,7 +1417,7 @@
     <main class="main-content" style="width: 100%; display: flex;">
       <!-- EDD Section Navigation -->
       <aside class="edd-section-nav">
-        <div class="edd-section-nav-header">📋 11-Section Workflow</div>
+        <div class="edd-section-nav-header">ðŸ“‹ 11-Section Workflow</div>
         
         <!-- Section Items -->
         <div class="edd-section-item active" onclick="switchSection(1)">
@@ -1477,6 +1485,21 @@
           <span>Business Recommendation</span>
           <span class="edd-section-status required">REQUIRED</span>
         </div>
+        <div class="edd-section-item" onclick="switchSection(12)">
+          <div class="edd-section-num">12</div>
+          <span>Beneficial Ownership</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
+        <div class="edd-section-item" onclick="switchSection(13)">
+          <div class="edd-section-num">13</div>
+          <span>Sanctions & Adverse Media</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
+        <div class="edd-section-item" onclick="switchSection(14)">
+          <div class="edd-section-num">14</div>
+          <span>Docs & QA Sign-off</span>
+          <span class="edd-section-status required">REQUIRED</span>
+        </div>
       </aside>
 
       <!-- Content Area -->
@@ -1490,10 +1513,7 @@
             </div>
             <div style="text-align: right;">
               <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Progress</div>
-              <div class="edd-progress">
-                <div class="edd-progress-bar" style="width: 18%;"></div>
-              </div>
-              <span style="font-size: 12px; color: var(--text-primary); font-weight: 600;">2 of 11 sections complete</span>
+              <div class="edd-progress"><div class="edd-progress-bar" id="progress-bar" style="width: 18%;"></div></div><span id="progress-text" style="font-size: 12px; color: var(--text-primary); font-weight: 600;">2 of 11 sections complete</span>
             </div>
           </div>
           
@@ -1512,27 +1532,31 @@
               <strong>Hybrid Data</strong> (Partial external + manual)
             </div>
           </div>
+
+          <div id="action-list" style="margin-top:16px; padding:14px; border:1px solid var(--glass-border); border-radius:10px; background: rgba(255, 193, 7, 0.08); color: var(--text-primary);">
+            <strong>Action Checklist:</strong> High-risk items will appear here after validation.
+          </div>
         </div>
 
         <!-- System Flow Diagram -->
         <div class="edd-system-flow">
           <div class="edd-flow-item">
-            <div class="edd-flow-icon">🏦</div>
+            <div class="edd-flow-icon">ðŸ¦</div>
             <div class="edd-flow-label">Core Banking<br>(T24)</div>
           </div>
-          <div class="edd-flow-arrow">→</div>
+          <div class="edd-flow-arrow">â†’</div>
           <div class="edd-flow-item">
-            <div class="edd-flow-icon">⚠️</div>
+            <div class="edd-flow-icon">âš ï¸</div>
             <div class="edd-flow-label">Risk Engine<br>(CRP)</div>
           </div>
-          <div class="edd-flow-arrow">→</div>
+          <div class="edd-flow-arrow">â†’</div>
           <div class="edd-flow-item">
-            <div class="edd-flow-icon">🔍</div>
+            <div class="edd-flow-icon">ðŸ”</div>
             <div class="edd-flow-label">EDD Investigation<br>(This Platform)</div>
           </div>
-          <div class="edd-flow-arrow">→</div>
+          <div class="edd-flow-arrow">â†’</div>
           <div class="edd-flow-item">
-            <div class="edd-flow-icon">✅</div>
+            <div class="edd-flow-icon">âœ…</div>
             <div class="edd-flow-label">Compliance<br>Decision</div>
           </div>
         </div>
@@ -1541,19 +1565,19 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
           <!-- Risk Overview Card -->
           <div style="background: linear-gradient(135deg, rgba(244,67,54,0.1), rgba(255,152,0,0.1)); border: 2px solid rgba(244,67,54,0.3); border-radius: 14px; padding: 20px;">
-            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">📊 Customer Risk Status</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">ðŸ“Š Customer Risk Status</div>
             <div style="font-size: 28px; font-weight: 800; color: #F44336; margin-bottom: 4px;">HIGH RISK</div>
             <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Classification: 78/100 (CRP Engine)</div>
             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
-              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">⚠️</span> Activity Risk: 85/100</div>
-              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">⚠️</span> Occupation Risk: 72/100</div>
-              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">⚠️</span> Product Risk: 68/100</div>
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">âš ï¸</span> Activity Risk: 85/100</div>
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">âš ï¸</span> Occupation Risk: 72/100</div>
+              <div style="display: flex; align-items: center; gap: 6px;"><span style="color: #FFB300;">âš ï¸</span> Product Risk: 68/100</div>
             </div>
           </div>
 
           <!-- Profile Summary Card -->
           <div style="background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(136,0,255,0.08)); border: 1px solid var(--glass-border); border-radius: 14px; padding: 20px;">
-            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">👤 Profile Overview</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">ðŸ‘¤ Profile Overview</div>
             <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span style="color: var(--text-muted);">Customer Name:</span>
@@ -1582,7 +1606,7 @@
         <!-- GLOBAL DATA RELIABILITY DASHBOARD -->
         <div class="edd-global-reliability-panel">
           <div class="edd-global-header">
-            <div class="edd-global-icon">📊</div>
+            <div class="edd-global-icon">ðŸ“Š</div>
             <div class="edd-global-title">
               <h2>Customer Data Reliability Assessment</h2>
               <p>Enterprise-grade credibility analysis across all data sources</p>
@@ -1645,13 +1669,13 @@
               <h2>Risk Classification of the Client</h2>
               <p>Automatically loaded from CRP (Customer Risk Profiling Engine)</p>
             </div>
-            <div class="edd-data-source-badge readonly">🟢 T24/CRP (External)</div>
+            <div class="edd-data-source-badge readonly">ðŸŸ¢ T24/CRP (External)</div>
           </div>
 
           <div class="edd-external-data-block">
             <div class="label">Overall Risk Category (Auto-Calculated by CRP)</div>
             <div class="value" style="font-size: 24px; font-weight: 800; color: #F44336; margin: 8px 0;">HIGH RISK</div>
-            <div class="source">🔵 Source: CRP | 📅 Last Updated: 2026-03-10 14:35 UTC | Status: ✓ VERIFIED</div>
+            <div class="source">ðŸ”µ Source: CRP | ðŸ“… Last Updated: 2026-03-10 14:35 UTC | Status: âœ“ VERIFIED</div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1668,7 +1692,7 @@
           </div>
 
           <div style="background: rgba(33,150,243,0.1); border: 1px solid rgba(33,150,243,0.2); border-left: 3px solid #2196F3; border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 12px; color: var(--text-secondary);">
-            <strong>ℹ️ Governance Note:</strong> All risk scores originate from external systems (CRP, Core Banking, TM). This platform READS and DISPLAYS these scores but does NOT calculate or modify them. Risk classifications are read-only and updated automatically from source systems.
+            <strong>â„¹ï¸ Governance Note:</strong> All risk scores originate from external systems (CRP, Core Banking, TM). This platform READS and DISPLAYS these scores but does NOT calculate or modify them. Risk classifications are read-only and updated automatically from source systems.
           </div>
         </div>
 
@@ -1680,7 +1704,7 @@
               <h2>Customer Information</h2>
               <p>Loaded from T24 Core Banking System</p>
             </div>
-            <div class="edd-data-source-badge readonly">🟢 T24 (External)</div>
+            <div class="edd-data-source-badge readonly">ðŸŸ¢ T24 (External)</div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1727,7 +1751,7 @@
           <!-- IDENTITY DATA CREDIBILITY SCORING -->
           <div class="edd-credibility-panel">
             <div class="edd-credibility-header">
-              <div class="edd-credibility-icon">✓</div>
+              <div class="edd-credibility-icon">âœ“</div>
               <div class="edd-credibility-title">
                 <h4>Identity Data Credibility Assessment</h4>
                 <p>Data verification status and reliability scoring</p>
@@ -1744,35 +1768,35 @@
               <div class="edd-credibility-item">
                 <div class="label">Qatar ID (QID) Verification</div>
                 <div class="value">
-                  <span class="edd-credibility-status verified">✔ MOI Verified</span>
+                  <span class="edd-credibility-status verified">âœ” MOI Verified</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Ministry of Interior database verified. Document uploaded and confirmed valid.</div>
               </div>
               <div class="edd-credibility-item">
                 <div class="label">Supporting Document</div>
                 <div class="value">
-                  <span class="edd-credibility-status verified">✔ Present</span>
+                  <span class="edd-credibility-status verified">âœ” Present</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Identity document scanned, stored in DMS. Validity confirmed through QCB Registry.</div>
               </div>
               <div class="edd-credibility-item">
-                <div class="label">Name Match (T24 ↔ MOI)</div>
+                <div class="label">Name Match (T24 â†” MOI)</div>
                 <div class="value">
-                  <span class="edd-credibility-status verified">✔ Verified</span>
+                  <span class="edd-credibility-status verified">âœ” Verified</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Abdullah Mohammed Al-Kuwari matches official Ministry of Interior records exactly.</div>
               </div>
               <div class="edd-credibility-item">
                 <div class="label">Date of Birth Match</div>
                 <div class="value">
-                  <span class="edd-credibility-status verified">✔ Verified</span>
+                  <span class="edd-credibility-status verified">âœ” Verified</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">March 15, 1975 confirmed in MOI database. Age 50. No discrepancies detected.</div>
               </div>
             </div>
 
             <div style="background: rgba(76,175,80,0.08); border-left: 4px solid #76B041; padding: 12px; border-radius: 6px; margin-top: 14px; font-size: 12px; color: #558B2F;">
-              <strong>✓ Assessment Summary:</strong> Identity data is highly reliable. All verification checks passed. Customer identity confirmed against multiple trusted sources (MOI, QCB Registry, T24). Risk level for identity section: <strong>LOW</strong>.
+              <strong>âœ“ Assessment Summary:</strong> Identity data is highly reliable. All verification checks passed. Customer identity confirmed against multiple trusted sources (MOI, QCB Registry, T24). Risk level for identity section: <strong>LOW</strong>.
             </div>
           </div>
         </div>
@@ -1785,22 +1809,22 @@
               <h2>Purpose and Intended Use of Account</h2>
               <p>You must fill this section</p>
             </div>
-            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+            <div class="edd-data-source-badge manual">ðŸŸ£ Investigator (Manual)</div>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">📝 What is the stated purpose of this account? *</div>
-            <textarea rows="4" placeholder="Describe the customer's intended use of the account..." required></textarea>
+            <div class="label">ðŸ“ What is the stated purpose of this account? *</div>
+            <textarea id="purpose_account" data-required="true" rows="4" placeholder="Describe the customer's intended use of the account..."></textarea>
             <small style="color: var(--text-muted); display: block; margin-top: 6px;">This is mandatory. If not applicable, enter 'Not Applicable' with justification.</small>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">💼 Explain the business relationship *</div>
-            <textarea rows="3" placeholder="How did this relationship originate? What is the expected activity?" required></textarea>
+            <div class="label">ðŸ’¼ Explain the business relationship *</div>
+            <textarea id="relationship_expl" data-required="true" rows="3" placeholder="How did this relationship originate? What is the expected activity?"></textarea>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">👥 Expected frequency of account use</div>
+            <div class="label">ðŸ‘¥ Expected frequency of account use</div>
             <select>
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
@@ -1819,7 +1843,7 @@
               <h2>Source of Income and Source of Wealth</h2>
               <p>Combination of external data and investigator assessment</p>
             </div>
-            <div class="edd-data-source-badge hybrid">🟡 Hybrid (External + Manual)</div>
+            <div class="edd-data-source-badge hybrid">ðŸŸ¡ Hybrid (External + Manual)</div>
           </div>
 
           <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--text-primary); font-weight: 700;">Auto-Filled from T24 / CRP</h4>
@@ -1850,24 +1874,24 @@
           <h4 style="margin-top: 20px; margin-bottom: 12px; color: var(--text-primary); font-weight: 700;">Investigator Assessment Required</h4>
 
           <div class="edd-investigator-input">
-            <div class="label">📊 Provide detailed explanation of source of wealth *</div>
-            <textarea rows="4" placeholder="Verify the income stream and provide justification for account activity..." required></textarea>
+            <div class="label">ðŸ“Š Provide detailed explanation of source of wealth *</div>
+            <textarea id="wealth_detail" data-required="true" rows="4" placeholder="Verify the income stream and provide justification for account activity..."></textarea>
             <small style="color: var(--text-muted); display: block; margin-top: 6px;">Government salary aligns with expected transaction patterns. Document any other wealth sources.</small>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">✅ Is the stated income sufficient to support account activity? *</div>
+            <div class="label">âœ… Is the stated income sufficient to support account activity? *</div>
             <div style="display: flex; gap: 16px; margin-top: 8px;">
-              <label><input type="radio" name="income_sufficient"> Yes, income is sufficient</label>
-              <label><input type="radio" name="income_sufficient"> No, additional sources identified</label>
-              <label><input type="radio" name="income_sufficient" checked> Requires further investigation</label>
+              <label><input type="radio" name="income_sufficient" value="yes"> Yes, income is sufficient</label>
+              <label><input type="radio" name="income_sufficient" value="no"> No, additional sources identified</label>
+              <label><input type="radio" name="income_sufficient" value="investigate" checked> Requires further investigation</label>
             </div>
           </div>
 
           <!-- SALARY CERTIFICATE CREDIBILITY SCORING -->
           <div class="edd-credibility-panel" style="margin-top: 20px;">
             <div class="edd-credibility-header">
-              <div class="edd-credibility-icon">📄</div>
+              <div class="edd-credibility-icon">ðŸ“„</div>
               <div class="edd-credibility-title">
                 <h4>Income Documentation Credibility Assessment</h4>
                 <p>Salary certificate and supporting document verification</p>
@@ -1884,21 +1908,21 @@
               <div class="edd-credibility-item">
                 <div class="label">DMS Salary Certificate Check</div>
                 <div class="value">
-                  <span class="edd-credibility-status missing">❌ Missing</span>
+                  <span class="edd-credibility-status missing">âŒ Missing</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">No salary certificate currently stored in Document Management System (DMS).</div>
               </div>
               <div class="edd-credibility-item">
                 <div class="label">Employer Verification</div>
                 <div class="value">
-                  <span class="edd-credibility-status verified">✔ Government Entity</span>
+                  <span class="edd-credibility-status verified">âœ” Government Entity</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Ministry of Interior is registered government employer. Employment history verified via CRP.</div>
               </div>
               <div class="edd-credibility-item">
                 <div class="label">Income Documentation Status</div>
                 <div class="value">
-                  <span class="edd-credibility-status warning">⚠ Insufficient</span>
+                  <span class="edd-credibility-status warning">âš  Insufficient</span>
                 </div>
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Income estimated from T24/CRP. Actual salary certificate not provided. Risk: Incomplete documentation.</div>
               </div>
@@ -1912,7 +1936,7 @@
             </div>
 
             <div style="background: rgba(255,152,0,0.08); border-left: 4px solid #FF9800; padding: 12px; border-radius: 6px; margin-top: 14px; font-size: 12px; color: #E65100;">
-              <strong>⚠ Assessment Summary:</strong> Income credibility is MODERATE (60/100). Employment verified via government registry and T24 records, but formal salary certificate not yet uploaded to DMS. <strong>Investigator Action:</strong> Request updated salary certificate from Ministry of Interior HR or employee payroll records to complete income verification.
+              <strong>âš  Assessment Summary:</strong> Income credibility is MODERATE (60/100). Employment verified via government registry and T24 records, but formal salary certificate not yet uploaded to DMS. <strong>Investigator Action:</strong> Request updated salary certificate from Ministry of Interior HR or employee payroll records to complete income verification.
             </div>
           </div>
         </div>
@@ -1921,14 +1945,14 @@
 
         <!-- DATA GAP DETECTION ALERT -->
         <div class="edd-data-gap-alert">
-          <div class="edd-alert-title">⚠ DATA GAP IDENTIFIED</div>
+          <div class="edd-alert-title">âš  DATA GAP IDENTIFIED</div>
           <div class="edd-alert-content">
             <strong>Occupation:</strong> Government Official (Ministry of Interior)<br>
             <strong>Missing Document:</strong> Formal Salary Certificate<br>
             <strong>Risk Impact:</strong> Income source documentation incomplete. Government income is stated but not formally certified in DMS system.
           </div>
           <div class="edd-alert-recommendation">
-            <strong>📋 Investigator Recommendation:</strong> Request official salary certificate or payroll documentation from Ministry of Interior Human Resources department. Government salaries typically fall within expected range, but formal documentation should be obtained to complete EDD record and reduce audit risk.
+            <strong>ðŸ“‹ Investigator Recommendation:</strong> Request official salary certificate or payroll documentation from Ministry of Interior Human Resources department. Government salaries typically fall within expected range, but formal documentation should be obtained to complete EDD record and reduce audit risk.
           </div>
         </div>
 
@@ -1939,7 +1963,7 @@
               <h2>Initial Deposit</h2>
               <p>Loaded from T24 Transaction History</p>
             </div>
-            <div class="edd-data-source-badge readonly">🟢 T24 (External)</div>
+            <div class="edd-data-source-badge readonly">ðŸŸ¢ T24 (External)</div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
@@ -1961,7 +1985,7 @@
           </div>
 
           <div style="background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 12px; color: var(--text-secondary);">
-            💡 <strong>Analysis:</strong> Initial deposit of QAR 250,000 is consistent with customer's HNWI (High Net Worth Individual) status and government employment income level.
+            ðŸ’¡ <strong>Analysis:</strong> Initial deposit of QAR 250,000 is consistent with customer's HNWI (High Net Worth Individual) status and government employment income level.
           </div>
         </div>
 
@@ -1973,29 +1997,29 @@
               <h2>Monthly Anticipated Transaction Activity</h2>
               <p>You must document expected patterns</p>
             </div>
-            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+            <div class="edd-data-source-badge manual">ðŸŸ£ Investigator (Manual)</div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
             <div class="edd-investigator-input">
               <div class="label">Expected Monthly Cash In (QAR)</div>
-              <input type="number" placeholder="e.g., 50000" required>
+              <input id="expected_in" data-required="true" type="number" placeholder="e.g., 50000">
               <small style="color: var(--text-muted); display: block; margin-top: 4px;">Salary deposits, investment income, etc.</small>
             </div>
             <div class="edd-investigator-input">
               <div class="label">Expected Monthly Cash Out (QAR)</div>
-              <input type="number" placeholder="e.g., 30000" required>
+              <input id="expected_out" data-required="true" type="number" placeholder="e.g., 30000">
               <small style="color: var(--text-muted); display: block; margin-top: 4px;">Transfers, payments, withdrawals</small>
             </div>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">📋 Describe expected transaction types and frequency</div>
-            <textarea rows="3" placeholder="Examples: Monthly salary, quarterly investments, frequent domestic transfers..." required></textarea>
+            <div class="label">ðŸ“‹ Describe expected transaction types and frequency</div>
+            <textarea id="expected_desc" data-required="true" rows="3" placeholder="Examples: Monthly salary, quarterly investments, frequent domestic transfers..."></textarea>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">🌍 Expected volume of international transactions?</div>
+            <div class="label">ðŸŒ Expected volume of international transactions?</div>
             <select required>
               <option value="">-- Select --</option>
               <option value="none">None expected</option>
@@ -2014,7 +2038,7 @@
               <h2>Existing Relationship within QIB</h2>
               <p>Loaded from T24 Customer Portfolio</p>
             </div>
-            <div class="edd-data-source-badge readonly">🟢 T24 (External)</div>
+            <div class="edd-data-source-badge readonly">ðŸŸ¢ T24 (External)</div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
@@ -2041,7 +2065,7 @@
           </div>
 
           <div style="background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 12px; color: var(--text-secondary);">
-            📊 <strong>Summary:</strong> Customer has strong existing relationship with QIB spanning 8+ years. Total aggregate balance: QAR 4,750,000. All accounts in good standing.
+            ðŸ“Š <strong>Summary:</strong> Customer has strong existing relationship with QIB spanning 8+ years. Total aggregate balance: QAR 4,750,000. All accounts in good standing.
           </div>
         </div>
 
@@ -2053,29 +2077,29 @@
               <h2>Existing Relationship with Other Banks</h2>
               <p>You must fill if customer has other bank accounts</p>
             </div>
-            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+            <div class="edd-data-source-badge manual">ðŸŸ£ Investigator (Manual)</div>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">✅ Does customer maintain accounts with other banks?</div>
+            <div class="label">âœ… Does customer maintain accounts with other banks?</div>
             <div style="display: flex; gap: 16px; margin-top: 8px;">
-              <label><input type="radio" name="other_banks"> Yes</label>
-              <label><input type="radio" name="other_banks" checked> No</label>
-              <label><input type="radio" name="other_banks"> Unknown</label>
+              <label><input type="radio" name="other_banks" value="yes"> Yes</label>
+              <label><input type="radio" name="other_banks" value="no" checked> No</label>
+              <label><input type="radio" name="other_banks" value="unknown"> Unknown</label>
             </div>
           </div>
 
           <div class="edd-investigator-input" style="display: none;" id="other-banks-details">
             <div class="label">List banks and account types</div>
-            <textarea rows="3" placeholder="Bank name, account type, approximate balance..."></textarea>
+            <textarea id="other_banks_text" rows="3" placeholder="Bank name, account type, approximate balance..." data-required="conditional"></textarea>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">💬 If 'No', confirm reason or provide comment</div>
-            <textarea rows="2" placeholder="e.g., 'Customer stated all banking needs met at QIB' or 'Not disclosed by customer'"></textarea>
+            <div class="label">ðŸ’¬ If 'No', confirm reason or provide comment</div>
+            <textarea id="other_banks_reason" rows="2" placeholder="e.g., 'Customer stated all banking needs met at QIB' or 'Not disclosed by customer'" data-required="conditional"></textarea>
           </div>
 
-          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px;">🔍 Note: If customer has other bank accounts, this may indicate diversified wealth management. Assess whether accounts are for different purposes or potential risk indicators.</small>
+          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px;">ðŸ” Note: If customer has other bank accounts, this may indicate diversified wealth management. Assess whether accounts are for different purposes or potential risk indicators.</small>
         </div>
 
         <!-- SECTION 9: Related Parties -->
@@ -2086,24 +2110,24 @@
               <h2>Related Parties and Beneficial Owners</h2>
               <p>You must list if applicable</p>
             </div>
-            <div class="edd-data-source-badge manual">🟣 Investigator (Manual)</div>
+            <div class="edd-data-source-badge manual">ðŸŸ£ Investigator (Manual)</div>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">✅ Are there related parties or beneficial owners? *</div>
+            <div class="label">âœ… Are there related parties or beneficial owners? *</div>
             <div style="display: flex; gap: 16px; margin-top: 8px;">
-              <label><input type="radio" name="related_parties"> Yes</label>
-              <label><input type="radio" name="related_parties" checked> No</label>
-              <label><input type="radio" name="related_parties"> Not disclosed</label>
+              <label><input type="radio" name="related_parties" value="yes"> Yes</label>
+              <label><input type="radio" name="related_parties" value="no" checked> No</label>
+              <label><input type="radio" name="related_parties" value="unknown"> Not disclosed</label>
             </div>
           </div>
 
           <div class="edd-investigator-input">
             <div class="label">List all related parties (if "Yes")</div>
-            <textarea rows="4" placeholder="Name | Relationship | Ownership % | Purpose&#10;e.g., Fatima Al-Kuwari | Spouse | - | Joint family accounts&#10;Or confirm 'None identified' if applicable"></textarea>
+            <textarea id="related_parties_text" rows="4" placeholder="Name | Relationship | Ownership % | Purpose&#10;e.g., Fatima Al-Kuwari | Spouse | - | Joint family accounts&#10;Or confirm 'None identified' if applicable" data-required="conditional"></textarea>
           </div>
 
-          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px;">👥 Related Parties include: spouse, children, parents, business partners, beneficial owners, authorized signatories, or any person with control over the account.</small>
+          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(0,0,0,0.05); border-radius: 4px;">ðŸ‘¥ Related Parties include: spouse, children, parents, business partners, beneficial owners, authorized signatories, or any person with control over the account.</small>
         </div>
 
         <!-- SECTION 10: PEP Information -->
@@ -2114,13 +2138,13 @@
               <h2>PEP Identification & Enhanced Due Diligence</h2>
               <p>Conditional: Only required if PEP flag = YES</p>
             </div>
-            <div class="edd-data-source-badge hybrid">🟡 Hybrid (External + Manual)</div>
+            <div class="edd-data-source-badge hybrid">ðŸŸ¡ Hybrid (External + Manual)</div>
           </div>
 
           <div class="edd-external-data-block">
-            <div class="label">🚨 PEP Status (from Regulatory Database)</div>
+            <div class="label">ðŸš¨ PEP Status (from Regulatory Database)</div>
             <div class="value" style="font-size: 18px; font-weight: 700; color: #F44336;">YES - CONFIRMED PEP</div>
-            <div class="source">🔴 Source: Regulatory PEP Database | Type: Domestic | Position: Government Official</div>
+            <div class="source">ðŸ”´ Source: Regulatory PEP Database | Type: Domestic | Position: Government Official</div>
           </div>
 
           <div class="edd-external-data-block">
@@ -2135,17 +2159,17 @@
           <h4 style="margin-top: 20px; margin-bottom: 12px; color: var(--text-primary); font-weight: 700;">Enhanced Investigator Assessment (MANDATORY for PEP)</h4>
 
           <div class="edd-investigator-input">
-            <div class="label">🔍 Provide PEP risk assessment and justification for account opening *</div>
+            <div class="label">ðŸ” Provide PEP risk assessment and justification for account opening *</div>
             <textarea rows="4" placeholder="Assess whether business relationship is legitimate and justified. Document senior management approval if applicable." required></textarea>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">📊 Verify source of funds for PEP customer *</div>
+            <div class="label">ðŸ“Š Verify source of funds for PEP customer *</div>
             <textarea rows="3" placeholder="Provide evidence that funds are from legitimate government salary or other lawful sources." required></textarea>
           </div>
 
           <div class="edd-investigator-input">
-            <div class="label">✅ Has senior management approved this PEP relationship? *</div>
+            <div class="label">âœ… Has senior management approved this PEP relationship? *</div>
             <div style="display: flex; gap: 16px; margin-top: 8px;">
               <label><input type="radio" name="pep_approved"> Yes, approved</label>
               <label><input type="radio" name="pep_approved"> Requires approval</label>
@@ -2153,13 +2177,13 @@
             </div>
           </div>
 
-          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(244,67,54,0.1); border-radius: 4px; border-left: 3px solid #F44336;">⚠️ <strong>PEP Requirement:</strong> All customer transactions must be monitored continuously. Enhanced due diligence required. Consider escalation to Compliance if sourced of funds cannot be verified or if transaction patterns deviate from expected activity profile.</small>
+          <small style="color: var(--text-muted); display: block; margin-top: 12px; padding: 8px; background: rgba(244,67,54,0.1); border-radius: 4px; border-left: 3px solid #F44336;">âš ï¸ <strong>PEP Requirement:</strong> All customer transactions must be monitored continuously. Enhanced due diligence required. Consider escalation to Compliance if sourced of funds cannot be verified or if transaction patterns deviate from expected activity profile.</small>
         </div>
 
         <!-- DATA RELIABILITY DASHBOARD & SUMMARY -->
         <div class="edd-reliability-dashboard">
           <div class="edd-reliability-header">
-            <div class="edd-reliability-icon">📊</div>
+            <div class="edd-reliability-icon">ðŸ“Š</div>
             <div class="edd-reliability-title">
               <h3>Data Reliability Summary</h3>
               <p>Credibility assessment across key data categories</p>
@@ -2212,7 +2236,7 @@
 
         <!-- INVESTIGATOR DECISION PRIMACY STATEMENT -->
         <div class="edd-investigator-primacy">
-          <h4>👤 INVESTIGATOR DECISION PRIMACY</h4>
+          <h4>ðŸ‘¤ INVESTIGATOR DECISION PRIMACY</h4>
           <p>
             This EDD system is designed to <strong>assist and advise the investigator</strong>, not replace human judgment. All automated scores, risk alerts, and recommendations provided in this form are advisory only. The investigator retains full authority to:
             <ul style="margin: 10px 0 0 20px; padding-left: 0;">
@@ -2235,54 +2259,54 @@
               <h2>Business Recommendation and Decision</h2>
               <p>Investigator and Manager approval workflow</p>
             </div>
-            <div class="edd-data-source-badge manual">🟣 Decision Engine</div>
+            <div class="edd-data-source-badge manual">ðŸŸ£ Decision Engine</div>
           </div>
 
           <div class="edd-decision-section">
-            <h4 style="margin-top: 0; margin-bottom: 16px; color: var(--text-primary); font-weight: 700;">🔎 Investigator Assessment</h4>
+            <h4 style="margin-top: 0; margin-bottom: 16px; color: var(--text-primary); font-weight: 700;">ðŸ”Ž Investigator Assessment</h4>
 
             <div class="edd-investigator-input">
-              <div class="label">💡 Overall EDD Assessment Summary *</div>
+              <div class="label">ðŸ’¡ Overall EDD Assessment Summary *</div>
               <textarea rows="4" placeholder="Summarize your findings from all 11 sections. Address any concerns found during investigation." required></textarea>
             </div>
 
             <div class="edd-investigator-input">
-              <div class="label">🎯 Business Recommendation *</div>
+              <div class="label">ðŸŽ¯ Business Recommendation *</div>
               <div class="edd-decision-grid">
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="recommendation"> ✅ APPROVE - Accept and proceed with account</label>
+                  <label><input type="radio" name="recommendation"> âœ… APPROVE - Accept and proceed with account</label>
                 </div>
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="recommendation"> ⚠️ ESCALATE - Refer to Compliance for decision</label>
+                  <label><input type="radio" name="recommendation"> âš ï¸ ESCALATE - Refer to Compliance for decision</label>
                 </div>
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="recommendation"> ❌ REJECT - Decline account / Close case</label>
+                  <label><input type="radio" name="recommendation"> âŒ REJECT - Decline account / Close case</label>
                 </div>
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="recommendation" checked> ⏳ REWORK - Request additional information</label>
+                  <label><input type="radio" name="recommendation" checked> â³ REWORK - Request additional information</label>
                 </div>
               </div>
             </div>
 
             <div style="background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 12px;">
-              ✉️ <strong>Investigator Signature:</strong> Your name and timestamp will be automatically captured.
+              âœ‰ï¸ <strong>Investigator Signature:</strong> Your name and timestamp will be automatically captured.
             </div>
           </div>
 
           <div class="edd-decision-section" style="background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(136,0,255,0.05));">
-            <h4 style="margin-top: 0; margin-bottom: 16px; color: var(--text-primary); font-weight: 700;">✅ Manager Approval (Checker)</h4>
+            <h4 style="margin-top: 0; margin-bottom: 16px; color: var(--text-primary); font-weight: 700;">âœ… Manager Approval (Checker)</h4>
 
             <div class="edd-investigator-input">
               <div class="label">Manager Review and Decision *</div>
               <div class="edd-decision-grid">
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="manager_decision"> ✅ APPROVED - Reviewed and accepted</label>
+                  <label><input type="radio" name="manager_decision"> âœ… APPROVED - Reviewed and accepted</label>
                 </div>
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="manager_decision"> ❌ REJECTED - Reviewed and rejected</label>
+                  <label><input type="radio" name="manager_decision"> âŒ REJECTED - Reviewed and rejected</label>
                 </div>
                 <div class="edd-decision-option">
-                  <label><input type="radio" name="manager_decision"> 🔄 REQUEST REWORK - Return for additional investigation</label>
+                  <label><input type="radio" name="manager_decision"> ðŸ”„ REQUEST REWORK - Return for additional investigation</label>
                 </div>
               </div>
             </div>
@@ -2293,14 +2317,113 @@
             </div>
 
             <div style="background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.2); border-radius: 8px; padding: 12px; margin-top: 16px; font-size: 12px;">
-              ✉️ <strong>Manager Signature:</strong> Your name and timestamp will be automatically captured.
+              âœ‰ï¸ <strong>Manager Signature:</strong> Your name and timestamp will be automatically captured.
             </div>
           </div>
 
-          <!-- Submit Buttons -->
+      <!-- SECTION 12: Beneficial Ownership & UBO -->
+      <div class="edd-section-panel" data-section="12">
+        <div class="edd-section-header">
+          <div class="edd-section-icon">12</div>
+          <div class="edd-section-title">
+            <h2>Beneficial Ownership & Control</h2>
+            <p>Mandatory for High-Risk cases</p>
+          </div>
+          <div class="edd-data-source-badge manual">ðŸ§­ Investigator (Manual)</div>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">List all Beneficial Owners (Name | Ownership % | Country) *</div>
+          <textarea id="ubo_list" data-required="true" rows="4" placeholder="e.g., Ali Al-Kuwari | 45% | Qatar&#10;Fatima Al-Kuwari | 30% | Qatar"></textarea>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">Control Structure Description *</div>
+          <textarea id="ubo_control" data-required="true" rows="3" placeholder="Describe control / voting rights / signatories"></textarea>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">Screening Status *</div>
+          <select id="ubo_screening" data-required="true">
+            <option value="">Select status</option>
+            <option value="clear">Clear</option>
+            <option value="hit">Potential Hit - requires escalation</option>
+            <option value="pending">Pending screening</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SECTION 13: Sanctions & Adverse Media -->
+      <div class="edd-section-panel" data-section="13">
+        <div class="edd-section-header">
+          <div class="edd-section-icon">13</div>
+          <div class="edd-section-title">
+            <h2>Sanctions & Adverse Media</h2>
+            <p>Must be completed before submission</p>
+          </div>
+          <div class="edd-data-source-badge manual">ðŸ›¡ï¸ Compliance (Manual)</div>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">Sanctions Screening Result *</div>
+          <select id="sanctions_result" data-required="true">
+            <option value="">Select result</option>
+            <option value="clear">Clear</option>
+            <option value="possible">Possible match - escalated</option>
+            <option value="confirmed">Confirmed match - reject relationship</option>
+          </select>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">Adverse Media Summary *</div>
+          <textarea id="adverse_media" data-required="true" rows="3" placeholder="Summarize screening sources, dates, and findings"></textarea>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">Date of Last Screening *</div>
+          <input id="screening_date" data-required="true" type="date">
+        </div>
+      </div>
+
+      <!-- SECTION 14: Documentation & QA -->
+      <div class="edd-section-panel" data-section="14">
+        <div class="edd-section-header">
+          <div class="edd-section-icon">14</div>
+          <div class="edd-section-title">
+            <h2>Documentation & QA Sign-off</h2>
+            <p>Final gate with 4-digit PIN</p>
+          </div>
+          <div class="edd-data-source-badge manual">ðŸ” Maker / Checker</div>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">Document Checklist *</div>
+          <label style="display:block; margin-bottom:4px;"><input type="checkbox" id="doc_id" data-required="true"> ID & Residency docs attached</label>
+          <label style="display:block; margin-bottom:4px;"><input type="checkbox" id="doc_proof_funds" data-required="true"> Proof of Funds / Source of Wealth uploaded</label>
+          <label style="display:block; margin-bottom:4px;"><input type="checkbox" id="doc_screening" data-required="true"> Screening evidence attached</label>
+        </div>
+
+        <div class="edd-investigator-input" style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:220px;">
+            <div class="label">Maker 4-digit PIN *</div>
+            <input id="maker_pin_case" data-required="true" type="password" pattern="\\d{4}" maxlength="4" placeholder="Maker PIN">
+          </div>
+          <div style="flex:1; min-width:220px;">
+            <div class="label">Checker 4-digit PIN *</div>
+            <input id="checker_pin_case" data-required="true" type="password" pattern="\\d{4}" maxlength="4" placeholder="Checker PIN">
+          </div>
+        </div>
+
+        <div class="edd-investigator-input">
+          <div class="label">QA Reviewer Name *</div>
+          <input id="qa_reviewer" data-required="true" type="text" placeholder="Enter QA reviewer">
+        </div>
+      </div>
+
+      <!-- Submit Buttons -->
           <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
             <button style="padding: 10px 20px; background: rgba(200,200,200,0.2); border: 1px solid var(--glass-border); border-radius: 8px; cursor: pointer; font-weight: 600;">Save Draft</button>
-            <button style="padding: 10px 20px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Submit Case for Review</button>
+            <button id="submit-case" type="submit" style="padding: 10px 20px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Submit Case for Review</button>
           </div>
 
           <!-- FINAL DECISION RESULT CARD -->
@@ -2326,7 +2449,7 @@
             <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; margin-bottom: 16px;">
               <h4 style="margin: 0 0 12px 0; color: var(--text-primary); font-weight: 700;">Recommendation</h4>
               <div style="background: rgba(244,67,54,0.1); border-left: 4px solid #F44336; padding: 16px; border-radius: 8px;">
-                <div style="font-size: 18px; font-weight: 800; color: #F44336; margin-bottom: 8px;">⚠️ ESCALATE TO COMPLIANCE</div>
+                <div style="font-size: 18px; font-weight: 800; color: #F44336; margin-bottom: 8px;">âš ï¸ ESCALATE TO COMPLIANCE</div>
                 <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
                   Due to HIGH RISK classification combined with abnormal transaction behavior, this case requires compliance team review before account activation.
                 </div>
@@ -2335,19 +2458,19 @@
 
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
               <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: center;">
-                <div style="font-size: 24px; margin-bottom: 6px;">👤</div>
+                <div style="font-size: 24px; margin-bottom: 6px;">ðŸ‘¤</div>
                 <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Investigator</div>
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Ahmed Al-Dosari</div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Mar 10, 2026 | 14:37 UTC</div>
               </div>
               <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: center;">
-                <div style="font-size: 24px; margin-bottom: 6px;">✅</div>
+                <div style="font-size: 24px; margin-bottom: 6px;">âœ…</div>
                 <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Manager</div>
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Senior Manager</div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Mar 10, 2026 | 15:00 UTC</div>
               </div>
               <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: center;">
-                <div style="font-size: 24px; margin-bottom: 6px;">⚖️</div>
+                <div style="font-size: 24px; margin-bottom: 6px;">âš–ï¸</div>
                 <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Compliance</div>
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">Awaiting Review</div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Pending...</div>
@@ -2392,12 +2515,163 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // Required field tracking
+    const requiredFields = [
+      { id: 'purpose_account', label: 'Purpose of account' },
+      { id: 'relationship_expl', label: 'Business relationship' },
+      { id: 'wealth_detail', label: 'Source of wealth explanation' },
+      { id: 'expected_in', label: 'Expected monthly cash in' },
+      { id: 'expected_out', label: 'Expected monthly cash out' },
+      { id: 'expected_desc', label: 'Expected transaction description' },
+      { id: 'ubo_list', label: 'UBO list' },
+      { id: 'ubo_control', label: 'Control description' },
+      { id: 'ubo_screening', label: 'UBO screening status' },
+      { id: 'sanctions_result', label: 'Sanctions result' },
+      { id: 'adverse_media', label: 'Adverse media summary' },
+      { id: 'screening_date', label: 'Screening date' },
+      { id: 'doc_id', label: 'Docs: ID/Residency', type: 'checkbox' },
+      { id: 'doc_proof_funds', label: 'Docs: Proof of Funds', type: 'checkbox' },
+      { id: 'doc_screening', label: 'Docs: Screening Evidence', type: 'checkbox' },
+      { id: 'maker_pin_case', label: 'Maker PIN', type: 'pin' },
+      { id: 'checker_pin_case', label: 'Checker PIN', type: 'pin' },
+      { id: 'qa_reviewer', label: 'QA reviewer' }
+    ];
+
+    const radioGroups = [
+      { name: 'income_sufficient', label: 'Income sufficiency decision' },
+      { name: 'other_banks', label: 'Other banks answer' },
+      { name: 'related_parties', label: 'Related parties answer' }
+    ];
+
+    const actionList = document.getElementById('action-list');
+
+    function getRadioValue(name) {
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : '';
+    }
+
+    function addMissing(missing, label, el) {
+      if (missing.includes(label)) return;
+      missing.push(label);
+      if (el) el.classList.add('edd-missing');
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll('.edd-missing').forEach(el => el.classList.remove('edd-missing'));
+    }
+
+    function validatePins(value, label, missing) {
+      if (!/^[0-9]{4}$/.test(value || '')) addMissing(missing, `${label} (4 digits)`, null);
+    }
+
+    function collectMissing() {
+      clearHighlights();
+      const missing = [];
+      const isHighRisk = document.body.textContent.includes('HIGH RISK');
+
+      requiredFields.forEach(f => {
+        const el = document.getElementById(f.id);
+        if (!el) return;
+        if (f.type === 'checkbox') {
+          if (!el.checked) addMissing(missing, f.label, el);
+        } else if (f.type === 'pin') {
+          validatePins(el.value, f.label, missing);
+        } else {
+          if (!el.value || !el.value.toString().trim()) addMissing(missing, f.label, el);
+        }
+      });
+
+      radioGroups.forEach(r => {
+        if (!getRadioValue(r.name)) addMissing(missing, r.label, null);
+      });
+
+      // Conditional logic for high risk and answers
+      const otherBanksVal = getRadioValue('other_banks');
+      const otherBanksText = document.getElementById('other_banks_text');
+      const otherBanksReason = document.getElementById('other_banks_reason');
+      if (isHighRisk || otherBanksVal === 'yes') {
+        if (otherBanksText && !otherBanksText.value.trim()) addMissing(missing, 'Other banks details', otherBanksText);
+      }
+      if (isHighRisk || otherBanksVal === 'unknown') {
+        if (otherBanksReason && !otherBanksReason.value.trim()) addMissing(missing, 'Other banks comment', otherBanksReason);
+      }
+
+      const relatedVal = getRadioValue('related_parties');
+      const relatedText = document.getElementById('related_parties_text');
+      if (isHighRisk && relatedVal !== 'no') {
+        if (relatedText && !relatedText.value.trim()) addMissing(missing, 'Related parties details', relatedText);
+      }
+
+      return missing;
+    }
+
+    function renderActionList(missing) {
+      if (!actionList) return;
+      if (!missing.length) {
+        actionList.innerHTML = '<strong>Action Checklist:</strong> All high-risk mandatory items are complete.';
+        actionList.style.background = 'rgba(52,211,153,0.12)';
+        return;
+      }
+      const items = missing.slice(0, 6).map(i => `<li>${i}</li>`).join('');
+      actionList.innerHTML = `<strong>Action Checklist:</strong><ul style="margin:8px 0 0 16px;">${items}</ul>`;
+      actionList.style.background = 'rgba(255,193,7,0.08)';
+    }
+
+    function updateProgress() {
+      const missing = collectMissing();
+      const totalRequired = requiredFields.length + radioGroups.length + 3; // conditional blocks for high-risk (other banks, comment, related)
+      const progress = Math.max(0, Math.min(100, Math.round(((totalRequired - missing.length) / totalRequired) * 100)));
+      const bar = document.getElementById('progress-bar');
+      const text = document.getElementById('progress-text');
+      if (bar) bar.style.width = `${progress}%`;
+      if (text) text.textContent = `${progress}% completeness (${totalRequired - missing.length} / ${totalRequired} checks)`;
+      renderActionList(missing);
+      return missing;
+    }
+
+    function validateBeforeSubmit() {
+      const missing = updateProgress();
+      if (missing.length) {
+        NotificationCenter.toast(`Complete required items: ${missing.slice(0, 3).join(', ')}`, 'error');
+        // navigate to first missing section
+        const firstId = requiredFields.find(f => missing.includes(f.label))?.id;
+        if (firstId) {
+          const el = document.getElementById(firstId);
+          if (el) {
+            const sectionEl = el.closest('.edd-section-panel');
+            if (sectionEl && sectionEl.dataset.section) switchSection(Number(sectionEl.dataset.section));
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+        return false;
+      }
+      NotificationCenter.toast('All validations passed. Ready to submit for review.', 'success');
+      return true;
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
       // Load customer info
       const urlParams = new URLSearchParams(window.location.search);
       const rimNumber = urlParams.get('rim') || 'RIM001234';
       document.getElementById('caseId').textContent = `EDD-2026-${rimNumber}`;
+      updateProgress();
+
+      document.querySelectorAll('[data-required], input[name="income_sufficient"], input[name="other_banks"], input[name="related_parties"]').forEach(el => {
+        el.addEventListener('change', updateProgress);
+        el.addEventListener('input', updateProgress);
+      });
+
+      const submitBtn = document.getElementById('submit-case');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (validateBeforeSubmit()) {
+            submitBtn.disabled = true;
+            NotificationCenter.toast('✔ CASE READY — send to review', 'success');
+          }
+        });
+      }
     });
   </script>
   <!-- Accessibility Manager JavaScript -->
@@ -2790,3 +3064,12 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+

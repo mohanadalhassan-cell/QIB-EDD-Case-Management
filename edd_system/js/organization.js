@@ -437,7 +437,7 @@ function getEmployeeData(id) {
     },
     'EXE-002': {
       id: 'EXE-002',
-      name: 'Mohanad Al Hassan',
+      name: 'العمليات',
       title: 'Operations Manager',
       department: 'Operations',
       division: 'Operations',

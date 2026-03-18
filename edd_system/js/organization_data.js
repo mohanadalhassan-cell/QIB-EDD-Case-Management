@@ -221,15 +221,15 @@ const QIBOrganization = {
     managers: [
       {
         id: 'MGR-001',
-        name: 'Mohanad Al Hassan',
-        name_ar: 'مهند الحسن',
+        name: 'العمليات',
+        name_ar: 'العمليات',
         title: 'Department Manager - WPS & DBO',
         title_ar: 'مدير إدارة - WPS والعمليات الرقمية',
         department: 'WPS & Digital Back Office',
         dept_code: 'WPS_DBO',
         photo: 'assets/employees/MR.MOHANAD ALHASSAM.jpeg',
         permissions: ['wps_owner', 'view_execute'],
-        email: 'mohanad.alhassan@qib.com.qa',
+        email: '',
         reports_to: 'OPS-HEAD-001',
         is_pilot: true
       },
