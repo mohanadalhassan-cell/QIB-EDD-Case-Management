@@ -101,9 +101,16 @@ const SettingsDrawer = {
               </div>
               <div class="color-mode-option" data-lang="ar">
                 <div class="color-mode-icon">🇶🇦</div>
-                <div class="color-mode-name">العربية</div>
+                <div class="color-mode-name">Arabic</div>
               </div>
             </div>
+          </div>
+
+          <!-- Demo Controls -->
+          <div class="settings-section">
+            <div class="settings-section-title">Demo Controls</div>
+            <p style="font-size:12px; color:#94a3b8; margin: 0 0 10px;">Reset session, theme, and access matrix for a clean demo state.</p>
+            <button id="demo-reset-btn" style="width:100%; padding:12px; border:none; border-radius:10px; background:linear-gradient(135deg,#ef4444,#f97316); color:#fff; font-weight:700; cursor:pointer;">Reset Demo State</button>
           </div>
         </div>
       </div>
@@ -163,6 +170,19 @@ const SettingsDrawer = {
         });
       }
     });
+
+    const demoResetBtn = document.getElementById('demo-reset-btn');
+    if (demoResetBtn) {
+      demoResetBtn.addEventListener('click', () => {
+        if (window.DemoReset && typeof window.DemoReset.run === 'function') {
+          window.DemoReset.run();
+        } else {
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.href = '/edd_system/login.html';
+        }
+      });
+    }
   },
   
   setFontSize: function(size) {

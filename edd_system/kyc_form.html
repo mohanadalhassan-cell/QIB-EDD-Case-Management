@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QIB KYC/EDD Digital Form - Enhanced Due Diligence</title>
     <link rel="stylesheet" href="../css/edd_system.css">
+    <script src="js/security-guard.js"></script>
+    <script src="js/theme-manager.js"></script>
     <style>
         :root {
             --primary-color: #1a4d7a;
@@ -525,6 +527,7 @@
     </style>
 </head>
 <body>
+    <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['business', 'cdd', 'compliance', 'management'] });</script>
     <div class="kyc-container">
         <div class="kyc-header">
             <h1>🏦 KYC/EDD Digital Form</h1>

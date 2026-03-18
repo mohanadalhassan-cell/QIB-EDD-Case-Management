@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="css/accessibility_vision2030.css">
   <link rel="stylesheet" href="css/theme-light.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <script src="js/security-guard.js"></script>
+  <script src="js/theme-manager.js"></script>
   <style>
     .kyc-segments {
       display: grid;
@@ -422,6 +424,7 @@
   </style>
 </head>
 <body>
+  <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['cdd', 'compliance', 'management', 'audit', 'it'] });</script>
   <div class="ambient-bg"></div>
   <div class="gradient-mesh"></div>
   

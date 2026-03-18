@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="css/settings-drawer.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300D4FF'/><text x='16' y='22' font-size='16' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
   <link rel="stylesheet" href="css/rtl-support.css">
+  <script src="js/security-guard.js"></script>
+  <script src="js/theme-manager.js"></script>
   <!-- Language & Voice Features -->
   <script src="js/language-pack.js"></script>
   <script src="js/voice-assistant.js"></script>
@@ -310,6 +312,7 @@
   </style>
 </head>
 <body>
+  <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['business', 'management'] });</script>
   <div class="ambient-bg"></div>
   <div class="gradient-mesh"></div>
   
@@ -739,6 +742,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       console.log('✓ Business View DOM loaded');
       loadUserInfo();
+      applyRoleBasedFiltering();
       updateCounts();
       renderCases('mass');
       applySegmentFromHash();
@@ -757,6 +761,20 @@
         document.getElementById('user-role').textContent = session.role || 'Head of Retail and Shared Service Operation';
         document.getElementById('user-avatar').textContent = session.employeeName.split(' ').map(n => n[0]).join('').substring(0, 2);
       }
+    }
+
+    // ═══ NEW: ROLE-BASED FILTERING ═══
+    function applyRoleBasedFiltering() {
+      const session = JSON.parse(sessionStorage.getItem('edd_session') || '{}');
+      const userRole = session.user?.role || localStorage.getItem('qibEddUserRole') || 'business';
+      
+      // Mark page with role class for CSS styling
+      document.body.classList.add('role-' + userRole);
+      
+      // Store for case rendering
+      window.currentUserRole = userRole;
+      
+      console.log('✓ Business View — Role-based filtering applied:', userRole);
     }
 
     function switchSegment(segment) {
@@ -839,6 +857,27 @@
         const daysClass = c.days > 10 ? 'overdue' : c.days > 5 ? 'warning' : 'normal';
         const urgentClass = c.days > 14 ? 'urgent' : c.days > 10 ? 'warning' : '';
         
+        // ═══ ROLE-BASED ACTION BUTTON ═══
+        const userRole = window.currentUserRole || 'business';
+        let actionButton = '';
+        
+        if (userRole === 'business') {
+          // MAKER: Can submit for review or review own cases
+          actionButton = `<button class="case-action" onclick="event.stopPropagation(); submitForApproval('${c.id}', 'business')" title="Submit for Maker Review">📤 Submit</button>`;
+        } 
+        else if (userRole === 'cdd') {
+          // CDD CHECKER: Can approve with PIN
+          actionButton = `<button class="case-action" onclick="event.stopPropagation(); showApprovalModal('${c.id}', 'cdd')" title="Approve (4-digit PIN required)" style="background: linear-gradient(135deg, #1DBF73, #00A854);">✅ Approve</button>`;
+        }
+        else if (userRole === 'compliance') {
+          // COMPLIANCE: Can do final review
+          actionButton = `<button class="case-action" onclick="event.stopPropagation(); showComplianceReview('${c.id}')" title="Compliance Review" style="background: linear-gradient(135deg, #7C4DFF, #651FFF);">📋 Review</button>`;
+        }
+        else {
+          // DEFAULT: View only
+          actionButton = `<button class="case-action" onclick="event.stopPropagation(); openCase('${c.id}')" title="View Case Details" style="opacity: 0.7;">👁️ View</button>`;
+        }
+        
         return `
           <div class="case-card ${urgentClass}" onclick="openCase('${c.id}')">
             <div class="case-priority ${c.risk}"></div>
@@ -852,7 +891,7 @@
               <div class="case-days ${daysClass}">${c.days} days</div>
               <div class="case-status">${c.status}</div>
             </div>
-            <button class="case-action" onclick="event.stopPropagation(); reviewCase('${c.id}')">Review</button>
+            ${actionButton}
           </div>
         `;
       }).join('');
@@ -997,6 +1036,71 @@
           window.location.href = 'login.html';
         });
       }
+    }
+
+    // ═══ NEW: ROLE-BASED ACTION HANDLERS ═══
+    function submitForApproval(caseId, role) {
+      const c = getCaseById(caseId);
+      if (!c) { showBvToast('Case details not found', 'error'); return; }
+
+      showBvToast(`📤 Case ${c.id} submitted for ${role === 'business' ? 'Maker' : 'Checker'} approval`);
+      console.log('Case submitted for approval:', { caseId, role, customer: c.customer });
+    }
+
+    function showApprovalModal(caseId, role) {
+      const c = getCaseById(caseId);
+      if (!c) { showBvToast('Case details not found', 'error'); return; }
+
+      const modal = document.createElement('div');
+      modal.id = 'approval-modal-' + caseId;
+      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10001;display:flex;align-items:center;justify-content:center;';
+      modal.innerHTML = `
+        <div style="width:min(500px,90vw);background:linear-gradient(135deg,#111b2f,#0b1426);border:1px solid rgba(0,212,255,.25);border-radius:16px;padding:24px;color:#fff;">
+          <h3 style="margin:0 0 16px 0;font-size:18px;">4-Digit PIN Approval Required</h3>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;">
+            <div><strong>Case:</strong> ${c.id}</div>
+            <div><strong>Customer:</strong> ${c.customer}</div>
+            <div><strong>Risk:</strong> ${c.risk.toUpperCase()}</div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label style="display:block;margin-bottom:8px;font-size:12px;color:#9fb6d4;">Enter 4-Digit PIN:</label>
+            <input type="password" id="pin-input-${caseId}" placeholder="••••" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,212,255,.3);background:rgba(0,212,255,.05);color:#fff;font-size:16px;text-align:center;letter-spacing:4px;" maxlength="4" inputmode="numeric">
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button onclick="approveCase('${caseId}', '${role}', document.getElementById('pin-input-${caseId}').value)" style="flex:1;padding:10px;background:linear-gradient(135deg,#1DBF73,#00A854);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;">✅ Approve</button>
+            <button onclick="document.getElementById('approval-modal-${caseId}').remove()" style="flex:1;padding:10px;background:rgba(255,82,82,.15);border:1px solid rgba(255,82,82,.3);border-radius:8px;color:#ff9999;font-weight:600;cursor:pointer;">❌ Cancel</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      document.getElementById('pin-input-' + caseId).focus();
+    }
+
+    function approveCase(caseId, role, pin) {
+      if (!pin || pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+        showBvToast('Invalid PIN. Must be 4 digits.', 'error');
+        return;
+      }
+
+      const c = getCaseById(caseId);
+      if (!c) { showBvToast('Case details not found', 'error'); return; }
+
+      showBvToast(`✅ Case ${c.id} approved by ${role === 'cdd' ? 'CDD Checker' : 'User'}`);
+      console.log('Case approved:', { caseId, role, pin: '****', customer: c.customer });
+
+      const modal = document.getElementById('approval-modal-' + caseId);
+      if (modal) modal.remove();
+
+      c.status = 'Approved';
+      renderCases(currentSegment);
+    }
+
+    function showComplianceReview(caseId) {
+      const c = getCaseById(caseId);
+      if (!c) { showBvToast('Case details not found', 'error'); return; }
+
+      showBvToast(`📋 Compliance review opened for case ${c.id} (${c.customer})`);
+      console.log('Compliance review:', { caseId, customer: c.customer });
     }
   </script>
 

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Control Governance</title>
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/accessibility_vision2030.css">
+  <link rel="stylesheet" href="css/theme-light.css">
+  <link rel="stylesheet" href="css/settings-drawer.css">
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <script src="js/security-guard.js"></script>
+  <script src="js/theme-manager.js"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(0,150,220,0.12), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(255,215,0,0.08), transparent 28%),
+                  #0a1024;
+      color: #e9edf5;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .page-shell {
+      max-width: 1200px;
+      margin: 32px auto 64px;
+      padding: 0 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .title-block h1 { margin: 0; font-size: 26px; letter-spacing: 0.2px; }
+    .title-block p { margin: 6px 0 0; color: #94a3b8; max-width: 720px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,214,188,0.12);
+      color: #34d399;
+      font-weight: 700;
+      border: 1px solid rgba(52,211,153,0.25);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+    }
+    .card h3 { margin: 0 0 4px; font-size: 16px; }
+    .card small { color: #94a3b8; }
+    .mode-toggle {
+      display: flex;
+      gap: 12px;
+      margin: 12px 0;
+    }
+    .mode-toggle label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      text-align: left;
+      font-size: 13px;
+    }
+    .matrix-table th { color: #cbd5e1; font-weight: 700; }
+    .module-checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.02);
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      color: #0b1224;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 12px 30px rgba(34,197,94,0.35);
+    }
+    .btn-secondary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      box-shadow: 0 12px 30px rgba(14,165,233,0.35);
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.04);
+      color: #e2e8f0;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .inline-inputs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .inline-inputs input {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: #e2e8f0;
+      min-width: 140px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+    .log-list { margin: 0; padding-left: 18px; color: #cbd5e1; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <script>window.AuthGuard && window.AuthGuard.enforce({ allowedRoles: ['it', 'management', 'compliance', 'audit'] });</script>
+  <div class="page-shell">
+    <div class="header">
+      <div class="title-block">
+        <span class="pill">Maker / Checker required</span>
+        <h1>Access Control Governance</h1>
+        <p>Role-to-page authorization matrix with mandatory 4-digit PIN approvals. Changes are only applied after Maker + Checker validation.</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+        <button class="btn btn-ghost" onclick="window.DemoReset && window.DemoReset.run()">Reset Demo State</button>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Access Mode</h3>
+        <small>Per-department mode: Maker/Checker أو Single User</small>
+        <div id="mode-table"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <span class="pill" style="background:rgba(255,159,28,0.12); color:#f59e0b; border-color:rgba(245,158,11,0.25);">4-digit PIN only</span>
+          <span class="pill" style="background:rgba(14,165,233,0.12); color:#0ea5e9; border-color:rgba(14,165,233,0.25);">No signatures</span>
+          <span class="pill" style="background:rgba(52,211,153,0.12); color:#22c55e; border-color:rgba(52,211,153,0.25);">Self-approval blocked</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Maker / Checker Approval</h3>
+        <small>أي تغيير يبقى Pending حتى Checker مختلف يعتمد</small>
+        <div class="inline-inputs">
+          <input type="password" id="maker-pin" inputmode="numeric" maxlength="4" placeholder="Maker PIN (4 digits)">
+          <input type="password" id="checker-pin" inputmode="numeric" maxlength="4" placeholder="Checker PIN (4 digits)">
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="btn-submit-maker">Submit for Approval (Maker)</button>
+          <button class="btn btn-secondary" id="btn-approve-checker">Approve Pending (Checker)</button>
+          <button class="btn btn-ghost" id="btn-reject">Reject Pending</button>
+          <button class="btn btn-ghost" id="btn-reset">Restore Defaults</button>
+        </div>
+        <div class="status-bar">
+          <div>Last approved: <span id="last-approved">Not set</span></div>
+          <div>Pending changes: <span id="pending-flag">None</span></div>
+        </div>
+        <div id="pending-summary" style="margin-top:10px; color:#e2e8f0; font-size:13px;"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Role-to-Page Matrix</h3>
+      <small>Business, CDD, Compliance coverage</small>
+      <table class="matrix-table" id="matrix-table">
+        <thead>
+          <tr>
+            <th style="width:160px;">Role</th>
+            <th>Allowed Pages</th>
+          </tr>
+        </thead>
+        <tbody id="matrix-body"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Workflow Capabilities</h3>
+      <small>من يدير الإنشاء / المراجعة / الموافقة / العرض</small>
+      <table class="matrix-table" id="capabilities-table">
+        <thead>
+          <tr>
+            <th style="width:160px;">Role</th>
+            <th>Create</th>
+            <th>Review</th>
+            <th>Approve</th>
+            <th>View Only</th>
+          </tr>
+        </thead>
+        <tbody id="capabilities-body"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Change Log</h3>
+      <small>Latest 5 governance updates</small>
+      <ul class="log-list" id="change-log"></ul>
+    </div>
+  </div>
+
+  <script>
+    const clone = (obj) => (typeof structuredClone === 'function' ? structuredClone(obj) : JSON.parse(JSON.stringify(obj)));
+    const managedRoles = ['business', 'cdd', 'compliance', 'audit', 'it'];
+    const capabilityOptions = ['business', 'cdd', 'compliance', 'management', 'audit', 'it'];
+    const modules = [
+      ['dashboard.html', 'Dashboard'],
+      ['business_view.html', 'Business View'],
+      ['cdd_view.html', 'CDD View'],
+      ['compliance_view.html', 'Compliance View'],
+      ['audit_console.html', 'Audit Console'],
+      ['admin_dashboard.html', 'Admin Dashboard'],
+      ['edd_case.html', 'EDD Case'],
+      ['customer360.html', 'Customer 360'],
+      ['kyc_form.html', 'KYC Form'],
+      ['kyc_monitoring.html', 'KYC Monitoring'],
+      ['access_control.html', 'Access Control']
+    ];
+
+    const defaultConfig = {
+      matrix: {
+        business: { 'dashboard.html': true, 'business_view.html': true, 'edd_case.html': true, 'customer360.html': true, 'kyc_form.html': true },
+        cdd: { 'dashboard.html': true, 'cdd_view.html': true, 'edd_case.html': true, 'compliance_view.html': true, 'kyc_monitoring.html': true },
+        compliance: { 'dashboard.html': true, 'compliance_view.html': true, 'audit_console.html': true },
+        audit: { 'dashboard.html': true, 'audit_console.html': true },
+        it: { 'dashboard.html': true, 'admin_dashboard.html': true, 'access_control.html': true }
+      },
+      modes: {
+        business: 'maker-checker',
+        cdd: 'maker-checker',
+        compliance: 'maker-checker',
+        audit: 'maker-checker',
+        it: 'single-user'
+      },
+      capabilities: {
+        business: { create: 'business', review: 'cdd', approve: 'compliance', view: 'management' },
+        cdd: { create: 'cdd', review: 'compliance', approve: 'compliance', view: 'management' },
+        compliance: { create: 'compliance', review: 'compliance', approve: 'management', view: 'management' },
+        audit: { create: 'audit', review: 'audit', approve: 'management', view: 'management' },
+        it: { create: 'it', review: 'it', approve: 'management', view: 'management' }
+      },
+      lastApproved: null,
+      lastApprovedBy: null,
+      log: []
+    };
+
+    const state = {
+      activeConfig: clone(defaultConfig),
+      draftConfig: clone(defaultConfig),
+      pending: null
+    };
+
+    function getCurrentUser() {
+      try {
+        const raw = sessionStorage.getItem('edd_session');
+        if (!raw) return null;
+        const session = JSON.parse(raw);
+        return session.user || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function loadActive() {
+      const saved = localStorage.getItem('access_control_state');
+      if (saved) {
+        try {
+          state.activeConfig = JSON.parse(saved);
+        } catch (e) {
+          console.warn('Access control state parse failed, using defaults', e);
+        }
+      }
+      state.draftConfig = clone(state.activeConfig);
+    }
+
+    function loadPending() {
+      const pending = AccessMatrixStore.loadPending();
+      if (pending && pending.draftConfig) {
+        state.pending = pending;
+        state.draftConfig = clone(pending.draftConfig);
+      }
+    }
+
+    function saveActive() {
+      localStorage.setItem('access_control_state', JSON.stringify(state.activeConfig));
+    }
+
+    function pageMatrixFromConfig(cfg) {
+      const pageMatrix = {};
+      Object.entries(cfg.matrix).forEach(([role, pages]) => {
+        Object.entries(pages).forEach(([page, allowed]) => {
+          if (!allowed) return;
+          if (!pageMatrix[page]) pageMatrix[page] = [];
+          pageMatrix[page].push(role);
+        });
+      });
+      return pageMatrix;
+    }
+
+    function applyToGuard(cfg) {
+      AccessMatrixStore.save(pageMatrixFromConfig(cfg));
+    }
+
+    function renderModes() {
+      const host = document.getElementById('mode-table');
+      host.innerHTML = '';
+      const table = document.createElement('table');
+      table.className = 'matrix-table';
+      const thead = document.createElement('thead');
+      thead.innerHTML = '<tr><th style="width:160px;">Role</th><th>Mode</th></tr>';
+      table.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      managedRoles.forEach(role => {
+        const tr = document.createElement('tr');
+        const tdRole = document.createElement('td');
+        tdRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+        const tdMode = document.createElement('td');
+        const select = document.createElement('select');
+        select.dataset.role = role;
+        ['maker-checker', 'single-user'].forEach(val => {
+          const opt = document.createElement('option');
+          opt.value = val;
+          opt.textContent = val === 'maker-checker' ? 'Maker / Checker' : 'Single User';
+          if (state.draftConfig.modes[role] === val) opt.selected = true;
+          select.appendChild(opt);
+        });
+        select.addEventListener('change', (e) => {
+          state.draftConfig.modes[role] = e.target.value;
+          markPending('Mode changed');
+        });
+        tdMode.appendChild(select);
+        tr.appendChild(tdRole);
+        tr.appendChild(tdMode);
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      host.appendChild(table);
+    }
+
+    function renderMatrix() {
+      const tbody = document.getElementById('matrix-body');
+      tbody.innerHTML = '';
+      managedRoles.forEach(role => {
+        if (!state.draftConfig.matrix[role]) state.draftConfig.matrix[role] = {};
+        const row = document.createElement('tr');
+        const roleCell = document.createElement('td');
+        roleCell.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+        row.appendChild(roleCell);
+
+        const cell = document.createElement('td');
+        modules.forEach(([key, label]) => {
+          const wrapper = document.createElement('label');
+          wrapper.className = 'module-checkbox';
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.checked = Boolean(state.draftConfig.matrix[role][key]);
+          cb.dataset.role = role;
+          cb.dataset.page = key;
+          cb.addEventListener('change', onToggle);
+          const span = document.createElement('span');
+          span.textContent = label;
+          wrapper.appendChild(cb);
+          wrapper.appendChild(span);
+          cell.appendChild(wrapper);
+        });
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderCapabilities() {
+      const tbody = document.getElementById('capabilities-body');
+      tbody.innerHTML = '';
+      managedRoles.forEach(role => {
+        const caps = state.draftConfig.capabilities[role] || { create: role, review: role, approve: role, view: role };
+        state.draftConfig.capabilities[role] = caps;
+        const tr = document.createElement('tr');
+        const tdRole = document.createElement('td');
+        tdRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+        tr.appendChild(tdRole);
+        ['create', 'review', 'approve', 'view'].forEach(capKey => {
+          const td = document.createElement('td');
+          const select = document.createElement('select');
+          capabilityOptions.forEach(optRole => {
+            const opt = document.createElement('option');
+            opt.value = optRole;
+            opt.textContent = optRole.charAt(0).toUpperCase() + optRole.slice(1);
+            if (caps[capKey] === optRole) opt.selected = true;
+            select.appendChild(opt);
+          });
+          select.addEventListener('change', (e) => {
+            state.draftConfig.capabilities[role][capKey] = e.target.value;
+            markPending('Capability changed');
+          });
+          td.appendChild(select);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function onToggle(e) {
+      const role = e.target.dataset.role;
+      const page = e.target.dataset.page;
+      state.draftConfig.matrix[role][page] = e.target.checked;
+      markPending('Matrix changed');
+    }
+
+    function markPending(reason = 'Draft updated') {
+      document.getElementById('pending-flag').textContent = reason;
+      renderPendingSummary();
+    }
+
+    function renderLog() {
+      const logEl = document.getElementById('change-log');
+      logEl.innerHTML = '';
+      const log = state.activeConfig.log || [];
+      log.slice(-5).reverse().forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        logEl.appendChild(li);
+      });
+      if (!logEl.childElementCount) {
+        logEl.innerHTML = '<li>No changes recorded yet.</li>';
+      }
+    }
+
+    function renderPendingSummary() {
+      const summary = document.getElementById('pending-summary');
+      if (!state.pending) {
+        summary.textContent = document.getElementById('pending-flag').textContent || 'No pending';
+        return;
+      }
+      summary.textContent = `Pending by ${state.pending.makerName} (${state.pending.makerRole}) at ${state.pending.submittedAt}`;
+      document.getElementById('pending-flag').textContent = 'Awaiting Checker';
+    }
+
+    function updateMeta() {
+      document.getElementById('last-approved').textContent = state.activeConfig.lastApproved || 'Not set';
+      document.getElementById('pending-flag').textContent = state.pending ? 'Awaiting Checker' : 'None';
+      renderPendingSummary();
+      renderLog();
+    }
+
+    function validatePin(value, label) {
+      const pinRegex = /^\d{4}$/;
+      if (!pinRegex.test(value)) {
+        NotificationCenter.toast(`${label} must be 4 digits`, 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function diffSummary(oldCfg, newCfg) {
+      let changed = 0;
+      managedRoles.forEach(role => {
+        const oldPages = oldCfg.matrix[role] || {};
+        const newPages = newCfg.matrix[role] || {};
+        modules.forEach(([page]) => {
+          if (Boolean(oldPages[page]) !== Boolean(newPages[page])) changed++;
+        });
+        if (oldCfg.modes[role] !== newCfg.modes[role]) changed++;
+      });
+      return `${changed} access changes`;
+    }
+
+    function submitForApproval() {
+      const makerPin = document.getElementById('maker-pin').value.trim();
+      if (!validatePin(makerPin, 'Maker PIN')) return;
+      const currentUser = getCurrentUser() || { employeeId: 'DEMO', name: 'Demo Maker', role: 'management' };
+      const pending = {
+        makerId: currentUser.employeeId,
+        makerName: currentUser.name,
+        makerRole: currentUser.role,
+        makerPin,
+        submittedAt: new Date().toISOString(),
+        draftConfig: clone(state.draftConfig),
+        previousConfig: clone(state.activeConfig)
+      };
+      AccessMatrixStore.savePending(pending);
+      state.pending = pending;
+      renderPendingSummary();
+      NotificationCenter.toast('Submitted for checker approval', 'info');
+    }
+
+    function approvePending() {
+      if (!state.pending) {
+        NotificationCenter.toast('No pending change to approve', 'warning');
+        return;
+      }
+      const checkerPin = document.getElementById('checker-pin').value.trim();
+      if (!validatePin(checkerPin, 'Checker PIN')) return;
+      const currentUser = getCurrentUser() || { employeeId: 'CHECKER', name: 'Checker', role: 'management' };
+      if (currentUser.employeeId === state.pending.makerId) {
+        NotificationCenter.toast('Self-approval blocked. Use a different checker.', 'error');
+        return;
+      }
+
+      state.activeConfig = clone(state.pending.draftConfig);
+      state.activeConfig.lastApproved = new Date().toISOString();
+      state.activeConfig.lastApprovedBy = currentUser.employeeId;
+      const summary = `Approved ${state.activeConfig.lastApproved} by ${currentUser.name} (${currentUser.employeeId}); maker ${state.pending.makerName} (${state.pending.makerId}); ${diffSummary(state.pending.previousConfig, state.pending.draftConfig)}`;
+      state.activeConfig.log = state.activeConfig.log || [];
+      state.activeConfig.log.push(summary);
+
+      saveActive();
+      applyToGuard(state.activeConfig);
+      AccessMatrixStore.clearPending();
+      state.pending = null;
+      state.draftConfig = clone(state.activeConfig);
+      renderModes();
+      renderMatrix();
+      renderCapabilities();
+      updateMeta();
+      NotificationCenter.toast('Change approved and applied', 'success');
+      document.getElementById('maker-pin').value = '';
+      document.getElementById('checker-pin').value = '';
+    }
+
+    function rejectPending() {
+      if (!state.pending) {
+        NotificationCenter.toast('No pending change to reject', 'warning');
+        return;
+      }
+      state.draftConfig = clone(state.activeConfig);
+      AccessMatrixStore.clearPending();
+      state.pending = null;
+      renderModes();
+      renderMatrix();
+      renderCapabilities();
+      updateMeta();
+      NotificationCenter.toast('Pending change rejected / cleared', 'info');
+    }
+
+    function handleReset() {
+      state.activeConfig = clone(defaultConfig);
+      state.draftConfig = clone(defaultConfig);
+      state.pending = null;
+      state.activeConfig.lastApproved = null;
+      state.activeConfig.lastApprovedBy = null;
+      saveActive();
+      applyToGuard(state.activeConfig);
+      AccessMatrixStore.clearPending();
+      renderModes();
+      renderMatrix();
+      renderCapabilities();
+      updateMeta();
+      NotificationCenter.toast('Matrix restored to defaults', 'info');
+    }
+
+    function init() {
+      if (window.DialogShield) window.DialogShield.override();
+      loadActive();
+      loadPending();
+      renderModes();
+      renderMatrix();
+      renderCapabilities();
+      updateMeta();
+      applyToGuard(state.activeConfig);
+
+      document.getElementById('btn-submit-maker').addEventListener('click', submitForApproval);
+      document.getElementById('btn-approve-checker').addEventListener('click', approvePending);
+      document.getElementById('btn-reject').addEventListener('click', rejectPending);
+      document.getElementById('btn-reset').addEventListener('click', handleReset);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>

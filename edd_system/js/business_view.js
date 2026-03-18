@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Logout handler
   document.getElementById('logout-btn').addEventListener('click', function() {
     sessionStorage.removeItem('edd_session');
-    window.location.href = '/edd_system/login.html';
+    window.location.href = 'login.html';
   });
 });
 
