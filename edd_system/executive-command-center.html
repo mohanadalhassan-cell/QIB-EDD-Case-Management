@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIB — Executive Command Center | مركز القيادة التنفيذي</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23D4AF37'/><text x='16' y='22' font-size='16' font-weight='bold' fill='%230a1f3d' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+  <link rel="stylesheet" href="css/edd_system.css">
+  <link rel="stylesheet" href="css/rtl-support.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="js/path_manager.js"></script>
+  <script src="js/sample_data_generator.js"></script>
+  <script src="js/edd_data_model.js"></script>
+  <script src="js/data_bridge.js"></script>
+  <script src="js/language-pack.js"></script>
+  <script src="js/voice-assistant.js"></script>
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       QIB EXECUTIVE COMMAND CENTER — BOARD-READY CONTROL ROOM
+       ═════════════════════════════════════════════════════════════ */
+    :root {
+      --gold:          #D4AF37;
+      --gold-light:    #F5D95C;
+      --gold-dim:      rgba(212,175,55,0.15);
+      --cyan:          #00D4FF;
+      --cyan-dark:     #0088BB;
+      --navy:          #060e1a;
+      --navy-mid:      #0c1929;
+      --navy-light:    #0f1d32;
+      --glass:         rgba(255,255,255,0.04);
+      --glass-border:  rgba(255,255,255,0.08);
+      --danger:        #FF4857;
+      --warning:       #FFA500;
+      --success:       #22C55E;
+      --white-90:      rgba(255,255,255,0.90);
+      --white-70:      rgba(255,255,255,0.70);
+      --white-50:      rgba(255,255,255,0.50);
+      --white-10:      rgba(255,255,255,0.10);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--navy);
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+
+    /* ─── 3D Background Canvas ─────────────────────────────────── */
+    #ecc-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+
+    /* ─── Main Layout ──────────────────────────────────────────── */
+    .ecc-layout {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ─── Sidebar ─────────────────────────────────────────────── */
+    .ecc-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: linear-gradient(180deg, rgba(6,14,26,0.97) 0%, rgba(12,25,41,0.98) 100%);
+      border-right: 1px solid rgba(212,175,55,0.2);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .ecc-brand {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+      margin-bottom: 16px;
+    }
+
+    .ecc-brand-logo {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--gold), #c49b2c);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 18px; color: var(--navy);
+      margin-bottom: 12px;
+      box-shadow: 0 4px 16px rgba(212,175,55,0.3);
+    }
+
+    .ecc-brand h2 {
+      font-size: 13px; font-weight: 700;
+      color: var(--gold); letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+
+    .ecc-brand p {
+      font-size: 10px; color: var(--white-50);
+      margin-top: 4px;
+    }
+
+    .ecc-nav {
+      flex: 1;
+      padding: 0 12px;
+    }
+
+    .ecc-nav-section {
+      margin-bottom: 8px;
+    }
+
+    .ecc-nav-label {
+      font-size: 9px; font-weight: 700;
+      color: var(--white-50);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      padding: 8px 8px 4px;
+    }
+
+    .ecc-nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--white-70);
+      font-size: 12px; font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .ecc-nav-item:hover {
+      background: var(--gold-dim);
+      border-color: rgba(212,175,55,0.2);
+      color: var(--gold);
+    }
+
+    .ecc-nav-item.active {
+      background: var(--gold-dim);
+      border-color: rgba(212,175,55,0.3);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .ecc-nav-icon { font-size: 15px; flex-shrink: 0; }
+
+    .ecc-sidebar-footer {
+      padding: 16px 20px 0;
+      border-top: 1px solid rgba(212,175,55,0.15);
+    }
+
+    .ecc-status-badge {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; color: var(--success);
+      margin-bottom: 8px;
+    }
+
+    .ecc-status-dot {
+      width: 8px; height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* ─── Main Content ─────────────────────────────────────────── */
+    .ecc-content {
+      flex: 1;
+      min-width: 0;
+      background: linear-gradient(180deg, rgba(6,14,26,0.88), rgba(12,25,41,0.92));
+      backdrop-filter: blur(10px);
+    }
+
+    /* ─── Top Bar ─────────────────────────────────────────────── */
+    .ecc-topbar {
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+      background: rgba(6,14,26,0.7);
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .ecc-topbar-left {
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .ecc-topbar-left img {
+      max-height: 28px; width: auto; opacity: 0.85;
+    }
+
+    .ecc-page-title {
+      font-size: 16px; font-weight: 800;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.3px;
+    }
+
+    .ecc-topbar-right {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .ecc-topbar-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 11px; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ecc-topbar-btn.lang   { background: linear-gradient(135deg,#42A5F5,#1E88E5); color:#fff; }
+    .ecc-topbar-btn.voice  { background: linear-gradient(135deg,#1DBF73,#00A854); color:#fff; }
+    .ecc-topbar-btn.explain{ background: linear-gradient(135deg,#FFA726,#F57C00); color:#fff; }
+    .ecc-topbar-btn:hover  { opacity: 0.85; transform: translateY(-1px); }
+
+    .ecc-live-time {
+      font-size: 11px; color: var(--white-50);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── Page Body ────────────────────────────────────────────── */
+    .ecc-body {
+      padding: 28px 32px;
+      max-width: 1800px;
+    }
+
+    /* ─── Section Heading ──────────────────────────────────────── */
+    .ecc-section-heading {
+      font-size: 13px; font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+
+    /* ─── KPI Banner ────────────────────────────────────────────── */
+    .ecc-kpi-banner {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .ecc-kpi-card {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .ecc-kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--cyan));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .ecc-kpi-card:hover::before { transform: scaleX(1); }
+
+    .ecc-kpi-card:hover {
+      border-color: rgba(212,175,55,0.3);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.1);
+      transform: translateY(-3px);
+    }
+
+    .ecc-kpi-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .ecc-kpi-label {
+      font-size: 10px;
+      color: var(--white-50);
+      text-transform: uppercase; letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .ecc-kpi-value {
+      font-size: 28px; font-weight: 900;
+      color: var(--gold);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .ecc-kpi-change {
+      font-size: 10px;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .ecc-kpi-change.positive { color: var(--success); }
+    .ecc-kpi-change.negative { color: var(--danger); }
+    .ecc-kpi-change.neutral  { color: var(--white-50); }
+
+    /* ─── Alert Banner ─────────────────────────────────────────── */
+    .ecc-alert-banner {
+      background: linear-gradient(135deg, rgba(255,72,87,0.08), rgba(255,165,0,0.05));
+      border: 1px solid rgba(255,72,87,0.25);
+      border-left: 4px solid var(--danger);
+      border-radius: 10px;
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px;
+      animation: slideIn 0.5s ease;
+    }
+
+    .ecc-alert-banner-icon { font-size: 22px; flex-shrink: 0; }
+
+    .ecc-alert-banner-text {
+      flex: 1;
+      font-size: 12px; color: #FF6E7A;
+      font-weight: 600;
+    }
+
+    .ecc-alert-dismiss {
+      background: none; border: none;
+      color: var(--white-50); cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .ecc-alert-dismiss:hover { color: #fff; }
+
+    /* ─── Two-Column Grid ──────────────────────────────────────── */
+    .ecc-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .ecc-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .ecc-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* ─── Panel ────────────────────────────────────────────────── */
+    .ecc-panel {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.01));
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 22px;
+      animation: fadeUp 0.6s ease backwards;
+    }
+
+    .ecc-panel-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--white-90);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ─── 3D Governance Panel ──────────────────────────────────── */
+    .ecc-3d-panel {
+      background: linear-gradient(135deg, rgba(12,25,41,0.9), rgba(6,14,26,0.95));
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      min-height: 360px;
+      position: relative;
+    }
+
+    .ecc-3d-panel-label {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      font-size: 12px; font-weight: 700;
+      color: var(--cyan);
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 6px; padding: 4px 10px;
+    }
+
+    .ecc-3d-panel canvas {
+      width: 100% !important;
+      height: 360px !important;
+    }
+
+    /* ─── Risk Indicators ──────────────────────────────────────── */
+    .ecc-risk-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .ecc-risk-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      font-size: 12px;
+    }
+
+    .ecc-risk-item-label {
+      color: var(--white-70);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .ecc-risk-item-value {
+      font-size: 16px; font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .risk-critical { color: var(--danger); }
+    .risk-high     { color: var(--warning); }
+    .risk-medium   { color: #F5D95C; }
+    .risk-safe     { color: var(--success); }
+
+    /* ─── Department Grid ──────────────────────────────────────── */
+    .ecc-dept-card {
+      background: linear-gradient(135deg, var(--glass), rgba(255,255,255,0.01));
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ecc-dept-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--cyan));
+      transform: scaleX(0);
+      transition: transform 0.35s ease;
+    }
+
+    .ecc-dept-card:hover::after { transform: scaleX(1); }
+
+    .ecc-dept-card:hover {
+      border-color: rgba(212,175,55,0.3);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.12);
+      transform: translateY(-4px);
+    }
+
+    .ecc-dept-icon  { font-size: 30px; margin-bottom: 8px; display: block; }
+    .ecc-dept-name  { font-size: 12px; font-weight: 800; color: var(--gold); margin-bottom: 6px; }
+    .ecc-dept-count { font-size: 22px; font-weight: 900; color: var(--cyan); }
+    .ecc-dept-label { font-size: 9px; color: var(--white-50); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+
+    /* ─── Executive Alerts Panel ──────────────────────────────── */
+    .ecc-alert-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .ecc-alert-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      animation: slideIn 0.4s ease;
+    }
+
+    .ecc-alert-item.critical {
+      background: rgba(255,72,87,0.08);
+      border: 1px solid rgba(255,72,87,0.2);
+      border-left: 3px solid var(--danger);
+    }
+
+    .ecc-alert-item.warning {
+      background: rgba(255,165,0,0.07);
+      border: 1px solid rgba(255,165,0,0.2);
+      border-left: 3px solid var(--warning);
+    }
+
+    .ecc-alert-item.info {
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-left: 3px solid var(--cyan);
+    }
+
+    .ecc-alert-item-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    .ecc-alert-item-content { flex: 1; }
+
+    .ecc-alert-item-title {
+      font-size: 11px; font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .ecc-alert-item.critical .ecc-alert-item-title { color: var(--danger); }
+    .ecc-alert-item.warning  .ecc-alert-item-title { color: var(--warning); }
+    .ecc-alert-item.info     .ecc-alert-item-title { color: var(--cyan); }
+
+    .ecc-alert-item-desc {
+      font-size: 11px; color: var(--white-70); line-height: 1.5;
+    }
+
+    .ecc-alert-item-time {
+      font-size: 9px; color: var(--white-50);
+      margin-top: 4px; font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── Compliance Meter ─────────────────────────────────────── */
+    .ecc-meter-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .ecc-meter-label {
+      font-size: 11px; color: var(--white-70);
+      width: 120px; flex-shrink: 0;
+    }
+
+    .ecc-meter-track {
+      flex: 1;
+      height: 8px;
+      background: var(--glass-border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .ecc-meter-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .ecc-meter-fill.gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .ecc-meter-fill.cyan { background: linear-gradient(90deg, var(--cyan-dark), var(--cyan)); }
+    .ecc-meter-fill.green{ background: linear-gradient(90deg, #16a34a, var(--success)); }
+    .ecc-meter-fill.warn { background: linear-gradient(90deg, #b45309, var(--warning)); }
+
+    .ecc-meter-value {
+      font-size: 12px; font-weight: 700;
+      color: var(--gold);
+      width: 36px; text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ─── Action Buttons ──────────────────────────────────────── */
+    .ecc-action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .ecc-action-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--white-70);
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .ecc-action-btn:hover {
+      background: var(--gold-dim);
+      border-color: rgba(212,175,55,0.3);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .ecc-action-btn span { font-size: 18px; }
+
+    /* ─── Board Readiness Banner ──────────────────────────────── */
+    .ecc-board-banner {
+      background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(0,212,255,0.04));
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.7s ease;
+      flex-wrap: wrap;
+    }
+
+    .ecc-board-banner-left {
+      display: flex; align-items: center; gap: 16px;
+    }
+
+    .ecc-board-banner-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--gold), #c49b2c);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .ecc-board-banner h2 {
+      font-size: 18px; font-weight: 800;
+      color: var(--gold); margin-bottom: 4px;
+    }
+
+    .ecc-board-banner p {
+      font-size: 12px; color: var(--white-70);
+    }
+
+    .ecc-board-cta {
+      display: flex; gap: 10px; flex-shrink: 0;
+    }
+
+    .ecc-board-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 12px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .ecc-board-btn.primary {
+      background: linear-gradient(135deg, var(--gold), #c49b2c);
+      color: var(--navy); border: none;
+    }
+
+    .ecc-board-btn.secondary {
+      background: transparent;
+      color: var(--white-70);
+      border: 1px solid var(--glass-border);
+    }
+
+    .ecc-board-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* ─── Animated Chart Panels ─────────────────────────────────── */
+    .ecc-chart-canvas { max-height: 220px; }
+
+    /* ─── Footer Stats Row ─────────────────────────────────────── */
+    .ecc-footer-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      padding-top: 24px;
+      border-top: 1px solid var(--glass-border);
+      animation: fadeUp 0.7s 0.2s ease backwards;
+    }
+
+    .ecc-footer-stat { text-align: center; }
+
+    .ecc-footer-stat-label {
+      font-size: 9px; color: var(--white-50);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .ecc-footer-stat-value {
+      font-size: 24px; font-weight: 900;
+      color: var(--gold);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ecc-footer-stat-sub {
+      font-size: 9px; color: var(--success);
+      margin-top: 3px;
+    }
+
+    /* ─── Department Modal ─────────────────────────────────────── */
+    .ecc-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none; align-items: center; justify-content: center;
+      z-index: 1000;
+    }
+
+    .ecc-modal.open { display: flex; }
+
+    .ecc-modal-box {
+      background: linear-gradient(135deg, var(--navy-mid), rgba(12,25,41,0.98));
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 560px; width: 90%;
+      max-height: 80vh; overflow-y: auto;
+      box-shadow: 0 0 60px rgba(212,175,55,0.25);
+      animation: scaleIn 0.35s ease;
+      position: relative;
+    }
+
+    .ecc-modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none;
+      font-size: 22px; color: var(--white-50);
+      cursor: pointer; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+
+    .ecc-modal-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+    .ecc-modal-title {
+      font-size: 18px; font-weight: 800;
+      color: var(--gold); margin-bottom: 20px;
+    }
+
+    .ecc-modal-metric-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 16px;
+    }
+
+    .ecc-modal-metric {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .ecc-modal-metric-label {
+      font-size: 10px; color: var(--white-50);
+      margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .ecc-modal-metric-value {
+      font-size: 20px; font-weight: 800; color: var(--cyan);
+    }
+
+    .ecc-modal-metric-trend {
+      font-size: 10px; margin-top: 2px;
+      color: var(--success);
+    }
+
+    .ecc-modal-status {
+      font-size: 12px; color: var(--white-70);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+
+    /* ─── Animations ───────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.9); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 8px rgba(212,175,55,0.2); }
+      50%       { box-shadow: 0 0 20px rgba(212,175,55,0.5); }
+    }
+
+    /* ─── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 1200px) {
+      .ecc-grid-2  { grid-template-columns: 1fr; }
+      .ecc-grid-3  { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .ecc-sidebar { display: none; }
+      .ecc-body    { padding: 16px; }
+      .ecc-grid-3  { grid-template-columns: 1fr; }
+      .ecc-kpi-banner { grid-template-columns: repeat(2,1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .ecc-kpi-banner { grid-template-columns: 1fr 1fr; }
+      .ecc-grid-4     { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ 3D BACKGROUND CANVAS ════════════════════════════════════ -->
+<canvas id="ecc-canvas"></canvas>
+
+<!-- ═══ LAYOUT ══════════════════════════════════════════════════ -->
+<div class="ecc-layout">
+
+  <!-- ─── SIDEBAR ──────────────────────────────────────────────── -->
+  <nav class="ecc-sidebar">
+    <div class="ecc-brand">
+      <div class="ecc-brand-logo">QIB</div>
+      <h2>Executive Command Center</h2>
+      <p>مركز القيادة التنفيذي</p>
+    </div>
+
+    <div class="ecc-nav">
+      <div class="ecc-nav-section">
+        <div class="ecc-nav-label">Executive</div>
+        <a class="ecc-nav-item active" href="executive-command-center.html">
+          <span class="ecc-nav-icon">⚡</span> Command Center
+        </a>
+        <a class="ecc-nav-item" href="executive_dashboard.html">
+          <span class="ecc-nav-icon">📊</span> Executive Dashboard
+        </a>
+        <a class="ecc-nav-item" href="executive_presentation.html">
+          <span class="ecc-nav-icon">🎯</span> Board Presentation
+        </a>
+        <a class="ecc-nav-item" href="command_center.html">
+          <span class="ecc-nav-icon">🖥️</span> 3D Control Room
+        </a>
+      </div>
+      <div class="ecc-nav-section">
+        <div class="ecc-nav-label">Operations</div>
+        <a class="ecc-nav-item" href="dashboard.html">
+          <span class="ecc-nav-icon">🏠</span> Main Dashboard
+        </a>
+        <a class="ecc-nav-item" href="edd_case.html">
+          <span class="ecc-nav-icon">📁</span> EDD Cases
+        </a>
+        <a class="ecc-nav-item" href="management_dashboard.html">
+          <span class="ecc-nav-icon">📋</span> Management
+        </a>
+        <a class="ecc-nav-item" href="decision-analytics-dashboard.html">
+          <span class="ecc-nav-icon">📈</span> Analytics
+        </a>
+      </div>
+      <div class="ecc-nav-section">
+        <div class="ecc-nav-label">Compliance</div>
+        <a class="ecc-nav-item" href="compliance_view.html">
+          <span class="ecc-nav-icon">⚖️</span> Compliance
+        </a>
+        <a class="ecc-nav-item" href="risk_dashboard.html">
+          <span class="ecc-nav-icon">🎯</span> Risk Dashboard
+        </a>
+        <a class="ecc-nav-item" href="audit_console.html">
+          <span class="ecc-nav-icon">🔍</span> Audit Console
+        </a>
+      </div>
+    </div>
+
+    <div class="ecc-sidebar-footer">
+      <div class="ecc-status-badge">
+        <div class="ecc-status-dot"></div>
+        All Systems Operational
+      </div>
+      <div style="font-size:10px;color:var(--white-50);">
+        QIB EDD System v2.0 · 2026
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── MAIN CONTENT ─────────────────────────────────────────── -->
+  <div class="ecc-content">
+
+    <!-- Top Bar -->
+    <header class="ecc-topbar">
+      <div class="ecc-topbar-left">
+        <img src="assets/the-vision.jpeg" alt="QIB" onerror="this.style.display='none'">
+        <span class="ecc-page-title">⚡ Executive Command Center — مركز القيادة التنفيذي</span>
+      </div>
+      <div class="ecc-topbar-right">
+        <span class="ecc-live-time" id="ecc-clock">--:--:--</span>
+        <button class="ecc-topbar-btn lang"
+                onclick="window.languageSwitcher && window.languageSwitcher()"
+                title="Switch Language">
+          <span id="lang-label">EN/AR</span>
+        </button>
+        <button class="ecc-topbar-btn explain"
+                onclick="VoiceAssistant && VoiceAssistant.explainCurrentPage()"
+                title="Explain Page">🔊</button>
+        <button class="ecc-topbar-btn voice"
+                onclick="VoiceAssistant && VoiceAssistant.startListening()"
+                title="Voice Commands">🎤</button>
+      </div>
+    </header>
+
+    <!-- Page Body -->
+    <main class="ecc-body">
+
+      <!-- Board Readiness Banner -->
+      <div class="ecc-board-banner">
+        <div class="ecc-board-banner-left">
+          <div class="ecc-board-banner-icon">🏛️</div>
+          <div>
+            <h2>Board Presentation Ready</h2>
+            <p>EDD Case Management Platform · Qatar Islamic Bank · Q1 2026 Strategic Review</p>
+          </div>
+        </div>
+        <div class="ecc-board-cta">
+          <a href="executive_presentation.html" class="ecc-board-btn primary">🎯 Launch Board Deck</a>
+          <a href="decision-analytics-dashboard.html" class="ecc-board-btn secondary">📈 Full Analytics</a>
+        </div>
+      </div>
+
+      <!-- Active Alert Banner -->
+      <div class="ecc-alert-banner" id="ecc-top-alert">
+        <span class="ecc-alert-banner-icon">🚨</span>
+        <span class="ecc-alert-banner-text">
+          3 sanctions matches and 2 SLA breaches require immediate executive attention — review alerts below.
+        </span>
+        <button class="ecc-alert-dismiss" onclick="document.getElementById('ecc-top-alert').style.display='none'">✕</button>
+      </div>
+
+      <!-- KPI Banner -->
+      <div class="ecc-section-heading">📊 Key Performance Indicators</div>
+      <div class="ecc-kpi-banner">
+        <div class="ecc-kpi-card">
+          <span class="ecc-kpi-icon">📁</span>
+          <div class="ecc-kpi-label">Active EDD Cases</div>
+          <div class="ecc-kpi-value"><span id="kpi-cases">0</span></div>
+          <div class="ecc-kpi-change positive">+12% from last month</div>
+        </div>
+        <div class="ecc-kpi-card">
+          <span class="ecc-kpi-icon">⏳</span>
+          <div class="ecc-kpi-label">Pending Reviews</div>
+          <div class="ecc-kpi-value"><span id="kpi-pending">0</span></div>
+          <div class="ecc-kpi-change negative">–8% avg cycle time</div>
+        </div>
+        <div class="ecc-kpi-card">
+          <span class="ecc-kpi-icon">🔄</span>
+          <div class="ecc-kpi-label">Re-KYC Progress</div>
+          <div class="ecc-kpi-value"><span id="kpi-rekyc">0</span>%</div>
+          <div class="ecc-kpi-change positive">+18% acceleration</div>
+        </div>
+        <div class="ecc-kpi-card">
+          <span class="ecc-kpi-icon">🚨</span>
+          <div class="ecc-kpi-label">High-Risk Alerts</div>
+          <div class="ecc-kpi-value"><span id="kpi-alerts">0</span></div>
+          <div class="ecc-kpi-change negative">+3 new PEP matches</div>
+        </div>
+        <div class="ecc-kpi-card">
+          <span class="ecc-kpi-icon">⏱️</span>
+          <div class="ecc-kpi-label">SLA Breaches</div>
+          <div class="ecc-kpi-value"><span id="kpi-sla">0</span></div>
+          <div class="ecc-kpi-change negative">Escalation required</div>
+        </div>
+        <div class="ecc-kpi-card">
+          <span class="ecc-kpi-icon">🖥️</span>
+          <div class="ecc-kpi-label">System Uptime</div>
+          <div class="ecc-kpi-value"><span id="kpi-uptime">0</span>%</div>
+          <div class="ecc-kpi-change positive">All systems nominal</div>
+        </div>
+      </div>
+
+      <!-- 3D Governance + Risk Indicators -->
+      <div class="ecc-grid-2" style="margin-bottom:24px;">
+        <div class="ecc-3d-panel">
+          <div class="ecc-3d-panel-label">🏛️ 3D Governance Hierarchy</div>
+          <canvas id="ecc-3d-hierarchy"></canvas>
+        </div>
+        <div class="ecc-panel">
+          <div class="ecc-panel-title">🎯 Risk Indicators</div>
+          <ul class="ecc-risk-list">
+            <li class="ecc-risk-item">
+              <span class="ecc-risk-item-label">🔴 Sanctions Matches</span>
+              <span class="ecc-risk-item-value risk-critical">3</span>
+            </li>
+            <li class="ecc-risk-item">
+              <span class="ecc-risk-item-label">🟠 PEP Cases</span>
+              <span class="ecc-risk-item-value risk-high">8</span>
+            </li>
+            <li class="ecc-risk-item">
+              <span class="ecc-risk-item-label">🟡 Unusual Activity</span>
+              <span class="ecc-risk-item-value risk-medium">18</span>
+            </li>
+            <li class="ecc-risk-item">
+              <span class="ecc-risk-item-label">⏱️ SLA Breaches</span>
+              <span class="ecc-risk-item-value risk-high">6</span>
+            </li>
+            <li class="ecc-risk-item">
+              <span class="ecc-risk-item-label">🔵 Under Investigation</span>
+              <span class="ecc-risk-item-value risk-medium">23</span>
+            </li>
+            <li class="ecc-risk-item">
+              <span class="ecc-risk-item-label">✅ Verified Clear</span>
+              <span class="ecc-risk-item-value risk-safe">814</span>
+            </li>
+          </ul>
+
+          <!-- Compliance Meters -->
+          <div style="margin-top:20px;">
+            <div class="ecc-panel-title" style="font-size:12px;">📋 Compliance Scores</div>
+            <div class="ecc-meter-row">
+              <span class="ecc-meter-label">SLA Compliance</span>
+              <div class="ecc-meter-track"><div class="ecc-meter-fill gold" id="m-sla" style="width:0%"></div></div>
+              <span class="ecc-meter-value">87%</span>
+            </div>
+            <div class="ecc-meter-row">
+              <span class="ecc-meter-label">Re-KYC Progress</span>
+              <div class="ecc-meter-track"><div class="ecc-meter-fill cyan" id="m-rekyc" style="width:0%"></div></div>
+              <span class="ecc-meter-value">68%</span>
+            </div>
+            <div class="ecc-meter-row">
+              <span class="ecc-meter-label">Regulatory Score</span>
+              <div class="ecc-meter-track"><div class="ecc-meter-fill green" id="m-reg" style="width:0%"></div></div>
+              <span class="ecc-meter-value">94%</span>
+            </div>
+            <div class="ecc-meter-row">
+              <span class="ecc-meter-label">Customer CSAT</span>
+              <div class="ecc-meter-track"><div class="ecc-meter-fill warn" id="m-csat" style="width:0%"></div></div>
+              <span class="ecc-meter-value">92%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Charts -->
+      <div class="ecc-section-heading">📈 Analytics Overview</div>
+      <div class="ecc-grid-3" style="margin-bottom:24px;">
+        <div class="ecc-panel">
+          <div class="ecc-panel-title">📅 30-Day KPI Trends</div>
+          <canvas id="chart-trends" class="ecc-chart-canvas"></canvas>
+        </div>
+        <div class="ecc-panel">
+          <div class="ecc-panel-title">⚠️ Risk Distribution</div>
+          <canvas id="chart-risk" class="ecc-chart-canvas"></canvas>
+        </div>
+        <div class="ecc-panel">
+          <div class="ecc-panel-title">🔄 Workflow Performance</div>
+          <canvas id="chart-workflow" class="ecc-chart-canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Department Performance -->
+      <div class="ecc-section-heading">🏢 Department Performance</div>
+      <div class="ecc-grid-4" style="margin-bottom:24px;">
+        <div class="ecc-dept-card" onclick="openDeptModal('business')">
+          <span class="ecc-dept-icon">📈</span>
+          <div class="ecc-dept-name">Business</div>
+          <div class="ecc-dept-count">47</div>
+          <div class="ecc-dept-label">Active Cases</div>
+        </div>
+        <div class="ecc-dept-card" onclick="openDeptModal('risk')">
+          <span class="ecc-dept-icon">🎯</span>
+          <div class="ecc-dept-name">Risk Mgmt</div>
+          <div class="ecc-dept-count">23</div>
+          <div class="ecc-dept-label">High-Risk Cases</div>
+        </div>
+        <div class="ecc-dept-card" onclick="openDeptModal('compliance')">
+          <span class="ecc-dept-icon">✅</span>
+          <div class="ecc-dept-name">Compliance</div>
+          <div class="ecc-dept-count">15</div>
+          <div class="ecc-dept-label">Pending Approvals</div>
+        </div>
+        <div class="ecc-dept-card" onclick="openDeptModal('operations')">
+          <span class="ecc-dept-icon">⚙️</span>
+          <div class="ecc-dept-name">Operations</div>
+          <div class="ecc-dept-count">89</div>
+          <div class="ecc-dept-label">Processed Today</div>
+        </div>
+        <div class="ecc-dept-card" onclick="openDeptModal('change')">
+          <span class="ecc-dept-icon">🚀</span>
+          <div class="ecc-dept-name">Change Mgmt</div>
+          <div class="ecc-dept-count">12</div>
+          <div class="ecc-dept-label">Active Projects</div>
+        </div>
+        <div class="ecc-dept-card" onclick="openDeptModal('it')">
+          <span class="ecc-dept-icon">🖥️</span>
+          <div class="ecc-dept-name">IT Systems</div>
+          <div class="ecc-dept-count">99.7%</div>
+          <div class="ecc-dept-label">Uptime SLA</div>
+        </div>
+      </div>
+
+      <!-- Executive Alerts -->
+      <div class="ecc-section-heading">🚨 Executive Alerts</div>
+      <div class="ecc-alert-list" style="margin-bottom:28px;">
+        <div class="ecc-alert-item critical">
+          <span class="ecc-alert-item-icon">⚠️</span>
+          <div class="ecc-alert-item-content">
+            <div class="ecc-alert-item-title">SANCTIONS MATCH DETECTED</div>
+            <div class="ecc-alert-item-desc">3 customers matched against QCB sanctions list. Immediate processing and escalation to Compliance required.</div>
+            <div class="ecc-alert-item-time">Today 09:14 · Escalated to Chief Compliance Officer</div>
+          </div>
+        </div>
+        <div class="ecc-alert-item warning">
+          <span class="ecc-alert-item-icon">⏱️</span>
+          <div class="ecc-alert-item-content">
+            <div class="ecc-alert-item-title">SLA BREACH ALERT</div>
+            <div class="ecc-alert-item-desc">2 EDD cases have exceeded the 30-day processing SLA. CEO escalation recommended per policy.</div>
+            <div class="ecc-alert-item-time">Today 08:30 · SLA Manager notified</div>
+          </div>
+        </div>
+        <div class="ecc-alert-item warning">
+          <span class="ecc-alert-item-icon">👤</span>
+          <div class="ecc-alert-item-content">
+            <div class="ecc-alert-item-title">PEP EXCEPTION CASES</div>
+            <div class="ecc-alert-item-desc">4 Politically Exposed Persons require Compliance Officer review and executive approval before proceeding.</div>
+            <div class="ecc-alert-item-time">Yesterday 16:45 · Awaiting C-suite sign-off</div>
+          </div>
+        </div>
+        <div class="ecc-alert-item info">
+          <span class="ecc-alert-item-icon">📋</span>
+          <div class="ecc-alert-item-content">
+            <div class="ecc-alert-item-title">RE-KYC MILESTONE REACHED</div>
+            <div class="ecc-alert-item-desc">Re-KYC cycle has reached 68% completion — on track for Q1 2026 regulatory deadline.</div>
+            <div class="ecc-alert-item-time">Today 07:00 · Automated progress update</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="ecc-section-heading">⚡ Quick Actions</div>
+      <div class="ecc-action-grid" style="margin-bottom:28px;">
+        <a href="edd_case.html" class="ecc-action-btn"><span>📁</span> New EDD Case</a>
+        <a href="compliance_view.html" class="ecc-action-btn"><span>⚖️</span> Compliance View</a>
+        <a href="risk_dashboard.html" class="ecc-action-btn"><span>🎯</span> Risk Dashboard</a>
+        <a href="audit_console.html" class="ecc-action-btn"><span>🔍</span> Audit Console</a>
+        <a href="kyc_monitoring.html" class="ecc-action-btn"><span>🔄</span> KYC Monitoring</a>
+        <a href="notifications_center.html" class="ecc-action-btn"><span>🔔</span> Notifications</a>
+        <a href="decision-analytics-dashboard.html" class="ecc-action-btn"><span>📈</span> Analytics</a>
+        <a href="executive_presentation.html" class="ecc-action-btn"><span>🎯</span> Board Deck</a>
+      </div>
+
+      <!-- Footer Summary Stats -->
+      <div class="ecc-footer-row">
+        <div class="ecc-footer-stat">
+          <div class="ecc-footer-stat-label">SLA Compliance</div>
+          <div class="ecc-footer-stat-value">87%</div>
+          <div class="ecc-footer-stat-sub">↑ On target</div>
+        </div>
+        <div class="ecc-footer-stat">
+          <div class="ecc-footer-stat-label">Re-KYC Progress</div>
+          <div class="ecc-footer-stat-value">68%</div>
+          <div class="ecc-footer-stat-sub">↑ +18% this month</div>
+        </div>
+        <div class="ecc-footer-stat">
+          <div class="ecc-footer-stat-label">Compliance Score</div>
+          <div class="ecc-footer-stat-value">94%</div>
+          <div class="ecc-footer-stat-sub">↑ Regulatory ready</div>
+        </div>
+        <div class="ecc-footer-stat">
+          <div class="ecc-footer-stat-label">Customer CSAT</div>
+          <div class="ecc-footer-stat-value">92%</div>
+          <div class="ecc-footer-stat-sub">↑ Above benchmark</div>
+        </div>
+        <div class="ecc-footer-stat">
+          <div class="ecc-footer-stat-label">Total Cases</div>
+          <div class="ecc-footer-stat-value">847</div>
+          <div class="ecc-footer-stat-sub">Active portfolio</div>
+        </div>
+        <div class="ecc-footer-stat">
+          <div class="ecc-footer-stat-label">System Uptime</div>
+          <div class="ecc-footer-stat-value">99.7%</div>
+          <div class="ecc-footer-stat-sub">↑ All green</div>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /.ecc-content -->
+</div><!-- /.ecc-layout -->
+
+<!-- ═══ DEPARTMENT MODAL ═══════════════════════════════════════ -->
+<div class="ecc-modal" id="deptModal">
+  <div class="ecc-modal-box">
+    <button class="ecc-modal-close" onclick="closeDeptModal()">✕</button>
+    <div id="deptModalContent"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   EXECUTIVE COMMAND CENTER — JAVASCRIPT ENGINE
+   ═════════════════════════════════════════════════════════════ */
+
+// ─── Live Clock ──────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('ecc-clock').textContent =
+    now.toLocaleTimeString('en-GB', { hour12: false });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── KPI Counter Animation ──────────────────────────────────
+function animateCounter(id, target, duration, decimals) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = Date.now();
+  function tick() {
+    const elapsed = Date.now() - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const value = target * ease;
+    el.textContent = decimals ? value.toFixed(1) : Math.floor(value);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+function initKPIs() {
+  animateCounter('kpi-cases',   847,  2200, false);
+  animateCounter('kpi-pending', 126,  2000, false);
+  animateCounter('kpi-rekyc',   68,   1800, false);
+  animateCounter('kpi-alerts',  23,   1600, false);
+  animateCounter('kpi-sla',     6,    1400, false);
+  animateCounter('kpi-uptime',  99,   2400, false);
+}
+
+// ─── Compliance Meters ──────────────────────────────────────
+function initMeters() {
+  const meters = [
+    { id: 'm-sla',   width: 87 },
+    { id: 'm-rekyc', width: 68 },
+    { id: 'm-reg',   width: 94 },
+    { id: 'm-csat',  width: 92 }
+  ];
+  setTimeout(() => {
+    meters.forEach(m => {
+      const el = document.getElementById(m.id);
+      if (el) el.style.width = m.width + '%';
+    });
+  }, 400);
+}
+
+// ─── Three.js 3D Governance Hierarchy ───────────────────────
+let scene3D, camera3D, renderer3D, animId3D;
+
+function init3D() {
+  const canvas = document.getElementById('ecc-3d-hierarchy');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  canvas.width  = canvas.offsetWidth  || 500;
+  canvas.height = 360;
+
+  scene3D = new THREE.Scene();
+  scene3D.background = new THREE.Color(0x060e1a);
+  scene3D.fog = new THREE.Fog(0x060e1a, 80, 300);
+
+  camera3D = new THREE.PerspectiveCamera(60, canvas.width / canvas.height, 0.1, 1000);
+  camera3D.position.set(25, 20, 35);
+  camera3D.lookAt(0, 8, 0);
+
+  renderer3D = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer3D.setSize(canvas.width, canvas.height);
+  renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer3D.shadowMap.enabled = true;
+
+  // Lighting
+  scene3D.add(new THREE.AmbientLight(0xffffff, 0.45));
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.75);
+  dirLight.position.set(30, 40, 30);
+  dirLight.castShadow = true;
+  scene3D.add(dirLight);
+  const pLight = new THREE.PointLight(0xD4AF37, 1.2);
+  pLight.position.set(-20, 25, 20);
+  scene3D.add(pLight);
+
+  // Grid
+  const grid = new THREE.GridHelper(120, 16, 0x333333, 0x1a1a1a);
+  grid.position.y = -20;
+  scene3D.add(grid);
+
+  // Governance nodes
+  const mkBox = (cx, cy, cz, color, scale) => {
+    const geo  = new THREE.BoxGeometry(scale, scale, scale);
+    const mat  = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.25, metalness: 0.6, roughness: 0.3 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(cx, cy, cz);
+    mesh.castShadow = true;
+    scene3D.add(mesh);
+    return mesh;
+  };
+  const mkCyl = (cx, cy, cz, color) => {
+    const geo  = new THREE.CylinderGeometry(2, 2, 3.5, 12);
+    const mat  = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.2, metalness: 0.5, roughness: 0.4 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(cx, cy, cz);
+    mesh.castShadow = true;
+    scene3D.add(mesh);
+    return mesh;
+  };
+  const mkSphere = (cx, cy, cz, color) => {
+    const geo  = new THREE.SphereGeometry(2, 12, 12);
+    const mat  = new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.15, metalness: 0.4, roughness: 0.5 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(cx, cy, cz);
+    mesh.castShadow = true;
+    scene3D.add(mesh);
+    return mesh;
+  };
+
+  // Board Layer
+  mkBox(-12, 22, -8, 0xD4AF37, 4);
+  mkBox(0,   22,  0, 0x00D4FF, 4.5);
+  mkBox(12,  22, -8, 0xD4AF37, 4);
+
+  // Executive Layer
+  mkCyl(-18, 10, 10, 0xFF6B6B);
+  mkCyl(-8,  10, 14, 0xFFB84D);
+  mkCyl(0,   10, 16, 0x51CF66);
+  mkCyl(8,   10, 14, 0x339AF0);
+  mkCyl(18,  10, 10, 0xFF922B);
+
+  // Operations Layer
+  mkSphere(-20, 0, 22, 0x888888);
+  mkSphere(0,   0, 24, 0x888888);
+  mkSphere(20,  0, 22, 0x888888);
+
+  // Connection lines
+  const mkLine = (x1,y1,z1,x2,y2,z2) => {
+    const pts = [new THREE.Vector3(x1,y1,z1), new THREE.Vector3(x2,y2,z2)];
+    const geo  = new THREE.BufferGeometry().setFromPoints(pts);
+    const mat  = new THREE.LineBasicMaterial({ color: 0x00D4FF, transparent: true, opacity: 0.5 });
+    scene3D.add(new THREE.Line(geo, mat));
+  };
+  mkLine(-12,22,-8,  0,22,0);  mkLine(12,22,-8,   0,22,0);
+  mkLine(0,22,0,  -18,10,10);  mkLine(0,22,0,   0,10,16);  mkLine(0,22,0, 18,10,10);
+  mkLine(-18,10,10, -20,0,22); mkLine(0,10,16,   0,0,24);  mkLine(18,10,10,20,0,22);
+
+  animate3D();
+  window.addEventListener('resize', on3DResize);
+}
+
+function animate3D() {
+  animId3D = requestAnimationFrame(animate3D);
+  const t = Date.now() * 0.00008;
+  camera3D.position.x = Math.cos(t) * 40;
+  camera3D.position.z = Math.sin(t) * 40;
+  camera3D.lookAt(0, 10, 0);
+  scene3D.children.forEach(obj => {
+    if (obj.isMesh) {
+      if (obj.geometry.type === 'BoxGeometry')      { obj.rotation.y += 0.004; obj.rotation.x += 0.002; }
+      else if (obj.geometry.type === 'CylinderGeometry') { obj.rotation.y += 0.005; }
+      else if (obj.geometry.type === 'SphereGeometry')   { obj.rotation.y += 0.003; }
+    }
+  });
+  renderer3D.render(scene3D, camera3D);
+}
+
+function on3DResize() {
+  const canvas = document.getElementById('ecc-3d-hierarchy');
+  if (!canvas || !renderer3D) return;
+  camera3D.aspect = canvas.offsetWidth / 360;
+  camera3D.updateProjectionMatrix();
+  renderer3D.setSize(canvas.offsetWidth, 360);
+}
+
+// ─── Charts (Chart.js) ──────────────────────────────────────
+function initCharts() {
+  if (typeof Chart === 'undefined') return;
+
+  Chart.defaults.color = 'rgba(255,255,255,0.6)';
+  Chart.defaults.font.family = "'Segoe UI', sans-serif";
+
+  const gridColor = 'rgba(255,255,255,0.06)';
+
+  // Trends
+  new Chart(document.getElementById('chart-trends'), {
+    type: 'line',
+    data: {
+      labels: ['W1','W2','W3','W4','W5'],
+      datasets: [
+        { label: 'EDD Cases', data: [720,760,800,825,847], borderColor: '#D4AF37', backgroundColor: 'rgba(212,175,55,0.1)', tension: 0.4, fill: true, pointRadius: 3 },
+        { label: 'Resolved',  data: [680,710,760,790,814], borderColor: '#22C55E', backgroundColor: 'rgba(34,197,94,0.08)',  tension: 0.4, fill: true, pointRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+        y: { grid: { color: gridColor }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+
+  // Risk Distribution
+  new Chart(document.getElementById('chart-risk'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Low Risk','Medium','High Risk','Critical'],
+      datasets: [{ data: [614, 178, 45, 10], backgroundColor: ['#22C55E','#FFA500','#FF8C00','#FF4857'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+      }
+    }
+  });
+
+  // Workflow Performance
+  new Chart(document.getElementById('chart-workflow'), {
+    type: 'bar',
+    data: {
+      labels: ['Business','Risk','Compliance','Ops','Change'],
+      datasets: [
+        { label: 'Completed', data: [42, 19, 14, 85, 10], backgroundColor: 'rgba(212,175,55,0.7)', borderRadius: 4 },
+        { label: 'In Progress',data: [5, 4, 1, 4, 2], backgroundColor: 'rgba(0,212,255,0.4)', borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { stacked: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+        y: { stacked: true, grid: { color: gridColor }, ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+// ─── Department Modal ────────────────────────────────────────
+const deptData = {
+  business: {
+    title: '📈 Business Department',
+    metrics: [
+      { label: 'Active Customers',   value: '847',  trend: '+12%' },
+      { label: 'New Onboarding',     value: '45',   trend: '+8%' },
+      { label: 'Document Requests',  value: '234',  trend: '-3%' },
+      { label: 'Account Reviews',    value: '156',  trend: '+15%' }
+    ],
+    status: 'All operations nominal — No critical issues.'
+  },
+  risk: {
+    title: '🎯 Risk Management',
+    metrics: [
+      { label: 'High Risk Cases', value: '23',   trend: '+3 alerts' },
+      { label: 'PEP Matches',     value: '8',    trend: 'Action required' },
+      { label: 'Risk Score (Avg)',value: '4.2',  trend: 'Acceptable' },
+      { label: 'Sanctions Hits',  value: '3',    trend: 'Escalated' }
+    ],
+    status: 'Risk control maintained — Monitor active escalations.'
+  },
+  compliance: {
+    title: '✅ Compliance',
+    metrics: [
+      { label: 'Regulatory Reviews', value: '15',  trend: 'In Progress' },
+      { label: 'Exception Cases',    value: '4',   trend: 'CEO Approval' },
+      { label: 'Re-KYC Due',         value: '187', trend: '+5 this week' },
+      { label: 'FATF Score',         value: '94%', trend: 'Green' }
+    ],
+    status: 'Compliance posture strong — Regulatory submission on track.'
+  },
+  operations: {
+    title: '⚙️ Operations',
+    metrics: [
+      { label: 'Cases Processed', value: '89',   trend: 'Today' },
+      { label: 'Avg Processing',  value: '3.2d', trend: '-0.5d improvement' },
+      { label: 'Auto-approved',   value: '67',   trend: '75% rate' },
+      { label: 'Escalated',       value: '22',   trend: '25% rate' }
+    ],
+    status: 'Operations running efficiently — SLA on target for 9 of 11 cases.'
+  },
+  change: {
+    title: '🚀 Change Management',
+    metrics: [
+      { label: 'Active Projects',  value: '12', trend: '4 critical' },
+      { label: 'Completed',        value: '7',  trend: 'This quarter' },
+      { label: 'Training Sessions',value: '23', trend: '94% completion' },
+      { label: 'System Upgrades',  value: '3',  trend: 'Scheduled' }
+    ],
+    status: 'Transformation progressing — Training completion at 94%.'
+  },
+  it: {
+    title: '🖥️ IT Systems',
+    metrics: [
+      { label: 'System Uptime',   value: '99.7%', trend: 'SLA met' },
+      { label: 'Response Time',   value: '210ms', trend: '< 500ms target' },
+      { label: 'API Endpoints',   value: '8',     trend: 'All healthy' },
+      { label: 'Security Alerts', value: '0',     trend: 'Clear' }
+    ],
+    status: 'All systems operational — No security incidents detected.'
+  }
+};
+
+function openDeptModal(key) {
+  const d = deptData[key];
+  if (!d) return;
+  const metricsHtml = d.metrics.map(m => `
+    <div class="ecc-modal-metric">
+      <div class="ecc-modal-metric-label">${m.label}</div>
+      <div class="ecc-modal-metric-value">${m.value}</div>
+      <div class="ecc-modal-metric-trend">${m.trend}</div>
+    </div>`).join('');
+
+  document.getElementById('deptModalContent').innerHTML = `
+    <div class="ecc-modal-title">${d.title}</div>
+    <div class="ecc-modal-metric-grid">${metricsHtml}</div>
+    <div class="ecc-modal-status">${d.status}</div>`;
+
+  document.getElementById('deptModal').classList.add('open');
+}
+
+function closeDeptModal() {
+  document.getElementById('deptModal').classList.remove('open');
+}
+
+// Close modal on background click
+document.getElementById('deptModal').addEventListener('click', function(e) {
+  if (e.target === this) closeDeptModal();
+});
+
+// ─── Initialise ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  initKPIs();
+  initMeters();
+  init3D();
+  initCharts();
+});
+</script>
+</body>
+</html>
