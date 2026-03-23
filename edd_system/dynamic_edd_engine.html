@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic EDD Engine — Admin Control Panel | QIB</title>
+  <link rel="stylesheet" href="css/edd_system.css" />
+  <style>
+    :root {
+      --primary: #1a4d7a;
+      --primary-light: #2a7ba8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --critical: #7c3aed;
+      --info: #3b82f6;
+      --bg: #f3f4f6;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --text-muted: #6b7280;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: #fff;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-bar h1 { font-size: 20px; font-weight: 700; }
+    .top-bar .subtitle { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+    .top-bar .actions { display: flex; gap: 10px; align-items: center; }
+    .badge-live {
+      background: var(--success);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+
+    /* ── Layout ── */
+    .layout { display: grid; grid-template-columns: 220px 1fr; height: calc(100vh - 60px); }
+
+    /* ── Sidebar Nav ── */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+    .nav-section { padding: 8px 20px 4px; font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; font-size: 13px; cursor: pointer;
+      border-left: 3px solid transparent; transition: all .2s;
+    }
+    .nav-item:hover { background: #f0f7ff; }
+    .nav-item.active { background: #e8f1fb; border-left-color: var(--primary); color: var(--primary); font-weight: 600; }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+    /* ── Main content ── */
+    .main { overflow-y: auto; padding: 28px 32px; }
+
+    /* ── Section panels ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .page-title { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+    .page-desc  { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      margin-bottom: 20px;
+    }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title { font-size: 15px; font-weight: 700; }
+    .card-meta  { font-size: 11px; color: var(--text-muted); }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #f8fafc; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 11px; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 11px 14px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    tr:hover td { background: #fafbff; }
+
+    /* ── Buttons ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-danger  { background: var(--danger);  color: #fff; }
+    .btn-warning { background: var(--warning); color: #fff; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--bg); }
+    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+
+    /* ── Badges ── */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-success  { background: rgba(16,185,129,.15); color: #059669; }
+    .badge-warning  { background: rgba(245,158,11,.15); color: #d97706; }
+    .badge-danger   { background: rgba(239,68,68,.15);  color: #dc2626; }
+    .badge-critical { background: rgba(124,58,237,.15); color: #7c3aed; }
+    .badge-info     { background: rgba(59,130,246,.15); color: #2563eb; }
+    .badge-muted    { background: rgba(0,0,0,.08);      color: var(--text-muted); }
+
+    /* ── Form elements ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 13px; font-family: inherit; background: #fafbff;
+      transition: border .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--primary);
+    }
+    .form-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
+
+    /* ── Toggle switch ── */
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+    .toggle { position: relative; width: 40px; height: 22px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #cbd5e1; border-radius: 22px; cursor: pointer; transition: .3s;
+    }
+    .toggle-slider:before {
+      content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px;
+      background: #fff; border-radius: 50%; transition: .3s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--success); }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+    /* ── Score bar ── */
+    .score-bar-wrap { display: flex; align-items: center; gap: 10px; }
+    .score-bar { flex: 1; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+    .score-label { font-size: 12px; font-weight: 700; width: 32px; text-align: right; }
+
+    /* ── Dependency graph ── */
+    .dep-map { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .dep-card { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 12px; }
+    .dep-card .field-name { font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+    .dep-card .dep-list  { list-style: none; color: var(--text-muted); line-height: 1.8; }
+    .dep-card .dep-list li::before { content: '→ '; color: var(--info); }
+
+    /* ── Eval result ── */
+    .eval-result {
+      border-radius: 12px; padding: 20px; margin-top: 20px;
+      border-left: 5px solid var(--info);
+    }
+    .eval-result.APPROVE     { background: rgba(16,185,129,.07); border-left-color: var(--success); }
+    .eval-result.EDD_REQUIRED { background: rgba(245,158,11,.07); border-left-color: var(--warning); }
+    .eval-result.HIGH_RISK   { background: rgba(239,68,68,.07);  border-left-color: var(--danger); }
+    .eval-result.BLOCK       { background: rgba(124,58,237,.07); border-left-color: var(--critical); }
+
+    .rec-label { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .rec-APPROVE      { color: var(--success); }
+    .rec-EDD_REQUIRED { color: var(--warning); }
+    .rec-HIGH_RISK    { color: var(--danger); }
+    .rec-BLOCK        { color: var(--critical); }
+
+    /* ── Audit log ── */
+    .audit-entry { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
+    .audit-ts    { color: var(--text-muted); white-space: nowrap; width: 160px; flex-shrink: 0; }
+    .audit-action { font-weight: 700; color: var(--primary); width: 160px; flex-shrink: 0; }
+    .audit-detail { color: var(--text); }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      z-index: 200; align-items: center; justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--surface); border-radius: 16px; width: 580px; max-width: 95vw;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.3); padding: 28px;
+    }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--primary); }
+    .modal-close { float: right; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-muted); }
+
+    /* ── Conflict alert ── */
+    .conflict-alert { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #dc2626; margin-top: 12px; }
+    .conflict-alert strong { display: block; margin-bottom: 4px; }
+
+    /* ── Metric tiles ── */
+    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .tile { background: var(--surface); border-radius: 12px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .tile-val { font-size: 28px; font-weight: 800; color: var(--primary); }
+    .tile-lbl { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ─────────────────────────────────────────────────────────────── -->
+<div class="top-bar">
+  <div>
+    <h1>⚙️ Dynamic EDD Engine — Admin Control Panel</h1>
+    <div class="subtitle">Qatar Islamic Bank · Compliance & Risk Division</div>
+  </div>
+  <div class="actions">
+    <span class="badge-live">● LIVE</span>
+    <button class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4);" onclick="exportConfig()">⬇ Export Config</button>
+    <label class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4);" for="importFile">⬆ Import</label>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importConfig(event)" />
+    <button class="btn btn-danger btn-sm" onclick="confirmReset()">↺ Reset Defaults</button>
+    <a href="admin_dashboard.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.4);">← Admin</a>
+  </div>
+</div>
+
+<!-- ── Layout ──────────────────────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" data-section="overview" onclick="showSection('overview',this)">
+      <span class="icon">🏠</span> Dashboard
+    </div>
+
+    <div class="nav-section">Engine Layers</div>
+    <div class="nav-item" data-section="fields" onclick="showSection('fields',this)">
+      <span class="icon">📋</span> Data Layer
+    </div>
+    <div class="nav-item" data-section="deps" onclick="showSection('deps',this)">
+      <span class="icon">🔗</span> Field Logic
+    </div>
+    <div class="nav-item" data-section="rules" onclick="showSection('rules',this)">
+      <span class="icon">⚖️</span> Rule Engine
+    </div>
+    <div class="nav-item" data-section="scoring" onclick="showSection('scoring',this)">
+      <span class="icon">📊</span> Risk Scoring
+    </div>
+    <div class="nav-item" data-section="decision" onclick="showSection('decision',this)">
+      <span class="icon">🎯</span> Decision Engine
+    </div>
+
+    <div class="nav-section">Tools</div>
+    <div class="nav-item" data-section="depmap" onclick="showSection('depmap',this)">
+      <span class="icon">🗺️</span> Dependency Map
+    </div>
+    <div class="nav-item" data-section="evaluate" onclick="showSection('evaluate',this)">
+      <span class="icon">🧪</span> Evaluate Case
+    </div>
+    <div class="nav-item" data-section="audit" onclick="showSection('audit',this)">
+      <span class="icon">📜</span> Audit Log
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- ════════════════════════════ OVERVIEW ════════════════════════════ -->
+    <div id="section-overview" class="section active">
+      <div class="page-title">Engine Overview</div>
+      <div class="page-desc">Summary of all configured engine components. All changes take effect immediately and persist across sessions.</div>
+
+      <div class="tiles" id="overviewTiles"></div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Architecture Layers</span>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Layer</th><th>Description</th><th>Items</th><th>Status</th></tr>
+          </thead>
+          <tbody id="overviewTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ DATA LAYER ════════════════════════════ -->
+    <div id="section-fields" class="section">
+      <div class="page-title">Data Layer — Field Registry</div>
+      <div class="page-desc">Define every field used across the engine. Fields drive rules, scoring, and dependency logic.</div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Registered Fields</span>
+          <button class="btn btn-primary btn-sm" onclick="openFieldModal()">+ Add Field</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Label</th><th>Type</th><th>Category</th><th>Weight</th><th>Required</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="fieldsTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ FIELD LOGIC ════════════════════════════ -->
+    <div id="section-deps" class="section">
+      <div class="page-title">Field Logic Layer — Dependency Rules</div>
+      <div class="page-desc">Control field visibility and required-state based on values of other fields.</div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Dependency Rules</span>
+          <button class="btn btn-primary btn-sm" onclick="openDepModal()">+ Add Rule</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>ID</th><th>When Field</th><th>Condition</th><th>Then Field</th><th>Effect</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="depsTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ RULE ENGINE ════════════════════════════ -->
+    <div id="section-rules" class="section">
+      <div class="page-title">Rule Engine — Business Rules</div>
+      <div class="page-desc">Configurable rules evaluated against case data. All conditions in a rule must be true for it to fire.</div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Business Rules</span>
+          <button class="btn btn-primary btn-sm" onclick="openRuleModal()">+ Add Rule</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Conditions</th><th>Action</th><th>Severity</th><th>Created By</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="rulesTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ RISK SCORING ════════════════════════════ -->
+    <div id="section-scoring" class="section">
+      <div class="page-title">Risk Scoring Engine</div>
+      <div class="page-desc">Weighted, multi-dimensional risk scoring. The composite score (0–100) drives the Decision Engine.</div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Scoring Dimensions</span>
+          <button class="btn btn-primary btn-sm" onclick="openDimModal()">+ Add Dimension</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Name</th><th>Field</th><th>Max Score</th><th>Weight (%)</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="dimsTable"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Score Category Thresholds</span>
+          <span class="card-meta">Defines which score range maps to LOW / MEDIUM / HIGH / CRITICAL</span>
+        </div>
+        <div id="thresholdsEditor"></div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════ DECISION ENGINE ════════════════════════════ -->
+    <div id="section-decision" class="section">
+      <div class="page-title">Decision Engine Configuration</div>
+      <div class="page-desc">Configure the automated EDD trigger thresholds. Human review can always override the system recommendation.</div>
+
+      <div class="card" id="decisionConfigCard"></div>
+    </div>
+
+    <!-- ════════════════════════════ DEPENDENCY MAP ════════════════════════════ -->
+    <div id="section-depmap" class="section">
+      <div class="page-title">Dependency Map</div>
+      <div class="page-desc">Shows which rules, dependencies, and scoring dimensions reference each field. Use this to safely modify or deactivate fields.</div>
+
+      <div id="depMapConflicts"></div>
+      <div class="dep-map" id="depMapGrid"></div>
+    </div>
+
+    <!-- ════════════════════════════ EVALUATE CASE ════════════════════════════ -->
+    <div id="section-evaluate" class="section">
+      <div class="page-title">Evaluate Case</div>
+      <div class="page-desc">Test the full engine pipeline against a sample case to preview the recommendation.</div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Case Data Input</span></div>
+        <div id="evalForm"></div>
+        <div class="form-actions">
+          <button class="btn btn-success" onclick="runEvaluation()">▶ Run Evaluation</button>
+          <button class="btn btn-outline" onclick="fillSampleData()">Load Sample Data</button>
+        </div>
+      </div>
+
+      <div id="evalResult"></div>
+    </div>
+
+    <!-- ════════════════════════════ AUDIT LOG ════════════════════════════ -->
+    <div id="section-audit" class="section">
+      <div class="page-title">Audit Log</div>
+      <div class="page-desc">All engine configuration changes, evaluations, and system events.</div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recent Events</span>
+          <button class="btn btn-danger btn-sm" onclick="clearAudit()">🗑 Clear Log</button>
+        </div>
+        <div id="auditLogContainer"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Modals ────────────────────────────────────────────────────────────────── -->
+
+<!-- Field Modal -->
+<div id="fieldModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('fieldModal')">×</button>
+    <div class="modal-title" id="fieldModalTitle">Add Field</div>
+    <form id="fieldForm" onsubmit="saveField(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Field ID (snake_case) *</label>
+          <input type="text" id="f-id" placeholder="e.g. business_sector" required pattern="[a-z0-9_]+" />
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="f-category" required>
+            <option value="CUSTOMER">CUSTOMER</option>
+            <option value="FINANCIAL">FINANCIAL</option>
+            <option value="ACTIVITY">ACTIVITY</option>
+            <option value="SCREENING">SCREENING</option>
+            <option value="GEOGRAPHY">GEOGRAPHY</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Label (English) *</label>
+          <input type="text" id="f-label" required />
+        </div>
+        <div class="form-group">
+          <label>Label (Arabic)</label>
+          <input type="text" id="f-labelAr" dir="rtl" />
+        </div>
+        <div class="form-group">
+          <label>Type *</label>
+          <select id="f-type" required onchange="toggleOptionsField()">
+            <option value="text">text</option>
+            <option value="number">number</option>
+            <option value="boolean">boolean</option>
+            <option value="select">select</option>
+            <option value="date">date</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Weight (0–100)</label>
+          <input type="number" id="f-weight" min="0" max="100" value="10" />
+        </div>
+      </div>
+      <div class="form-group" id="optionsGroup" style="margin-top:12px;display:none;">
+        <label>Options (JSON array: [{"value":"v","label":"l"},…])</label>
+        <textarea id="f-options" rows="3" placeholder='[{"value":"low","label":"Low"},{"value":"high","label":"High"}]'></textarea>
+      </div>
+      <div class="toggle-wrap" style="margin-top:14px;">
+        <label class="toggle"><input type="checkbox" id="f-required" /><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;">Required</span>
+        <label class="toggle" style="margin-left:20px;"><input type="checkbox" id="f-active" checked /><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;">Active</span>
+      </div>
+      <input type="hidden" id="f-editId" />
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('fieldModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Field</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Dependency Modal -->
+<div id="depModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('depModal')">×</button>
+    <div class="modal-title" id="depModalTitle">Add Dependency Rule</div>
+    <form id="depForm" onsubmit="saveDep(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Rule ID *</label>
+          <input type="text" id="d-id" placeholder="dep_xxx" required pattern="[a-z0-9_]+" />
+        </div>
+        <div class="form-group">
+          <label>Effect *</label>
+          <select id="d-effect" required>
+            <option value="require">require</option>
+            <option value="unrequire">unrequire</option>
+            <option value="show">show</option>
+            <option value="hide">hide</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Source Field *</label>
+          <select id="d-source" required></select>
+        </div>
+        <div class="form-group">
+          <label>Operator *</label>
+          <select id="d-operator" required>
+            <option value="eq">eq (==)</option>
+            <option value="neq">neq (!=)</option>
+            <option value="gt">gt (&gt;)</option>
+            <option value="gte">gte (≥)</option>
+            <option value="lt">lt (&lt;)</option>
+            <option value="lte">lte (≤)</option>
+            <option value="contains">contains</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Condition Value *</label>
+          <input type="text" id="d-value" placeholder="e.g. true, high, 50" required />
+        </div>
+        <div class="form-group">
+          <label>Target Field *</label>
+          <select id="d-target" required></select>
+        </div>
+      </div>
+      <div class="toggle-wrap" style="margin-top:14px;">
+        <label class="toggle"><input type="checkbox" id="d-active" checked /><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;">Active</span>
+      </div>
+      <input type="hidden" id="d-editId" />
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('depModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Rule Modal -->
+<div id="ruleModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('ruleModal')">×</button>
+    <div class="modal-title" id="ruleModalTitle">Add Business Rule</div>
+    <form id="ruleForm" onsubmit="saveRule(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Rule ID *</label>
+          <input type="text" id="r-id" placeholder="BR-007" required />
+        </div>
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="r-name" required />
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label>Description</label>
+          <input type="text" id="r-desc" />
+        </div>
+        <div class="form-group">
+          <label>Action *</label>
+          <select id="r-action" required>
+            <option value="FLAG_EDD">FLAG_EDD</option>
+            <option value="FLAG_HIGH">FLAG_HIGH</option>
+            <option value="FLAG_CRITICAL">FLAG_CRITICAL</option>
+            <option value="BLOCK">BLOCK</option>
+            <option value="ALERT">ALERT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Severity *</label>
+          <select id="r-severity" required>
+            <option value="LOW">LOW</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HIGH">HIGH</option>
+            <option value="CRITICAL">CRITICAL</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Created By</label>
+          <input type="text" id="r-createdBy" value="Admin" />
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;">CONDITIONS (ALL must be true)</div>
+        <div id="conditionsContainer"></div>
+        <button type="button" class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="addConditionRow()">+ Add Condition</button>
+      </div>
+
+      <div class="toggle-wrap" style="margin-top:14px;">
+        <label class="toggle"><input type="checkbox" id="r-active" checked /><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;">Active</span>
+      </div>
+      <input type="hidden" id="r-editId" />
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('ruleModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Rule</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Scoring Dimension Modal -->
+<div id="dimModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('dimModal')">×</button>
+    <div class="modal-title" id="dimModalTitle">Add Scoring Dimension</div>
+    <form id="dimForm" onsubmit="saveDim(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Dimension ID *</label>
+          <input type="text" id="sd-id" placeholder="SD-XXX" required />
+        </div>
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="sd-name" required />
+        </div>
+        <div class="form-group">
+          <label>Source Field *</label>
+          <select id="sd-field" required></select>
+        </div>
+        <div class="form-group">
+          <label>Max Score</label>
+          <input type="number" id="sd-maxScore" value="100" min="1" required />
+        </div>
+        <div class="form-group">
+          <label>Weight (%)</label>
+          <input type="number" id="sd-weight" value="20" min="1" max="100" required />
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:12px;">
+        <label>Score Map (JSON) — use string/boolean keys or lt&lt;N&gt;/gte&lt;N&gt; for numeric ranges</label>
+        <textarea id="sd-scoreMap" rows="4" placeholder='{"low":10,"medium":40,"high":75,"critical":100}'></textarea>
+      </div>
+      <div class="toggle-wrap" style="margin-top:14px;">
+        <label class="toggle"><input type="checkbox" id="sd-active" checked /><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;">Active</span>
+      </div>
+      <input type="hidden" id="sd-editId" />
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('dimModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── Scripts ───────────────────────────────────────────────────────────────── -->
+<script src="js/dynamic_edd_engine.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════════
+
+function showSection(name, navEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  navEl.classList.add('active');
+  renderSection(name);
+}
+
+function renderSection(name) {
+  const map = {
+    overview:  renderOverview,
+    fields:    renderFields,
+    deps:      renderDeps,
+    rules:     renderRules,
+    scoring:   renderScoring,
+    decision:  renderDecision,
+    depmap:    renderDepMap,
+    evaluate:  renderEvalForm,
+    audit:     renderAudit,
+  };
+  if (map[name]) map[name]();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════════
+
+function badgeForSeverity(s) {
+  const m = { LOW:'badge-info', MEDIUM:'badge-warning', HIGH:'badge-danger', CRITICAL:'badge-critical' };
+  return `<span class="badge ${m[s]||'badge-muted'}">${s}</span>`;
+}
+
+function toggleBadge(active) {
+  return active
+    ? `<span class="badge badge-success">Active</span>`
+    : `<span class="badge badge-muted">Inactive</span>`;
+}
+
+function esc(s) {
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+function fieldLabel(id) {
+  const f = DynamicEDDEngine.getFields().find(f => f.id === id);
+  return f ? f.label : id;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// OVERVIEW
+// ═══════════════════════════════════════════════════════════════════
+
+function renderOverview() {
+  const fields = DynamicEDDEngine.getFields();
+  const deps   = DynamicEDDEngine.getFieldDependencies();
+  const rules  = DynamicEDDEngine.getRules();
+  const dims   = DynamicEDDEngine.getScoringDimensions();
+  const { ruleConflicts } = DynamicEDDEngine.getDependencyMap();
+
+  document.getElementById('overviewTiles').innerHTML = [
+    { val: fields.filter(f=>f.active).length, lbl: 'Active Fields' },
+    { val: deps.filter(d=>d.active).length,   lbl: 'Field Dependencies' },
+    { val: rules.filter(r=>r.active).length,  lbl: 'Active Rules' },
+    { val: dims.filter(d=>d.active).length,   lbl: 'Scoring Dimensions' },
+    { val: ruleConflicts.length, lbl: 'Conflicts' },
+  ].map(t => `<div class="tile"><div class="tile-val" style="${t.lbl==='Conflicts'&&t.val>0?'color:var(--danger)':''}">${t.val}</div><div class="tile-lbl">${t.lbl}</div></div>`).join('');
+
+  document.getElementById('overviewTable').innerHTML = [
+    { layer:'Data Layer',     icon:'📋', desc:'Dynamic field registry',                   items:fields.length,           active:fields.filter(f=>f.active).length },
+    { layer:'Field Logic',    icon:'🔗', desc:'Conditional field dependency rules',        items:deps.length,             active:deps.filter(d=>d.active).length },
+    { layer:'Rule Engine',    icon:'⚖️', desc:'Configurable business rules',               items:rules.length,            active:rules.filter(r=>r.active).length },
+    { layer:'Risk Scoring',   icon:'📊', desc:'Weighted multi-dimensional scoring',        items:dims.length,             active:dims.filter(d=>d.active).length },
+    { layer:'Decision Engine',icon:'🎯', desc:'Automated EDD trigger & recommendation',   items:1,                       active:1 },
+    { layer:'Dependency Map', icon:'🗺️', desc:'Integrity tracker for field references',   items:ruleConflicts.length,    active:ruleConflicts.length===0?1:0, conflict:ruleConflicts.length>0 },
+  ].map(r => `<tr>
+    <td><strong>${r.icon} ${esc(r.layer)}</strong></td>
+    <td style="color:var(--text-muted);font-size:12px;">${esc(r.desc)}</td>
+    <td>${r.items}</td>
+    <td>${r.conflict ? `<span class="badge badge-danger">${r.items} conflict(s)</span>` : toggleBadge(r.active > 0)}</td>
+  </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DATA LAYER — FIELDS
+// ═══════════════════════════════════════════════════════════════════
+
+function renderFields() {
+  const fields = DynamicEDDEngine.getFields();
+  document.getElementById('fieldsTable').innerHTML = fields.map(f => `
+    <tr>
+      <td><code>${esc(f.id)}</code></td>
+      <td><strong>${esc(f.label)}</strong><br/><span style="color:var(--text-muted);font-size:11px;">${esc(f.labelAr||'')}</span></td>
+      <td><span class="badge badge-info">${f.type}</span></td>
+      <td>${esc(f.category)}</td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:${f.weight}%;background:var(--primary);"></div></div>
+          <span class="score-label">${f.weight}</span>
+        </div>
+      </td>
+      <td>${f.required ? '<span class="badge badge-danger">Yes</span>' : '<span class="badge badge-muted">No</span>'}</td>
+      <td>${toggleBadge(f.active)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editField('${esc(f.id)}')">Edit</button>
+        <button class="btn ${f.active?'btn-warning':'btn-success'} btn-sm" onclick="toggleField('${esc(f.id)}',${!f.active})">${f.active?'Disable':'Enable'}</button>
+      </td>
+    </tr>`).join('');
+}
+
+function openFieldModal(fieldId) {
+  document.getElementById('fieldModalTitle').textContent = fieldId ? 'Edit Field' : 'Add Field';
+  document.getElementById('f-editId').value = fieldId || '';
+  if (fieldId) {
+    const f = DynamicEDDEngine.getFields().find(x => x.id === fieldId);
+    document.getElementById('f-id').value       = f.id;
+    document.getElementById('f-id').disabled    = true;
+    document.getElementById('f-label').value    = f.label;
+    document.getElementById('f-labelAr').value  = f.labelAr || '';
+    document.getElementById('f-type').value     = f.type;
+    document.getElementById('f-category').value = f.category;
+    document.getElementById('f-weight').value   = f.weight;
+    document.getElementById('f-required').checked = f.required;
+    document.getElementById('f-active').checked   = f.active;
+    document.getElementById('f-options').value  = f.options?.length ? JSON.stringify(f.options) : '';
+    toggleOptionsField();
+  } else {
+    document.getElementById('fieldForm').reset();
+    document.getElementById('f-id').disabled = false;
+    document.getElementById('f-active').checked = true;
+  }
+  document.getElementById('fieldModal').classList.add('open');
+}
+
+function editField(id) { openFieldModal(id); }
+
+function toggleField(id, active) {
+  if (!active) {
+    const conflicts = DynamicEDDEngine.deactivateField(id);
+    if (conflicts.length > 0) {
+      alert('Warning: Deactivating this field causes ' + conflicts.length + ' conflict(s). Review the Dependency Map.');
+    }
+  } else {
+    DynamicEDDEngine.updateField(id, { active: true });
+  }
+  renderFields();
+}
+
+function toggleOptionsField() {
+  const t = document.getElementById('f-type').value;
+  document.getElementById('optionsGroup').style.display = t === 'select' ? 'block' : 'none';
+}
+
+function saveField(e) {
+  e.preventDefault();
+  const editId = document.getElementById('f-editId').value;
+  let opts = [];
+  try { opts = JSON.parse(document.getElementById('f-options').value || '[]'); } catch(ex) { alert('Invalid options JSON'); return; }
+
+  const data = {
+    label:    document.getElementById('f-label').value,
+    labelAr:  document.getElementById('f-labelAr').value,
+    type:     document.getElementById('f-type').value,
+    category: document.getElementById('f-category').value,
+    weight:   parseInt(document.getElementById('f-weight').value) || 10,
+    required: document.getElementById('f-required').checked,
+    active:   document.getElementById('f-active').checked,
+    options:  opts,
+  };
+
+  try {
+    if (editId) {
+      DynamicEDDEngine.updateField(editId, data);
+    } else {
+      DynamicEDDEngine.addField({ id: document.getElementById('f-id').value, ...data });
+    }
+    closeModal('fieldModal');
+    renderFields();
+  } catch (err) { alert(err.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// FIELD LOGIC — DEPENDENCIES
+// ═══════════════════════════════════════════════════════════════════
+
+function renderDeps() {
+  const deps = DynamicEDDEngine.getFieldDependencies();
+  document.getElementById('depsTable').innerHTML = deps.map(d => `
+    <tr>
+      <td><code>${esc(d.id)}</code></td>
+      <td>${esc(fieldLabel(d.sourceFieldId))}</td>
+      <td><code>${esc(d.condition.operator)}</code> <strong>${esc(String(d.condition.value))}</strong></td>
+      <td>${esc(fieldLabel(d.targetFieldId))}</td>
+      <td><span class="badge badge-info">${esc(d.effect)}</span></td>
+      <td>${toggleBadge(d.active)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editDep('${esc(d.id)}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="removeDep('${esc(d.id)}')">Remove</button>
+      </td>
+    </tr>`).join('');
+}
+
+function openDepModal(depId) {
+  const fields = DynamicEDDEngine.getActiveFields();
+  const opts = fields.map(f => `<option value="${esc(f.id)}">${esc(f.label)}</option>`).join('');
+  document.getElementById('d-source').innerHTML = opts;
+  document.getElementById('d-target').innerHTML = opts;
+  document.getElementById('depModalTitle').textContent = depId ? 'Edit Dependency' : 'Add Dependency Rule';
+  document.getElementById('d-editId').value = depId || '';
+  if (depId) {
+    const d = DynamicEDDEngine.getFieldDependencies().find(x => x.id === depId);
+    document.getElementById('d-id').value       = d.id;
+    document.getElementById('d-id').disabled    = true;
+    document.getElementById('d-source').value   = d.sourceFieldId;
+    document.getElementById('d-operator').value = d.condition.operator;
+    document.getElementById('d-value').value    = d.condition.value;
+    document.getElementById('d-target').value   = d.targetFieldId;
+    document.getElementById('d-effect').value   = d.effect;
+    document.getElementById('d-active').checked = d.active;
+  } else {
+    document.getElementById('depForm').reset();
+    document.getElementById('d-id').disabled = false;
+    document.getElementById('d-active').checked = true;
+  }
+  document.getElementById('depModal').classList.add('open');
+}
+
+function editDep(id) { openDepModal(id); }
+function removeDep(id) { if (confirm('Remove dependency "' + id + '"?')) { DynamicEDDEngine.removeFieldDependency(id); renderDeps(); } }
+
+function saveDep(e) {
+  e.preventDefault();
+  const editId = document.getElementById('d-editId').value;
+  const rawVal = document.getElementById('d-value').value;
+  // Coerce value types
+  let val = rawVal;
+  if (rawVal === 'true') val = true;
+  else if (rawVal === 'false') val = false;
+  else if (!isNaN(rawVal) && rawVal !== '') val = Number(rawVal);
+
+  const data = {
+    sourceFieldId: document.getElementById('d-source').value,
+    condition: { operator: document.getElementById('d-operator').value, value: val },
+    targetFieldId: document.getElementById('d-target').value,
+    effect:  document.getElementById('d-effect').value,
+    active:  document.getElementById('d-active').checked,
+  };
+  try {
+    if (editId) { DynamicEDDEngine.updateFieldDependency(editId, data); }
+    else { DynamicEDDEngine.addFieldDependency({ id: document.getElementById('d-id').value, ...data }); }
+    closeModal('depModal');
+    renderDeps();
+  } catch (err) { alert(err.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RULE ENGINE
+// ═══════════════════════════════════════════════════════════════════
+
+function renderRules() {
+  const rules = DynamicEDDEngine.getRules();
+  document.getElementById('rulesTable').innerHTML = rules.map(r => `
+    <tr>
+      <td><code>${esc(r.id)}</code></td>
+      <td><strong>${esc(r.name)}</strong><br/><span style="font-size:11px;color:var(--text-muted);">${esc(r.description||'')}</span></td>
+      <td style="font-size:11px;">
+        ${r.conditions.map(c=>`<div><code>${esc(fieldLabel(c.fieldId))}</code> ${esc(c.operator)} <strong>${esc(String(c.value))}</strong></div>`).join('')}
+      </td>
+      <td><span class="badge badge-info">${esc(r.action)}</span></td>
+      <td>${badgeForSeverity(r.severity)}</td>
+      <td style="font-size:12px;">${esc(r.createdBy)}</td>
+      <td>${toggleBadge(r.active)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editRule('${esc(r.id)}')">Edit</button>
+        <button class="btn ${r.active?'btn-warning':'btn-success'} btn-sm" onclick="toggleRule('${esc(r.id)}',${!r.active})">${r.active?'Disable':'Enable'}</button>
+        <button class="btn btn-danger btn-sm" onclick="removeRule('${esc(r.id)}')">✕</button>
+      </td>
+    </tr>`).join('');
+}
+
+function openRuleModal(ruleId) {
+  document.getElementById('ruleModalTitle').textContent = ruleId ? 'Edit Rule' : 'Add Business Rule';
+  document.getElementById('r-editId').value = ruleId || '';
+  document.getElementById('conditionsContainer').innerHTML = '';
+  if (ruleId) {
+    const r = DynamicEDDEngine.getRules().find(x => x.id === ruleId);
+    document.getElementById('r-id').value        = r.id;
+    document.getElementById('r-id').disabled     = true;
+    document.getElementById('r-name').value      = r.name;
+    document.getElementById('r-desc').value      = r.description || '';
+    document.getElementById('r-action').value    = r.action;
+    document.getElementById('r-severity').value  = r.severity;
+    document.getElementById('r-createdBy').value = r.createdBy;
+    document.getElementById('r-active').checked  = r.active;
+    r.conditions.forEach(c => addConditionRow(c));
+  } else {
+    document.getElementById('ruleForm').reset();
+    document.getElementById('r-id').disabled = false;
+    document.getElementById('r-active').checked = true;
+    addConditionRow();
+  }
+  document.getElementById('ruleModal').classList.add('open');
+}
+
+function editRule(id) { openRuleModal(id); }
+function toggleRule(id, active) { DynamicEDDEngine.updateRule(id, { active }); renderRules(); }
+function removeRule(id) { if (confirm('Remove rule "' + id + '"?')) { DynamicEDDEngine.removeRule(id); renderRules(); } }
+
+function addConditionRow(cond) {
+  const fields = DynamicEDDEngine.getActiveFields();
+  const fieldOpts = fields.map(f => `<option value="${esc(f.id)}" ${cond&&cond.fieldId===f.id?'selected':''}>${esc(f.label)}</option>`).join('');
+  const ops = ['eq','neq','gt','gte','lt','lte','contains'];
+  const opOpts = ops.map(o => `<option ${cond&&cond.operator===o?'selected':''}>${o}</option>`).join('');
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center;';
+  row.innerHTML = `
+    <select class="cond-field" style="flex:2;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;">${fieldOpts}</select>
+    <select class="cond-op"    style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;">${opOpts}</select>
+    <input  class="cond-val"   type="text" value="${cond?esc(String(cond.value)):''}" placeholder="value"
+            style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;" />
+    <button type="button" onclick="this.parentElement.remove()" style="border:none;background:none;color:var(--danger);font-size:18px;cursor:pointer;">×</button>`;
+  document.getElementById('conditionsContainer').appendChild(row);
+}
+
+function saveRule(e) {
+  e.preventDefault();
+  const editId = document.getElementById('r-editId').value;
+  const conditions = Array.from(document.getElementById('conditionsContainer').children).map(row => {
+    const rawVal = row.querySelector('.cond-val').value;
+    let val = rawVal;
+    if (rawVal === 'true') val = true;
+    else if (rawVal === 'false') val = false;
+    else if (!isNaN(rawVal) && rawVal !== '') val = Number(rawVal);
+    return { fieldId: row.querySelector('.cond-field').value, operator: row.querySelector('.cond-op').value, value: val };
+  });
+  if (!conditions.length) { alert('Add at least one condition.'); return; }
+
+  const data = {
+    name:        document.getElementById('r-name').value,
+    description: document.getElementById('r-desc').value,
+    conditions,
+    action:      document.getElementById('r-action').value,
+    severity:    document.getElementById('r-severity').value,
+    createdBy:   document.getElementById('r-createdBy').value,
+    active:      document.getElementById('r-active').checked,
+  };
+  try {
+    if (editId) { DynamicEDDEngine.updateRule(editId, data); }
+    else { DynamicEDDEngine.addRule({ id: document.getElementById('r-id').value, ...data }); }
+    closeModal('ruleModal');
+    renderRules();
+  } catch (err) { alert(err.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RISK SCORING
+// ═══════════════════════════════════════════════════════════════════
+
+function renderScoring() {
+  const dims = DynamicEDDEngine.getScoringDimensions();
+  document.getElementById('dimsTable').innerHTML = dims.map(d => `
+    <tr>
+      <td><code>${esc(d.id)}</code></td>
+      <td><strong>${esc(d.name)}</strong></td>
+      <td>${esc(fieldLabel(d.fieldId))}</td>
+      <td>${d.maxScore}</td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar"><div class="score-bar-fill" style="width:${d.weight}%;background:var(--primary);"></div></div>
+          <span class="score-label">${d.weight}%</span>
+        </div>
+      </td>
+      <td>${toggleBadge(d.active)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="editDim('${esc(d.id)}')">Edit</button>
+        <button class="btn ${d.active?'btn-warning':'btn-success'} btn-sm" onclick="toggleDim('${esc(d.id)}',${!d.active})">${d.active?'Disable':'Enable'}</button>
+      </td>
+    </tr>`).join('');
+
+  // Threshold editor
+  const thresholds = DynamicEDDEngine.getScoreThresholds();
+  document.getElementById('thresholdsEditor').innerHTML = Object.entries(thresholds).map(([cat, range]) => `
+    <div style="display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div style="width:90px;font-weight:700;color:${range.color};">${cat}</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+        Min: <input type="number" value="${range.min}" min="0" max="100" style="width:64px;padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;" onchange="updateThreshold('${cat}','min',this.value)" />
+        Max: <input type="number" value="${range.max}" min="0" max="100" style="width:64px;padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;" onchange="updateThreshold('${cat}','max',this.value)" />
+      </div>
+      <div style="flex:1;height:8px;background:linear-gradient(to right,${range.color},${range.color});border-radius:4px;opacity:.4;"></div>
+    </div>`).join('');
+}
+
+function updateThreshold(cat, key, val) {
+  const t = DynamicEDDEngine.getScoreThresholds();
+  t[cat][key] = parseInt(val);
+  DynamicEDDEngine.updateScoreThresholds(t);
+}
+
+function openDimModal(dimId) {
+  const fields = DynamicEDDEngine.getActiveFields();
+  const fieldOpts = fields.map(f => `<option value="${esc(f.id)}">${esc(f.label)}</option>`).join('');
+  document.getElementById('sd-field').innerHTML = fieldOpts;
+  document.getElementById('dimModalTitle').textContent = dimId ? 'Edit Dimension' : 'Add Scoring Dimension';
+  document.getElementById('sd-editId').value = dimId || '';
+  if (dimId) {
+    const d = DynamicEDDEngine.getScoringDimensions().find(x => x.id === dimId);
+    document.getElementById('sd-id').value       = d.id;
+    document.getElementById('sd-id').disabled    = true;
+    document.getElementById('sd-name').value     = d.name;
+    document.getElementById('sd-field').value    = d.fieldId;
+    document.getElementById('sd-maxScore').value = d.maxScore;
+    document.getElementById('sd-weight').value   = d.weight;
+    document.getElementById('sd-scoreMap').value = JSON.stringify(d.scoreMap, null, 2);
+    document.getElementById('sd-active').checked = d.active;
+  } else {
+    document.getElementById('dimForm').reset();
+    document.getElementById('sd-id').disabled = false;
+    document.getElementById('sd-active').checked = true;
+  }
+  document.getElementById('dimModal').classList.add('open');
+}
+
+function editDim(id) { openDimModal(id); }
+function toggleDim(id, active) { DynamicEDDEngine.updateScoringDimension(id, { active }); renderScoring(); }
+
+function saveDim(e) {
+  e.preventDefault();
+  const editId = document.getElementById('sd-editId').value;
+  let scoreMap = {};
+  try { scoreMap = JSON.parse(document.getElementById('sd-scoreMap').value || '{}'); } catch(ex) { alert('Invalid score map JSON'); return; }
+
+  const data = {
+    name:     document.getElementById('sd-name').value,
+    fieldId:  document.getElementById('sd-field').value,
+    maxScore: parseInt(document.getElementById('sd-maxScore').value),
+    weight:   parseInt(document.getElementById('sd-weight').value),
+    scoreMap,
+    active:   document.getElementById('sd-active').checked,
+  };
+  try {
+    if (editId) { DynamicEDDEngine.updateScoringDimension(editId, data); }
+    else { DynamicEDDEngine.addScoringDimension({ id: document.getElementById('sd-id').value, ...data }); }
+    closeModal('dimModal');
+    renderScoring();
+  } catch (err) { alert(err.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DECISION ENGINE
+// ═══════════════════════════════════════════════════════════════════
+
+function renderDecision() {
+  const cfg = DynamicEDDEngine.getDecisionConfig();
+  document.getElementById('decisionConfigCard').innerHTML = `
+    <div class="card-header"><span class="card-title">Decision Thresholds</span><button class="btn btn-primary btn-sm" onclick="saveDecisionConfig()">💾 Save</button></div>
+    <div class="form-grid-3" style="margin-bottom:20px;">
+      <div class="form-group">
+        <label>EDD Required Score Threshold (0–100)</label>
+        <input type="number" id="dc-edd" min="0" max="100" value="${cfg.eddScoreThreshold}" />
+      </div>
+      <div class="form-group">
+        <label>Block Score Threshold (0–100)</label>
+        <input type="number" id="dc-block" min="0" max="100" value="${cfg.blockScoreThreshold}" />
+      </div>
+      <div class="form-group">
+        <label>Auto-Approve Below Score</label>
+        <input type="number" id="dc-approve" min="0" max="100" value="${cfg.autoApproveBelow}" />
+      </div>
+    </div>
+    <div class="toggle-wrap">
+      <label class="toggle"><input type="checkbox" id="dc-sanctions" ${cfg.blockOnSanctions?'checked':''}/><span class="toggle-slider"></span></label>
+      <span style="font-size:13px;">Always BLOCK on Sanctions Match (hard override)</span>
+    </div>
+    <div style="margin-top:20px;padding:14px;background:#f0f7ff;border-radius:10px;font-size:12px;color:var(--text-muted);">
+      <strong style="color:var(--primary);">How it works:</strong>
+      Score ≥ Block Threshold → <span class="badge badge-critical">BLOCK</span> &nbsp;|&nbsp;
+      Score ≥ EDD Threshold → <span class="badge badge-warning">EDD_REQUIRED</span> &nbsp;|&nbsp;
+      Score &lt; Auto-Approve &amp; no rules fired → <span class="badge badge-success">APPROVE</span><br/>
+      Rule actions always escalate: FLAG_CRITICAL / BLOCK override score-based decisions.
+    </div>`;
+}
+
+function saveDecisionConfig() {
+  DynamicEDDEngine.updateDecisionConfig({
+    eddScoreThreshold:   parseInt(document.getElementById('dc-edd').value),
+    blockScoreThreshold: parseInt(document.getElementById('dc-block').value),
+    autoApproveBelow:    parseInt(document.getElementById('dc-approve').value),
+    blockOnSanctions:    document.getElementById('dc-sanctions').checked,
+  });
+  alert('Decision Engine configuration saved.');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DEPENDENCY MAP
+// ═══════════════════════════════════════════════════════════════════
+
+function renderDepMap() {
+  const { fieldUsedByRules, fieldUsedByDeps, fieldUsedByScoring, ruleConflicts } = DynamicEDDEngine.getDependencyMap();
+  const fields = DynamicEDDEngine.getFields();
+
+  // Conflicts alert
+  const conflictsEl = document.getElementById('depMapConflicts');
+  conflictsEl.innerHTML = ruleConflicts.length
+    ? `<div class="conflict-alert"><strong>⚠️ ${ruleConflicts.length} dependency conflict(s) detected:</strong>${ruleConflicts.map(c=>`<div>• ${esc(c.ruleId)}: ${esc(c.reason)}</div>`).join('')}</div>`
+    : '';
+
+  // Field cards
+  document.getElementById('depMapGrid').innerHTML = fields.map(f => {
+    const rules   = fieldUsedByRules[f.id]   || [];
+    const deps    = fieldUsedByDeps[f.id]    || [];
+    const scoring = fieldUsedByScoring[f.id] || [];
+    const total   = rules.length + deps.length + scoring.length;
+
+    return `<div class="dep-card">
+      <div class="field-name">${esc(f.label)} ${!f.active?'<span class="badge badge-muted" style="font-size:10px;">inactive</span>':''}</div>
+      <div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;"><code>${esc(f.id)}</code> · ${total} reference(s)</div>
+      ${rules.length  ? `<div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-top:6px;">Rules</div><ul class="dep-list">${rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ul>` : ''}
+      ${deps.length   ? `<div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-top:6px;">Dependencies</div><ul class="dep-list">${deps.map(d=>`<li>${esc(d)}</li>`).join('')}</ul>` : ''}
+      ${scoring.length? `<div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-top:6px;">Scoring</div><ul class="dep-list">${scoring.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>` : ''}
+      ${total === 0   ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">No references</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// EVALUATE CASE
+// ═══════════════════════════════════════════════════════════════════
+
+function renderEvalForm() {
+  const fields = DynamicEDDEngine.getActiveFields();
+  document.getElementById('evalForm').innerHTML = `
+    <div class="form-grid">
+      ${fields.map(f => {
+        if (f.type === 'boolean') {
+          return `<div class="form-group">
+            <label>${esc(f.label)}</label>
+            <select id="eval-${esc(f.id)}">
+              <option value="">— not set —</option>
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>`;
+        } else if (f.type === 'select' && f.options?.length) {
+          const opts = f.options.map(o=>`<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('');
+          return `<div class="form-group"><label>${esc(f.label)}</label><select id="eval-${esc(f.id)}"><option value="">— not set —</option>${opts}</select></div>`;
+        } else if (f.type === 'number') {
+          return `<div class="form-group"><label>${esc(f.label)}</label><input type="number" id="eval-${esc(f.id)}" placeholder="0" /></div>`;
+        } else {
+          return `<div class="form-group"><label>${esc(f.label)}</label><input type="text" id="eval-${esc(f.id)}" /></div>`;
+        }
+      }).join('')}
+    </div>`;
+}
+
+function fillSampleData() {
+  const sample = {
+    customer_type: 'individual', nationality: 'Qatar', annual_income: 120000,
+    source_of_funds: 'salary', is_pep: 'false', sanctions_match: 'false',
+    country_risk: 'medium', transaction_vol: 50000, cash_intensity: 20, adverse_media: 'false',
+  };
+  Object.entries(sample).forEach(([k,v]) => {
+    const el = document.getElementById('eval-' + k);
+    if (el) el.value = v;
+  });
+}
+
+function runEvaluation() {
+  const fields = DynamicEDDEngine.getActiveFields();
+  const caseData = {};
+  fields.forEach(f => {
+    const el = document.getElementById('eval-' + f.id);
+    if (!el || el.value === '') return;
+    let val = el.value;
+    if (val === 'true')  val = true;
+    else if (val === 'false') val = false;
+    else if (f.type === 'number') val = Number(val);
+    caseData[f.id] = val;
+  });
+
+  const result = DynamicEDDEngine.evaluate(caseData);
+  const recColors = { APPROVE:'var(--success)', EDD_REQUIRED:'var(--warning)', HIGH_RISK:'var(--danger)', BLOCK:'var(--critical)' };
+
+  const breakdownHtml = result.breakdown.map(b =>
+    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:12px;">
+      <span>${esc(b.name)}</span>
+      <span><strong>${b.rawScore}</strong> raw → <strong>${b.contribution}</strong> weighted pts</span>
+    </div>`).join('');
+
+  document.getElementById('evalResult').innerHTML = `
+    <div class="eval-result ${result.recommendation}">
+      <div class="rec-label rec-${result.recommendation}">
+        ${result.recommendation === 'APPROVE' ? '✅' : result.recommendation === 'EDD_REQUIRED' ? '⚠️' : result.recommendation === 'HIGH_RISK' ? '🔴' : '🛑'}
+        ${result.recommendation.replace(/_/g,' ')}
+      </div>
+      <div style="font-size:28px;font-weight:800;color:${recColors[result.recommendation]};margin-bottom:12px;">
+        Score: ${result.score} / 100 &nbsp;<span class="badge ${result.category==='LOW'?'badge-success':result.category==='MEDIUM'?'badge-warning':result.category==='HIGH'?'badge-danger':'badge-critical'}">${result.category}</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Score Breakdown</div>
+          ${breakdownHtml}
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Fired Rules (${result.firedRules.length})</div>
+          ${result.firedRules.length
+            ? result.firedRules.map(r=>`<div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:12px;"><strong>${esc(r.id)}</strong> ${esc(r.name)} ${badgeForSeverity(r.severity)}</div>`).join('')
+            : '<div style="font-size:12px;color:var(--text-muted);">No rules fired</div>'}
+          <div style="font-size:13px;font-weight:700;margin-top:14px;margin-bottom:8px;">Decision Reasons</div>
+          ${result.reasons.map(r=>`<div style="font-size:12px;padding:3px 0;">• ${esc(r)}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// AUDIT LOG
+// ═══════════════════════════════════════════════════════════════════
+
+function renderAudit() {
+  const log = DynamicEDDEngine.getAuditLog(200);
+  document.getElementById('auditLogContainer').innerHTML = log.length
+    ? log.map(e => `<div class="audit-entry">
+        <span class="audit-ts">${new Date(e.ts).toLocaleString()}</span>
+        <span class="audit-action">${esc(e.action)}</span>
+        <span class="audit-detail">${esc(e.detail)}</span>
+      </div>`).join('')
+    : '<div style="color:var(--text-muted);padding:16px;font-size:13px;">No audit entries yet.</div>';
+}
+
+function clearAudit() {
+  if (confirm('Clear the entire audit log?')) { DynamicEDDEngine.clearAuditLog(); renderAudit(); }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════════════════════════════════
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close on backdrop click
+document.querySelectorAll('.modal-backdrop').forEach(bd => {
+  bd.addEventListener('click', e => { if (e.target === bd) bd.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// EXPORT / IMPORT / RESET
+// ═══════════════════════════════════════════════════════════════════
+
+function exportConfig() {
+  const blob = new Blob([DynamicEDDEngine.exportConfig()], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'dynamic_edd_config_' + Date.now() + '.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function importConfig(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      DynamicEDDEngine.importConfig(e.target.result);
+      alert('Configuration imported successfully.');
+      renderSection(document.querySelector('.nav-item.active').dataset.section);
+    } catch (err) { alert('Import failed: ' + err.message); }
+  };
+  reader.readAsText(file);
+}
+
+function confirmReset() {
+  if (confirm('Reset ALL engine configuration to factory defaults? This cannot be undone.')) {
+    DynamicEDDEngine.reset();
+    renderSection('overview');
+    showSection('overview', document.querySelector('[data-section="overview"]'));
+    alert('Engine reset to factory defaults.');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+
+renderOverview();
+</script>
+
+</body>
+</html>
