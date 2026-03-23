@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QIB EDD Automation Platform — Phase 5</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2300D4FF'/><text x='16' y='22' font-size='14' font-weight='900' fill='%23050810' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+<style>
+  :root {
+    --bg:          #050810;
+    --bg-card:     rgba(8,15,35,0.85);
+    --bg-hover:    rgba(12,22,50,0.9);
+    --border:      rgba(0,212,255,0.12);
+    --border-act:  rgba(0,212,255,0.45);
+    --blue:        #00D4FF;
+    --purple:      #8B5CF6;
+    --green:       #00E676;
+    --amber:       #FFB800;
+    --red:         #FF4757;
+    --text:        #e8eaf6;
+    --text-dim:    rgba(232,234,246,0.55);
+    --sidebar-w:   290px;
+    --header-h:    62px;
+    --kpi-h:       74px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* ── HEADER ───────────────────────────────────── */
+  .hdr {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--header-h);
+    background: rgba(5,8,20,0.96);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    display: flex; align-items: center; gap: 20px; padding: 0 20px;
+  }
+  .hdr-logo { display: flex; align-items: center; gap: 10px; }
+  .hdr-logo .ql {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 18px; color: #050810;
+  }
+  .hdr-title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; white-space: nowrap; }
+  .hdr-title span { color: var(--blue); }
+  .hdr-sep { width: 1px; height: 30px; background: var(--border); }
+  .hdr-tag { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+
+  /* stage selector */
+  .stage-sel { display: flex; gap: 4px; margin-left: auto; }
+  .stage-btn {
+    padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+    cursor: pointer; transition: all .2s; letter-spacing: 0.5px;
+  }
+  .stage-btn.active { background: rgba(0,212,255,0.12); border-color: var(--blue); color: var(--blue); }
+  .stage-btn:hover:not(.active) { border-color: rgba(0,212,255,0.3); color: var(--text); }
+
+  /* nav buttons */
+  .hdr-nav { display: flex; gap: 8px; }
+  .hdr-nav a {
+    padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+    cursor: pointer; transition: all .2s; text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .hdr-nav a:hover { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.4); color: #c4b5fd; }
+  .hdr-nav a.primary { background: rgba(0,212,255,0.1); border-color: var(--blue); color: var(--blue); }
+  .hdr-nav a.primary:hover { background: rgba(0,212,255,0.2); }
+
+  /* ── KPI BAR ──────────────────────────────────── */
+  .kpi-bar {
+    position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 90;
+    height: var(--kpi-h);
+    background: rgba(6,10,25,0.95);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 20px; gap: 0; overflow: hidden;
+  }
+  .kpi-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-right: 1px solid var(--border); padding: 0 8px; min-width: 90px;
+  }
+  .kpi-item:last-child { border-right: none; }
+  .kpi-v { font-size: 22px; font-weight: 800; color: var(--blue); line-height: 1; }
+  .kpi-v.green { color: var(--green); }
+  .kpi-v.amber { color: var(--amber); }
+  .kpi-v.red   { color: var(--red); }
+  .kpi-l { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.6px; margin-top: 4px; text-align: center; }
+  .kpi-sub { font-size: 10px; color: var(--text-dim); }
+
+  /* ── LAYOUT ──────────────────────────────────── */
+  .app {
+    position: fixed;
+    top: calc(var(--header-h) + var(--kpi-h));
+    left: 0; right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────── */
+  .sidebar {
+    background: rgba(4,8,20,0.97);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-hdr {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .sidebar-hdr h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
+  .badge-count { background: rgba(0,212,255,0.15); color: var(--blue); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .case-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .case-list::-webkit-scrollbar { width: 4px; }
+  .case-list::-webkit-scrollbar-track { background: transparent; }
+  .case-list::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
+
+  .case-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px;
+    margin-bottom: 6px; cursor: pointer;
+    transition: all .2s;
+  }
+  .case-card:hover { background: var(--bg-hover); border-color: rgba(0,212,255,0.3); transform: translateX(2px); }
+  .case-card.active { background: rgba(0,212,255,0.07); border-color: var(--blue); }
+  .case-card-id { font-size: 11px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .case-card-name { font-size: 13px; font-weight: 700; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .case-card-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .elig-dot {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .elig-dot.green { background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+  .elig-dot.amber { background: rgba(255,184,0,0.12); color: var(--amber); border: 1px solid rgba(255,184,0,0.3); }
+  .elig-dot.red   { background: rgba(255,71,87,0.12);  color: var(--red);   border: 1px solid rgba(255,71,87,0.3); }
+  .case-score { font-size: 10px; color: var(--text-dim); }
+
+  .sidebar-stats {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: rgba(3,6,18,0.8);
+  }
+  .sidebar-stats h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 10px; }
+  .stage-stat { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .stage-stat-label { font-size: 11px; display: flex; align-items: center; gap: 6px; }
+  .stage-stat-value { font-size: 12px; font-weight: 700; color: var(--blue); }
+  .dot-stage { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-stage.C { background: var(--green); }
+  .dot-stage.B { background: var(--amber); }
+  .dot-stage.A { background: var(--red); }
+  .dot-stage.E { background: var(--red); }
+
+  /* ── MAIN PANEL ──────────────────────────────── */
+  .main { display: flex; flex-direction: column; overflow: hidden; background: rgba(5,9,22,0.5); }
+
+  /* case detail top */
+  .case-top {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+    flex-shrink: 0;
+  }
+  .case-top-row { display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+  .case-info { flex: 1; min-width: 200px; }
+  .case-name { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+  .case-sub  { font-size: 12px; color: var(--text-dim); margin-top: 3px; line-height: 1.6; }
+  .elig-badge {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 700;
+    border: 1.5px solid;
+  }
+  .elig-badge.green { background: rgba(0,230,118,0.1); border-color: rgba(0,230,118,0.4); color: var(--green); }
+  .elig-badge.amber { background: rgba(255,184,0,0.1); border-color: rgba(255,184,0,0.4); color: var(--amber); }
+  .elig-badge.red   { background: rgba(255,71,87,0.1);  border-color: rgba(255,71,87, 0.4); color: var(--red); }
+  .elig-badge .elig-icon { font-size: 20px; }
+
+  /* meters row */
+  .meters-row { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .meter-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .meter-wrap svg { display: block; }
+  .meter-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+  .meter-val { font-size: 13px; font-weight: 700; color: var(--blue); }
+  .meter-val.green { color: var(--green); }
+  .meter-val.amber { color: var(--amber); }
+  .meter-val.red   { color: var(--red); }
+
+  /* auto score bar */
+  .score-block { flex: 1; min-width: 220px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 14px 16px; border: 1px solid var(--border); }
+  .score-block h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 10px; }
+  .score-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .score-val { font-size: 28px; font-weight: 900; color: var(--blue); }
+  .score-stage { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .score-stage-lbl { font-size: 10px; color: var(--text-dim); }
+  .score-stage-val { font-size: 14px; font-weight: 800; color: var(--green); }
+  .score-bar-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
+  .score-bar-fill.green { background: linear-gradient(90deg, #00E676, #00BFA5); }
+  .score-bar-fill.amber { background: linear-gradient(90deg, #FFB800, #FF8F00); }
+  .score-bar-fill.red   { background: linear-gradient(90deg, #FF4757, #D50000); }
+  .score-bar-ticks { display: flex; justify-content: space-between; margin-top: 4px; font-size: 9px; color: var(--text-dim); }
+
+  /* decision badge */
+  .decision-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 800;
+    letter-spacing: 0.5px; margin-top: 12px;
+  }
+  .decision-badge.green { background: rgba(0,230,118,0.12); border: 1.5px solid var(--green); color: var(--green); }
+  .decision-badge.amber { background: rgba(255,184,0,0.12); border: 1.5px solid var(--amber); color: var(--amber); }
+  .decision-badge.red   { background: rgba(255,71,87,0.12); border: 1.5px solid var(--red); color: var(--red); }
+  .decision-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+  /* ── TABS ─────────────────────────────────────── */
+  .tab-bar {
+    display: flex; gap: 0; padding: 0 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(5,9,22,0.9);
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: 12px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
+    border-bottom: 2px solid transparent; color: var(--text-dim);
+    transition: all .2s; white-space: nowrap; letter-spacing: 0.3px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+  /* tab panels */
+  .tab-content { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .tab-content::-webkit-scrollbar { width: 4px; }
+  .tab-content::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── OVERVIEW TAB ─────────────────────────────── */
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 14px; }
+  .ov-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+  }
+  .ov-card h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .ov-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+  .ov-row:last-child { border-bottom: none; }
+  .ov-row-lbl { color: var(--text-dim); }
+  .ov-row-val { font-weight: 600; color: var(--text); }
+  .ov-row-val.blue { color: var(--blue); }
+  .ov-row-val.green { color: var(--green); }
+  .ov-row-val.amber { color: var(--amber); }
+  .ov-row-val.red   { color: var(--red); }
+
+  /* ── DECISION EXPLANATION TAB ─────────────────── */
+  .rules-grid { display: flex; flex-direction: column; gap: 6px; }
+  .rule-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 14px; transition: all .15s;
+  }
+  .rule-row:hover { border-color: rgba(0,212,255,0.25); }
+  .rule-row.passed { border-left: 3px solid var(--green); }
+  .rule-row.failed  { border-left: 3px solid var(--red); }
+  .rule-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .rule-content { flex: 1; min-width: 0; }
+  .rule-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .rule-detail { font-size: 11px; color: var(--text-dim); }
+  .rule-status {
+    flex-shrink: 0; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 4px; text-transform: uppercase;
+  }
+  .rule-status.passed { background: rgba(0,230,118,0.12); color: var(--green); }
+  .rule-status.failed  { background: rgba(255,71,87,0.12);  color: var(--red); }
+  .rules-summary {
+    display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .rules-sum-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; text-align: center; }
+  .rules-sum-item .v { font-size: 22px; font-weight: 800; }
+  .rules-sum-item .l { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* ── AUDIT TRAIL TAB ──────────────────────────── */
+  .audit-timeline { position: relative; padding-left: 24px; }
+  .audit-timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--blue), rgba(0,212,255,0.1)); border-radius: 1px; }
+  .audit-step {
+    position: relative; margin-bottom: 10px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px;
+  }
+  .audit-step::before {
+    content: ''; position: absolute; left: -21px; top: 14px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--blue); border: 2px solid var(--bg);
+  }
+  .audit-step.PASS::before     { background: var(--green); }
+  .audit-step.WARNING::before  { background: var(--amber); }
+  .audit-step.FAIL::before,
+  .audit-step.BLOCKED::before  { background: var(--red); }
+  .audit-step.APPROVED::before,
+  .audit-step.LOCKED::before   { background: var(--blue); }
+  .audit-step-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .audit-time { font-size: 11px; font-weight: 700; color: var(--blue); white-space: nowrap; }
+  .audit-step-name { font-size: 12px; font-weight: 600; flex: 1; }
+  .audit-result {
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+  }
+  .audit-result.PASS     { background: rgba(0,230,118,0.12); color: var(--green); }
+  .audit-result.WARNING  { background: rgba(255,184,0,0.12); color: var(--amber); }
+  .audit-result.FAIL,
+  .audit-result.BLOCKED  { background: rgba(255,71,87,0.12); color: var(--red); }
+  .audit-result.APPROVED,
+  .audit-result.LOCKED,
+  .audit-result.SENT     { background: rgba(0,212,255,0.12); color: var(--blue); }
+  .audit-detail { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+  /* ── POLICY CONTROLS TAB ─────────────────────── */
+  .policy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 14px; }
+  .policy-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .policy-block h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .policy-check { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+  .policy-check:last-child { border-bottom: none; }
+  .policy-check-icon { flex-shrink: 0; font-size: 13px; }
+  .policy-check-text { color: var(--text-dim); }
+  .policy-check-text span { color: var(--text); font-weight: 600; }
+
+  /* ── SIMULATION TAB ───────────────────────────── */
+  .sim-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+  .sim-header h3 { font-size: 14px; font-weight: 700; }
+  .sim-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(139,92,246,0.15));
+    border: 1px solid var(--blue); color: var(--blue);
+    padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: all .2s;
+  }
+  .sim-btn:hover { background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(139,92,246,0.25)); }
+  .sim-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .sim-pipeline { display: flex; flex-direction: column; gap: 8px; }
+  .sim-step {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px;
+    transition: all .3s;
+  }
+  .sim-step.running { border-color: rgba(0,212,255,0.4); background: rgba(0,212,255,0.05); }
+  .sim-step.done-PASS    { border-color: rgba(0,230,118,0.3); background: rgba(0,230,118,0.04); }
+  .sim-step.done-WARNING { border-color: rgba(255,184,0,0.3);  background: rgba(255,184,0,0.04); }
+  .sim-step.done-BLOCKED,
+  .sim-step.done-FAIL    { border-color: rgba(255,71,87,0.3);  background: rgba(255,71,87,0.04); }
+  .sim-step.done-AUTO_APPROVED       { border-color: rgba(0,230,118,0.5); background: rgba(0,230,118,0.08); }
+  .sim-step.done-HUMAN_REVIEW,
+  .sim-step.done-DOCUMENTS_REQUESTED,
+  .sim-step.done-MANUAL_REVIEW       { border-color: rgba(255,184,0,0.4); background: rgba(255,184,0,0.06); }
+  .sim-step.done-ESCALATED_COMPLIANCE{ border-color: rgba(255,71,87,0.5); background: rgba(255,71,87,0.06); }
+
+  .sim-step-num {
+    width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+    flex-shrink: 0; color: var(--text-dim); transition: all .3s;
+  }
+  .sim-step.running .sim-step-num { border-color: var(--blue); color: var(--blue); animation: spin-ring 1s linear infinite; }
+  .sim-step.done-PASS    .sim-step-num { border-color: var(--green); color: var(--green); background: rgba(0,230,118,0.1); }
+  .sim-step.done-WARNING .sim-step-num { border-color: var(--amber); color: var(--amber); background: rgba(255,184,0,0.1); }
+  .sim-step.done-BLOCKED .sim-step-num,
+  .sim-step.done-FAIL    .sim-step-num { border-color: var(--red);   color: var(--red);   background: rgba(255,71,87,0.1); }
+  .sim-step.done-AUTO_APPROVED .sim-step-num { border-color: var(--green); color: var(--green); background: rgba(0,230,118,0.15); }
+
+  @keyframes spin-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(0,212,255,0.4); }
+    50%  { box-shadow: 0 0 0 4px rgba(0,212,255,0.1); }
+    100% { box-shadow: 0 0 0 0 rgba(0,212,255,0); }
+  }
+  .sim-step-content { flex: 1; }
+  .sim-step-label { font-size: 13px; font-weight: 600; }
+  .sim-step-detail { font-size: 11px; color: var(--text-dim); margin-top: 3px; display: none; }
+  .sim-step.running .sim-step-detail { display: block; content: ''; }
+  .sim-step[class*="done-"] .sim-step-detail { display: block; }
+  .sim-step-result {
+    flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 5px; text-transform: uppercase;
+  }
+  .sim-step.running .sim-step-result { display: none; }
+  .sim-step[class*="done-PASS"]    .sim-step-result { background: rgba(0,230,118,0.12); color: var(--green); }
+  .sim-step[class*="done-WARNING"] .sim-step-result { background: rgba(255,184,0,0.12); color: var(--amber); }
+  .sim-step[class*="done-BLOCKED"],
+  .sim-step[class*="done-FAIL"]    { /* handled inline */ }
+  .sim-result-final {
+    margin-top: 14px; padding: 16px 20px; border-radius: 10px;
+    font-size: 15px; font-weight: 800; display: none;
+    text-align: center; letter-spacing: 0.5px;
+  }
+
+  /* ── SCROLLBAR ────────────────────────────────── */
+  .main::-webkit-scrollbar { width: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="hdr">
+  <div class="hdr-logo">
+    <div class="ql">Q</div>
+    <div class="hdr-title">QIB <span>EDD Automation Platform</span></div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-tag">Phase 5 — Governed Decision Engine</div>
+
+  <div class="stage-sel" id="stageSel">
+    <button class="stage-btn" data-stage="A" onclick="setStage('A')">Stage A</button>
+    <button class="stage-btn" data-stage="B" onclick="setStage('B')">Stage B</button>
+    <button class="stage-btn active" data-stage="C" onclick="setStage('C')">Stage C</button>
+  </div>
+
+  <div class="hdr-nav">
+    <a href="executive-command-center.html">📊 Executive View</a>
+    <a href="system-presentation.html">🔮 Presentation Mode</a>
+    <a href="decision-analytics-dashboard.html">📈 Analytics</a>
+    <a href="dashboard.html" class="primary">⬅ Back to Dashboard</a>
+  </div>
+</header>
+
+<!-- ═══════════ KPI BAR ═══════════ -->
+<div class="kpi-bar">
+  <div class="kpi-item">
+    <div class="kpi-v" id="k0">847</div>
+    <div class="kpi-l">Cases Today</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v green" id="k1">601</div>
+    <div class="kpi-l">Automated</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v amber" id="k2">154</div>
+    <div class="kpi-l">Human Reviews</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v red" id="k3">92</div>
+    <div class="kpi-l">Escalations</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v" id="k4">71%</div>
+    <div class="kpi-l">Auto Rate</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v" id="k5">23 min</div>
+    <div class="kpi-l">Avg Decision</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v green" id="k6">96.8%</div>
+    <div class="kpi-l">Accuracy</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-v amber" id="k7">7.2%</div>
+    <div class="kpi-l">False Positive Rate</div>
+  </div>
+</div>
+
+<!-- ═══════════ APP LAYOUT ═══════════ -->
+<div class="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-hdr">
+      <h3>Case Queue</h3>
+      <span class="badge-count">5 Cases</span>
+    </div>
+
+    <div class="case-list" id="caseList"></div>
+
+    <div class="sidebar-stats">
+      <h4>Queue by Stage</h4>
+      <div class="stage-stat">
+        <div class="stage-stat-label"><span class="dot-stage C"></span> Stage C — Fully Auto</div>
+        <div class="stage-stat-value">1</div>
+      </div>
+      <div class="stage-stat">
+        <div class="stage-stat-label"><span class="dot-stage B"></span> Stage B — Human-in-Loop</div>
+        <div class="stage-stat-value">2</div>
+      </div>
+      <div class="stage-stat">
+        <div class="stage-stat-label"><span class="dot-stage A"></span> Stage A — Manual</div>
+        <div class="stage-stat-value">1</div>
+      </div>
+      <div class="stage-stat">
+        <div class="stage-stat-label"><span class="dot-stage E"></span> Escalation Required</div>
+        <div class="stage-stat-value">1</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN PANEL ── -->
+  <main class="main" id="mainPanel">
+    <!-- Case Top -->
+    <div class="case-top" id="caseTop"></div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab('overview')">Overview</div>
+      <div class="tab" onclick="switchTab('decision')">Decision Explanation</div>
+      <div class="tab" onclick="switchTab('audit')">Audit Trail</div>
+      <div class="tab" onclick="switchTab('policy')">Policy Controls</div>
+      <div class="tab" onclick="switchTab('simulation')">Scenario Simulation</div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="tabContent"></div>
+  </main>
+</div>
+
+<script src="js/edd-automation-engine.js"></script>
+<script>
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let currentStage = 'C';
+let currentCase  = EDD_DEMO_CASES[0];
+let currentTab   = 'overview';
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderCaseList();
+  loadCase(EDD_DEMO_CASES[0]);
+  animateKPIs();
+});
+
+// ─────────────────────────────────────────────────────────────
+// STAGE SELECTOR
+// ─────────────────────────────────────────────────────────────
+function setStage(stage) {
+  currentStage = stage;
+  document.querySelectorAll('.stage-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.stage === stage);
+  });
+  renderCaseList();
+  loadCase(currentCase);
+}
+
+// ─────────────────────────────────────────────────────────────
+// CASE LIST
+// ─────────────────────────────────────────────────────────────
+function renderCaseList() {
+  const el = document.getElementById('caseList');
+  el.innerHTML = EDD_DEMO_CASES.map((c, i) => {
+    const badge = AutomationDecisionEngine.getEligibilityBadge(c.automationScore, c.pepStatus);
+    const stageLabel = getStageLabel(c, currentStage);
+    const isActive = c.id === currentCase.id ? ' active' : '';
+    return `
+      <div class="case-card${isActive}" onclick="loadCase(EDD_DEMO_CASES[${i}])">
+        <div class="case-card-id">${c.id} · ${c.processingTime}</div>
+        <div class="case-card-name">${c.customer}</div>
+        <div class="case-card-meta">
+          <span class="elig-dot ${badge.color}">${badge.icon} Stage ${badge.stage}</span>
+          <span class="case-score">Auto: ${c.automationScore}%</span>
+        </div>
+        <div class="case-card-meta" style="margin-top:4px">
+          <span class="case-score" style="color:${riskColor(c.riskScore)}">Risk: ${c.riskScore ?? 'N/A'}</span>
+          <span class="case-score">${stageLabel}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function getStageLabel(c, stage) {
+  if (c.pepStatus) return '<span style="color:var(--red)">Compliance Escalation</span>';
+  if (stage === 'C') return c.automationScore >= 70 ? '<span style="color:var(--green)">✓ Auto-Eligible</span>' : '<span style="color:var(--amber)">Human Required</span>';
+  if (stage === 'B') return c.automationScore >= 40 ? '<span style="color:var(--amber)">✓ B-Eligible</span>' : '<span style="color:var(--red)">Manual Only</span>';
+  return '<span style="color:var(--text-dim)">Manual Review</span>';
+}
+
+function riskColor(score) {
+  if (score === null) return 'var(--red)';
+  if (score <= 35) return 'var(--green)';
+  if (score <= 60) return 'var(--amber)';
+  return 'var(--red)';
+}
+
+// ─────────────────────────────────────────────────────────────
+// LOAD CASE
+// ─────────────────────────────────────────────────────────────
+function loadCase(c) {
+  currentCase = c;
+  renderCaseList();
+  renderCaseTop(c);
+  switchTab(currentTab);
+}
+
+function renderCaseTop(c) {
+  const badge     = AutomationDecisionEngine.getEligibilityBadge(c.automationScore, c.pepStatus);
+  const decision  = AutomationDecisionEngine.getDecisionBadge(c.decision);
+  const circ      = 2 * Math.PI * 42;
+
+  const M  = (v, color) => {
+    if (v === null) return `<div style="font-size:13px;color:var(--text-dim);margin-top:4px">N/A (PEP Stop)</div>`;
+    const pct = Math.min(Math.max(v, 0), 100);
+    const off = circ * (1 - pct / 100);
+    const clr = color;
+    return `
+      <svg width="90" height="90" viewBox="0 0 90 90">
+        <circle cx="45" cy="45" r="42" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/>
+        <circle cx="45" cy="45" r="42" fill="none" stroke="${clr}" stroke-width="7"
+          stroke-dasharray="${circ.toFixed(2)}"
+          stroke-dashoffset="${circ.toFixed(2)}"
+          stroke-linecap="round"
+          transform="rotate(-90 45 45)"
+          id="circ_${c.id}_${pct}"
+          style="transition:stroke-dashoffset 1.5s ease"/>
+        <text x="45" y="49" font-size="18" font-weight="800" fill="${clr}" text-anchor="middle" font-family="system-ui">${pct}${pct<10?'':''}</text>
+      </svg>`;
+  };
+
+  const riskPct  = c.riskScore === null ? null : Math.max(0, 100 - c.riskScore);
+  const riskClr  = c.riskScore === null ? 'var(--red)' : riskColor(c.riskScore);
+
+  const scoreClr = badge.color === 'green' ? 'green' : badge.color === 'amber' ? 'amber' : 'red';
+  const barW     = c.automationScore + '%';
+
+  document.getElementById('caseTop').innerHTML = `
+    <div class="case-top-row">
+      <div class="case-info">
+        <div class="case-name">${c.customer}</div>
+        <div class="case-sub">
+          ${c.id} &nbsp;·&nbsp; ${c.nationality} &nbsp;·&nbsp; ${c.occupation}<br>
+          ${c.employer} &nbsp;·&nbsp; <b>Segment:</b> ${c.segment} &nbsp;·&nbsp; <b>KYC:</b> ${c.kycStatus}
+        </div>
+      </div>
+      <div class="elig-badge ${badge.color}">
+        <span class="elig-icon">${badge.icon}</span>
+        <div>
+          <div>${badge.label}</div>
+          <div style="font-size:10px;opacity:0.7;font-weight:400;margin-top:1px">Automation Score: ${c.automationScore}%</div>
+        </div>
+      </div>
+    </div>
+    <div class="meters-row">
+      <div class="meter-wrap">
+        ${M(c.riskScore === null ? null : (100 - c.riskScore), riskClr)}
+        <div class="meter-label">Risk Score</div>
+        <div class="meter-val ${c.riskScore===null?'red':c.riskScore<=35?'green':c.riskScore<=60?'amber':'red'}">${c.riskScore ?? 'STOP'} / ${c.riskBand}</div>
+      </div>
+      <div class="meter-wrap">
+        ${M(c.dataCompleteness, c.dataCompleteness>=95?'var(--green)':'var(--amber)')}
+        <div class="meter-label">Data Completeness</div>
+        <div class="meter-val ${c.dataCompleteness>=95?'green':'amber'}">${c.dataCompleteness}%</div>
+      </div>
+      <div class="meter-wrap">
+        ${M(c.decisionConfidence, c.decisionConfidence===null?'var(--red)':c.decisionConfidence>=80?'var(--blue)':'var(--amber)')}
+        <div class="meter-label">Decision Confidence</div>
+        <div class="meter-val ${c.decisionConfidence===null?'red':c.decisionConfidence>=80?'':'amber'}">${c.decisionConfidence ?? 'N/A'}${c.decisionConfidence!==null?'%':''}</div>
+      </div>
+      <div class="score-block">
+        <h4>Automation Eligibility Score</h4>
+        <div class="score-row">
+          <div class="score-val">${c.automationScore}%</div>
+          <div class="score-stage">
+            <div class="score-stage-lbl">Eligible Stage</div>
+            <div class="score-stage-val" style="color:${badge.color==='green'?'var(--green)':badge.color==='amber'?'var(--amber)':'var(--red)'}">${c.eligibleStage}</div>
+          </div>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill ${scoreClr}" id="scoreBar_${c.id}" style="width:0"></div>
+        </div>
+        <div class="score-bar-ticks"><span>0</span><span>40 (B)</span><span>70 (C)</span><span>100</span></div>
+        <div class="decision-badge ${decision.color}" style="margin-top:10px">
+          <span>${decision.icon}</span> ${decision.label}
+        </div>
+        <div class="decision-sub">Code: ${c.decisionCode} &nbsp;·&nbsp; Processing: ${c.processingTime}</div>
+      </div>
+    </div>`;
+
+  // animate meters
+  setTimeout(() => {
+    const fill = document.getElementById(`scoreBar_${c.id}`);
+    if (fill) fill.style.width = c.automationScore + '%';
+    // SVG circles
+    document.querySelectorAll(`[id^="circ_${c.id}_"]`).forEach(el => {
+      const pct = parseInt(el.id.split('_').pop());
+      const off = circ * (1 - pct / 100);
+      el.style.strokeDashoffset = off.toFixed(2);
+    });
+  }, 50);
+}
+
+// ─────────────────────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const tabs = ['overview','decision','audit','policy','simulation'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  const el = document.getElementById('tabContent');
+  const c  = currentCase;
+  if (tab === 'overview')    el.innerHTML = renderOverview(c);
+  if (tab === 'decision')    el.innerHTML = renderDecision(c);
+  if (tab === 'audit')       el.innerHTML = renderAudit(c);
+  if (tab === 'policy')      el.innerHTML = renderPolicy(c);
+  if (tab === 'simulation')  el.innerHTML = renderSimulation(c);
+}
+
+// ─────────────────────────────────────────────────────────────
+// TAB: OVERVIEW
+// ─────────────────────────────────────────────────────────────
+function renderOverview(c) {
+  const passCount  = c.rules.filter(r => r.passed).length;
+  const failCount  = c.rules.filter(r => !r.passed).length;
+  const srcList    = (c.sourceSystems || []).map(s => `<div class="ov-row"><span class="ov-row-lbl">${s}</span><span class="ov-row-val green">✓ Connected</span></div>`).join('');
+  const missingHtml = c.missingDocs ? c.missingDocs.map(d => `<div class="ov-row"><span class="ov-row-lbl">📋 ${d}</span><span class="ov-row-val amber">Required</span></div>`).join('') : `<div class="ov-row"><span class="ov-row-val green">✓ All documents present</span></div>`;
+
+  return `<div class="overview-grid">
+    <div class="ov-card">
+      <h4>🧑 Customer Profile</h4>
+      <div class="ov-row"><span class="ov-row-lbl">Full Name</span><span class="ov-row-val">${c.customer}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Nationality</span><span class="ov-row-val">${c.nationality}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Date of Birth</span><span class="ov-row-val">${c.dob} (Age ${c.age})</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Occupation</span><span class="ov-row-val">${c.occupation}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Employer</span><span class="ov-row-val">${c.employer}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Segment</span><span class="ov-row-val blue">${c.segment}</span></div>
+    </div>
+    <div class="ov-card">
+      <h4>💰 Financial Profile</h4>
+      <div class="ov-row"><span class="ov-row-lbl">Monthly Income</span><span class="ov-row-val blue">QAR ${c.monthlyIncome.toLocaleString()}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Income Source</span><span class="ov-row-val">${c.incomeSource}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Source of Wealth</span><span class="ov-row-val">${c.sourceOfWealth}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Employment Verified</span><span class="ov-row-val ${c.employmentVerified?'green':'amber'}">${c.employmentVerified?'✓ Verified':'⚠ Pending'}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">TM Alerts</span><span class="ov-row-val ${c.transactionAlerts===0?'green':'amber'}">${c.transactionAlerts}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Negative Events</span><span class="ov-row-val green">${c.negativeEvents}</span></div>
+    </div>
+    <div class="ov-card">
+      <h4>🛡 Compliance Checks</h4>
+      <div class="ov-row"><span class="ov-row-lbl">PEP Status</span><span class="ov-row-val ${c.pepStatus?'red':'green'}">${c.pepStatus?'⛔ MATCH DETECTED':'✓ Clear (Negative)'}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Sanctions</span><span class="ov-row-val ${c.sanctionsStatus?'red':'green'}">${c.sanctionsStatus?'⛔ HIT':'✓ Clear'}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Adverse Media</span><span class="ov-row-val ${c.adverseMedia?'amber':'green'}">${c.adverseMedia?'⚠ Flag':'✓ Clear'}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">KYC Status</span><span class="ov-row-val blue">${c.kycStatus}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Last KYC Update</span><span class="ov-row-val">${c.lastKycUpdate}</span></div>
+    </div>
+    <div class="ov-card">
+      <h4>📁 Documents</h4>
+      <div class="ov-row"><span class="ov-row-lbl">Documents Provided</span><span class="ov-row-val ${c.documentsComplete?'green':'amber'}">${c.documentCount}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Completeness</span><span class="ov-row-val ${c.dataCompleteness>=95?'green':'amber'}">${c.dataCompleteness}%</span></div>
+      ${missingHtml}
+    </div>
+    <div class="ov-card">
+      <h4>⚙ Rule Summary</h4>
+      <div class="ov-row"><span class="ov-row-lbl">Rules Evaluated</span><span class="ov-row-val blue">${c.rules.length}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Rules Passed</span><span class="ov-row-val green">✓ ${passCount}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Rules Failed</span><span class="ov-row-val ${failCount>0?'amber':'green'}">${failCount>0?'⚠ ':''} ${failCount}</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Pass Rate</span><span class="ov-row-val ${passCount===c.rules.length?'green':'amber'}">${Math.round(passCount/c.rules.length*100)}%</span></div>
+      <div class="ov-row"><span class="ov-row-lbl">Eligible Stage</span><span class="ov-row-val blue">${c.eligibleStage}</span></div>
+    </div>
+    <div class="ov-card">
+      <h4>🔗 Source Systems Used</h4>
+      ${srcList}
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TAB: DECISION EXPLANATION
+// ─────────────────────────────────────────────────────────────
+function renderDecision(c) {
+  const passCount = c.rules.filter(r => r.passed).length;
+  const failCount = c.rules.filter(r => !r.passed).length;
+  const decision  = AutomationDecisionEngine.getDecisionBadge(c.decision);
+  const rows = c.rules.map(r => `
+    <div class="rule-row ${r.passed?'passed':'failed'}">
+      <div class="rule-icon">${r.passed ? '✅' : '❌'}</div>
+      <div class="rule-content">
+        <div class="rule-name">${r.rule}</div>
+        <div class="rule-detail">${r.detail}</div>
+      </div>
+      <div class="rule-status ${r.passed?'passed':'failed'}">${r.passed?'PASS':'FAIL'}</div>
+    </div>`).join('');
+
+  return `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="font-size:16px;font-weight:800">Decision Explanation</div>
+      <div class="decision-badge ${decision.color}">${decision.icon} ${decision.label}</div>
+      <div style="font-size:12px;color:var(--text-dim)">Code: ${c.decisionCode} · Confidence: ${c.decisionConfidence ?? 'N/A'}${c.decisionConfidence!==null?'%':''}</div>
+    </div>
+    <div class="rules-summary">
+      <div class="rules-sum-item"><div class="v" style="color:var(--blue)">${c.rules.length}</div><div class="l">Total Rules</div></div>
+      <div class="rules-sum-item"><div class="v" style="color:var(--green)">${passCount}</div><div class="l">Passed</div></div>
+      <div class="rules-sum-item"><div class="v" style="color:var(--red)">${failCount}</div><div class="l">Failed</div></div>
+      <div class="rules-sum-item"><div class="v" style="color:var(--blue)">${Math.round(passCount/c.rules.length*100)}%</div><div class="l">Pass Rate</div></div>
+      <div class="rules-sum-item"><div class="v" style="color:var(--amber)">${c.automationScore}%</div><div class="l">Auto Score</div></div>
+    </div>
+    <div class="rules-grid">${rows}</div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TAB: AUDIT TRAIL
+// ─────────────────────────────────────────────────────────────
+function renderAudit(c) {
+  const steps = c.auditSteps.map(s => `
+    <div class="audit-step ${s.result}">
+      <div class="audit-step-row">
+        <span class="audit-time">${s.time}</span>
+        <span class="audit-step-name">${s.step}</span>
+        <span class="audit-result ${s.result}">${s.result}</span>
+      </div>
+      <div class="audit-detail">${s.detail}</div>
+    </div>`).join('');
+
+  const retentionNote = `<div style="margin-top:14px;padding:12px 16px;background:rgba(0,212,255,0.05);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text-dim)">
+      <b style="color:var(--blue)">🔒 Audit Record Status:</b> &nbsp; Immutable / Locked — Cannot be modified after decision.&nbsp;&nbsp;
+      <b style="color:var(--blue)">Retention:</b> 7 years (Qatar regulatory requirement).&nbsp;&nbsp;
+      <b style="color:var(--blue)">Case:</b> ${c.id} &nbsp;·&nbsp; <b style="color:var(--blue)">Customer:</b> ${c.customer}
+    </div>`;
+
+  return `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:16px;font-weight:800">Immutable Audit Trail</div>
+      <div style="font-size:12px;color:var(--text-dim)">${c.auditSteps.length} events recorded · Policy: 7-year retention</div>
+    </div>
+    <div class="audit-timeline">${steps}</div>
+    ${retentionNote}`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TAB: POLICY CONTROLS
+// ─────────────────────────────────────────────────────────────
+function renderPolicy(c) {
+  const elig = AutomationDecisionEngine.getEligibilityBadge(c.automationScore, c.pepStatus);
+  const mkCheck = (icon, text, ok) => `
+    <div class="policy-check">
+      <span class="policy-check-icon">${ok ? '✅' : '❌'}</span>
+      <span class="policy-check-text">${text}</span>
+    </div>`;
+
+  return `<div class="policy-grid">
+    <div class="policy-block">
+      <h4>✅ Eligibility Controls</h4>
+      ${mkCheck('',`Data Completeness ≥ 95% &nbsp;<span>—&nbsp; Actual: ${c.dataCompleteness}%</span>`, c.dataCompleteness>=95)}
+      ${mkCheck('',`Data Freshness — KYC updated <span>${c.lastKycUpdate}</span>`, true)}
+      ${mkCheck('',`Source Systems Available <span>— ${(c.sourceSystems||[]).length} connected</span>`, true)}
+      ${mkCheck('',`KYC Form Complete <span>— Status: ${c.kycStatus}</span>`, c.kycStatus==='COMPLETE')}
+      ${mkCheck('',`Documents ≥ 95% <span>— Actual: ${c.documentCount}</span>`, c.documentsComplete)}
+    </div>
+    <div class="policy-block">
+      <h4>🛡 Regulatory Safeguards</h4>
+      ${mkCheck('',`PEP Match Check <span>— ${c.pepStatus?'⛔ MATCH DETECTED':'No match found'}</span>`, !c.pepStatus)}
+      ${mkCheck('',`Sanctions Screening <span>— ${c.sanctionsStatus?'⛔ HIT':'OFAC/UN/EU cleared'}</span>`, !c.sanctionsStatus)}
+      ${mkCheck('',`No Black-Box Logic <span>— ${c.rules.length} explicit rules applied</span>`, true)}
+      ${mkCheck('',`Policy-Bounded Scope <span>— No out-of-policy automation</span>`, true)}
+      ${mkCheck('',`Audit Trail Complete <span>— ${c.auditSteps.length} events logged</span>`, true)}
+    </div>
+    <div class="policy-block">
+      <h4>⚡ Risk Controls</h4>
+      ${mkCheck('',`Risk Score Band — Actual: <span>${c.riskScore ?? 'N/A'} (${c.riskBand})</span>`, !c.pepStatus && (c.riskScore===null||c.riskScore<=35))}
+      ${mkCheck('',`No Negative Events (30 days) <span>— ${c.negativeEvents} events</span>`, c.negativeEvents===0)}
+      ${mkCheck('',`Transaction Monitoring Clear <span>— ${c.transactionAlerts} alerts</span>`, c.transactionAlerts===0)}
+      ${mkCheck('',`Confidence Level ≥ 80% <span>— Actual: ${c.decisionConfidence??'N/A'}${c.decisionConfidence!==null?'%':''}</span>`, c.decisionConfidence!==null && c.decisionConfidence>=80)}
+    </div>
+    <div class="policy-block">
+      <h4>📋 Governance Status</h4>
+      <div class="policy-check">
+        <span class="policy-check-icon">📌</span>
+        <span class="policy-check-text">Eligible Stage: <span>${c.eligibleStage}</span></span>
+      </div>
+      <div class="policy-check">
+        <span class="policy-check-icon">📌</span>
+        <span class="policy-check-text">Automation Score: <span>${c.automationScore}%</span></span>
+      </div>
+      <div class="policy-check">
+        <span class="policy-check-icon">📌</span>
+        <span class="policy-check-text">Policy: <span>AUTOMATED_DECISIONING_POLICY_FRAMEWORK v1.0</span></span>
+      </div>
+      <div class="policy-check">
+        <span class="policy-check-icon">📌</span>
+        <span class="policy-check-text">Model Version: <span>EDD-ENG 1.2.3 — Stage ${currentStage} Active</span></span>
+      </div>
+      <div class="policy-check">
+        <span class="policy-check-icon">📌</span>
+        <span class="policy-check-text">Selected Mode: <span style="color:var(--blue)">Stage ${currentStage} — ${currentStage==='C'?'Fully Automated':currentStage==='B'?'Human-in-Loop':'Governance Support'}</span></span>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TAB: SIMULATION
+// ─────────────────────────────────────────────────────────────
+function renderSimulation(c) {
+  const steps = AutomationDecisionEngine.getSimulationSteps(c);
+  const stepHtml = steps.map((s, i) => `
+    <div class="sim-step" id="simStep_${i}">
+      <div class="sim-step-num">${i + 1}</div>
+      <div class="sim-step-content">
+        <div class="sim-step-label">${s.label}</div>
+        <div class="sim-step-detail">${s.detail}</div>
+      </div>
+      <div class="sim-step-result"></div>
+    </div>`).join('');
+
+  const cases = EDD_DEMO_CASES.map((dc, i) => `
+    <span onclick="loadCase(EDD_DEMO_CASES[${i}]);switchTab('simulation')"
+      style="cursor:pointer;padding:4px 10px;border-radius:5px;font-size:11px;
+      font-weight:600;border:1px solid var(--border);color:var(--text-dim);
+      background:var(--bg-card);transition:all .2s;display:inline-block"
+      onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'"
+      onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-dim)'">
+      ${dc.id.replace('EDD-2026-','')}
+    </span>`).join('');
+
+  return `
+    <div class="sim-header">
+      <div>
+        <h3>🔬 Scenario Simulation Engine</h3>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:3px">Simulating: <b style="color:var(--blue)">${c.id}</b> — ${c.customer}</div>
+      </div>
+      <button class="sim-btn" onclick="runSimulation()" id="simRunBtn">▶ Run Simulation</button>
+    </div>
+    <div style="margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px">Switch Scenario:</span>
+      ${cases}
+    </div>
+    <div class="sim-pipeline" id="simPipeline">${stepHtml}</div>
+    <div id="simFinalResult"></div>`;
+}
+
+let simRunning = false;
+function runSimulation() {
+  if (simRunning) return;
+  simRunning = true;
+  const btn = document.getElementById('simRunBtn');
+  if (btn) btn.disabled = true;
+  const steps = AutomationDecisionEngine.getSimulationSteps(currentCase);
+  // reset
+  steps.forEach((_, i) => {
+    const el = document.getElementById(`simStep_${i}`);
+    if (el) { el.className = 'sim-step'; el.querySelector('.sim-step-result').textContent = ''; }
+  });
+  document.getElementById('simFinalResult').style.display = 'none';
+
+  let delay = 0;
+  steps.forEach((s, i) => {
+    const runTime = delay;
+    const doneTime = delay + s.ms;
+    delay = doneTime + 200;
+
+    setTimeout(() => {
+      const el = document.getElementById(`simStep_${i}`);
+      if (el) { el.className = 'sim-step running'; el.querySelector('.sim-step-result').textContent = ''; }
+    }, runTime);
+
+    setTimeout(() => {
+      const el = document.getElementById(`simStep_${i}`);
+      if (el) {
+        el.className = `sim-step done-${s.result}`;
+        const res = el.querySelector('.sim-step-result');
+        res.textContent = s.result;
+        // color the result span based on result
+        const clrMap = { PASS:'var(--green)', WARNING:'var(--amber)', BLOCKED:'var(--red)', FAIL:'var(--red)' };
+        const bgMap  = { PASS:'rgba(0,230,118,0.12)', WARNING:'rgba(255,184,0,0.12)', BLOCKED:'rgba(255,71,87,0.12)', FAIL:'rgba(255,71,87,0.12)' };
+        const clr = clrMap[s.result] || 'var(--blue)';
+        const bg  = bgMap[s.result]  || 'rgba(0,212,255,0.12)';
+        res.style.cssText = `background:${bg};color:${clr};font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;text-transform:uppercase`;
+      }
+    }, doneTime);
+  });
+
+  // final result
+  setTimeout(() => {
+    const decision = AutomationDecisionEngine.getDecisionBadge(currentCase.decision);
+    const colorMap = { green:'rgba(0,230,118,0.12)', amber:'rgba(255,184,0,0.12)', red:'rgba(255,71,87,0.12)' };
+    const borderMap = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)' };
+    const bg = colorMap[decision.color] || 'rgba(0,212,255,0.1)';
+    const bd = borderMap[decision.color] || 'var(--blue)';
+    const el = document.getElementById('simFinalResult');
+    el.style.cssText = `display:block;margin-top:14px;padding:16px 20px;border-radius:10px;background:${bg};border:2px solid ${bd};color:${bd};font-size:15px;font-weight:800;text-align:center;letter-spacing:0.5px`;
+    el.innerHTML = `${decision.icon} &nbsp; SIMULATION COMPLETE — ${decision.label} &nbsp; (${currentCase.decisionCode})<div style="font-size:11px;font-weight:400;margin-top:4px;color:var(--text-dim)">Processing Time: ${currentCase.processingTime} · Confidence: ${currentCase.decisionConfidence ?? 'N/A'}${currentCase.decisionConfidence!==null?'%':''} · Audit Trail: ${currentCase.auditSteps.length} events logged</div>`;
+    simRunning = false;
+    if (btn) btn.disabled = false;
+  }, delay + 200);
+}
+
+// ─────────────────────────────────────────────────────────────
+// ANIMATE KPIs
+// ─────────────────────────────────────────────────────────────
+function animateKPIs() {
+  const targets = [847, 601, 154, 92];
+  targets.forEach((target, i) => {
+    const el = document.getElementById('k' + i);
+    if (!el) return;
+    let start = 0; const dur = 1200; const step = 16;
+    const inc = target / (dur / step);
+    const iv = setInterval(() => {
+      start = Math.min(start + inc, target);
+      el.textContent = Math.round(start);
+      if (start >= target) clearInterval(iv);
+    }, step);
+  });
+}
+</script>
+</body>
+</html>

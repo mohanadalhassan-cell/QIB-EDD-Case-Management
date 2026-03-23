@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QIB EDD — System Architecture Presentation</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%238B5CF6'/><text x='16' y='22' font-size='14' font-weight='900' fill='white' text-anchor='middle' font-family='system-ui'>Q</text></svg>">
+<style>
+  :root {
+    --bg:   #020508; --blue: #00D4FF; --purple: #8B5CF6; --green: #00E676;
+    --amber: #FFB800; --red: #FF4757; --text: #e8eaf6; --text-dim: rgba(232,234,246,0.55);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
+
+  /* ── BACKGROUND GRID ── */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: 
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,92,246,0.06) 0%, transparent 70%);
+  }
+
+  /* ── HEADER ── */
+  .hdr {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 56px; background: rgba(2,5,12,0.95); border-bottom: 1px solid rgba(0,212,255,0.1);
+    display: flex; align-items: center; padding: 0 24px; gap: 16px;
+  }
+  .hdr-logo { width: 32px; height: 32px; border-radius: 7px; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; color: #050810; flex-shrink: 0; }
+  .hdr-title { font-size: 13px; font-weight: 700; }
+  .hdr-title span { color: var(--blue); }
+  .hdr-sep { width: 1px; height: 28px; background: rgba(0,212,255,0.15); }
+  .hdr-subtitle { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+  .hdr-nav { margin-left: auto; display: flex; gap: 8px; }
+  .hdr-nav a {
+    padding: 5px 12px; border-radius: 5px; font-size: 11px; font-weight: 600;
+    border: 1px solid rgba(0,212,255,0.15); background: transparent; color: var(--text-dim);
+    text-decoration: none; transition: all .2s;
+  }
+  .hdr-nav a:hover { border-color: var(--blue); color: var(--blue); background: rgba(0,212,255,0.06); }
+  .hdr-nav a.primary { border-color: var(--blue); color: var(--blue); }
+
+  /* ── DEMO CONTROLS ── */
+  .demo-ctrl {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(5,8,20,0.92); border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 50px; padding: 10px 20px; backdrop-filter: blur(16px);
+  }
+  .ctrl-btn {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(0,212,255,0.3);
+    background: transparent; color: var(--blue); font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .2s;
+  }
+  .ctrl-btn:hover { background: rgba(0,212,255,0.12); border-color: var(--blue); }
+  .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .ctrl-step { font-size: 12px; font-weight: 700; color: var(--text-dim); min-width: 80px; text-align: center; }
+  .ctrl-auto { padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid var(--purple); background: rgba(139,92,246,0.12); color: var(--purple); cursor: pointer; transition: all .2s; }
+  .ctrl-auto:hover { background: rgba(139,92,246,0.22); }
+  .ctrl-auto.active { background: rgba(139,92,246,0.3); }
+
+  /* ── MAIN STAGE ── */
+  .stage {
+    position: fixed; inset: 0; top: 56px; bottom: 80px;
+    perspective: 1400px;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10;
+  }
+
+  /* ── ARCH CONTAINER ── */
+  .arch {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0; width: 100%; max-width: 900px;
+    transform-style: preserve-3d;
+    animation: archFloat 6s ease-in-out infinite;
+  }
+  @keyframes archFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  /* ── COMPONENT BOX ── */
+  .comp-box {
+    width: 560px; max-width: 90vw;
+    background: rgba(8,15,35,0.88);
+    border: 1.5px solid rgba(0,212,255,0.15);
+    border-radius: 14px; padding: 18px 24px;
+    backdrop-filter: blur(20px);
+    position: relative; z-index: 1;
+    cursor: pointer;
+    transition: all .35s cubic-bezier(0.4,0,0.2,1);
+    opacity: 0; transform: translateY(20px);
+  }
+  .comp-box.visible { opacity: 1; transform: translateY(0); }
+  .comp-box:hover { transform: scale(1.02) translateY(-2px); }
+  .comp-box.highlight {
+    border-color: rgba(0,212,255,0.7) !important;
+    background: rgba(0,212,255,0.07) !important;
+    box-shadow: 0 0 40px rgba(0,212,255,0.15), 0 0 80px rgba(0,212,255,0.05), inset 0 0 30px rgba(0,212,255,0.03);
+  }
+  .comp-box.highlight .comp-icon { animation: pulse-icon 1.5s ease-in-out infinite; }
+  @keyframes pulse-icon { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+  /* box color themes */
+  .t-blue   { border-color: rgba(0,212,255,0.25); }
+  .t-purple { border-color: rgba(139,92,246,0.25); }
+  .t-green  { border-color: rgba(0,230,118,0.25); }
+  .t-amber  { border-color: rgba(255,184,0,0.25); }
+  .t-red    { border-color: rgba(255,71,87,0.25); }
+
+  .t-blue.highlight   { border-color: rgba(0,212,255,0.8) !important; box-shadow: 0 0 40px rgba(0,212,255,0.18), inset 0 0 20px rgba(0,212,255,0.05) !important; }
+  .t-purple.highlight { border-color: rgba(139,92,246,0.8) !important; box-shadow: 0 0 40px rgba(139,92,246,0.18), inset 0 0 20px rgba(139,92,246,0.05) !important; background: rgba(139,92,246,0.05) !important; }
+  .t-green.highlight  { border-color: rgba(0,230,118,0.8) !important; box-shadow: 0 0 40px rgba(0,230,118,0.18), inset 0 0 20px rgba(0,230,118,0.05) !important; background: rgba(0,230,118,0.05) !important; }
+  .t-amber.highlight  { border-color: rgba(255,184,0,0.8) !important; box-shadow: 0 0 40px rgba(255,184,0,0.18), inset 0 0 20px rgba(255,184,0,0.05) !important; background: rgba(255,184,0,0.05) !important; }
+  .t-red.highlight    { border-color: rgba(255,71,87,0.8) !important; box-shadow: 0 0 40px rgba(255,71,87,0.18), inset 0 0 20px rgba(255,71,87,0.05) !important; background: rgba(255,71,87,0.05) !important; }
+
+  .comp-row { display: flex; align-items: flex-start; gap: 14px; }
+  .comp-icon { font-size: 28px; flex-shrink: 0; }
+  .comp-head { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 5px; }
+  .comp-sub  { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+  .comp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .comp-tag {
+    font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 12px;
+    text-transform: uppercase; letter-spacing: 0.4px; border: 1px solid;
+  }
+  .tag-blue   { border-color: rgba(0,212,255,0.4);   color: var(--blue);   background: rgba(0,212,255,0.08); }
+  .tag-green  { border-color: rgba(0,230,118,0.4);   color: var(--green);  background: rgba(0,230,118,0.08); }
+  .tag-amber  { border-color: rgba(255,184,0,0.4);   color: var(--amber);  background: rgba(255,184,0,0.08); }
+  .tag-purple { border-color: rgba(139,92,246,0.4);  color: var(--purple); background: rgba(139,92,246,0.08); }
+  .tag-red    { border-color: rgba(255,71,87,0.4);   color: var(--red);    background: rgba(255,71,87,0.08); }
+
+  /* ── CONNECTORS ── */
+  .connector {
+    width: 2px; height: 28px; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity .4s;
+  }
+  .connector.visible { opacity: 1; }
+  .connector-line {
+    width: 2px; flex: 1;
+    background: linear-gradient(180deg, rgba(0,212,255,0.4), rgba(0,212,255,0.1));
+    position: relative;
+  }
+  .connector-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    background: var(--blue); box-shadow: 0 0 10px var(--blue);
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{box-shadow:0 0 6px var(--blue)} 50%{box-shadow:0 0 16px var(--blue),0 0 30px rgba(0,212,255,0.3)} }
+
+  /* ── NARRATOR PANEL ── */
+  .narrator {
+    position: fixed; bottom: 90px; right: 24px; z-index: 200;
+    width: 340px; background: rgba(5,8,20,0.95); border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 12px; padding: 18px 20px; backdrop-filter: blur(16px);
+    transform: translateX(380px); transition: transform .4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .narrator.visible { transform: translateX(0); }
+  .narrator-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--blue); font-weight: 700; margin-bottom: 8px; }
+  .narrator-body { font-size: 13px; line-height: 1.6; color: var(--text); }
+  .narrator-detail { font-size: 12px; color: var(--text-dim); margin-top: 8px; line-height: 1.5; }
+  .narrator-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+
+  /* ── STEP INDICATORS ── */
+  .step-dots {
+    display: flex; gap: 8px; align-items: center; margin: 0 12px;
+  }
+  .step-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(0,212,255,0.2); border: 1px solid rgba(0,212,255,0.3);
+    cursor: pointer; transition: all .2s;
+  }
+  .step-dot.active { background: var(--blue); box-shadow: 0 0 8px var(--blue); width: 20px; border-radius: 4px; }
+  .step-dot.done { background: rgba(0,230,118,0.5); border-color: var(--green); }
+
+  /* ── CORNER BADGE ── */
+  .corner-badge {
+    position: fixed; top: 72px; left: 24px; z-index: 150;
+    background: rgba(5,8,20,0.92); border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 11px; color: var(--text-dim);
+    transition: opacity .3s;
+  }
+  .corner-badge b { color: var(--blue); display: block; font-size: 16px; margin-bottom: 2px; }
+
+  /* ── PARTICLES (decorative) ── */
+  .particle {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 5;
+    animation: float-particle linear infinite;
+    opacity: 0;
+  }
+  @keyframes float-particle {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-20px) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="hdr">
+  <div class="hdr-logo">Q</div>
+  <div class="hdr-title">QIB <span>EDD Automation</span></div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-subtitle">System Architecture — Presentation Mode</div>
+  <div class="hdr-nav">
+    <a href="edd-automation-platform.html" class="primary">⬅ Operations Platform</a>
+    <a href="executive-command-center.html">📊 Executive View</a>
+    <a href="dashboard.html">🏠 Dashboard</a>
+  </div>
+</header>
+
+<!-- ── CORNER BADGE ── -->
+<div class="corner-badge" id="cornerBadge">
+  <b id="cbStep">Overview</b>
+  <span id="cbDesc">5 platform components</span>
+</div>
+
+<!-- ── ARCHITECTURE STAGE ── -->
+<div class="stage">
+  <div class="arch" id="arch">
+
+    <!-- 1. EDD Operations Platform -->
+    <div class="comp-box t-blue" id="box0" onclick="highlightBox(0)">
+      <div class="comp-row">
+        <div class="comp-icon">🖥</div>
+        <div>
+          <div class="comp-head" style="color:var(--blue)">EDD Automation Platform</div>
+          <div class="comp-sub">Unified operations interface · Case queue · Stage A/B/C selector · Decision panel · Scenario simulation · Real-time audit trail display</div>
+          <div class="comp-tags">
+            <span class="comp-tag tag-blue">React-like SPA</span>
+            <span class="comp-tag tag-blue">5 Case Scenarios</span>
+            <span class="comp-tag tag-blue">Live Simulation</span>
+            <span class="comp-tag tag-blue">Dark UI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector" id="conn0">
+      <div class="connector-dot"></div>
+      <div class="connector-line"></div>
+    </div>
+
+    <!-- 2. Decision Analytics Engine -->
+    <div class="comp-box t-purple" id="box1" onclick="highlightBox(1)">
+      <div class="comp-row">
+        <div class="comp-icon">🧠</div>
+        <div>
+          <div class="comp-head" style="color:var(--purple)">Decision Analytics Engine</div>
+          <div class="comp-sub">AI-governance decision core · Policy-bounded rules engine · 14 explicit rules per case · Confidence scoring · Explainability layer · No black-box decisions</div>
+          <div class="comp-tags">
+            <span class="comp-tag tag-purple">14 Rules</span>
+            <span class="comp-tag tag-purple">96%+ Accuracy</span>
+            <span class="comp-tag tag-purple">Explainable AI</span>
+            <span class="comp-tag tag-amber">Zero Black-Box</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector" id="conn1">
+      <div class="connector-dot"></div>
+      <div class="connector-line"></div>
+    </div>
+
+    <!-- 3. Stage Eligibility Checker -->
+    <div class="comp-box t-green" id="box2" onclick="highlightBox(2)">
+      <div class="comp-row">
+        <div class="comp-icon">⚡</div>
+        <div>
+          <div class="comp-head" style="color:var(--green)">Stage Eligibility Engine</div>
+          <div class="comp-sub">Risk band evaluation · PEP hard-stop detection · Data completeness threshold · Document verification · Employment check · Stage A/B/C qualification</div>
+          <div class="comp-tags">
+            <span class="comp-tag tag-green">PEP Screening</span>
+            <span class="comp-tag tag-green">Risk Banding</span>
+            <span class="comp-tag tag-green">Stage C: ≥70%</span>
+            <span class="comp-tag tag-green">Stage B: ≥40%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector" id="conn2">
+      <div class="connector-dot"></div>
+      <div class="connector-line"></div>
+    </div>
+
+    <!-- 4. Source Systems Integration -->
+    <div class="comp-box t-amber" id="box3" onclick="highlightBox(3)">
+      <div class="comp-row">
+        <div class="comp-icon">🔗</div>
+        <div>
+          <div class="comp-head" style="color:var(--amber)">Source Systems Integration</div>
+          <div class="comp-sub">Multi-system data aggregation · T24 Core Banking (income/salary) · QCB/Refinitiv (PEP + Sanctions) · Document DMS · CRM · AML Engine feeds</div>
+          <div class="comp-tags">
+            <span class="comp-tag tag-amber">T24 Banking</span>
+            <span class="comp-tag tag-amber">QCB Screening</span>
+            <span class="comp-tag tag-amber">DMS Docs</span>
+            <span class="comp-tag tag-amber">AML Engine</span>
+            <span class="comp-tag tag-amber">CRM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector" id="conn3">
+      <div class="connector-dot"></div>
+      <div class="connector-line"></div>
+    </div>
+
+    <!-- 5. Audit & Governance -->
+    <div class="comp-box t-red" id="box4" onclick="highlightBox(4)">
+      <div class="comp-row">
+        <div class="comp-icon">🔒</div>
+        <div>
+          <div class="comp-head" style="color:var(--red)">Audit & Governance Layer</div>
+          <div class="comp-sub">Immutable audit trail · 7-year regulatory retention · QCB/FATF compliance · Timestamped decision log · Human override recording · Policy version tracking</div>
+          <div class="comp-tags">
+            <span class="comp-tag tag-red">Immutable Log</span>
+            <span class="comp-tag tag-red">7-Year Retention</span>
+            <span class="comp-tag tag-blue">QCB Compliant</span>
+            <span class="comp-tag tag-blue">FATF Aligned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── NARRATOR ── -->
+<div class="narrator" id="narrator">
+  <div class="narrator-title" id="nTitle">Component Overview</div>
+  <div class="narrator-body" id="nBody">—</div>
+  <div class="narrator-detail" id="nDetail">—</div>
+  <div class="narrator-tags" id="nTags"></div>
+</div>
+
+<!-- ── DEMO CONTROLS ── -->
+<div class="demo-ctrl">
+  <button class="ctrl-btn" id="prevBtn" onclick="prevStep()" disabled>◀</button>
+  <div class="step-dots" id="stepDots"></div>
+  <div class="ctrl-step" id="ctrlStep">Step 1 / 6</div>
+  <button class="ctrl-btn" id="nextBtn" onclick="nextStep()">▶</button>
+  <div class="hdr-sep" style="height:24px;margin:0 4px"></div>
+  <button class="ctrl-auto" id="autoBtn" onclick="toggleAuto()">⏵ Auto Demo</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// PRESENTATION SCRIPT
+// ─────────────────────────────────────────
+
+const STEPS = [
+  {
+    title: 'EDD Automation Platform',
+    active: [0], connectors: [],
+    narTitle: '🖥 Operations Platform',
+    narBody: 'The QIB EDD Automation Platform is the primary interface for compliance officers and operations teams. It supports all three automation stages (A, B, C) from a single unified workspace.',
+    narDetail: '5 pre-built case scenarios · Stage selector (A/B/C) · Real-time decision simulation · Tab-based detail view · Audit trail visualization',
+    tags: [['Platform','blue'],['Phase 5','blue'],['Live','green']],
+    cbStep: 'Component 1/5', cbDesc: 'EDD Operations Platform'
+  },
+  {
+    title: 'Decision Analytics Engine',
+    active: [1], connectors: [0],
+    narTitle: '🧠 Decision Analytics Engine',
+    narBody: 'The core intelligence layer. Uses 14 explicit, policy-bounded rules to evaluate each case. Every decision is fully explainable — no opaque algorithms. Confidence score and stage eligibility are calculated here.',
+    narDetail: 'Rules: Identity / PEP / Sanctions / Risk Score / Data Quality / Income / Documents / Employment / Source of Wealth · Output: Stage C / B / A / Escalate',
+    tags: [['14 Rules','purple'],['Explainable','amber'],['96.8% Accuracy','green']],
+    cbStep: 'Component 2/5', cbDesc: 'Decision Analytics Engine'
+  },
+  {
+    title: 'Stage Eligibility Engine',
+    active: [2], connectors: [0,1],
+    narTitle: '⚡ Stage Eligibility Checker',
+    narBody: 'Evaluates each case against the three automation stages. PEP and Sanctions matches are immediate hard stops — no score calculated. Risk score determines stage eligibility band.',
+    narDetail: 'Stage C: AutoScore ≥70%, Risk ≤35 · Stage B: AutoScore ≥40%, Risk ≤60 · Stage A: All other cases · Escalation: PEP / Sanctions / Fraud flags',
+    tags: [['Stage C: ≥70%','green'],['Stage B: ≥40%','amber'],['Hard Stops','red']],
+    cbStep: 'Component 3/5', cbDesc: 'Stage Eligibility Engine'
+  },
+  {
+    title: 'Source Systems Integration',
+    active: [3], connectors: [0,1,2],
+    narTitle: '🔗 Data Integration Hub',
+    narBody: 'Connects to five live source systems simultaneously: T24 Core Banking for income verification, QCB/Refinitiv for PEP and Sanctions screening, Document DMS for file completeness, CRM for customer history, and the AML Engine for transaction alerts.',
+    narDetail: 'T24 → salary & income · QCB/Refinitiv → PEP, OFAC, UN, EU · DMS → document count & quality · CRM → relationship history · AML → transaction monitoring',
+    tags: [['T24','amber'],['QCB','amber'],['Refinitiv','amber'],['DMS','amber'],['AML','amber']],
+    cbStep: 'Component 4/5', cbDesc: 'Source Systems Integration'
+  },
+  {
+    title: 'Audit & Governance',
+    active: [4], connectors: [0,1,2,3],
+    narTitle: '🔒 Audit & Governance Layer',
+    narBody: 'Every decision, every rule evaluation, every data access is recorded in an immutable audit log. Retained for 7 years per Qatar regulatory requirements. Designed for QCB, FATF, and PDPPL compliance.',
+    narDetail: 'Immutable event log · Timestamped to millisecond precision · 7-year regulatory retention · Full decision explainability · Human override recording · Policy version tracking',
+    tags: [['Immutable','red'],['7-Year Retention','blue'],['QCB','blue'],['FATF','blue']],
+    cbStep: 'Component 5/5', cbDesc: 'Audit & Governance Layer'
+  },
+  {
+    title: 'Full Architecture Overview',
+    active: [0,1,2,3,4], connectors: [0,1,2,3],
+    narTitle: '🏗 Complete Architecture',
+    narBody: 'All five layers working in concert. A single EDD case flows from the Platform UI → Decision Engine → Eligibility Check → Source Systems → Audit Log. Total processing time: 23 minutes on average vs. 2.8 days manually.',
+    narDetail: 'Processing time: 23 min avg · Accuracy: 96.8% · Automation: 71% of cases · Cost saving: QAR 1.8M+/month · Policy: AUTOMATED_DECISIONING_POLICY_FRAMEWORK v1.0',
+    tags: [['Full Stack','blue'],['Production Ready','green'],['QIB Phase 5','purple']],
+    cbStep: 'Full Architecture', cbDesc: 'All 5 components active'
+  }
+];
+
+let currentStep = 0;
+let autoTimer = null;
+
+function init() {
+  // build step dots
+  const dotsEl = document.getElementById('stepDots');
+  dotsEl.innerHTML = STEPS.map((_, i) => `<div class="step-dot" onclick="goStep(${i})" id="dot${i}"></div>`).join('');
+
+  // reveal all boxes instantly with stagger
+  document.querySelectorAll('.comp-box').forEach((b, i) => {
+    setTimeout(() => b.classList.add('visible'), i * 120 + 100);
+  });
+
+  setTimeout(() => goStep(0), 700);
+  addParticles();
+}
+
+function goStep(n) {
+  currentStep = n;
+  const s = STEPS[n];
+
+  // update boxes
+  document.querySelectorAll('.comp-box').forEach((b, i) => {
+    b.classList.toggle('highlight', s.active.includes(i));
+  });
+  // connectors
+  document.querySelectorAll('.connector').forEach((c, i) => {
+    c.classList.toggle('visible', s.connectors.includes(i));
+  });
+
+  // step dots
+  document.querySelectorAll('.step-dot').forEach((d, i) => {
+    d.classList.remove('active', 'done');
+    if (i === n) d.classList.add('active');
+    else if (i < n) d.classList.add('done');
+  });
+
+  // controls
+  document.getElementById('prevBtn').disabled = n === 0;
+  document.getElementById('nextBtn').disabled = n === STEPS.length - 1;
+  document.getElementById('ctrlStep').textContent = `Step ${n + 1} / ${STEPS.length}`;
+
+  // corner badge
+  document.getElementById('cbStep').textContent = s.cbStep;
+  document.getElementById('cbDesc').textContent = s.cbDesc;
+
+  // narrator
+  const nar = document.getElementById('narrator');
+  document.getElementById('nTitle').textContent = s.narTitle;
+  document.getElementById('nBody').textContent = s.narBody;
+  document.getElementById('nDetail').textContent = s.narDetail;
+  const tagsEl = document.getElementById('nTags');
+  tagsEl.innerHTML = s.tags.map(([l, c]) => `<span class="comp-tag tag-${c}">${l}</span>`).join('');
+  nar.classList.add('visible');
+
+  // scroll active box into view
+  if (s.active.length > 0) {
+    const b = document.getElementById('box' + s.active[0]);
+    if (b) b.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function highlightBox(i) {
+  const step = STEPS.findIndex(s => s.active.includes(i) && s.active.length === 1);
+  if (step !== -1) goStep(step);
+}
+
+function nextStep() { if (currentStep < STEPS.length - 1) goStep(currentStep + 1); }
+function prevStep() { if (currentStep > 0) goStep(currentStep - 1); }
+
+function toggleAuto() {
+  const btn = document.getElementById('autoBtn');
+  if (autoTimer) {
+    clearInterval(autoTimer);
+    autoTimer = null;
+    btn.classList.remove('active');
+    btn.textContent = '⏵ Auto Demo';
+  } else {
+    btn.classList.add('active');
+    btn.textContent = '⏸ Pause';
+    autoTimer = setInterval(() => {
+      if (currentStep < STEPS.length - 1) nextStep();
+      else { goStep(0); }
+    }, 3500);
+  }
+}
+
+// keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextStep();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevStep();
+  if (e.key === ' ') { e.preventDefault(); toggleAuto(); }
+  if (e.key >= '1' && e.key <= '6') goStep(parseInt(e.key) - 1);
+});
+
+// particles
+function addParticles() {
+  const colors = ['rgba(0,212,255,0.4)', 'rgba(139,92,246,0.3)', 'rgba(0,230,118,0.3)'];
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 4 + 2;
+    p.style.cssText = `
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random() * colors.length)]};
+      left:${Math.random() * 100}%;
+      animation-duration:${Math.random() * 12 + 8}s;
+      animation-delay:${Math.random() * 6}s;
+    `;
+    document.body.appendChild(p);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
